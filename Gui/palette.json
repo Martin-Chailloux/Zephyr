@@ -1,0 +1,21 @@
+{
+    "text_white": "#F9F9F9",
+    "text_black": "#2F2F32",
+    "background": "#303030",
+    "light": "#545454",
+    "medium": "#3D3D3D",
+    "dark": "#262626",
+    "purple": "#C8B8EA",
+    "red": "#FFC3C4",
+    "orange": "#FFD486",
+    "yellow": "#FFF2A0",
+    "green": "#C5FFAF",
+    "blue": "#6BB6FF",
+    "cyan": "#A5E5D9",
+    "todo": "#FFF2A0",
+    "wip": "#FFD486",
+    "wfa": "#C8B8EA",
+    "done": "#C5FFAF",
+    "error": "#FFC3C4",
+    "omit": "#262626"
+}

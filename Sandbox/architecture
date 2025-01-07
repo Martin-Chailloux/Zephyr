@@ -1,0 +1,29 @@
+- manghost
+    links between Ghost and MongoEngine
+        - document_models
+        - mongo_dialog
+
+- panels
+    Panels window in the app. Can be closed and rearranged (maybe ? do it later)
+        - stage_panel
+        - stage
+            - stage_select
+            - stage_favorites
+            - create_popup
+        - panel_utils
+            - header
+
+- gui
+    Everything about Ghost's GUI
+        - palette
+        - palette_api
+        - style
+        - style_api
+
+- utils
+    - chronometer
+
+- widget_components
+    - squared_button
+
+
