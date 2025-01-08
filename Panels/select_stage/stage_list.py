@@ -7,8 +7,8 @@ from PySide6.QtWidgets import (QWidget, QVBoxLayout, QPushButton, QHBoxLayout,
 
 from MangoEngine.document_models import Status
 from Widgets.line_edit_popup import LineEditPopup
-from Widgets.favorite_widgets import GSetFavoriteButton
-from Widgets.status_widgets import GStatusCombobox
+from Widgets.qwidgets_extensions import ZIconButton, ZTransparentIconButton
+from Widgets.status_widgets import ZStatusComboBox
 
 
 class StageItem(QWidget):
@@ -18,6 +18,7 @@ class StageItem(QWidget):
         self.name = name
         self.status = status
         super().__init__()
+
         self._init_ui()
 
     def __repr__(self):
@@ -31,8 +32,8 @@ class StageItem(QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(2)
 
-        # mover = GSquaredIconButton(icon_name="mdi.arrow-up-bold", width=18, background=False)
-        mover = GSetFavoriteButton(icon_name="mdi.arrow-up-bold", size=self.h, checkable=False)
+        # mover = ZIconButton(icon_name="mdi.arrow-up-bold", width=self.h, icon_size=18)
+        mover = ZTransparentIconButton(icon_name="mdi.arrow-up-bold", width=self.h, icon_size=18)
         mover.clicked.connect(self.moved.emit)
         layout.addWidget(mover)
 
@@ -47,13 +48,16 @@ class StageItem(QWidget):
         users = ["Martin", "Kim", "Elise", "Chloé", "Hugo", "Camille"]
         user_combobox.addItems(users)
 
-        status = GStatusCombobox(starting_status=self.status)
+        status = ZStatusComboBox(starting_status=self.status)
         layout.addWidget(status)
 
         button.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         # for widget in [user_combobox, status]:
         #     # widget.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         #     widget.setFixedHeight(self.h + 12)
+
+        # public vars
+        self.mover = mover
 
 
 class ZStageListWidget(QWidget):
@@ -109,8 +113,8 @@ class ZStageListWidget(QWidget):
         self.create_stage_request.emit(description)
 
     def on_moved_requested(self):
-        before = self.stage_items
-        after = []
+        before: list[StageItem] = self.stage_items
+        after: list[StageItem] = []
 
         for i, stage_item in enumerate(self.stage_items):
             sender: StageItem = self.sender()

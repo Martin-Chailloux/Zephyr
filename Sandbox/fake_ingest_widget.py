@@ -6,7 +6,7 @@ from PySide6.QtWidgets import (QVBoxLayout, QTableWidget, QLineEdit, QHBoxLayout
 import qtawesome
 
 from MangoEngine import mongo_dialog
-from Widgets.qt_extensions import ZIconButton
+from Widgets.qwidgets_extensions import ZIconButton
 
 
 class ZFakeIngestWidget(QTableWidget):

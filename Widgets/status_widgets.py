@@ -4,8 +4,9 @@ from Gui.palette_api import ZPalette
 
 c = ZPalette()
 
-class GStatusCombobox(QComboBox):
+class ZStatusComboBox(QComboBox):
     colors = {
+        "WAIT": c.yellow,
         "TODO": c.yellow,
         "WIP": c.orange,
         "DONE": c.green,
@@ -15,6 +16,7 @@ class GStatusCombobox(QComboBox):
     }
 
     def __init__(self, starting_status: str = "TODO"):
+        # TODO: les choix doivent venir de lq db
         super().__init__()
         self.addItems([k for k in self.colors.keys()])
         self.view().colors = self.colors
@@ -26,6 +28,6 @@ class GStatusCombobox(QComboBox):
             self.setCurrentText(starting_status)
 
     def on_text_changed(self, text):
-        # TODO: color the content for better ux
+        # TODO: colorize the content for better ux
         pass
 

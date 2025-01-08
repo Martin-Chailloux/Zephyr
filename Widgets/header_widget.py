@@ -2,7 +2,7 @@ import qtawesome
 from PySide6 import QtCore
 from PySide6.QtWidgets import QWidget, QHBoxLayout, QLabel
 
-from Widgets.qt_extensions import ZImage
+from Widgets.qwidgets_extensions import ZImage
 
 
 class ZHeader(QWidget):

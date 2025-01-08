@@ -10,7 +10,7 @@ from Widgets.line_edit_popup import LineEditPopup
 from Utils.chronometer import Chronometer
 
 from Panels.select_stage.stage_list import ZStageListWidget
-from Widgets.favorite_widgets import GSetFavoriteButton
+from Widgets.favorite_widgets import ZSetFavoriteIconButton
 from Widgets.header_widget import ZHeader
 
 
@@ -72,7 +72,7 @@ class ZSelectAssetWidget(QWidget):
         grid_layout.addWidget(variant_cb, 1, 3)
         variant_cb.addItem("default")
 
-        fav = GSetFavoriteButton(size=self.h, checkable=True)
+        fav = ZSetFavoriteIconButton()
         grid_layout.addWidget(fav, 1, 4)
 
         # ==============
