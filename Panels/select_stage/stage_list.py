@@ -8,7 +8,7 @@ from PySide6.QtWidgets import (QWidget, QVBoxLayout, QPushButton, QHBoxLayout,
 from MangoEngine.document_models import Status
 from Widgets.line_edit_popup import LineEditPopup
 from Widgets.qwidgets_extensions import ZIconButton, ZTransparentIconButton
-from Widgets.status_widgets import ZStatusComboBox
+from Widgets.status_widgets import ZStatusSelector
 
 
 class StageItem(QWidget):
@@ -48,7 +48,7 @@ class StageItem(QWidget):
         users = ["Martin", "Kim", "Elise", "Chloé", "Hugo", "Camille"]
         user_combobox.addItems(users)
 
-        status = ZStatusComboBox(starting_status=self.status)
+        status = ZStatusSelector(starting_status=self.status)
         layout.addWidget(status)
 
         button.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
