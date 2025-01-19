@@ -11,7 +11,6 @@ from Utils.chronometer import Chronometer
 
 from Panels.select_stage.stage_list import ZStageListWidget
 from Widgets.favorite_widgets import ZSetFavoriteIconButton
-from Widgets.header_widget import ZHeader
 
 
 class ZSelectAssetWidget(QWidget):
@@ -39,16 +38,11 @@ class ZSelectAssetWidget(QWidget):
         layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop | QtCore.Qt.AlignmentFlag.AlignLeft)
 
         # ==============
-        # header
-        # ==============
-        header = ZHeader(text="SELECT STAGE")
-        layout.addWidget(header)
-
-        # ==============
         # grid
         # ==============
         grid_layout = QGridLayout()
         layout.addLayout(grid_layout)
+        grid_layout.setContentsMargins(7, 7, 7, 7)
         grid_layout.setVerticalSpacing(1)
         grid_layout.setHorizontalSpacing(5)
 
@@ -79,9 +73,9 @@ class ZSelectAssetWidget(QWidget):
         # stages
         # ==============
         line = QFrame()
+        layout.addWidget(line)
         line.setFrameShape(QFrame.Shape.HLine)
         line.setFrameShadow(QFrame.Shadow.Sunken)
-        layout.addWidget(line)
 
         layout.addWidget(ZStageListWidget())
 
