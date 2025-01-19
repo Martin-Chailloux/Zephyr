@@ -9,9 +9,8 @@ palette = ZPalette()
 
 
 class ZIconButton(QPushButton):
-    def __init__(self, icon_name: str, width: int, icon_size=None, color: str = "white"):
+    def __init__(self, icon_name: str, width: int = 30, icon_size: int=20, color: str = "white"):
         super().__init__()
-        icon_size = icon_size or width
 
         self.setFixedSize(QSize(width, width))
         color = color or palette.text_white
