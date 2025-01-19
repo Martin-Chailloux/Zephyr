@@ -4,7 +4,6 @@ from PySide6.QtWidgets import QVBoxLayout, QPushButton, QHBoxLayout, QDialog, QL
 
 from MangoEngine import mongo_dialog
 
-
 class LineEditPopup(QDialog):
     create_clicked = Signal(str)
 
@@ -53,6 +52,10 @@ class LineEditPopup(QDialog):
         self.create_button = create_button
         self.cancel_button = cancel_button
 
+    def connect_signals(self):
+        self.cancel_button.clicked.connect(self.close)
+        self.create_button.clicked.connect(self.on_create_clicked)
+
     def keyPressEvent(self, event):
         if event.key() == QtCore.Qt.Key.Key_Return:
             if self.create_button.isEnabled():
@@ -88,4 +91,4 @@ class LineEditPopup(QDialog):
 
     def on_create_clicked(self):
         self.create_clicked.emit(self.current_text)
-
+        self.line_edit.clear()
