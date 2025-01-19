@@ -14,6 +14,9 @@ class LineEditPopup(QDialog):
         self.invalid_names = [] if invalid_entries is None else [mongo_dialog.text_to_input(t).lower() for t in invalid_entries]
 
         self._init_ui()
+        self._create_input_buttons()
+        self.connect_signals()
+
         self.on_text_changed()
 
     @property
@@ -33,21 +36,20 @@ class LineEditPopup(QDialog):
         layout.addWidget(line_edit)
         line_edit.textChanged.connect(self.on_text_changed)
 
+        self.layout = layout
+        self.warning_label = warning_label
+        self.line_edit = line_edit
+
+    def _create_input_buttons(self):
         h_layout = QHBoxLayout()
-        layout.addLayout(h_layout)
+        self.layout.addLayout(h_layout)
 
         cancel_button = QPushButton("Cancel")
         h_layout.addWidget(cancel_button)
 
         create_button = QPushButton("Create")
         h_layout.addWidget(create_button)
-        create_button.clicked.connect(self.on_create_clicked)
 
-        for button in [cancel_button, create_button]:
-            button.clicked.connect(self.close)
-
-        self.warning_label = warning_label
-        self.line_edit = line_edit
         self.create_button = create_button
         self.cancel_button = cancel_button
 
