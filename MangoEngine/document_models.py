@@ -36,7 +36,7 @@ class Project(Document):
 
 class Asset(Document):
     """
-    Category & Name of an item
+    Category + Name + Variant. Contains stages.
     """
     category = StringField(required=True)
     name = StringField(required=True)
