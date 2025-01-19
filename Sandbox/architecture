@@ -26,4 +26,22 @@
 - widget_components
     - squared_button
 
+STAGE:
+Presets of:
+    - name
+    - label
+    - icon
+    - color
+    - recipes
+example:
+    - rig_assembly
+    - Rig assembly
+    - *character in tpose*
+    - light orange
+    - tbd: build / export / ingredients / ...
+Edit stages: toggle stage presets from a list of available stages, for the selected asset
+Recommended: Ensemble of stage that matches a certain category
+
+Recipes:
+dans l'idéal: des setup de nodes avec des inputs / outputs qui servent à définir des builds et des exports de scènes
 
