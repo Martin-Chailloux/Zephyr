@@ -14,6 +14,8 @@ from Sandbox.fake_ingest_widget import ZFakeIngestWidget
 class Ghost(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.setWindowTitle("Zephyr")
+
         self.setCentralWidget(TestWidget())
 
         project: Project = project_dialog.get_project("Dev")
