@@ -65,6 +65,6 @@ if __name__ == '__main__':
         minutes = time / 60
         msg = f"Run time: {round(minutes)} minutes, {time % 60} seconds."
     else:
-        msg = f"Run time: {time} seconds."
+        msg = f"Run time: {time: 2.2f} seconds."
     print(msg)
 
