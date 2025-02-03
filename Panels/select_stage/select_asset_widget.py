@@ -1,8 +1,7 @@
 import qtawesome
 from PySide6 import QtCore
 from PySide6.QtCore import Signal
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QComboBox, QLabel, QGridLayout, \
-    QFrame
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QComboBox, QLabel, QGridLayout, QFrame
 
 from MangoEngine import mongo_dialog
 from MangoEngine.document_models import Project, Asset
@@ -112,26 +111,7 @@ class ZSelectAssetWidget(QWidget):
         self.name_cb.item_created.connect(self.on_name_created)
         self.variant_cb.item_created.connect(self.on_variant_created)
 
-    def on_category_created(self, category: str):
-        print(f"CATEGORY CREATED: {category}")
-        self.project.add_category(category)
-        self.category_cb.set_items(self.project.categories)
-        self.category_cb.setCurrentText(category)
-
-    def on_name_created(self, name: str):
-        print(f"NAME CREATED: {name}")
-        mongo_dialog.create_asset(category=self.category, name=name)
-        self.on_category_selected()
-        self.name_cb.setCurrentText(name)
-
-    def on_variant_created(self, variant: str):
-        print(f"VARIANT CREATED: {variant}")
-        mongo_dialog.create_asset(category=self.category, name=self.name, variant=variant)
-        self.on_name_selected()
-        self.variant_cb.setCurrentText(variant)
-
     def on_category_selected(self):
-        print(f"CATEGORY SELECTED: {self.category}")
         self.name_cb.blockSignals(True)  # Delay on_name_selected()
 
         assets = mongo_dialog.get_asset(category=self.category, variant="-")
@@ -147,7 +127,6 @@ class ZSelectAssetWidget(QWidget):
         self.name_cb.blockSignals(False)
 
     def on_name_selected(self):
-        print(f"NAME SELECTED: {self.name}")
         self.variant_cb.blockSignals(True)
 
         assets = mongo_dialog.get_asset(category=self.category, name=self.name)
@@ -163,8 +142,35 @@ class ZSelectAssetWidget(QWidget):
         self.variant_cb.blockSignals(False)
 
     def on_variant_selected(self):
-        print(f"VARIANT SELECTED: {self.variant}")
         self.cache.set_key(self.category, self.name, self.variant)
+
+        forbidden = [self.add_item_label, ""]
+        for s in self.category, self.name, self.variant:
+            if s in forbidden:
+                return
+
+        variant = "-" if self.variant == "main" else self.variant
+        current_asset = Asset.objects.get(category=self.category, name=self.name, variant=variant)
+        self.stage_list.set_asset(current_asset)
+
+    def on_category_created(self, category: str):
+        print(f"CATEGORY CREATED: {category}")
+        self.project.add_category(category)
+        self.category_cb.set_items(self.project.categories)
+        self.category_cb.setCurrentText(category)
+
+    def on_name_created(self, name: str):
+        print(f"NAME CREATED: {name}")
+        mongo_dialog.create_asset(category=self.category, name=name)
+        self.on_category_selected()
+        self.name_cb.setCurrentText(name)
+
+    def on_variant_created(self, variant: str):
+        # TODO: BUG: it updates the main instead of creating a new variant
+        print(f"VARIANT CREATED: {variant}")
+        mongo_dialog.create_asset(category=self.category, name=self.name, variant=variant)
+        self.on_name_selected()
+        self.variant_cb.setCurrentText(variant)
 
 
 class AssetFieldCombobox(QComboBox):
