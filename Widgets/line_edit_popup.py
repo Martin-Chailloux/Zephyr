@@ -78,9 +78,9 @@ class LineEditPopup(QDialog):
         is_valid = False
         color = "orange"
         if len(text) < min_length:
-            msg = "Not enough characters"
+            msg = "Text is empty"
         elif len(text) > max_length:
-            msg = "Too many characters"
+            msg = "Text is too long"
         elif name_exists:
             msg = "Name already exist"
 
