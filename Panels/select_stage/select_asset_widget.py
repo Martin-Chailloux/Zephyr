@@ -212,19 +212,16 @@ class AssetFieldCombobox(QComboBox):
         self.is_scrolling = False
 
     def on_index_changed(self):
-        if self.is_scrolling:
-            self.previous_index = self.currentIndex()
-            return
+        if not self.is_scrolling:
+            if self.currentText() == self.add_item_label:
+                invalid_names = self.items
+                invalid_names.append(self.default)
+                popup = LineEditPopup(title="New", invalid_entries=invalid_names)
+                popup.create_clicked.connect(self.on_new_selected)
 
-        if self.currentText() == self.add_item_label:
-            invalid_names = self.items
-            invalid_names.append(self.default)
-            popup = LineEditPopup(title="New", invalid_entries=invalid_names)
-            popup.create_clicked.connect(self.on_new_selected)
-
-            item_added = popup.exec()
-            if not item_added:
-                self.setCurrentIndex(self.previous_index)
+                item_added = popup.exec()
+                if not item_added:
+                    self.setCurrentIndex(self.previous_index)
 
         self.previous_index = self.currentIndex()
 
