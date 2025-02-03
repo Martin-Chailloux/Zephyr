@@ -7,8 +7,10 @@ from MangoEngine import mongo_dialog
 class LineEditPopup(QDialog):
     create_clicked = Signal(str)
 
-    def __init__(self, title, invalid_entries: list[str] = None):
+    def __init__(self, title, invalid_entries: list[str] = None, close_on_confirm: bool=False):
         super().__init__()
+        self.close_on_confirm = close_on_confirm
+
         self.setWindowTitle(title)
         self.invalid_names = [] if invalid_entries is None else [mongo_dialog.text_to_input(t).lower() for t in invalid_entries]
 
@@ -46,20 +48,22 @@ class LineEditPopup(QDialog):
         cancel_button = QPushButton("Cancel")
         h_layout.addWidget(cancel_button)
 
-        create_button = QPushButton("Create")
-        h_layout.addWidget(create_button)
+        confirm_button = QPushButton("Create")
+        h_layout.addWidget(confirm_button)
 
-        self.create_button = create_button
+        self.confirm_button = confirm_button
         self.cancel_button = cancel_button
 
     def connect_signals(self):
+        if self.close_on_confirm:
+            self.confirm_button.clicked.connect(self.close)
         self.cancel_button.clicked.connect(self.close)
-        self.create_button.clicked.connect(self.on_create_clicked)
+        self.confirm_button.clicked.connect(self.on_create_clicked)
 
     def keyPressEvent(self, event):
         if event.key() == QtCore.Qt.Key.Key_Return:
-            if self.create_button.isEnabled():
-                self.create_button.clicked.emit()
+            if self.confirm_button.isEnabled():
+                self.confirm_button.clicked.emit()
         elif event.key() == QtCore.Qt.Key.Key_Escape:
             self.cancel_button.clicked.emit()
         else:
@@ -87,7 +91,7 @@ class LineEditPopup(QDialog):
 
         self.warning_label.setText(msg)
         self.warning_label.setStyleSheet(f"color: {color}")
-        self.create_button.setEnabled(is_valid)
+        self.confirm_button.setEnabled(is_valid)
 
     def on_create_clicked(self):
         self.create_clicked.emit(self.current_text)
