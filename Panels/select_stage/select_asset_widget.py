@@ -203,12 +203,14 @@ class AssetFieldCombobox(QComboBox):
     def wheelEvent(self, event):
         # Loop at extremities ; skips "new"
         self.is_scrolling = True
+
+        previous_index = self.currentIndex()
         super().wheelEvent(event)
 
         wheel_up = event.angleDelta().y() > 0
-        if self.previous_index == 0 and wheel_up:
+        if wheel_up and previous_index == self.currentIndex():
             self.setCurrentIndex(self.count()-2)
-        elif self.currentText() == self.add_item_label:
+        elif not wheel_up and previous_index == self.count()-2:
             self.setCurrentIndex(0)
 
         self.is_scrolling = False
