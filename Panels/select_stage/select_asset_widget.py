@@ -5,7 +5,7 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QComboBox, QLabel, QGridLayo
     QFrame
 
 from MangoEngine import mongo_dialog
-from MangoEngine.document_models import Project
+from MangoEngine.document_models import Project, Asset
 from Widgets.line_edit_popup import LineEditPopup
 from Utils.chronometer import Chronometer
 
@@ -77,7 +77,8 @@ class ZSelectAssetWidget(QWidget):
         line.setFrameShape(QFrame.Shape.HLine)
         line.setFrameShadow(QFrame.Shadow.Sunken)
 
-        layout.addWidget(ZStageListWidget())
+        stage_list = ZStageListWidget()
+        layout.addWidget(stage_list)
 
         for cb in [category_cb, name_cb, variant_cb]:
             cb.setFixedHeight(self.h)
@@ -88,6 +89,7 @@ class ZSelectAssetWidget(QWidget):
         self.category_cb = category_cb
         self.name_cb = name_cb
         self.variant_cb = variant_cb
+        self.stage_list = stage_list
 
     @property
     def category(self) -> str:
