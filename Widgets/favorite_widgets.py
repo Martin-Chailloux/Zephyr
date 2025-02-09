@@ -1,9 +1,4 @@
-from operator import iconcat
-
 import qtawesome
-from PySide6.QtCore import QSize
-from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import QPushButton
 
 from Gui.palette_api import ZPalette
 from Widgets.qwidgets_extensions import ZIconButton
