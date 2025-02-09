@@ -2,25 +2,25 @@ from textwrap import dedent
 
 from PySide6.QtCore import QPoint, QSize, Signal
 from PySide6.QtGui import QColor, QCursor
-from PySide6.QtWidgets import QPushButton, QGridLayout
+from PySide6.QtWidgets import QPushButton, QGridLayout, QVBoxLayout, QDialog
 from qtpy.QtWidgets import QMenu
 
-from Gui.palette_api import ZPalette
+from Gui.palette import Palette
 
-c = ZPalette()
 
 class ZStatusSelector(QPushButton):
-    # TODO: les choix doivent venir de la db
-    # TODO: disabled style
+    palette: Palette = Palette.objects.get(name="dev")
+    # TODO: choices should come from db
+    # TODO: define disabled style
 
     colors = {
-        "WAIT": c.text_white,
-        "TODO": c.yellow,
-        "WIP": c.orange,
-        "WFA": c.purple,
-        "DONE": c.green,
-        "ERROR": c.red,
-        "OMIT": c.light,
+        "WAIT": palette.white_text,
+        "TODO": palette.yellow,
+        "WIP": palette.orange,
+        "WFA": palette.purple,
+        "DONE": palette.green,
+        "ERROR": palette.red,
+        "OMIT": palette.primary,
     }
 
     w: int = 46
@@ -50,37 +50,42 @@ class ZStatusSelector(QPushButton):
 
         x = int(QCursor.pos().x() - menu.w / 2)
         y = int(QCursor.pos().y() - menu.h / 2)
-        menu.exec(QPoint(x, y))
+
+        # TODO: QMenu fonctionne que en python 3.12
+        menu.exec()
+        # menu.exec(QPoint(x, y))
 
 
-class SelectStatusMenu(QMenu):
+class SelectStatusMenu(QDialog):
+    palette: Palette = Palette.objects.get(name="dev")
+
     margin = 10
     spacing = 1
     max_columns: int = 2
     status_selected = Signal(str)
 
     colors = {
-        "TODO": c.yellow,
-        "WIP": c.orange,
-        "WFA": c.purple,
-        "DONE": c.green,
-        "WAIT": c.text_white,
-        "ERROR": c.red,
-        "OMIT": c.light,
+        "TODO": palette.yellow,
+        "WIP": palette.orange,
+        "WFA": palette.purple,
+        "DONE": palette.green,
+        "WAIT": palette.white_text,
+        "ERROR": palette.red,
+        "OMIT": palette.primary,
     }
 
     def __init__(self, button_w: int, button_h: int):
         super().__init__()
         self.max_rows = int(len(self.colors) / self.max_columns)
+        self.w = (button_w * self.spacing * self.max_columns) + (2 * self.margin)
+        self.h = (button_h * self.spacing * self.max_rows) + (2 * self.margin)
+
+        self.setFixedSize(QSize(self.w, self.h))
 
         layout = QGridLayout()
         self.setLayout(layout)
         layout.setContentsMargins(self.margin, self.margin, self.margin, self.margin)
         layout.setSpacing(self.spacing)
-
-        self.w = (button_w * self.spacing * self.max_columns) + (2 * self.margin)
-        self.h = (button_h * self.spacing * self.max_rows) + (2 * self.margin)
-        self.setFixedSize(QSize(self.w, self.h))
 
         for i, (text, color) in enumerate(self.colors.items()):
             button = QPushButton(text)
@@ -97,19 +102,18 @@ class SelectStatusMenu(QMenu):
         self.close()
 
 
-def set_stylesheet(widget, color: QColor):
-    c_base = color.name()
-    c_hover = color.lighter(110).name()
+def set_stylesheet(widget, color: str):
+    hover_color = QColor(color).lighter(110).name()
     widget.setStyleSheet(dedent("""
                     QPushButton {
                         color: black ;
-                        background-color:$c_base;
+                        background-color: $color;
                         border: 2px solid transparent;
                     }
                     QPushButton:hover {
-                        background-color:$c_hover;
+                        background-color: $hover_color;
                         border: none;
                     }
                     """)
-                    .replace("$c_base", c_base)
-                    .replace("$c_hover", c_hover))
+                    .replace("$color", color)
+                    .replace("$hover_color", hover_color))

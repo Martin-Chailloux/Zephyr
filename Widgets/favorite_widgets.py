@@ -1,14 +1,14 @@
 import qtawesome
 
-from Gui.palette_api import ZPalette
+from Gui.palette import Palette
 from Widgets.qwidgets_extensions import ZIconButton
-
-palette = ZPalette()
 
 
 class ZSetFavoriteIconButton(ZIconButton):
+    palette: Palette = Palette.objects.get(name="dev")
+
     def __init__(self):
-        super().__init__(icon_name="fa.star", width=24, icon_size=18, color=palette.text_white)
+        super().__init__(icon_name="fa.star", width=24, icon_size=18, color=self.palette.white_text)
         self.unchecked_icon = qtawesome.icon("fa.star-o", color=self.color)
 
         self.setCheckable(True)

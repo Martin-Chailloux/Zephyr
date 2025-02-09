@@ -3,17 +3,17 @@ from PySide6.QtCore import QSize
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import QPushButton, QLabel
 
-from Gui.palette_api import ZPalette
-
-palette = ZPalette()
+from Gui.palette import Palette
 
 
 class ZIconButton(QPushButton):
+    palette: Palette = Palette.objects.get(name="dev")
+
     def __init__(self, icon_name: str, width: int = 30, icon_size: int=20, color: str = "white"):
         super().__init__()
 
         self.setFixedSize(QSize(width, width))
-        color = color or palette.text_white
+        color = color or self.palette.white_text
         icon = qtawesome.icon(icon_name, color=color)
         self.setIcon(icon)
         self.setIconSize(QSize(icon_size, icon_size))
