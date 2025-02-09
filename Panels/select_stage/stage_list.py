@@ -1,6 +1,3 @@
-from re import template
-from textwrap import dedent
-
 import qtawesome
 
 from PySide6 import QtCore
@@ -71,13 +68,6 @@ class StageItem(QWidget):
 
 
 class ZStageListWidget(QWidget):
-    defaults = {
-        "modeling": "ph.cube-fill",
-        "rigging": "mdi.human-edit",
-        "texturing": "fa.paint-brush",
-        "shading": "mdi6.crystal-ball",
-    }
-
     create_stage_request = Signal(str)
     margin: int = 7
 
