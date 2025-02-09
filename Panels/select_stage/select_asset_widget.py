@@ -30,7 +30,7 @@ class ZSelectAssetWidget(QWidget):
         self.on_category_selected()
 
     def _init_ui(self):
-        self.setFixedWidth(417)
+        self.setMaximumWidth(512)
 
         layout = QVBoxLayout()
         self.setLayout(layout)
@@ -207,7 +207,7 @@ class AssetFieldCombobox(QComboBox):
         self.setItemIcon(self.count()-1, qtawesome.icon("fa.plus-circle"))
 
     def wheelEvent(self, event):
-        # Loop at extremities ; skips "new"
+        # Loop at extremities & skip "new"
         self.is_scrolling = True
 
         previous_index = self.currentIndex()
