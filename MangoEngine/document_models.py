@@ -21,7 +21,7 @@ class Project(Document):
     }
 
     def __repr__(self):
-        return f"Project: name ='{self.name}'"
+        return f"<Project>: name ='{self.name}'"
 
     def add_category(self, new_categories: str | list[str]):
         if type(new_categories) is str:
@@ -38,28 +38,60 @@ class Asset(Document):
     """
     Category + Name + Variant. Contains stages.
     """
+    longname = StringField(required=True, primary_key=True)
+
     category = StringField(required=True)
     name = StringField(required=True)
     variant = StringField(default="-")
+
+    stages = ListField(ReferenceField(document_type='Stage'), default=[])
 
     meta = {
         'collection': 'Assets'
     }
 
     def __repr__(self):
-        return f"Asset: category='{self.category}', name='{self.name}', variant='{self.variant}'"
+        return f"<Asset>: {self.longname}]"
 
-    @property
-    def longname(self) -> str:
-        return f"{self.category}_{self.name}_{self.variant}"
 
-    @classmethod
-    def from_longname(cls, longname: str):
-        keys = longname.split("_")
-        if len(keys) != 3:
-            raise "Incorrect number of keys in longname."
-        return cls(category=keys[0], name=keys[1], variant=keys[2])
+class StageTemplate(Document):
+    name = StringField(required=True, primary_key=True)
+    label = StringField(required=True, unique=True)
+    description = StringField(default="")
 
+    color = StringField(default="#ffffff")
+    icon_name = StringField(default="fa5s.question")
+
+    presets = ListField(StringField(), default=[])
+
+    meta = {
+        'collection': 'Stage templates'
+    }
+
+    def __repr__(self):
+        return f"<Stage template>: {self.name}"
+
+
+class Stage(Document):
+    longname = StringField(required=True, primary_key=True)
+    stage_template = ReferenceField(document_type=StageTemplate)
+    asset = ReferenceField(document_type=Asset)
+
+    meta = {
+        'collection': 'Stages'
+    }
+
+    def __repr__(self):
+        return f"<Stage>: {self.longname}'"
+
+    def append_to_asset(self):
+        self.asset.stages.append(self)
+        self.asset.save()
+
+
+# ======================================================
+# NOTE: below is theory, it can change a lot in practice
+# ======================================================
 
 class Component(Document):
     """
@@ -99,7 +131,7 @@ class Component(Document):
                    filepath=filepath)
 
 
-class Stage(Component):
+class StageOld(Component):
     """
     A Component that creates Products
     """
@@ -111,7 +143,7 @@ class Product(Component):
     """
     A Component created from a Stage
     """
-    stage = ReferenceField(document_type=Stage, required=True)
+    stage = ReferenceField(document_type=StageOld, required=True)
 
 Stage.register_delete_rule(Product, 'products', PULL)
 
@@ -120,7 +152,7 @@ class Increment(Document):
     """
     Numbered iteration of a Stage
     """
-    stage: Stage = ReferenceField(document_type=Stage, reverse_delete_rule=CASCADE, default=None)
+    stage: StageOld = ReferenceField(document_type=StageOld, reverse_delete_rule=CASCADE, default=None)
     product: Product = ReferenceField(document_type=Product, reverse_delete_rule=CASCADE, default=None)
 
     count = IntField(min=0, required=True)
@@ -128,7 +160,7 @@ class Increment(Document):
     extension = StringField(required=True)
 
     @property
-    def source(self) -> Stage | Product:
+    def source(self) -> StageOld | Product:
         if self.product is None:
             return self.stage
         elif self.stage is None:
