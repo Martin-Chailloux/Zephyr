@@ -6,7 +6,7 @@ from PySide6.QtWidgets import (QVBoxLayout, QTableWidget, QLineEdit, QHBoxLayout
 import qtawesome
 
 from MangoEngine import mongo_dialog
-from Widgets.qwidgets_extensions import ZIconButton
+from Widgets.qwidgets_extensions import IconButton
 
 
 class ZFakeIngestWidget(QTableWidget):
@@ -29,13 +29,13 @@ class ZFakeIngestWidget(QTableWidget):
         layout.addLayout(h_layout)
         h_layout.setSpacing(2)
 
-        copy_button = ZIconButton("fa5s.clone", 30, 20)
+        copy_button = IconButton("fa5s.clone", 30, 20)
         h_layout.addWidget(copy_button)
 
-        plus_button = ZIconButton("fa.plus", 30, 20)
+        plus_button = IconButton("fa.plus", 30, 20)
         h_layout.addWidget(plus_button)
 
-        minus_button = ZIconButton("fa.minus", 30, 20)
+        minus_button = IconButton("fa.minus", 30, 20)
         h_layout.addWidget(minus_button)
 
         h_layout.addSpacing(7)
@@ -43,7 +43,7 @@ class ZFakeIngestWidget(QTableWidget):
         name_field = QLineEdit()
         h_layout.addWidget(name_field)
 
-        rename_button = ZIconButton("mdi6.rename", 30, 20)
+        rename_button = IconButton("mdi6.rename", 30, 20)
         h_layout.addWidget(rename_button)
 
         export_button = QPushButton("Save to Database")

@@ -1,12 +1,11 @@
 import qtawesome
 from PySide6.QtCore import QSize
-from PySide6.QtGui import QColor
-from PySide6.QtWidgets import QPushButton, QLabel
+from PySide6.QtWidgets import QPushButton, QLabel, QWidget, QVBoxLayout, QTextEdit
 
 from Gui.palette import Palette
 
 
-class ZIconButton(QPushButton):
+class IconButton(QPushButton):
     palette: Palette = Palette.objects.get(name="dev")
 
     def __init__(self, icon_name: str, width: int = 30, icon_size: int=20, color: str = "white"):
