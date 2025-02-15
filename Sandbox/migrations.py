@@ -1,6 +1,6 @@
 from Cython.Shadow import returns
 
-from MangoEngine.document_models import Stage, StageTemplate
+from MangoEngine.document_models import Stage, StageTemplate, Asset
 
 from MangoEngine import mongo_dialog
 
@@ -26,6 +26,14 @@ def stage_templates_description_to_tooltip():
         old = stage_template.description
         stage_template.update(unset__description = True)
         stage_template.update(tooltip = old)
+
+
+def clear_old_stages_from_assets():
+    all_assets = Asset.objects
+    all_stages = Stage.objects
+    for asset in all_assets:
+        stages = [s for s in asset.stages if s in all_stages]
+        asset.update(stages=stages)
 
 if __name__ == '__main__':
     pass
