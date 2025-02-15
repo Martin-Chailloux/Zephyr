@@ -9,7 +9,7 @@ import qtawesome
 
 from MangoEngine.document_models import StageTemplate
 from Widgets.line_edit_popup import LineEditPopup
-from Widgets.qwidgets_extensions import ZIconButton
+from Widgets.qwidgets_extensions import IconButton
 
 
 class StageButton(QPushButton):
@@ -110,11 +110,11 @@ class StageTemplateSelector(QDialog):
 
         w = presets_cb.sizeHint().height()
 
-        save_button = ZIconButton(icon_name="mdi6.content-save", width=w)
+        save_button = IconButton(icon_name="mdi6.content-save", width=w)
         h_layout.addWidget(save_button)
         save_button.setToolTip("Save preset")
 
-        save_as_button = ZIconButton(icon_name="mdi6.content-save-plus", width=w)
+        save_as_button = IconButton(icon_name="mdi6.content-save-plus", width=w)
         h_layout.addWidget(save_as_button)
         save_as_button.setToolTip("Save as new preset")
 
