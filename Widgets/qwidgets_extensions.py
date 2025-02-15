@@ -32,3 +32,25 @@ class IconAsPixmap(QLabel):
         icon = qtawesome.icon(self.icon_name)
         pixmap = icon.pixmap(self.sizeHint().height())
         self.setPixmap(pixmap)
+
+
+class TextBox(QWidget):
+    def __init__(self, title: str):
+        super().__init__()
+        self.title = title
+
+        self._init_ui()
+
+    def _init_ui(self):
+        layout = QVBoxLayout()
+        self.setLayout(layout)
+        layout.setContentsMargins(0, 0, 0, 0)
+
+        label = QLabel(self.title)
+        layout.addWidget(label)
+
+        text_edit = QTextEdit()
+        layout.addWidget(text_edit)
+
+        # public vars
+        self.text_edit = text_edit
