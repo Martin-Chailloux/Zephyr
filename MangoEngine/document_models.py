@@ -63,7 +63,7 @@ class StageTemplate(Document):
     """
     name = StringField(required=True, primary_key=True)
     label = StringField(required=True, unique=True)
-    description = StringField(default="")  # TODO: migration: description -> tooltip
+    tooltip = StringField(default="")
 
     color = StringField(default="#ffffff")
     icon_name = StringField(default="fa5s.question")
