@@ -6,7 +6,7 @@ import qtawesome
 from PySide6 import QtCore
 from PySide6.QtWidgets import (QApplication, QDialog, QVBoxLayout, QHBoxLayout,
                                QPushButton, QLabel, QSizePolicy)
-from Widgets.qwidgets_extensions import TextBox
+from Widgets.qwidgets_extensions import TextBox, PushButtonAutoWidth
 
 from MangoEngine.document_models import Stage
 
@@ -64,17 +64,18 @@ class SelectStageVersionWidget(QDialog):
         v_layout.addLayout(h_layout)
         h_layout.setSpacing(self.buttons_spacing)
 
-        from_scratch_button = QPushButton(" From scratch")
+        from_scratch_button = PushButtonAutoWidth(
+            text=" From scratch", icon_name='ph.selection-bold',
+            tooltip="use an empty file",
+            fixed_width=True,
+        )
         h_layout.addWidget(from_scratch_button)
-        from_scratch_button.setIcon(qtawesome.icon("ph.selection-bold"))
-        from_scratch_button.setFixedWidth(from_scratch_button.sizeHint().width() + 12)
-        from_scratch_button.setFixedHeight(self.h)
 
-        increment_button = QPushButton(" Increment")
-        h_layout.addWidget(increment_button)
-        increment_button.setIcon(qtawesome.icon("fa5s.arrow-up"))
-        increment_button.setMinimumWidth(increment_button.sizeHint().width() + 12)
-        increment_button.setFixedHeight(self.h)
+        from_scratch_button = PushButtonAutoWidth(
+            text=" Increment", icon_name='fa5s.arrow-up',
+            tooltip="use a copy of the selected version",
+        )
+        h_layout.addWidget(from_scratch_button)
 
         # versions list
         versions_list = VersionsListView()
@@ -87,19 +88,18 @@ class SelectStageVersionWidget(QDialog):
         v_layout.addLayout(h_layout)
         h_layout.setSpacing(self.buttons_spacing)
 
-        processes_button = QPushButton(" Processes")
-        processes_button.setIcon(qtawesome.icon('fa.gears'))
+        processes_button = PushButtonAutoWidth(
+            text=" Processes", icon_name='fa.gears',
+            tooltip="Choose a process to launch",
+            fixed_width=True,
+        )
         h_layout.addWidget(processes_button)
-        processes_button.setFixedHeight(self.h)
-        processes_button.setFixedWidth(processes_button.sizeHint().width() + 12)
-        processes_button.setToolTip("Choose a process to launch")
 
-        launch_button = QPushButton(" Launch")
-        launch_button.setIcon(qtawesome.icon('fa5s.rocket'))
+        launch_button = PushButtonAutoWidth(
+            text=" Launch", icon_name='fa5s.rocket',
+            tooltip="Open the selected file within its software",
+        )
         h_layout.addWidget(launch_button)
-        launch_button.setFixedHeight(self.h)
-        launch_button.setMinimumWidth(increment_button.sizeHint().width() + 12)
-        launch_button.setToolTip("Open the selected file within its software")
 
         # TODO: open_folder & copy_path in a context menu
         # open_folder_button = IconButton(icon_name="fa5s.folder-open")

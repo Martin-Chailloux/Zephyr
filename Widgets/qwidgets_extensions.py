@@ -54,3 +54,19 @@ class TextBox(QWidget):
 
         # public vars
         self.text_edit = text_edit
+
+
+class PushButtonAutoWidth(QPushButton):
+    def __init__(self, text: str=None, icon_name: str=None, tooltip: str=None,
+                 height: int=28, fixed_width: bool=False):
+        super().__init__()
+        if text is not None:
+            self.setText(text)
+        if icon_name is not None:
+            self.setIcon(qtawesome.icon(icon_name))
+        if tooltip is not None:
+            self.setToolTip(tooltip)
+
+        self.setFixedHeight(height)
+        width = self.sizeHint().width() + 12
+        self.setFixedWidth(width) if fixed_width else self.setMinimumWidth(width)
