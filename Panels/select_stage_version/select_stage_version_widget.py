@@ -64,17 +64,17 @@ class SelectStageVersionWidget(QDialog):
         v_layout.addLayout(h_layout)
         h_layout.setSpacing(self.buttons_spacing)
 
-        increment_button = QPushButton(" Increment")
-        h_layout.addWidget(increment_button)
-        increment_button.setIcon(qtawesome.icon("fa5s.arrow-up"))
-        increment_button.setMinimumWidth(increment_button.sizeHint().width() + 12)
-        increment_button.setFixedHeight(self.h)
-
         from_scratch_button = QPushButton(" From scratch")
         h_layout.addWidget(from_scratch_button)
         from_scratch_button.setIcon(qtawesome.icon("ph.selection-bold"))
         from_scratch_button.setFixedWidth(from_scratch_button.sizeHint().width() + 12)
         from_scratch_button.setFixedHeight(self.h)
+
+        increment_button = QPushButton(" Increment")
+        h_layout.addWidget(increment_button)
+        increment_button.setIcon(qtawesome.icon("fa5s.arrow-up"))
+        increment_button.setMinimumWidth(increment_button.sizeHint().width() + 12)
+        increment_button.setFixedHeight(self.h)
 
         # versions list
         versions_list = VersionsListView()

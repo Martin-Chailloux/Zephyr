@@ -6,6 +6,7 @@ import qdarkstyle
 from MangoEngine import project_dialog
 from MangoEngine.document_models import Project
 from Panels.select_stage.select_asset_widget import ZSelectAssetWidget
+from Panels.select_stage_version.select_stage_version_widget import SelectStageVersionWidget
 from Utils.chronometer import Chronometer
 
 from Sandbox.fake_ingest_widget import ZFakeIngestWidget
@@ -16,7 +17,7 @@ class Ghost(QMainWindow):
         super().__init__()
         self.setWindowTitle("Zephyr")
 
-        self.setCentralWidget(TestWidget())
+        self.setCentralWidget(SelectStageVersionWidget())
 
         project: Project = project_dialog.get_project("Dev")
 
