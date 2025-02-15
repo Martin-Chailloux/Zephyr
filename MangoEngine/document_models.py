@@ -86,8 +86,8 @@ class Stage(Document):
     Contains a Work Component, and Exports Components.
     """
     longname = StringField(required=True, primary_key=True)
-    stage_template = ReferenceField(document_type=StageTemplate)
     asset = ReferenceField(document_type=Asset)
+    stage_template = ReferenceField(document_type=StageTemplate)
 
     components = ListField(ReferenceField(document_type='Component', default=[]))  # TODO: migration ?
     ingredients = ListField(ReferenceField(document_type='Versions'), default=[]) # TODO: migration ?
@@ -163,83 +163,3 @@ class Version(Document):
 
     def __repr__(self):
         return f"<Version>: {self.longname}"
-
-
-# ======================================================
-# NOTE: below is theory, it can change a lot in practice
-# ======================================================
-
-class Component(Document):
-    """
-    Base class for Stages and Products
-    """
-    asset = ReferenceField(Asset, reverse_delete_rule=CASCADE, required=True)
-
-    description = StringField(required=True)
-    detail = StringField(default="-")
-
-    current_status = StringField(
-        choices=[Status.TODO, Status.WIP, Status.WFA, Status.DONE, Status.ERROR, Status.OMIT],
-        default=Status.TODO
-    )
-
-    meta = {
-        'collection': 'Components',
-        'allow_inheritance': True
-    }
-
-    def __repr__(self):
-        return (f"Stage: asset='{self.asset}'"
-                f"\ndescription='{self.description}', detail='{self.detail}', ext='{self.extension}")
-
-    @property
-    def longname(self) -> str:
-        return f"{self.asset.longname}_{self.description}_{self.detail}_{self.extension}"
-
-    @classmethod
-    def from_longname(cls, longname: str, filepath: str):
-        keys = longname.split("_")
-        if len(keys) != 6:
-            raise "Incorrect number of keys in longname."
-        asset = Asset.objects(category=keys[0], name=keys[1], variant=keys[2])
-        return cls(asset=asset,
-                   description=keys[3], detail=keys[4], extension=keys[5],
-                   filepath=filepath)
-
-
-class StageOld(Component):
-    """
-    A Component that creates Products
-    """
-    components = ListField(ReferenceField(document_type=Component, reverse_delete_rule=PULL), default=[])
-    products = ListField(ReferenceField(document_type='Product'), default=[])
-
-
-class Product(Component):
-    """
-    A Component created from a Stage
-    """
-    stage = ReferenceField(document_type=StageOld, required=True)
-
-Stage.register_delete_rule(Product, 'products', PULL)
-
-
-class Increment(Document):
-    """
-    Numbered iteration of a Stage
-    """
-    stage: StageOld = ReferenceField(document_type=StageOld, reverse_delete_rule=CASCADE, default=None)
-    product: Product = ReferenceField(document_type=Product, reverse_delete_rule=CASCADE, default=None)
-
-    count = IntField(min=0, required=True)
-    filepath = StringField(required=True)
-    extension = StringField(required=True)
-
-    @property
-    def source(self) -> StageOld | Product:
-        if self.product is None:
-            return self.stage
-        elif self.stage is None:
-            return self.product
-        else:
-            raise "Increments should have exactly one source."

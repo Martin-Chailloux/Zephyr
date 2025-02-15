@@ -52,10 +52,9 @@ def create_stage_template(name: str, label: str, description: str,
     return stage_template
 
 
-def create_stage(stage_template: StageTemplate, asset: Asset, **kwargs) -> Stage:
-    # TODO: MIGRATION: longname = {asset.longname}_{stage_template.name}
-    longname = "_".join(s for s in [stage_template.name, asset.longname])
-    kwargs = dict(stage_template=stage_template, asset=asset, longname=longname, **kwargs)
+def create_stage(asset: Asset, stage_template: StageTemplate, **kwargs) -> Stage:
+    longname = "_".join(s for s in [asset.longname, stage_template.name])
+    kwargs = dict(asset=asset, stage_template=stage_template, longname=longname, **kwargs)
     kwargs = {k: v for k, v in kwargs.items() if v is not None}
     stage = Stage(**kwargs)
     stage.save()
