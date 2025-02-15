@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from mongoengine import *
 from MangoEngine.data import Status
 
@@ -55,9 +57,13 @@ class Asset(Document):
 
 
 class StageTemplate(Document):
+    """
+    Template for a Stage. \n
+    Infos: name, label, description, color, icon
+    """
     name = StringField(required=True, primary_key=True)
     label = StringField(required=True, unique=True)
-    description = StringField(default="")
+    description = StringField(default="")  # TODO: migration: description -> tooltip
 
     color = StringField(default="#ffffff")
     icon_name = StringField(default="fa5s.question")
@@ -73,9 +79,18 @@ class StageTemplate(Document):
 
 
 class Stage(Document):
+    """
+    Belongs to an Asset. Working step in its utilisation.
+    (ex: modeling, rigging, animation, lighting, etc.) \n
+    Is based on a StageTemplate. \n
+    Contains a Work Component, and Exports Components.
+    """
     longname = StringField(required=True, primary_key=True)
     stage_template = ReferenceField(document_type=StageTemplate)
     asset = ReferenceField(document_type=Asset)
+
+    components = ListField(ReferenceField(document_type='Component', default=[]))  # TODO: migration ?
+    ingredients = ListField(ReferenceField(document_type='Versions'), default=[]) # TODO: migration ?
 
     meta = {
         'collection': 'Stages'
@@ -85,8 +100,69 @@ class Stage(Document):
         return f"<Stage>: {self.longname}'"
 
     def append_to_asset(self):
+        if self in self.asset.stages:
+            print(f"WARNING: {self.__repr__()} is already a stage of {self.asset.__repr__()}. Cannot append.")
+            return
+
         self.asset.stages.append(self)
         self.asset.save()
+
+
+class Component(Document):
+    """
+    Belongs to a Stage. Contains Versions. \n
+    Work Component: contains the working versions of a Stage. \n
+    Export Component: contains the versions of an exported item. \n
+    Ingredient: Version of a component that is used inside a Stage.
+    """
+    longname = StringField(required=True, primary_key=True)
+
+    name = StringField(required=True)
+    label = StringField(required=True)
+    description = StringField(required=True)
+    extension = StringField(required=True)
+
+    stage = ReferenceField(document_type=Stage, required=True)
+    versions = ListField(ReferenceField(document_type='Version'), default=[])
+    head_version = ReferenceField(document_type='Version')
+
+    destinations = ListField(ReferenceField(document_type=Stage, default=[]))
+
+    meta = {
+        'collection': 'Components'
+    }
+
+    def __repr__(self):
+        return f"<Component>: {self.longname}"
+
+
+class Version(Document):
+    """
+    Belongs to a Component. Has an increment number and a filepath. \n
+    Ingredient: Version that is used inside a Stage.
+    """
+    longname = StringField(required=True, primary_key=True)
+
+    source = ReferenceField(document_type=Component, required=True)
+
+    number = IntField(required=True)
+    filepath = IntField(required=True)
+
+    creation_time = DateTimeField(default=datetime.utcnow())
+    # creation_user = ReferenceField(document_type='User')
+    last_time = DateTimeField(default=datetime.utcnow())
+    # last_user = ReferenceField(document_type='User')
+
+    comment = StringField(default="")
+    thumbnail_path = StringField()
+    # todo_list = ReferenceField(document_type='Task', default=[])
+
+    meta = {
+        'collection': 'Versions'
+    }
+
+    def __repr__(self):
+        return f"<Version>: {self.longname}"
 
 
 # ======================================================
