@@ -8,7 +8,7 @@ from qtpy.QtWidgets import QMenu
 from Gui.palette import Palette
 
 
-class ZStatusSelector(QPushButton):
+class StatusSelectWidget(QPushButton):
     palette: Palette = Palette.objects.get(name="dev")
     # TODO: choices should come from db
     # TODO: define disabled style

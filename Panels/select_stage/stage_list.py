@@ -8,7 +8,7 @@ from PySide6.QtWidgets import (QWidget, QVBoxLayout, QPushButton, QHBoxLayout, Q
 from MangoEngine.document_models import Status, StageTemplate, Asset, Stage
 from MangoEngine.mongo_dialog import create_stage
 from Widgets.stage_widgets import StageTemplateSelector, StageButton
-from Widgets.status_widgets import ZStatusSelector
+from Widgets.status_widgets import StatusSelectWidget
 
 
 class StageItem(QWidget):
@@ -51,7 +51,7 @@ class StageItem(QWidget):
         layout.addWidget(button)
         button.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
-        status_button = ZStatusSelector(height=self.h)
+        status_button = StatusSelectWidget(height=self.h)
         layout.addWidget(status_button)
 
         button.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
