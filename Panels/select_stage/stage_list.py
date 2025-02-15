@@ -35,6 +35,7 @@ class StageItem(QWidget):
 
         # TODO: photo de profil comme icone, le nom en tooltip quand on hover
         # TODO: bigger round button with tooltip
+        # TODO: offset in its own widget
         user_combobox = QComboBox()
         layout.addWidget(user_combobox)
         user_combobox.setFixedHeight(self.h)
