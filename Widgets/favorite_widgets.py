@@ -1,10 +1,10 @@
 import qtawesome
 
 from Gui.palette import Palette
-from Widgets.qwidgets_extensions import ZIconButton
+from Widgets.qwidgets_extensions import IconButton
 
 
-class ZSetFavoriteIconButton(ZIconButton):
+class SetFavoriteIconButton(IconButton):
     palette: Palette = Palette.objects.get(name="dev")
 
     def __init__(self):
