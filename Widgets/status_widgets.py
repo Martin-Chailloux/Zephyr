@@ -1,5 +1,6 @@
 from textwrap import dedent
 
+from PySide6 import QtCore
 from PySide6.QtCore import QPoint, QSize, Signal
 from PySide6.QtGui import QColor, QCursor
 from PySide6.QtWidgets import QPushButton, QGridLayout, QVBoxLayout, QDialog
@@ -81,6 +82,8 @@ class SelectStatusMenu(QDialog):
         self.h = (button_h * self.spacing * self.max_rows) + (2 * self.margin)
 
         self.setFixedSize(QSize(self.w, self.h))
+        self.setWindowFlag(QtCore.Qt.WindowType.FramelessWindowHint)
+        # TODO: place under the mouse
 
         layout = QGridLayout()
         self.setLayout(layout)
