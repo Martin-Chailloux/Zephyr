@@ -3,8 +3,7 @@ from textwrap import dedent
 from PySide6 import QtCore
 from PySide6.QtCore import QPoint, QSize, Signal
 from PySide6.QtGui import QColor, QCursor
-from PySide6.QtWidgets import QPushButton, QGridLayout, QVBoxLayout, QDialog
-from qtpy.QtWidgets import QMenu
+from PySide6.QtWidgets import QPushButton, QGridLayout, QDialog
 
 from Gui.palette import Palette
 
@@ -52,9 +51,9 @@ class StatusSelectWidget(QPushButton):
         x = int(QCursor.pos().x() - menu.w / 2)
         y = int(QCursor.pos().y() - menu.h / 2)
 
-        # TODO: QMenu fonctionne que en python 3.12
+        # TODO: create a higher level widget in qwidget extensions
+        menu.move(QPoint(x, y))
         menu.exec()
-        # menu.exec(QPoint(x, y))
 
 
 class SelectStatusMenu(QDialog):
@@ -83,7 +82,6 @@ class SelectStatusMenu(QDialog):
 
         self.setFixedSize(QSize(self.w, self.h))
         self.setWindowFlag(QtCore.Qt.WindowType.FramelessWindowHint)
-        # TODO: place under the mouse
 
         layout = QGridLayout()
         self.setLayout(layout)
