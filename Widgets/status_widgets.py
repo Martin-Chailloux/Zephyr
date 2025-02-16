@@ -6,6 +6,7 @@ from PySide6.QtGui import QColor, QCursor
 from PySide6.QtWidgets import QPushButton, QGridLayout, QDialog
 
 from Gui.palette import Palette
+from Widgets.qwidgets_extensions import ContextWidget
 
 
 class StatusSelectWidget(QPushButton):
@@ -47,16 +48,10 @@ class StatusSelectWidget(QPushButton):
     def create_menu(self):
         menu = SelectStatusMenu(button_w = self.w, button_h = self.h + 8)
         menu.status_selected.connect(self.set_new_status)
-
-        x = int(QCursor.pos().x() - menu.w / 2)
-        y = int(QCursor.pos().y() - menu.h / 2)
-
-        # TODO: create a higher level widget in qwidget extensions
-        menu.move(QPoint(x, y))
         menu.exec()
 
 
-class SelectStatusMenu(QDialog):
+class SelectStatusMenu(ContextWidget):
     palette: Palette = Palette.objects.get(name="dev")
 
     margin = 10
@@ -79,10 +74,9 @@ class SelectStatusMenu(QDialog):
         self.max_rows = int(len(self.colors) / self.max_columns)
         self.w = (button_w * self.spacing * self.max_columns) + (2 * self.margin)
         self.h = (button_h * self.spacing * self.max_rows) + (2 * self.margin)
-
         self.setFixedSize(QSize(self.w, self.h))
-        self.setWindowFlag(QtCore.Qt.WindowType.FramelessWindowHint)
 
+    def _init_ui(self):
         layout = QGridLayout()
         self.setLayout(layout)
         layout.setContentsMargins(self.margin, self.margin, self.margin, self.margin)

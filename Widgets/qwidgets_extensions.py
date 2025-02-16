@@ -1,6 +1,8 @@
 import qtawesome
-from PySide6.QtCore import QSize
-from PySide6.QtWidgets import QPushButton, QLabel, QWidget, QVBoxLayout, QTextEdit
+from PySide6 import QtCore
+from PySide6.QtCore import QSize, Signal, QPoint
+from PySide6.QtGui import QCursor
+from PySide6.QtWidgets import QPushButton, QLabel, QWidget, QVBoxLayout, QTextEdit, QDialog
 
 from Gui.palette import Palette
 
@@ -70,3 +72,27 @@ class PushButtonAutoWidth(QPushButton):
         self.setFixedHeight(height)
         width = self.sizeHint().width() + 12
         self.setFixedWidth(width) if fixed_width else self.setMinimumWidth(width)
+
+
+class ContextWidget(QDialog):
+    confirmed = Signal(str)
+
+    def __init__(self, is_centered: bool=False):
+        super().__init__()
+        self.is_centered = is_centered
+        self.setWindowFlag(QtCore.Qt.WindowType.FramelessWindowHint)
+        self._init_ui()
+
+    def _init_ui(self):
+        pass
+
+    def exec(self):
+        x = int(QCursor.pos().x())
+        y = int(QCursor.pos().y())
+
+        if self.is_centered:
+            x -= self.sizeHint().width() / 2
+            y -= self.sizeHint().height() / 2
+
+        self.move(QPoint(x, y))
+        super().exec()
