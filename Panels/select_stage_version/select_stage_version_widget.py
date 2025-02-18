@@ -4,9 +4,14 @@ import qdarkstyle
 import qtawesome
 
 from PySide6 import QtCore
+from PySide6.QtCore import QPoint, QSize, Signal
+from PySide6.QtGui import QAction
 from PySide6.QtWidgets import (QApplication, QDialog, QVBoxLayout, QHBoxLayout,
-                               QPushButton, QLabel, QSizePolicy)
-from Widgets.qwidgets_extensions import TextBox, PushButtonAutoWidth
+                               QPushButton, QLabel, QSizePolicy, QMenu, QWidget, QGridLayout)
+
+from Data import softwares
+from Data.softwares import Software
+from Widgets.qwidgets_extensions import TextBox, PushButtonAutoWidth, ContextWidget
 
 from MangoEngine.document_models import Stage
 
@@ -21,6 +26,7 @@ class SelectStageVersionWidget(QDialog):
     def __init__(self):
         super().__init__()
         self._init_ui()
+        self.connect_signals()
 
     def _init_ui(self):
         layout = QVBoxLayout()
@@ -71,11 +77,11 @@ class SelectStageVersionWidget(QDialog):
         )
         h_layout.addWidget(from_scratch_button)
 
-        from_scratch_button = PushButtonAutoWidth(
+        increment_button = PushButtonAutoWidth(
             text=" Increment", icon_name='fa5s.arrow-up',
             tooltip="use a copy of the selected version",
         )
-        h_layout.addWidget(from_scratch_button)
+        h_layout.addWidget(increment_button)
 
         # versions list
         versions_list = VersionsListView()
@@ -122,6 +128,73 @@ class SelectStageVersionWidget(QDialog):
         todo_list = TextBox(title="To do:")
         v_layout.addWidget(todo_list)
 
+        # ------------------------
+        # public vars
+        # ------------------------
+        self.from_scratch_button = from_scratch_button
+
+    def connect_signals(self):
+        self.from_scratch_button.clicked.connect(self.on_from_scratch_clicked)
+        self.from_scratch_button.customContextMenuRequested.connect(self.on_from_scratch_clicked)
+
+    def on_from_scratch_clicked(self):
+        menu = SelectSoftwareContextWidget()
+        menu.exec()
+
+
+class SelectSoftwareContextWidget(ContextWidget):
+    software_icons = [
+        softwares.Krita(),
+        softwares.Blender(),
+        softwares.Maya(),
+        softwares.GuerillaRender(),
+        softwares.Nuke(),
+    ]
+
+    margin = 2
+    button_w: int = 48
+    h: int = 48
+
+    def __init__(self):
+        w = (len(self.software_icons) * self.button_w) + (2 * self.margin)
+        super().__init__(w=w, h=self.h,
+                         align_h=QtCore.Qt.AlignmentFlag.AlignCenter,
+                         align_v=QtCore.Qt.AlignmentFlag.AlignBottom)
+        self._init_ui()
+
+    def _init_ui(self):
+        layout = QHBoxLayout()
+        self.setLayout(layout)
+        layout.setContentsMargins(self.margin, self.margin, self.margin, self.margin)
+        layout.setSpacing(2)
+
+        for i, software in enumerate(self.software_icons):
+            h = self.h - 12
+            button = SoftwareButton(software=software, icon_h=h)
+            layout.addWidget(button)
+            button.software_selected.connect(self.on_software_selected)
+
+    def on_software_selected(self, label: str):
+        print(f"software selected: {label}")
+        self.close()
+
+
+class SoftwareButton(QPushButton):
+    software_selected = Signal(str)
+
+    def __init__(self, software: Software, icon_h: int=36):
+        super().__init__()
+        self.software = software
+        self.setIcon(software.icon)
+        self.setIconSize(QSize(icon_h, icon_h))
+
+        self.setToolTip(software.label)
+        self.setEnabled(self.software.is_enabled)
+
+        self.clicked.connect(self.on_button_clicked)
+
+    def on_button_clicked(self):
+        self.software_selected.emit(self.software.label)
 
 
 if __name__ == '__main__':

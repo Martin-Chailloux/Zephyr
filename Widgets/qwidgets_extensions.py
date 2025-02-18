@@ -75,24 +75,31 @@ class PushButtonAutoWidth(QPushButton):
 
 
 class ContextWidget(QDialog):
-    confirmed = Signal(str)
-
-    def __init__(self, is_centered: bool=False):
+    def __init__(self, w: int, h: int,
+                 align_h: QtCore.Qt.AlignmentFlag=QtCore.Qt.AlignmentFlag.AlignLeft,
+                 align_v: QtCore.Qt.AlignmentFlag=QtCore.Qt.AlignmentFlag.AlignTop):
         super().__init__()
-        self.is_centered = is_centered
-        self.setWindowFlag(QtCore.Qt.WindowType.FramelessWindowHint)
-        self._init_ui()
+        self.w = w
+        self.h = h
+        self.align_h = align_h
+        self.align_v = align_v
 
-    def _init_ui(self):
-        pass
+        self.setWindowFlag(QtCore.Qt.WindowType.FramelessWindowHint)
+        self.setFixedSize(QSize(w, h))
 
     def exec(self):
         x = int(QCursor.pos().x())
         y = int(QCursor.pos().y())
 
-        if self.is_centered:
-            x -= self.sizeHint().width() / 2
-            y -= self.sizeHint().height() / 2
+        if self.align_h in [QtCore.Qt.AlignmentFlag.AlignCenter, QtCore.Qt.AlignmentFlag.AlignHCenter]:
+            x -= self.w / 2
+        elif self.align_h in [QtCore.Qt.AlignmentFlag.AlignRight]:
+            x -= self.w
+
+        if self.align_v in [QtCore.Qt.AlignmentFlag.AlignCenter, QtCore.Qt.AlignmentFlag.AlignVCenter]:
+            y -= self.h / 2
+        elif self.align_v in [QtCore.Qt.AlignmentFlag.AlignBottom]:
+            y -= self.h
 
         self.move(QPoint(x, y))
         super().exec()
