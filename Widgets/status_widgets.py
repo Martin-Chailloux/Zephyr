@@ -1,5 +1,6 @@
 from textwrap import dedent
 
+from PySide6 import QtCore
 from PySide6.QtCore import QSize, Signal
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import QPushButton, QGridLayout
@@ -58,7 +59,9 @@ class SelectStatusMenu(ContextWidget):
         w = (self.button_w * self.max_columns) + (2 * self.margin)
         h = (self.button_h * max_rows) + (2 * self.margin)
 
-        super().__init__(w=w, h=h)
+        super().__init__(w=w, h=h,
+                         align_h=QtCore.Qt.AlignmentFlag.AlignHCenter,
+                         align_v=QtCore.Qt.AlignmentFlag.AlignVCenter)
         self._init_ui()
 
     def _init_ui(self):
