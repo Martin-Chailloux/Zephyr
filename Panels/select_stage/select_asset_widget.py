@@ -11,6 +11,8 @@ from Utils.chronometer import Chronometer
 from Widgets.favorite_widgets import SetFavoriteIconButton
 
 
+# TODO: if an asset without existing name or variant, the previous stage list is kept
+
 class SelectAssetWidget(QWidget):
     h = 32
     add_item_label = "New"
