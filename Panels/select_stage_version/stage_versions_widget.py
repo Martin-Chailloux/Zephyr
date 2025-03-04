@@ -43,7 +43,6 @@ class StageVersionsWidget(QDialog):
         sub_layout.addWidget(label)
         label.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
 
-        # TODO: update using a signal from stage select
         stage_item = StageItem(stage=Stage.objects[0])
         sub_layout.addWidget(stage_item)
         stage_item.setFixedWidth(248)
@@ -136,7 +135,7 @@ class StageVersionsWidget(QDialog):
 
     def set_stage(self, longname: str):
         stage = Stage.objects.get(longname=longname)
-        print(f"{stage = }")
+        self.stage_item.set_stage(stage)
 
     def connect_signals(self):
         self.from_scratch_button.clicked.connect(self.on_from_scratch_clicked)

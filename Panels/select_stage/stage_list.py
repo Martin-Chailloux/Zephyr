@@ -25,7 +25,20 @@ class StageItem(QWidget):
     def __repr__(self):
         return f"StageItem|{self.stage.__repr__()}"
 
+    def set_stage(self, stage: Stage):
+        while self.layout().count():
+            item = self.layout().takeAt(0)
+            widget = item.widget()
+            if widget is not None:
+                widget.deleteLater()
+        self.stage = stage
+        self._init_ui()
+        self.connect_signals()
+
     def _init_ui(self):
+        # TODO: le layout se set pas une 2e fois si on rappelle la fonction
+        #   donc on utilise self.layout() ensuite
+        #   lire la doc Qt pour comprendre
         layout = QHBoxLayout()
         self.setLayout(layout)
         self.setFixedHeight(self.h)
@@ -37,7 +50,7 @@ class StageItem(QWidget):
         # TODO: bigger round button with tooltip
         # TODO: offset in its own widget
         user_combobox = QComboBox()
-        layout.addWidget(user_combobox)
+        self.layout().addWidget(user_combobox)
         user_combobox.setFixedHeight(self.h)
         users = ["Martin", "Kim", "Elise", "Chloé", "Hugo", "Camille"]
         user_combobox.addItems(users)
@@ -48,11 +61,11 @@ class StageItem(QWidget):
             user_combobox.setToolTip("UserTest")
 
         button = StageButton(template=self.stage.stage_template, h=self.h)
-        layout.addWidget(button)
+        self.layout().addWidget(button)
         button.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
         status_button = StatusSelectWidget(height=self.h)
-        layout.addWidget(status_button)
+        self.layout().addWidget(status_button)
 
         button.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
