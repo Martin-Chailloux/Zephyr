@@ -64,12 +64,12 @@ class StageItem(QWidget):
 
     def on_button_clicked(self):
         if self.button.isChecked():
-            text = self.button.text()
-            self.stage_selected.emit(text)
+            self.stage_selected.emit(self.stage.longname)
+
 
 
 class StageListWidget(QWidget):
-    create_stage_request = Signal(str)
+    stage_selected = Signal(str)
     margin: int = 7
 
     def __init__(self):
@@ -153,11 +153,14 @@ class StageListWidget(QWidget):
 
         self.refresh_stage_items()
 
-    def on_stage_selected(self, stage_name: str):
-        print(f"Selected stage: {stage_name}")
-
+    def on_stage_selected(self, longname: str):
         # uncheck other stages
         sender: StageItem = self.sender()
         for i, stage_item in enumerate(self.stage_items):
             if stage_item is not sender:
                 stage_item.button.setChecked(False)
+
+        # TODO: get_asset(), get_stage(), etc.
+        print(f"iazieazo")
+        print(f"{longname = }")
+        self.stage_selected.emit(longname)

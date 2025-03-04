@@ -132,6 +132,11 @@ class StageVersionsWidget(QDialog):
         # public vars
         # ------------------------
         self.from_scratch_button = from_scratch_button
+        self.stage_item = stage_item
+
+    def set_stage(self, longname: str):
+        stage = Stage.objects.get(longname=longname)
+        print(f"{stage = }")
 
     def connect_signals(self):
         self.from_scratch_button.clicked.connect(self.on_from_scratch_clicked)

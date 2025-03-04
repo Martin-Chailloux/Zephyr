@@ -3,6 +3,7 @@ from PySide6 import QtCore
 from PySide6.QtWidgets import QVBoxLayout, QDialog, QApplication, QMainWindow, QDockWidget
 import qdarkstyle
 
+from MangoEngine.document_models import Stage
 from Panels.main_panels.select_stage_panel import SelectStagePanel
 from Panels.main_panels.stage_panel import StagePanel
 from Utils.chronometer import Chronometer
@@ -10,18 +11,34 @@ from Utils.chronometer import Chronometer
 from Sandbox.fake_ingest_widget import ZFakeIngestWidget
 
 
-class Ghost(QMainWindow):
+class Breeze(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Breeze")
+        self._init_ui()
+        self.connect_signals()
 
-        self.setCentralWidget(StagePanel())
+    def _init_ui(self):
+        # stage central widget
+        stage_panel = StagePanel()
+        self.setCentralWidget(stage_panel)
 
-        self.select_stage_panel = SelectStagePanel()
+        # stage select
+        select_stage_panel = SelectStagePanel()
         dock = QDockWidget("Select Stage")
-        dock.setWidget(self.select_stage_panel)
+        dock.setWidget(select_stage_panel)
         self.addDockWidget(QtCore.Qt.DockWidgetArea.LeftDockWidgetArea, dock)
         dock.setAllowedAreas(QtCore.Qt.DockWidgetArea.LeftDockWidgetArea)
+
+        # public vars
+        self.select_stage_panel = select_stage_panel
+        self.stage_panel = stage_panel
+
+    def connect_signals(self):
+        self.select_stage_panel.stage_selected.connect(self.on_stage_selected)
+
+    def on_stage_selected(self, longname: str):
+        self.stage_panel.set_stage(longname=longname)
 
 
 class TestWidget(QDialog):
@@ -45,7 +62,7 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     app.setStyleSheet(qdarkstyle.load_stylesheet())
 
-    window = Ghost()
+    window = Breeze()
     window.show()
     chrono.tick("App launched in")
     print("-----------------")
