@@ -68,7 +68,7 @@ class StageItem(QWidget):
             self.stage_selected.emit(text)
 
 
-class ZStageListWidget(QWidget):
+class StageListWidget(QWidget):
     create_stage_request = Signal(str)
     margin: int = 7
 
@@ -154,13 +154,9 @@ class ZStageListWidget(QWidget):
         self.refresh_stage_items()
 
     def on_stage_selected(self, stage_name: str):
-        """
-        :param stage_name: name of the selected stage
-        :return:
-
-        Unchecks other stages
-        """
         print(f"Selected stage: {stage_name}")
+
+        # uncheck other stages
         sender: StageItem = self.sender()
         for i, stage_item in enumerate(self.stage_items):
             if stage_item is not sender:

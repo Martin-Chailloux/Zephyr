@@ -8,13 +8,13 @@ from MangoEngine.document_models import Project, Asset
 from Widgets.line_edit_popup import LineEditPopup
 from Utils.chronometer import Chronometer
 
-from Panels.select_stage.stage_list import ZStageListWidget
 from Widgets.favorite_widgets import SetFavoriteIconButton
 
 
-class ZSelectAssetWidget(QWidget):
+class SelectAssetWidget(QWidget):
     h = 32
     add_item_label = "New"
+    asset_selected = Signal(str)
 
     def __init__(self, project: Project):
         super().__init__()
@@ -63,7 +63,6 @@ class ZSelectAssetWidget(QWidget):
 
         variant_cb = AssetFieldCombobox()
         grid_layout.addWidget(variant_cb, 1, 3)
-        variant_cb.addItem("default")
 
         fav = SetFavoriteIconButton()
         grid_layout.addWidget(fav, 1, 4)
@@ -76,9 +75,6 @@ class ZSelectAssetWidget(QWidget):
         line.setFrameShape(QFrame.Shape.HLine)
         line.setFrameShadow(QFrame.Shadow.Sunken)
 
-        stage_list = ZStageListWidget()
-        layout.addWidget(stage_list)
-
         for cb in [category_cb, name_cb, variant_cb]:
             cb.setFixedHeight(self.h)
 
@@ -88,7 +84,6 @@ class ZSelectAssetWidget(QWidget):
         self.category_cb = category_cb
         self.name_cb = name_cb
         self.variant_cb = variant_cb
-        self.stage_list = stage_list
 
     @property
     def category(self) -> str:
@@ -101,6 +96,12 @@ class ZSelectAssetWidget(QWidget):
     @property
     def variant(self) -> str:
         return self.variant_cb.currentText()
+
+    @property
+    def current_asset(self) -> Asset:
+        current_asset =  Asset.objects.get(category=self.category, name=self.name, variant=self.variant)
+        print(f"{current_asset = }")
+        return current_asset
 
     def connect_signals(self):
         self.category_cb.currentTextChanged.connect(self.on_category_selected)
@@ -150,8 +151,7 @@ class ZSelectAssetWidget(QWidget):
                 return
 
         variant = "-" if self.variant == "main" else self.variant
-        current_asset = Asset.objects.get(category=self.category, name=self.name, variant=variant)
-        self.stage_list.set_asset(current_asset)
+        self.asset_selected.emit(self.current_asset.longname)
 
     def on_category_created(self, category: str):
         print(f"CATEGORY CREATED: {category}")
@@ -166,7 +166,6 @@ class ZSelectAssetWidget(QWidget):
         self.name_cb.setCurrentText(name)
 
     def on_variant_created(self, variant: str):
-        # TODO: BUG: it updates the main instead of creating a new variant
         print(f"VARIANT CREATED: {variant}")
         mongo_dialog.create_asset(category=self.category, name=self.name, variant=variant)
         self.on_name_selected()
@@ -175,8 +174,6 @@ class ZSelectAssetWidget(QWidget):
 
 class AssetFieldCombobox(QComboBox):
     add_item_label = "New"
-    default = "-"
-    default_label = "main"
     item_created = Signal(str)
 
     def __init__(self):
@@ -198,9 +195,6 @@ class AssetFieldCombobox(QComboBox):
 
         lowers = [item.lower() for item in items]
         items = [x for _, x in sorted(zip(lowers, items))]
-
-        if items[0] == self.default:
-            items[0] = self.default_label
 
         self.addItems(items)
         self.addItem(self.add_item_label)
@@ -225,7 +219,6 @@ class AssetFieldCombobox(QComboBox):
         if not self.is_scrolling:
             if self.currentText() == self.add_item_label:
                 invalid_names = self.items
-                invalid_names.append(self.default)
                 popup = LineEditPopup(title="New", invalid_entries=invalid_names)
                 popup.create_clicked.connect(self.on_new_selected)
 

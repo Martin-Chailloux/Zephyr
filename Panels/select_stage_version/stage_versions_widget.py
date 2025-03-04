@@ -19,7 +19,7 @@ from Panels.select_stage.stage_list import StageItem
 from Panels.versions_list.versions_list_view import VersionsListView
 
 
-class SelectStageVersionWidget(QDialog):
+class StageVersionsWidget(QDialog):
     h = 28
     buttons_spacing = 2
 
@@ -202,7 +202,7 @@ if __name__ == '__main__':
 
     app.setStyleSheet(qdarkstyle.load_stylesheet())
 
-    window = SelectStageVersionWidget()
+    window = StageVersionsWidget()
     window.show()
 
     app.exec()

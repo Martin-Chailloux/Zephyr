@@ -1,8 +1,7 @@
 from PySide6 import QtCore
-from PySide6.QtCore import QSize
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QSplitter, QPushButton, QLabel
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QSplitter, QLabel
 
-from Panels.select_stage_version.select_stage_version_widget import SelectStageVersionWidget
+from Panels.select_stage_version.stage_versions_widget import StageVersionsWidget
 
 
 class StagePanel(QWidget):
@@ -15,7 +14,7 @@ class StagePanel(QWidget):
         self.setLayout(layout)
 
         placeholder1 = QLabel()
-        select_stage_version = SelectStageVersionWidget()
+        select_stage_version = StageVersionsWidget()
         placeholder2 = QLabel()
 
         v_splitter = QSplitter()

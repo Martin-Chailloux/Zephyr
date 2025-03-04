@@ -3,10 +3,8 @@ from PySide6 import QtCore
 from PySide6.QtWidgets import QVBoxLayout, QDialog, QApplication, QMainWindow, QDockWidget
 import qdarkstyle
 
-from MangoEngine import project_dialog
-from MangoEngine.document_models import Project
-from Panels.select_stage.select_asset_widget import ZSelectAssetWidget
-from Panels.stage_panel import StagePanel
+from Panels.main_panels.select_stage_panel import SelectStagePanel
+from Panels.main_panels.stage_panel import StagePanel
 from Utils.chronometer import Chronometer
 
 from Sandbox.fake_ingest_widget import ZFakeIngestWidget
@@ -15,15 +13,13 @@ from Sandbox.fake_ingest_widget import ZFakeIngestWidget
 class Ghost(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Zephyr")
+        self.setWindowTitle("Breeze")
 
         self.setCentralWidget(StagePanel())
 
-        project: Project = project_dialog.get_project("Dev")
-
-        self.select_stage_widget = ZSelectAssetWidget(project)
+        self.select_stage_panel = SelectStagePanel()
         dock = QDockWidget("Select Stage")
-        dock.setWidget(self.select_stage_widget)
+        dock.setWidget(self.select_stage_panel)
         self.addDockWidget(QtCore.Qt.DockWidgetArea.LeftDockWidgetArea, dock)
         dock.setAllowedAreas(QtCore.Qt.DockWidgetArea.LeftDockWidgetArea)
 
