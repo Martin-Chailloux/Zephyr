@@ -8,8 +8,6 @@ from Panels.select_stage.stage_list import StageListWidget
 
 
 class SelectStagePanel(QWidget):
-    stage_selected = Signal(str)
-
     def __init__(self):
         super().__init__()
         self._init_ui()
@@ -32,14 +30,10 @@ class SelectStagePanel(QWidget):
 
     def connect_signals(self):
         self.select_asset_widget.asset_selected.connect(self.on_asset_selected)
-        self.stage_list_widget.stage_selected.connect(self.on_stage_selected)
 
     def on_asset_selected(self, longname: str):
         asset = Asset.objects.get(longname=longname)
         self.stage_list_widget.set_asset(asset)
-
-    def on_stage_selected(self, longname: str):
-        self.stage_selected.emit(longname)
 
     def init_state(self):
         asset = self.select_asset_widget.current_asset

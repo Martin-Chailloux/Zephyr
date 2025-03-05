@@ -1,11 +1,9 @@
 import sys
 
 import qdarkstyle
-import qtawesome
 
 from PySide6 import QtCore
-from PySide6.QtCore import QPoint, QSize, Signal
-from PySide6.QtGui import QAction
+from PySide6.QtCore import QSize, Signal
 from PySide6.QtWidgets import (QApplication, QDialog, QVBoxLayout, QHBoxLayout,
                                QPushButton, QLabel, QSizePolicy, QMenu, QWidget, QGridLayout)
 
@@ -132,10 +130,6 @@ class StageVersionsWidget(QDialog):
         # ------------------------
         self.from_scratch_button = from_scratch_button
         self.stage_item = stage_item
-
-    def set_stage(self, longname: str):
-        stage = Stage.objects.get(longname=longname)
-        self.stage_item.set_stage(stage)
 
     def connect_signals(self):
         self.from_scratch_button.clicked.connect(self.on_from_scratch_clicked)

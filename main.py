@@ -35,10 +35,11 @@ class Breeze(QMainWindow):
         self.stage_panel = stage_panel
 
     def connect_signals(self):
-        self.select_stage_panel.stage_selected.connect(self.on_stage_selected)
+        self.select_stage_panel.stage_list_widget.stage_selected.connect(self.on_stage_selected)
 
     def on_stage_selected(self, longname: str):
-        self.stage_panel.set_stage(longname=longname)
+        stage = Stage.objects.get(longname=longname)
+        self.stage_panel.stage_versions_widget.stage_item.set_stage(stage=stage)
 
 
 class TestWidget(QDialog):

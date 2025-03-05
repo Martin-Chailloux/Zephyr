@@ -33,6 +33,3 @@ class StagePanel(QWidget):
 
         # public vars
         self.stage_versions_widget = stage_versions_widget
-
-    def set_stage(self, longname: str):
-        self.stage_versions_widget.set_stage(longname=longname)
