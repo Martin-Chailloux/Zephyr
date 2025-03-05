@@ -2,7 +2,7 @@ from textwrap import dedent
 
 from PySide6 import QtCore
 from PySide6.QtCore import QRect, Signal
-from PySide6.QtGui import QPainter, QBrush, QIcon, QPainterPath, QColor
+from PySide6.QtGui import QPainter, QBrush, QIcon, QPainterPath, QColor, QPen
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QSizePolicy, QHBoxLayout, QComboBox, QLabel
 
 import qtawesome
@@ -25,14 +25,19 @@ class StageButton(QPushButton):
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         self.setCheckable(True)
         self.setStyleSheet(dedent("""
-            QPushButton {color: darkgrey}
+            QPushButton {
+                color: darkgrey;
+                text-align: left;
+                padding-left: 48 px;
+            }
             QPushButton:checked {
                 color: white;
                 border: 1px solid white;
+                text-align: left;
+                padding-left: 48 px;
             }
         """))
         self.setFixedHeight(self.h)
-
         self.setText(self.template.label)
 
     def paintEvent(self, event):
@@ -55,7 +60,7 @@ class StageButton(QPushButton):
         h = rect.height()
 
         # Fill color
-        fill_w = round(w/4)
+        fill_w = 36
         rect.setWidth(fill_w)
         border_width = 1
         rect = QRect(x + border_width, y + border_width, fill_w + border_width, h - border_width*2)
