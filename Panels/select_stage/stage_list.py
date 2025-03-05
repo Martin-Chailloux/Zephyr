@@ -174,6 +174,4 @@ class StageListWidget(QWidget):
                 stage_item.button.setChecked(False)
 
         # TODO: get_asset(), get_stage(), etc.
-        print(f"iazieazo")
-        print(f"{longname = }")
         self.stage_selected.emit(longname)
