@@ -6,12 +6,10 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QComboBox, QLabel, QGridLayo
 from MangoEngine import mongo_dialog
 from MangoEngine.document_models import Project, Asset
 from Widgets.line_edit_popup import LineEditPopup
-from Utils.chronometer import Chronometer
-
-from Widgets.favorite_widgets import SetFavoriteIconButton
+from Widgets.favorite_widgets import SetBookmarkIconButton
 
 
-# TODO: if an asset without existing name or variant, the previous stage list is kept
+# TODO: bug: if an asset without existing name or variant, the previous stage list is kept
 
 class SelectAssetWidget(QWidget):
     h = 32
@@ -21,10 +19,6 @@ class SelectAssetWidget(QWidget):
     def __init__(self, project: Project):
         super().__init__()
         self.project = project
-        chronometer = Chronometer()
-
-        chronometer.tick("GSelectStageWidget built in")
-
         self.cache = SelectionCache()
 
         self._init_ui()
@@ -38,9 +32,6 @@ class SelectAssetWidget(QWidget):
         self.setLayout(layout)
         layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop | QtCore.Qt.AlignmentFlag.AlignLeft)
 
-        # ==============
-        # grid
-        # ==============
         grid_layout = QGridLayout()
         layout.addLayout(grid_layout)
         grid_layout.setContentsMargins(7, 7, 7, 7)
@@ -66,23 +57,20 @@ class SelectAssetWidget(QWidget):
         variant_cb = AssetFieldCombobox()
         grid_layout.addWidget(variant_cb, 1, 3)
 
-        fav = SetFavoriteIconButton()
-        grid_layout.addWidget(fav, 1, 4)
+        for cb in [category_cb, name_cb, variant_cb]:
+            cb.setFixedHeight(self.h)
 
-        # ==============
-        # stages
-        # ==============
+        set_bookmark_button = SetBookmarkIconButton()
+        grid_layout.addWidget(set_bookmark_button, 1, 4)
+
         line = QFrame()
         layout.addWidget(line)
         line.setFrameShape(QFrame.Shape.HLine)
         line.setFrameShadow(QFrame.Shadow.Sunken)
 
-        for cb in [category_cb, name_cb, variant_cb]:
-            cb.setFixedHeight(self.h)
-
-        # ==============
+        # ------------------------
         # public vars
-        # ==============
+        # ------------------------
         self.category_cb = category_cb
         self.name_cb = name_cb
         self.variant_cb = variant_cb
@@ -102,7 +90,6 @@ class SelectAssetWidget(QWidget):
     @property
     def current_asset(self) -> Asset:
         current_asset =  Asset.objects.get(category=self.category, name=self.name, variant=self.variant)
-        print(f"{current_asset = }")
         return current_asset
 
     def connect_signals(self):
@@ -152,7 +139,6 @@ class SelectAssetWidget(QWidget):
             if s in forbidden:
                 return
 
-        variant = "-" if self.variant == "main" else self.variant
         self.asset_selected.emit(self.current_asset.longname)
 
     def on_category_created(self, category: str):

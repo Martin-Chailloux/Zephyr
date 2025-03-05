@@ -4,7 +4,7 @@ from Gui.palette import Palette
 from Widgets.qwidgets_extensions import IconButton
 
 
-class SetFavoriteIconButton(IconButton):
+class SetBookmarkIconButton(IconButton):
     palette: Palette = Palette.objects.get(name="dev")
 
     def __init__(self):
