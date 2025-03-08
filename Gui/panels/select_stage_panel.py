@@ -18,6 +18,7 @@ class SelectStagePanel(QWidget):
         self.setLayout(layout)
 
         project: Project = projects_dialog.get_project("Dev")
+
         select_asset_widget = SelectAssetWidget(project)
         layout.addWidget(select_asset_widget)
 
