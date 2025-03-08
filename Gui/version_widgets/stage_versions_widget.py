@@ -10,7 +10,7 @@ from PySide6.QtWidgets import (QApplication, QDialog, QVBoxLayout, QHBoxLayout,
 from Data import softwares
 from Data.softwares import Software
 from Gui.stage_widgets.stage_subwidgets import StageItem
-from Utils.util_widgets import TextBox, PushButtonAutoWidth, ContextWidget
+from Utils.util_widgets import TextBox, PushButtonAutoWidth, ContextMenuWidget
 
 from Data.breeze_documents import Stage
 from Gui.version_widgets.versions_list.versions_list_view import VersionsListView
@@ -135,11 +135,11 @@ class StageVersionsWidget(QDialog):
         self.from_scratch_button.customContextMenuRequested.connect(self.on_from_scratch_clicked)
 
     def on_from_scratch_clicked(self):
-        menu = SelectSoftwareContextWidget()
+        menu = SelectSoftwareContextMenuWidget()
         menu.exec()
 
 
-class SelectSoftwareContextWidget(ContextWidget):
+class SelectSoftwareContextMenuWidget(ContextMenuWidget):
     software_icons = [
         softwares.Krita(),
         softwares.Blender(),

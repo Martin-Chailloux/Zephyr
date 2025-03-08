@@ -74,7 +74,7 @@ class PushButtonAutoWidth(QPushButton):
         self.setFixedWidth(width) if fixed_width else self.setMinimumWidth(width)
 
 
-class ContextWidget(QDialog):
+class ContextMenuWidget(QDialog):
     def __init__(self, w: int, h: int,
                  align_h: QtCore.Qt.AlignmentFlag=QtCore.Qt.AlignmentFlag.AlignLeft,
                  align_v: QtCore.Qt.AlignmentFlag=QtCore.Qt.AlignmentFlag.AlignTop):

@@ -7,7 +7,7 @@ from PySide6.QtWidgets import QPushButton, QGridLayout
 
 from Data import status
 from Dialogs.palette_dialog import Palette
-from Utils.util_widgets import ContextWidget
+from Utils.util_widgets import ContextMenuWidget
 
 
 class SelectStatusWidget(QPushButton):
@@ -41,7 +41,7 @@ class SelectStatusWidget(QPushButton):
         menu.exec()
 
 
-class SelectStatusMenu(ContextWidget):
+class SelectStatusMenu(ContextMenuWidget):
     palette: Palette = Palette.objects.get(name="dev")
 
     status_selected = Signal(str)
