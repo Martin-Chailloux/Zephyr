@@ -1,7 +1,4 @@
-from Cython.Shadow import returns
-
 from Data.breeze_documents import Stage, StageTemplate, Asset
-
 from Dialogs import breeze_dialog
 
 
@@ -15,7 +12,7 @@ def update_stages_longname():
         stage_template = stage.stage_template
         stage.delete()
 
-        mongo_dialog.create_stage(
+        breeze_dialog.create_stage(
             asset=asset,
             stage_template=stage_template
         )
