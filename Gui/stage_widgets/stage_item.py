@@ -55,7 +55,7 @@ class StageItem(QWidget):
         users = ["Martin", "Kim", "Elise", "Chloé", "Hugo", "Camille"]
         user_combobox.addItems(users)
         for i, user in enumerate(users):
-            icon_path = f"Icons/Users/{user.lower()}.jpg"
+            icon_path = f"Resources/Icons/Users/{user.lower()}.jpg"
             icon = QIcon(icon_path)
             user_combobox.setItemIcon(i, icon)
             user_combobox.setToolTip("UserTest")
