@@ -2,83 +2,11 @@ import qtawesome
 
 from PySide6 import QtCore
 from PySide6.QtCore import Signal, QSize
-from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import (QWidget, QVBoxLayout, QPushButton, QHBoxLayout, QSizePolicy, QComboBox)
+from PySide6.QtWidgets import (QWidget, QVBoxLayout, QPushButton, QSizePolicy)
 
-from MangoEngine.document_models import Status, StageTemplate, Asset, Stage
-from MangoEngine.mongo_dialog import create_stage
-from Widgets.stage_widgets import StageTemplateSelector, StageButton
-from Widgets.status_widgets import StatusSelectWidget
-
-
-class StageItem(QWidget):
-    h = 28
-    stage_selected = Signal(str)
-
-    def __init__(self, stage: Stage):
-        self.stage = stage
-        super().__init__()
-
-        self._init_ui()
-        self.connect_signals()
-
-    def __repr__(self):
-        return f"StageItem|{self.stage.__repr__()}"
-
-    def set_stage(self, stage: Stage):
-        while self.layout().count():
-            item = self.layout().takeAt(0)
-            widget = item.widget()
-            if widget is not None:
-                widget.deleteLater()
-        self.stage = stage
-        self._init_ui()
-        self.connect_signals()
-
-    def _init_ui(self):
-        # TODO: le layout se set pas une 2e fois si on rappelle la fonction
-        #   donc on utilise self.layout() ensuite
-        #   lire la doc Qt pour comprendre
-        layout = QHBoxLayout()
-        self.setLayout(layout)
-        self.setFixedHeight(self.h)
-
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(2)
-
-        # TODO: photo de profil comme icone, le nom en tooltip quand on hover
-        # TODO: bigger round button with tooltip
-        # TODO: offset in its own widget
-        user_combobox = QComboBox()
-        self.layout().addWidget(user_combobox)
-        user_combobox.setFixedHeight(self.h)
-        users = ["Martin", "Kim", "Elise", "Chloé", "Hugo", "Camille"]
-        user_combobox.addItems(users)
-        for i, user in enumerate(users):
-            icon_path = f"Icons/Users/{user.lower()}.jpg"
-            icon = QIcon(icon_path)
-            user_combobox.setItemIcon(i, icon)
-            user_combobox.setToolTip("UserTest")
-
-        button = StageButton(template=self.stage.stage_template, h=self.h)
-        self.layout().addWidget(button)
-        button.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-
-        status_button = StatusSelectWidget(height=self.h)
-        self.layout().addWidget(status_button)
-
-        button.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-
-        # public vars
-        self.button = button
-
-    def connect_signals(self):
-        self.button.clicked.connect(self.on_button_clicked)
-
-    def on_button_clicked(self):
-        if self.button.isChecked():
-            self.stage_selected.emit(self.stage.longname)
-
+from Data.breeze_documents import StageTemplate, Asset, Stage
+from Dialogs.breeze_dialog import create_stage
+from Gui.stage_widgets.stage_subwidgets import StageItem, StageTemplateSelector
 
 
 class StageListWidget(QWidget):

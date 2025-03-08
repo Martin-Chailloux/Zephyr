@@ -1,9 +1,9 @@
 from PySide6 import QtCore
 from PySide6.QtCore import QModelIndex
 from PySide6.QtGui import QPainter
-from PySide6.QtWidgets import QAbstractItemDelegate, QStyledItemDelegate, QStyleOptionViewItem
+from PySide6.QtWidgets import QStyledItemDelegate, QStyleOptionViewItem
 
-from Panels.versions_list.versions_list_model import VersionItemRoles
+from Gui.version_widgets.versions_list.versions_list_model import VersionItemRoles
 
 
 # TODO: comment, date, hour, user

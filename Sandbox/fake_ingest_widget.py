@@ -5,8 +5,8 @@ from PySide6.QtWidgets import (QVBoxLayout, QTableWidget, QLineEdit, QHBoxLayout
                                QPushButton, QTableWidgetItem, QMessageBox, QMenu)
 import qtawesome
 
-from MangoEngine import mongo_dialog
-from Widgets.qwidgets_extensions import IconButton
+from Dialogs import breeze_dialog
+from Utils.util_widgets import IconButton
 
 
 class ZFakeIngestWidget(QTableWidget):

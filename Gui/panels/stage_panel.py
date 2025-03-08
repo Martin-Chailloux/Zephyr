@@ -1,7 +1,7 @@
 from PySide6 import QtCore
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QSplitter, QLabel
 
-from Panels.select_stage_version.stage_versions_widget import StageVersionsWidget
+from Gui.version_widgets.stage_versions_widget import StageVersionsWidget
 
 
 class StagePanel(QWidget):

@@ -3,10 +3,10 @@ from PySide6 import QtCore
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QComboBox, QLabel, QGridLayout, QFrame
 
-from MangoEngine import mongo_dialog
-from MangoEngine.document_models import Project, Asset
-from Widgets.line_edit_popup import LineEditPopup
-from Widgets.favorite_widgets import SetBookmarkIconButton
+from Data.breeze_documents import Project, Asset
+from Dialogs import breeze_dialog
+from Gui.popups.line_edit_popup import LineEditPopup
+from Gui.asset_widgets.asset_subwidgets import SetBookmarkIconButton
 
 
 # TODO: bug: if an asset without existing name or variant, the previous stage list is kept
@@ -104,7 +104,7 @@ class SelectAssetWidget(QWidget):
     def on_category_selected(self):
         self.name_cb.blockSignals(True)  # Delay on_name_selected()
 
-        assets = mongo_dialog.get_asset(category=self.category, variant="-")
+        assets = breeze_dialog.get_asset(category=self.category, variant="-")
         names = [asset.name for asset in assets]
         self.name_cb.set_items(names)
 
@@ -119,7 +119,7 @@ class SelectAssetWidget(QWidget):
     def on_name_selected(self):
         self.variant_cb.blockSignals(True)
 
-        assets = mongo_dialog.get_asset(category=self.category, name=self.name)
+        assets = breeze_dialog.get_asset(category=self.category, name=self.name)
         variants = [asset.variant for asset in assets]
         self.variant_cb.set_items(variants)
 
@@ -149,13 +149,13 @@ class SelectAssetWidget(QWidget):
 
     def on_name_created(self, name: str):
         print(f"NAME CREATED: {name}")
-        mongo_dialog.create_asset(category=self.category, name=name)
+        breeze_dialog.create_asset(category=self.category, name=name)
         self.on_category_selected()
         self.name_cb.setCurrentText(name)
 
     def on_variant_created(self, variant: str):
         print(f"VARIANT CREATED: {variant}")
-        mongo_dialog.create_asset(category=self.category, name=self.name, variant=variant)
+        breeze_dialog.create_asset(category=self.category, name=self.name, variant=variant)
         self.on_name_selected()
         self.variant_cb.setCurrentText(variant)
 

@@ -1,4 +1,4 @@
-from Gui.palette import Palette
+from Dialogs.palette_dialog import Palette
 
 palette: Palette = Palette.objects.get(name="dev")
 

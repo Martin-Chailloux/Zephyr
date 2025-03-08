@@ -5,12 +5,12 @@ from PySide6.QtCore import QSize, Signal
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import QPushButton, QGridLayout
 
-from Gui.palette import Palette
-from Widgets.qwidgets_extensions import ContextWidget
 from Data import status
+from Dialogs.palette_dialog import Palette
+from Utils.util_widgets import ContextWidget
 
 
-class StatusSelectWidget(QPushButton):
+class SelectStatusWidget(QPushButton):
     palette: Palette = Palette.objects.get(name="dev")
     statuses = status.default_statuses
 

@@ -1,7 +1,6 @@
 from datetime import datetime
 
 from mongoengine import *
-from MangoEngine.data import Status
 
 
 # TODO: Est-ce que c'est pertinant sur le long terme de le mettre ici ?

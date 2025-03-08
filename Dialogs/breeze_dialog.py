@@ -1,13 +1,13 @@
-from MangoEngine.document_models import Asset, Stage, StageTemplate
+from Data.breeze_documents import Asset, Stage, StageTemplate
 from Utils.chronometer import Chronometer
 
 
-def text_to_input(text: str):
-    s = text.replace("_", " ").replace("-", " ")
-    s = s.split()
-    if len(s) == 0:
+def text_to_conformed_text(text: str):
+    """ Converts a string input into its camelCase equivalent """
+    split_text = text.replace("_", " ").replace("-", " ").split()
+    if len(split_text) == 0:
         return text
-    return s[0] + "".join(i.replace(i[0], i[0].upper()) for i in s[1:])
+    return split_text[0] + "".join(s.replace(s[0], s[0].upper()) for s in split_text[1:])
 
 
 def create_asset(category: str, name : str, variant: str = None, **kwargs) -> Asset:

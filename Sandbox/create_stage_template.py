@@ -1,4 +1,4 @@
-from MangoEngine.mongo_dialog import create_stage_template
+from Dialogs.breeze_dialog import create_stage_template
 
 stage = create_stage_template(
     name="lighting",

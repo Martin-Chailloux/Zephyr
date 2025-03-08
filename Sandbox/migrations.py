@@ -1,8 +1,8 @@
 from Cython.Shadow import returns
 
-from MangoEngine.document_models import Stage, StageTemplate, Asset
+from Data.breeze_documents import Stage, StageTemplate, Asset
 
-from MangoEngine import mongo_dialog
+from Dialogs import breeze_dialog
 
 
 def update_stages_longname():

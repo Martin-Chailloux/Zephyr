@@ -1,10 +1,9 @@
-from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QWidget, QVBoxLayout
 
-from MangoEngine import project_dialog
-from MangoEngine.document_models import Project, Asset
-from Panels.select_stage.select_asset_widget import SelectAssetWidget
-from Panels.select_stage.stage_list import StageListWidget
+from Data.breeze_documents import Project, Asset
+from Dialogs import projects_dialog
+from Gui.asset_widgets.select_asset_widget import SelectAssetWidget
+from Gui.stage_widgets.stage_list import StageListWidget
 
 
 class SelectStagePanel(QWidget):
@@ -18,7 +17,7 @@ class SelectStagePanel(QWidget):
         layout = QVBoxLayout()
         self.setLayout(layout)
 
-        project: Project = project_dialog.get_project("Dev")
+        project: Project = projects_dialog.get_project("Dev")
         select_asset_widget = SelectAssetWidget(project)
         layout.addWidget(select_asset_widget)
 

@@ -2,7 +2,8 @@ from PySide6 import QtCore
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QVBoxLayout, QPushButton, QHBoxLayout, QDialog, QLineEdit, QLabel
 
-from MangoEngine import mongo_dialog
+from Dialogs import breeze_dialog
+
 
 class LineEditPopup(QDialog):
     create_clicked = Signal(str)
@@ -12,7 +13,7 @@ class LineEditPopup(QDialog):
         self.close_on_confirm = close_on_confirm
 
         self.setWindowTitle(title)
-        self.invalid_names = [] if invalid_entries is None else [mongo_dialog.text_to_input(t).lower() for t in invalid_entries]
+        self.invalid_names = [] if invalid_entries is None else [breeze_dialog.text_to_conformed_text(t).lower() for t in invalid_entries]
 
         self._init_ui()
         self._create_input_buttons()
@@ -23,7 +24,7 @@ class LineEditPopup(QDialog):
     @property
     def current_text(self) -> str:
         text = self.line_edit.text()
-        return mongo_dialog.text_to_input(text)
+        return breeze_dialog.text_to_conformed_text(text)
 
     def _init_ui(self):
         layout = QVBoxLayout()
@@ -70,7 +71,7 @@ class LineEditPopup(QDialog):
             super().keyPressEvent(event)
 
     def on_text_changed(self):
-        text = mongo_dialog.text_to_input(self.current_text)
+        text = breeze_dialog.text_to_conformed_text(self.current_text)
         min_length = 1
         max_length = 12
         name_exists = text.lower() in self.invalid_names

@@ -3,9 +3,9 @@ from PySide6 import QtCore
 from PySide6.QtWidgets import QVBoxLayout, QDialog, QApplication, QMainWindow, QDockWidget
 import qdarkstyle
 
-from MangoEngine.document_models import Stage
-from Panels.main_panels.select_stage_panel import SelectStagePanel
-from Panels.main_panels.stage_panel import StagePanel
+from Data.breeze_documents import Stage
+from Gui.panels.select_stage_panel import SelectStagePanel
+from Gui.panels.stage_panel import StagePanel
 from Utils.chronometer import Chronometer
 
 from Sandbox.fake_ingest_widget import ZFakeIngestWidget

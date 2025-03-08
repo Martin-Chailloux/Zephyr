@@ -5,16 +5,15 @@ import qdarkstyle
 from PySide6 import QtCore
 from PySide6.QtCore import QSize, Signal
 from PySide6.QtWidgets import (QApplication, QDialog, QVBoxLayout, QHBoxLayout,
-                               QPushButton, QLabel, QSizePolicy, QMenu, QWidget, QGridLayout)
+                               QPushButton, QLabel, QSizePolicy)
 
 from Data import softwares
 from Data.softwares import Software
-from Widgets.qwidgets_extensions import TextBox, PushButtonAutoWidth, ContextWidget
+from Gui.stage_widgets.stage_subwidgets import StageItem
+from Utils.util_widgets import TextBox, PushButtonAutoWidth, ContextWidget
 
-from MangoEngine.document_models import Stage
-
-from Panels.select_stage.stage_list import StageItem
-from Panels.versions_list.versions_list_view import VersionsListView
+from Data.breeze_documents import Stage
+from Gui.version_widgets.versions_list.versions_list_view import VersionsListView
 
 
 class StageVersionsWidget(QDialog):

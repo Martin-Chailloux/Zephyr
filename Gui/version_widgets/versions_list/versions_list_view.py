@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QListView
 
-from Panels.versions_list.versions_list_item_delagate import VersionsListItemDelegate
-from Panels.versions_list.versions_list_model import VersionsListModel
+from Gui.version_widgets.versions_list.versions_list_item_delagate import VersionsListItemDelegate
+from Gui.version_widgets.versions_list.versions_list_model import VersionsListModel
 
 
 class VersionsListView(QListView):
