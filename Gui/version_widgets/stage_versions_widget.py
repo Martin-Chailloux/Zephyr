@@ -9,7 +9,7 @@ from PySide6.QtWidgets import (QApplication, QDialog, QVBoxLayout, QHBoxLayout,
 
 from Data import softwares
 from Data.softwares import Software
-from Gui.stage_widgets.stage_subwidgets import StageItem
+from Gui.stage_widgets.stage_item import StageItem
 from Utils.util_widgets import TextBox, PushButtonAutoWidth, ContextMenuWidget
 
 from Data.breeze_documents import Stage

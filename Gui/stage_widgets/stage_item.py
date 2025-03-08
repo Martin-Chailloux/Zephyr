@@ -148,5 +148,3 @@ class StageButton(QPushButton):
         icon.paint(painter, rect, QtCore.Qt.AlignmentFlag.AlignRight)
 
         painter.restore()
-
-
