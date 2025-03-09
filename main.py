@@ -16,6 +16,7 @@ class Breeze(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Breeze")
+        self.setWindowIcon(qtawesome.icon("fa5s.wind"))
         self._init_ui()
         self.connect_signals()
 
@@ -41,21 +42,6 @@ class Breeze(QMainWindow):
     def on_stage_selected(self, longname: str):
         stage = Stage.objects.get(longname=longname)
         self.stage_panel.stage_versions_widget.stage_item.set_stage(stage=stage)
-
-
-class TestWidget(QDialog):
-    def __init__(self):
-        super().__init__(parent=None)
-        self._init_ui()
-
-    def _init_ui(self):
-        self.setWindowTitle("Zephyr")
-        layout = QVBoxLayout()
-        self.setLayout(layout)
-        layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop)
-
-        fake_ingest_widget = ZFakeIngestWidget()
-        layout.addWidget(fake_ingest_widget)
 
 
 if __name__ == '__main__':
