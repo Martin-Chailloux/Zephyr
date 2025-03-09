@@ -1,4 +1,7 @@
 import sys
+
+import qtawesome
+
 from PySide6 import QtCore
 from PySide6.QtWidgets import QVBoxLayout, QDialog, QApplication, QMainWindow, QDockWidget
 import qdarkstyle
