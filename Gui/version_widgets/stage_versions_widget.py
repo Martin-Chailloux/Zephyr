@@ -3,13 +3,12 @@ import sys
 import qdarkstyle
 
 from PySide6 import QtCore
-from PySide6.QtCore import QSize, Signal
 from PySide6.QtWidgets import (QApplication, QDialog, QVBoxLayout, QHBoxLayout,
-                               QPushButton, QLabel, QSizePolicy)
+                               QLabel, QSizePolicy)
 
-from Data import softwares
-from Data.softwares import Software
+from Data.software import Software
 from Gui.stage_widgets.stage_item import StageItem
+from Gui.version_widgets.select_software_popup import SelectSoftwarePopup
 from Utils.util_widgets import TextBox, PushButtonAutoWidth, ContextMenuWidget
 
 from Data.breeze_documents import Stage
@@ -67,7 +66,7 @@ class StageVersionsWidget(QDialog):
         h_layout.setSpacing(self.buttons_spacing)
 
         from_scratch_button = PushButtonAutoWidth(
-            text=" From scratch", icon_name='ph.selection-bold',
+            text=" Empty", icon_name='ph.selection-bold',
             tooltip="use an empty file",
             fixed_width=True,
         )
@@ -135,63 +134,19 @@ class StageVersionsWidget(QDialog):
         self.from_scratch_button.customContextMenuRequested.connect(self.on_from_scratch_clicked)
 
     def on_from_scratch_clicked(self):
-        menu = SelectSoftwareContextMenuWidget()
+        menu = SelectSoftwarePopup(
+            available_soft= [
+                Software.krita,
+                Software.maya,
+                Software.blender,
+                Software.guerilla,
+                Software.nuke,
+            ],
+            recommended_soft= [
+                Software.blender
+            ],
+        )
         menu.exec()
-
-
-class SelectSoftwareContextMenuWidget(ContextMenuWidget):
-    software_icons = [
-        softwares.Krita(),
-        softwares.Blender(),
-        softwares.Maya(),
-        softwares.GuerillaRender(),
-        softwares.Nuke(),
-    ]
-
-    margin = 2
-    button_w: int = 48
-    h: int = 48
-
-    def __init__(self):
-        w = (len(self.software_icons) * self.button_w) + (2 * self.margin)
-        super().__init__(w=w, h=self.h,
-                         align_h=QtCore.Qt.AlignmentFlag.AlignCenter,
-                         align_v=QtCore.Qt.AlignmentFlag.AlignBottom)
-        self._init_ui()
-
-    def _init_ui(self):
-        layout = QHBoxLayout()
-        self.setLayout(layout)
-        layout.setContentsMargins(self.margin, self.margin, self.margin, self.margin)
-        layout.setSpacing(2)
-
-        for i, software in enumerate(self.software_icons):
-            h = self.h - 12
-            button = SoftwareButton(software=software, icon_h=h)
-            layout.addWidget(button)
-            button.software_selected.connect(self.on_software_selected)
-
-    def on_software_selected(self, label: str):
-        print(f"software selected: {label}")
-        self.close()
-
-
-class SoftwareButton(QPushButton):
-    software_selected = Signal(str)
-
-    def __init__(self, software: Software, icon_h: int=36):
-        super().__init__()
-        self.software = software
-        self.setIcon(software.icon)
-        self.setIconSize(QSize(icon_h, icon_h))
-
-        self.setToolTip(software.label)
-        self.setEnabled(self.software.is_enabled)
-
-        self.clicked.connect(self.on_button_clicked)
-
-    def on_button_clicked(self):
-        self.software_selected.emit(self.software.label)
 
 
 if __name__ == '__main__':
