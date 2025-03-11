@@ -5,6 +5,7 @@ from PySide6.QtWidgets import QPushButton, QDialog, QVBoxLayout, QListWidget, QL
     QHBoxLayout
 
 from Data.software import SoftwareModel
+from Utils.util_widgets.searchbar_widgets import SearchbarWidget
 
 
 class SelectSoftwarePopup(QDialog):
@@ -14,16 +15,25 @@ class SelectSoftwarePopup(QDialog):
         self.recommended_soft = recommended_soft
 
         self.setWindowTitle("Choose a software")
+        self.setWindowIcon(qtawesome.icon("fa5s.rocket"))
         self._init_ui()
         self.set_initial_state()
+        self.connect_signals()
 
     def _init_ui(self):
         layout = QVBoxLayout()
         self.setLayout(layout)
 
+        sub_layout = QHBoxLayout()
+        layout.addLayout(sub_layout)
+
+        # searchbar_widget
+        searchbar_widget = SearchbarWidget()
+        sub_layout.addWidget(searchbar_widget)
+
         # show recommended checkbox
         show_recommended_checkbox = QCheckBox("Recommended")
-        layout.addWidget(show_recommended_checkbox)
+        sub_layout.addWidget(show_recommended_checkbox)
 
         # software grid
         software_grid = IconsGrid()
@@ -53,12 +63,18 @@ class SelectSoftwarePopup(QDialog):
         # ------------------------
         # public vars
         # ------------------------
+        self.searchbar_widget = searchbar_widget
         self.show_recommended_checkbox = show_recommended_checkbox
         self.software_grid = software_grid
 
     def set_initial_state(self):
         self.show_recommended_checkbox.setChecked(True)
 
+    def connect_signals(self):
+        self.searchbar_widget.text_changed.connect(self.on_text_filter_changed)
+
+    def on_text_filter_changed(self, text: str):
+        print(f"{text = }")
 
 class IconsGrid(QListWidget):
     columns = 5
