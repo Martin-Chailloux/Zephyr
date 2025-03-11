@@ -3,6 +3,7 @@ import sys
 import qdarkstyle
 
 from PySide6 import QtCore
+from PySide6.QtCore import QSize
 from PySide6.QtWidgets import (QApplication, QDialog, QVBoxLayout, QHBoxLayout,
                                QLabel, QSizePolicy)
 
@@ -134,7 +135,7 @@ class StageVersionsWidget(QDialog):
         self.from_scratch_button.customContextMenuRequested.connect(self.on_from_scratch_clicked)
 
     def on_from_scratch_clicked(self):
-        menu = SelectSoftwarePopup(
+        dialog = SelectSoftwarePopup(
             available_soft= [
                 Software.krita,
                 Software.maya,
@@ -146,7 +147,9 @@ class StageVersionsWidget(QDialog):
                 Software.blender
             ],
         )
-        menu.exec()
+
+        dialog.resize(QSize(420, 360))
+        dialog.exec()
 
 
 if __name__ == '__main__':
