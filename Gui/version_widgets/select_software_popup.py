@@ -8,7 +8,6 @@ from Data.software import SoftwareModel
 
 
 class SelectSoftwarePopup(QDialog):
-    # TODO: startup size
     def __init__(self, available_soft: list[SoftwareModel], recommended_soft: list[SoftwareModel]):
         super().__init__()
         self.available_soft = available_soft
