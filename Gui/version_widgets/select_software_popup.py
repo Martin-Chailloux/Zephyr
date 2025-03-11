@@ -71,7 +71,7 @@ class SelectSoftwarePopup(QDialog):
         self.show_recommended_checkbox.setChecked(True)
 
     def connect_signals(self):
-        self.searchbar_widget.text_changed.connect(self.on_text_filter_changed)
+        self.searchbar_widget.textChanged.connect(self.on_text_filter_changed)
 
     def on_text_filter_changed(self, text: str):
         print(f"{text = }")
