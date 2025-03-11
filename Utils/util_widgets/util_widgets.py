@@ -1,8 +1,8 @@
 import qtawesome
 from PySide6 import QtCore
 from PySide6.QtCore import QSize, QPoint
-from PySide6.QtGui import QCursor
-from PySide6.QtWidgets import QPushButton, QLabel, QWidget, QVBoxLayout, QTextEdit, QDialog
+from PySide6.QtGui import QCursor, QIcon
+from PySide6.QtWidgets import QPushButton, QLabel, QWidget, QVBoxLayout, QTextEdit, QDialog, QSizePolicy
 
 from Dialogs.palette_dialog import Palette
 
@@ -25,15 +25,17 @@ class IconButton(QPushButton):
 
 
 class IconLabel(QLabel):
-    def __init__(self, icon_name: str, height: int = None):
+    def __init__(self, icon: QIcon, height: int = None):
         super().__init__()
-        self.icon_name = icon_name
         if height is not None:
             self.setFixedHeight(height)
 
-        icon = qtawesome.icon(self.icon_name)
-        pixmap = icon.pixmap(self.sizeHint().height())
+        height = self.sizeHint().height()
+
+        pixmap = icon.pixmap(height - int(height/8))  # A full size icon is too big to fit in
         self.setPixmap(pixmap)
+
+        self.setFixedSize(QSize(height, height))
 
 
 class TextBox(QWidget):
