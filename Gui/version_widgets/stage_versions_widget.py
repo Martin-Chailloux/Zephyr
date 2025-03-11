@@ -10,7 +10,7 @@ from PySide6.QtWidgets import (QApplication, QDialog, QVBoxLayout, QHBoxLayout,
 from Data.software import Software
 from Gui.stage_widgets.stage_item import StageItem
 from Gui.version_widgets.select_software_popup import SelectSoftwarePopup
-from Utils.util_widgets import TextBox, PushButtonAutoWidth, ContextMenuWidget
+from Utils.util_widgets.util_widgets import TextBox, PushButtonAutoWidth
 
 from Data.breeze_documents import Stage
 from Gui.version_widgets.versions_list.versions_list_view import VersionsListView

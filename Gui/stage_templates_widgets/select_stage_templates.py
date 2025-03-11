@@ -6,7 +6,7 @@ from PySide6.QtWidgets import QDialog, QVBoxLayout, QLabel, QHBoxLayout, QComboB
 from Data.breeze_documents import StageTemplate
 from Gui.popups.line_edit_popup import LineEditPopup
 from Gui.stage_widgets.stage_item import StageButton
-from Utils.util_widgets import IconButton
+from Utils.util_widgets.util_widgets import IconButton
 
 
 class StageTemplateSelector(QDialog):

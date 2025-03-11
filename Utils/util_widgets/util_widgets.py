@@ -24,7 +24,7 @@ class IconButton(QPushButton):
         self.icon = icon
 
 
-class IconAsPixmap(QLabel):
+class IconLabel(QLabel):
     def __init__(self, icon_name: str, height: int = None):
         super().__init__()
         self.icon_name = icon_name

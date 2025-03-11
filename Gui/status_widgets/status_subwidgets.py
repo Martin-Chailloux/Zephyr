@@ -7,7 +7,7 @@ from PySide6.QtWidgets import QPushButton, QGridLayout
 
 from Data import status
 from Dialogs.palette_dialog import Palette
-from Utils.util_widgets import ContextMenuWidget
+from Utils.util_widgets.util_widgets import ContextMenuWidget
 
 
 class SelectStatusWidget(QPushButton):

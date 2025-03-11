@@ -1,7 +1,7 @@
 import qtawesome
 
 from Dialogs.palette_dialog import Palette
-from Utils.util_widgets import IconButton
+from Utils.util_widgets.util_widgets import IconButton
 
 
 class SetBookmarkIconButton(IconButton):
