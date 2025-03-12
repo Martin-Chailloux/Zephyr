@@ -13,6 +13,7 @@ class SelectSoftwarePopup(QDialog):
         super().__init__()
         self.available_soft = available_soft
         self.recommended_soft = recommended_soft
+        self.recommended_soft_labels = [s.label.lower() for s in self.recommended_soft]
 
         self.setWindowTitle("Choose a software")
         self.setWindowIcon(qtawesome.icon("fa5s.rocket"))
@@ -67,14 +68,24 @@ class SelectSoftwarePopup(QDialog):
         self.show_recommended_checkbox = show_recommended_checkbox
         self.software_grid = software_grid
 
+    def connect_signals(self):
+        self.searchbar_widget.textChanged.connect(self.update_visible_items)
+        self.show_recommended_checkbox.clicked.connect(self.update_visible_items)
+
+    def update_visible_items(self):
+        text_filter = self.searchbar_widget.text()
+        for item in self.software_grid.all_items:
+            is_hidden_by_filter = text_filter.lower() not in item.text().lower()
+            is_recommended = item.text().lower() in self.recommended_soft_labels
+            is_hidden_by_recommended = self.show_recommended_checkbox.isChecked() and not is_recommended
+
+            is_hidden = is_hidden_by_filter or is_hidden_by_recommended
+            item.setHidden(is_hidden)
+
     def set_initial_state(self):
         self.show_recommended_checkbox.setChecked(True)
+        self.update_visible_items()
 
-    def connect_signals(self):
-        self.searchbar_widget.textChanged.connect(self.on_text_filter_changed)
-
-    def on_text_filter_changed(self, text: str):
-        print(f"{text = }")
 
 class IconsGrid(QListWidget):
     columns = 5
@@ -85,6 +96,11 @@ class IconsGrid(QListWidget):
         self.setResizeMode(QListView.ResizeMode.Adjust)
         self.setLayoutMode(QListView.LayoutMode.Batched)
         self.setUniformItemSizes(True)
+
+    @property
+    def all_items(self) -> list[QListWidgetItem]:
+        items = [self.item(i) for i in range(self.count())]
+        return items
 
     def _resize(self):
         """
@@ -102,8 +118,7 @@ class IconsGrid(QListWidget):
         self.setGridSize(QSize(tile_w, tile_w))
         self.setIconSize(QSize(icon_w, icon_w))
 
-        items = [self.item(i) for i in range(self.count())]
-        for item in items:
+        for item in self.all_items:
             item.setSizeHint(QSize(tile_w, tile_w))
 
     def resizeEvent(self, event):

@@ -144,7 +144,8 @@ class StageVersionsWidget(QDialog):
                 Software.nuke,
             ],
             recommended_soft= [
-                Software.blender
+                Software.blender,
+                Software.nuke,
             ],
         )
 
