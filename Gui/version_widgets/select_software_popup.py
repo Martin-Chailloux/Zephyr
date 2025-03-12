@@ -32,9 +32,9 @@ class SelectSoftwarePopup(QDialog):
         searchbar_widget = SearchbarWidget()
         sub_layout.addWidget(searchbar_widget)
 
-        # show recommended checkbox
-        show_recommended_checkbox = QCheckBox("Recommended")
-        sub_layout.addWidget(show_recommended_checkbox)
+        # 'show all' checkbox
+        show_all_checkbox = QCheckBox("Show all")
+        sub_layout.addWidget(show_all_checkbox)
 
         # software grid
         software_grid = IconsGrid()
@@ -65,25 +65,24 @@ class SelectSoftwarePopup(QDialog):
         # public vars
         # ------------------------
         self.searchbar_widget = searchbar_widget
-        self.show_recommended_checkbox = show_recommended_checkbox
+        self.show_all_checkbox = show_all_checkbox
         self.software_grid = software_grid
 
     def connect_signals(self):
         self.searchbar_widget.textChanged.connect(self.update_visible_items)
-        self.show_recommended_checkbox.clicked.connect(self.update_visible_items)
+        self.show_all_checkbox.clicked.connect(self.update_visible_items)
 
     def update_visible_items(self):
         text_filter = self.searchbar_widget.text()
         for item in self.software_grid.all_items:
             is_hidden_by_filter = text_filter.lower() not in item.text().lower()
             is_recommended = item.text().lower() in self.recommended_soft_labels
-            is_hidden_by_recommended = self.show_recommended_checkbox.isChecked() and not is_recommended
+            is_hidden_by_checkbox = not self.show_all_checkbox.isChecked() and not is_recommended
 
-            is_hidden = is_hidden_by_filter or is_hidden_by_recommended
+            is_hidden = is_hidden_by_filter or is_hidden_by_checkbox
             item.setHidden(is_hidden)
 
     def set_initial_state(self):
-        self.show_recommended_checkbox.setChecked(True)
         self.update_visible_items()
 
 
