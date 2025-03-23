@@ -9,7 +9,7 @@ from PySide6.QtWidgets import (QApplication, QDialog, QVBoxLayout, QHBoxLayout,
 
 from Breeze.Data.software import Software
 from Breeze.Gui.stage_widgets.stage_item import StageItem
-from Breeze.Gui.version_widgets.select_software_popup import SelectSoftwarePopup
+from Gui.popups.select_software_popup import SelectSoftwarePopup
 from Breeze.Utils.util_widgets.util_widgets import TextBox, PushButtonAutoWidth
 
 from Breeze.Data.breeze_documents import Stage
