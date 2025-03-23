@@ -5,7 +5,7 @@ from PySide6.QtWidgets import QPushButton, QDialog, QVBoxLayout, QListWidget, QL
     QHBoxLayout
 
 from Data.software import SoftwareModel
-from Utils.util_widgets.searchbar_widgets import SearchbarWidget
+from Gui.util_widgets.searchbar_widgets import SearchbarWidget
 
 
 class SelectSoftwarePopup(QDialog):

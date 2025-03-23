@@ -12,7 +12,7 @@ from Data.breeze_documents import Stage
 from Gui.stage_widgets.stage_item import StageItem
 from Gui.popups.select_software_popup import SelectSoftwarePopup
 from Gui.version_widgets.versions_list.versions_list_view import VersionsListView
-from Utils.util_widgets.util_widgets import TextBox, PushButtonAutoWidth
+from Gui.util_widgets.util_widgets import TextBox, PushButtonAutoWidth
 
 
 class StageVersionsWidget(QDialog):
