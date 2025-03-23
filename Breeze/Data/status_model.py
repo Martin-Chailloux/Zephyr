@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 from Dialogs.palette_dialog import Palette
 
 palette: Palette = Palette.objects.get(name="dev")
@@ -5,46 +7,29 @@ palette: Palette = Palette.objects.get(name="dev")
 
 # TODO: define a color for disabled states
 
+@dataclass
 class StatusItem:
     label: str
     color: str
 
 
-# ------------------------
-
-class WAIT(StatusItem):
-    label: str = "WAIT"
-    color: str = palette.white_text
-
-
-class TODO(StatusItem):
-    label: str = "TODO"
-    color: str = palette.yellow
-
-
-class WIP(StatusItem):
-    label: str = "WIP"
-    color: str = palette.orange
+@dataclass
+class StatusModel:
+    wait = StatusItem(label="WAIT", color=palette.white_text)
+    todo = StatusItem(label="TODO", color=palette.yellow)
+    wip = StatusItem(label="WAIT", color=palette.orange)
+    wfa = StatusItem(label="WFA", color=palette.purple)
+    done = StatusItem(label="DONE", color=palette.green)
+    error = StatusItem(label="ERROR", color=palette.red)
+    omit = StatusItem(label="OMIT", color=palette.primary)
 
 
-class WFA(StatusItem):
-    label: str = "WFA"
-    color: str = palette.purple
-
-
-class DONE(StatusItem):
-    label: str = "DONE"
-    color: str = palette.green
-
-
-class ERROR(StatusItem):
-    label: str = "ERROR"
-    color: str = palette.red
-
-
-class OMIT(StatusItem):
-    label: str = "OMIT"
-    color: str = palette.primary
-
-
-default_statuses = [TODO, WIP, WFA, DONE, WAIT, ERROR, OMIT]
+default_statuses = [
+    StatusModel.todo,
+    StatusModel.wip,
+    StatusModel.wfa,
+    StatusModel.done,
+    StatusModel.wait,
+    StatusModel.error,
+    StatusModel.omit,
+]

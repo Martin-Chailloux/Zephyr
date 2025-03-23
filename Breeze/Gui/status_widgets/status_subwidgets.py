@@ -5,14 +5,14 @@ from PySide6.QtCore import QSize, Signal
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import QPushButton, QGridLayout
 
-from Data import status_model
+from Data.status_model import default_statuses
 from Dialogs.palette_dialog import Palette
 from Gui.util_widgets.util_widgets import ContextMenuWidget
 
 
 class SelectStatusWidget(QPushButton):
     palette: Palette = Palette.objects.get(name="dev")
-    statuses = status.default_statuses
+    statuses = default_statuses
 
     w: int = 48
 
@@ -24,10 +24,10 @@ class SelectStatusWidget(QPushButton):
 
     def set_new_status(self, text: str):
         success = False
-        for _status in self.statuses:
-            if text == _status.label:
+        for status in self.statuses:
+            if text == status.label:
                 self.setText(text)
-                set_stylesheet(self, _status.color)
+                set_stylesheet(self, status.color)
                 success = True
         if not success:
             raise ValueError("Unknown status, cannot set.")
@@ -52,7 +52,7 @@ class SelectStatusMenu(ContextMenuWidget):
     button_h = 28
     max_columns = 2
 
-    statuses = status.default_statuses
+    statuses = default_statuses
 
     def __init__(self):
         max_rows = int(len(self.statuses) / self.max_columns) + 1
