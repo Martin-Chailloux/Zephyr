@@ -7,7 +7,7 @@ from PySide6.QtCore import QSize
 from PySide6.QtWidgets import (QApplication, QDialog, QVBoxLayout, QHBoxLayout,
                                QLabel, QSizePolicy)
 
-from Data.software import Software
+from Data.software_model import SoftwareModel
 from Data.breeze_documents import Stage
 from Gui.stage_widgets.stage_item import StageItem
 from Gui.popups.select_software_popup import SelectSoftwarePopup
@@ -136,15 +136,15 @@ class StageVersionsWidget(QDialog):
     def on_from_scratch_clicked(self):
         dialog = SelectSoftwarePopup(
             available_soft= [
-                Software.krita,
-                Software.maya,
-                Software.blender,
-                Software.guerilla,
-                Software.nuke,
+                SoftwareModel.krita,
+                SoftwareModel.maya,
+                SoftwareModel.blender,
+                SoftwareModel.guerilla,
+                SoftwareModel.nuke,
             ],
             recommended_soft= [
-                Software.blender,
-                Software.nuke,
+                SoftwareModel.blender,
+                SoftwareModel.nuke,
             ],
         )
 

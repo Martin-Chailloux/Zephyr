@@ -5,7 +5,7 @@ from PySide6.QtCore import QSize, Signal
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import QPushButton, QGridLayout
 
-from Data import status
+from Data import status_model
 from Dialogs.palette_dialog import Palette
 from Gui.util_widgets.util_widgets import ContextMenuWidget
 

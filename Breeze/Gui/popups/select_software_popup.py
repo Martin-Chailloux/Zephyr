@@ -4,12 +4,12 @@ from PySide6.QtCore import QSize
 from PySide6.QtWidgets import QPushButton, QDialog, QVBoxLayout, QListWidget, QListWidgetItem, QCheckBox, QListView, \
     QHBoxLayout
 
-from Data.software import SoftwareModel
+from Data.software_model import SoftwareItem
 from Gui.util_widgets.searchbar_widgets import SearchbarWidget
 
 
 class SelectSoftwarePopup(QDialog):
-    def __init__(self, available_soft: list[SoftwareModel], recommended_soft: list[SoftwareModel]):
+    def __init__(self, available_soft: list[SoftwareItem], recommended_soft: list[SoftwareItem]):
         super().__init__()
         self.available_soft = available_soft
         self.recommended_soft = recommended_soft

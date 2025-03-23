@@ -5,44 +5,44 @@ palette: Palette = Palette.objects.get(name="dev")
 
 # TODO: define a color for disabled states
 
-class Status:
+class StatusItem:
     label: str
     color: str
 
 
 # ------------------------
 
-class WAIT(Status):
+class WAIT(StatusItem):
     label: str = "WAIT"
     color: str = palette.white_text
 
 
-class TODO(Status):
+class TODO(StatusItem):
     label: str = "TODO"
     color: str = palette.yellow
 
 
-class WIP(Status):
+class WIP(StatusItem):
     label: str = "WIP"
     color: str = palette.orange
 
 
-class WFA(Status):
+class WFA(StatusItem):
     label: str = "WFA"
     color: str = palette.purple
 
 
-class DONE(Status):
+class DONE(StatusItem):
     label: str = "DONE"
     color: str = palette.green
 
 
-class ERROR(Status):
+class ERROR(StatusItem):
     label: str = "ERROR"
     color: str = palette.red
 
 
-class OMIT(Status):
+class OMIT(StatusItem):
     label: str = "OMIT"
     color: str = palette.primary
 
