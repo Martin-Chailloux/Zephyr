@@ -3,7 +3,7 @@ import sys
 import qtawesome
 
 from PySide6 import QtCore
-from PySide6.QtWidgets import QVBoxLayout, QDialog, QApplication, QMainWindow, QDockWidget
+from PySide6.QtWidgets import QApplication, QMainWindow, QDockWidget
 import qdarkstyle
 
 from Data.breeze_documents import Stage
@@ -70,4 +70,3 @@ if __name__ == '__main__':
     else:
         msg = f"Run time: {time: 2.2f} seconds."
     print(msg)
-
