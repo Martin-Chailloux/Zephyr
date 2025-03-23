@@ -1,5 +1,5 @@
-from Breeze.Data.breeze_documents import Stage, StageTemplate, Asset
-from Breeze.Dialogs import breeze_dialog
+from Data.breeze_documents import Stage, StageTemplate, Asset
+from Dialogs import breeze_dialog
 
 
 def update_stages_longname():

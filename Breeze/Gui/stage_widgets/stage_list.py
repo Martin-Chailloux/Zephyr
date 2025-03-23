@@ -4,10 +4,10 @@ from PySide6 import QtCore
 from PySide6.QtCore import Signal, QSize
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QPushButton, QSizePolicy)
 
-from Breeze.Data.breeze_documents import StageTemplate, Asset, Stage
-from Breeze.Dialogs.breeze_dialog import create_stage
-from Breeze.Gui.stage_templates_widgets.select_stage_templates import StageTemplateSelector
-from Breeze.Gui.stage_widgets.stage_item import StageItem
+from Data.breeze_documents import StageTemplate, Asset, Stage
+from Dialogs.breeze_dialog import create_stage
+from Gui.stage_templates_widgets.select_stage_templates import StageTemplateSelector
+from Gui.stage_widgets.stage_item import StageItem
 
 
 class StageListWidget(QWidget):

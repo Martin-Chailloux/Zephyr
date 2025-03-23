@@ -4,7 +4,7 @@ from PySide6.QtCore import QSize, QPoint
 from PySide6.QtGui import QCursor, QIcon
 from PySide6.QtWidgets import QPushButton, QLabel, QWidget, QVBoxLayout, QTextEdit, QDialog
 
-from Breeze.Dialogs.palette_dialog import Palette
+from Dialogs.palette_dialog import Palette
 
 
 class IconButton(QPushButton):

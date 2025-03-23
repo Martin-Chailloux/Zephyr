@@ -1,9 +1,9 @@
 from PySide6.QtWidgets import QWidget, QVBoxLayout
 
-from Breeze.Data.breeze_documents import Project, Asset
-from Breeze.Dialogs import projects_dialog
-from Breeze.Gui.asset_widgets.select_asset_widget import SelectAssetWidget
-from Breeze.Gui.stage_widgets.stage_list import StageListWidget
+from Data.breeze_documents import Project, Asset
+from Dialogs import projects_dialog
+from Gui.asset_widgets.select_asset_widget import SelectAssetWidget
+from Gui.stage_widgets.stage_list import StageListWidget
 
 
 class SelectStagePanel(QWidget):

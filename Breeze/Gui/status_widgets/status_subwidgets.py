@@ -5,9 +5,9 @@ from PySide6.QtCore import QSize, Signal
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import QPushButton, QGridLayout
 
-from Breeze.Data import status
-from Breeze.Dialogs.palette_dialog import Palette
-from Breeze.Utils.util_widgets.util_widgets import ContextMenuWidget
+from Data import status
+from Dialogs.palette_dialog import Palette
+from Utils.util_widgets.util_widgets import ContextMenuWidget
 
 
 class SelectStatusWidget(QPushButton):

@@ -3,7 +3,7 @@ from PySide6.QtCore import QModelIndex
 from PySide6.QtGui import QPainter
 from PySide6.QtWidgets import QStyledItemDelegate, QStyleOptionViewItem
 
-from Breeze.Gui.version_widgets.versions_list.versions_list_model import VersionItemRoles
+from Gui.version_widgets.versions_list.versions_list_model import VersionItemRoles
 
 
 # TODO: comment, date, hour, user

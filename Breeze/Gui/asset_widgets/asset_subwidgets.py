@@ -1,7 +1,7 @@
 import qtawesome
 
-from Breeze.Dialogs.palette_dialog import Palette
-from Breeze.Utils.util_widgets.util_widgets import IconButton
+from Dialogs.palette_dialog import Palette
+from Utils.util_widgets.util_widgets import IconButton
 
 
 class SetBookmarkIconButton(IconButton):

@@ -1,4 +1,4 @@
-from Breeze.Data.breeze_documents import Project
+from Data.breeze_documents import Project
 
 
 def create_project(name: str, categories: list[str] = None, users: list[str] = None, **kwargs) -> Project:

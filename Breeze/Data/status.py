@@ -1,4 +1,4 @@
-from Breeze.Dialogs.palette_dialog import Palette
+from Dialogs.palette_dialog import Palette
 
 palette: Palette = Palette.objects.get(name="dev")
 

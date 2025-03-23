@@ -1,4 +1,4 @@
-from Breeze.Dialogs.palette_dialog import create_palette
+from Dialogs.palette_dialog import create_palette
 
 create_palette(
         name = "dev",

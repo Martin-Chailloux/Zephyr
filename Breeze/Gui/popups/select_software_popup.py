@@ -4,8 +4,8 @@ from PySide6.QtCore import QSize
 from PySide6.QtWidgets import QPushButton, QDialog, QVBoxLayout, QListWidget, QListWidgetItem, QCheckBox, QListView, \
     QHBoxLayout
 
-from Breeze.Data.software import SoftwareModel
-from Breeze.Utils.util_widgets.searchbar_widgets import SearchbarWidget
+from Data.software import SoftwareModel
+from Utils.util_widgets.searchbar_widgets import SearchbarWidget
 
 
 class SelectSoftwarePopup(QDialog):

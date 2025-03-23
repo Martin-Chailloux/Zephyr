@@ -3,10 +3,10 @@ from PySide6 import QtCore
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QLabel, QHBoxLayout, QComboBox, QPushButton
 
-from Breeze.Data.breeze_documents import StageTemplate
-from Breeze.Gui.popups.line_edit_popup import LineEditPopup
-from Breeze.Gui.stage_widgets.stage_item import StageButton
-from Breeze.Utils.util_widgets.util_widgets import IconButton
+from Data.breeze_documents import StageTemplate
+from Gui.popups.line_edit_popup import LineEditPopup
+from Gui.stage_widgets.stage_item import StageButton
+from Utils.util_widgets.util_widgets import IconButton
 
 
 class StageTemplateSelector(QDialog):

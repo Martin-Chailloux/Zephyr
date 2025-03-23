@@ -2,7 +2,7 @@ from PySide6 import QtCore
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QVBoxLayout, QPushButton, QHBoxLayout, QDialog, QLineEdit, QLabel
 
-from Breeze.Dialogs import breeze_dialog
+from Dialogs import breeze_dialog
 
 
 class LineEditPopup(QDialog):

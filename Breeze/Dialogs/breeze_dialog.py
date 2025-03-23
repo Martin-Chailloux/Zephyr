@@ -1,5 +1,5 @@
-from Breeze.Data.breeze_documents import Asset, Stage, StageTemplate
-from Breeze.Utils.chronometer import Chronometer
+from Data.breeze_documents import Asset, Stage, StageTemplate
+from Utils.chronometer import Chronometer
 
 
 def text_to_conformed_text(text: str):

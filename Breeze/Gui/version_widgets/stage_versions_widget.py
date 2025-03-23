@@ -7,13 +7,12 @@ from PySide6.QtCore import QSize
 from PySide6.QtWidgets import (QApplication, QDialog, QVBoxLayout, QHBoxLayout,
                                QLabel, QSizePolicy)
 
-from Breeze.Data.software import Software
-from Breeze.Gui.stage_widgets.stage_item import StageItem
+from Data.software import Software
+from Data.breeze_documents import Stage
+from Gui.stage_widgets.stage_item import StageItem
 from Gui.popups.select_software_popup import SelectSoftwarePopup
-from Breeze.Utils.util_widgets.util_widgets import TextBox, PushButtonAutoWidth
-
-from Breeze.Data.breeze_documents import Stage
-from Breeze.Gui.version_widgets.versions_list.versions_list_view import VersionsListView
+from Gui.version_widgets.versions_list.versions_list_view import VersionsListView
+from Utils.util_widgets.util_widgets import TextBox, PushButtonAutoWidth
 
 
 class StageVersionsWidget(QDialog):

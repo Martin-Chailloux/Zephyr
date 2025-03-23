@@ -3,10 +3,10 @@ from PySide6 import QtCore
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QComboBox, QLabel, QGridLayout, QFrame
 
-from Breeze.Data.breeze_documents import Project, Asset
-from Breeze.Dialogs import breeze_dialog
-from Breeze.Gui.popups.line_edit_popup import LineEditPopup
-from Breeze.Gui.asset_widgets.asset_subwidgets import SetBookmarkIconButton
+from Data.breeze_documents import Project, Asset
+from Dialogs import breeze_dialog
+from Gui.popups.line_edit_popup import LineEditPopup
+from Gui.asset_widgets.asset_subwidgets import SetBookmarkIconButton
 
 
 # TODO: bug: if an asset without existing name or variant, the previous stage list is kept

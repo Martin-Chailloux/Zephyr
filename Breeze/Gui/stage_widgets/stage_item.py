@@ -7,8 +7,8 @@ from PySide6.QtWidgets import QPushButton, QSizePolicy, QHBoxLayout, QComboBox, 
 
 import qtawesome
 
-from Breeze.Data.breeze_documents import StageTemplate, Stage
-from Breeze.Gui.status_widgets.status_subwidgets import SelectStatusWidget
+from Data.breeze_documents import StageTemplate, Stage
+from Gui.status_widgets.status_subwidgets import SelectStatusWidget
 
 
 class StageItem(QWidget):
