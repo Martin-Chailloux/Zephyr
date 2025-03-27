@@ -4,7 +4,7 @@ class Chronometer:
     def __init__(self):
         self.previous = time.time()
 
-    def tick(self, text: str = None, as_float = False) -> str | float:
+    def tick(self, text: str = None, as_float = False) -> float:
         now = time.time()
         delta = now - self.previous
 
@@ -12,4 +12,4 @@ class Chronometer:
             print(f"{text} {delta:3.2f}s")
 
         self.previous = time.time()
-        return delta if as_float else f"{delta:3.2f}s"
+        return delta
