@@ -1,7 +1,5 @@
 from mongoengine import *
 
-connect(host="mongodb+srv://MartinChailloux:adminGhost@learn.kqpry.mongodb.net/JourDeVent")
-
 
 class Palette(Document):
     name = StringField(required=True, primary_key=True)

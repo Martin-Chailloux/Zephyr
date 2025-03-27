@@ -1,11 +1,5 @@
 from datetime import datetime
-
 from mongoengine import *
-
-
-# TODO: Est-ce que c'est pertinant sur le long terme de le mettre ici ?
-# TODO: Tester à l'ouverture du soft quand y aura un truc qui ressemble à un soft
-connect(host="mongodb+srv://MartinChailloux:adminGhost@learn.kqpry.mongodb.net/JourDeVent")
 
 
 class Project(Document):

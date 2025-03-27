@@ -1,5 +1,12 @@
 import sys
 
+from Utils.chronometer import Chronometer
+import mongoengine
+chrono = Chronometer()
+print("Connecting ...")
+mongoengine.connect(host="mongodb+srv://MartinChailloux:adminGhost@learn.kqpry.mongodb.net/JourDeVent")
+chrono.tick("... Connected in:")
+
 import qtawesome
 
 from PySide6 import QtCore
@@ -9,7 +16,6 @@ import qdarkstyle
 from Data.breeze_documents import Stage
 from Gui.panels.select_stage_panel import SelectStagePanel
 from Gui.panels.stage_panel import StagePanel
-from Utils.chronometer import Chronometer
 
 
 class Breeze(QMainWindow):
