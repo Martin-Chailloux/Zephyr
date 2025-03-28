@@ -41,10 +41,8 @@ def get_asset(category: str = None, name: str = None, variant: str = None, uniqu
 
 
 # NOTE: currently no gui to create stages
-def create_stage_template(name: str, label: str, description: str,
-                          color: str = None, icon_name: str = None, **kwargs) -> StageTemplate:
-    kwargs = dict(name=name, label=label, description=description,
-                  color=color, icon_name=icon_name, **kwargs)
+def create_stage_template(name: str, label: str, color: str = None, icon_name: str = None, **kwargs) -> StageTemplate:
+    kwargs = dict(name=name, label=label, color=color, icon_name=icon_name, **kwargs)
     kwargs = {k: v for k, v in kwargs.items() if v is not None}
     stage_template = StageTemplate(**kwargs)
     stage_template.save()
