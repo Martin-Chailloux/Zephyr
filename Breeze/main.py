@@ -1,4 +1,5 @@
 import sys
+from datetime import timedelta
 
 from Utils.chronometer import Chronometer
 import mongoengine
@@ -66,15 +67,10 @@ if __name__ == '__main__':
 
     app.exec()
 
-    time = chrono.tick(as_float=True)
-    if time > 60 * 60:
-        hours = time / 60
-        minutes = hours / 60
-        # hours / minutes lack precision
-        msg = f"Run time: {round(hours)} hours, {round(minutes)} minutes, {time % 60} seconds."
-    elif time > 60:
-        minutes = time / 60
-        msg = f"Run time: {round(minutes)} minutes, {time % 60} seconds."
-    else:
-        msg = f"Run time: {time: 2.2f} seconds."
+    runtime = chrono.tick()
+    runtime = str(timedelta(seconds=runtime))
+    hours = int(runtime.split(":")[0])
+    minutes = int(runtime.split(":")[1])
+    seconds = float(runtime.split(":")[2])
+    msg = f"Run time: {hours}h, {minutes}m, {seconds:2.2f}s"
     print(msg)

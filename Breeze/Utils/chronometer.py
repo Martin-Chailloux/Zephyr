@@ -4,7 +4,7 @@ class Chronometer:
     def __init__(self):
         self.previous = time.time()
 
-    def tick(self, text: str = None, as_float = False) -> float:
+    def tick(self, text: str = None) -> float:
         now = time.time()
         delta = now - self.previous
 
