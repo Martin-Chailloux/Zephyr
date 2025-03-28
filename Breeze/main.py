@@ -2,16 +2,18 @@ import sys
 
 from Utils.chronometer import Chronometer
 import mongoengine
+
 chrono = Chronometer()
 print("Connecting ...")
-mongoengine.connect(host="mongodb+srv://MartinChailloux:adminGhost@learn.kqpry.mongodb.net/JourDeVent")
+mongoengine.connect(host="mongodb://localhost:27017/JourDeVent")
 chrono.tick("... Connected in:")
 
+
 import qtawesome
+import qdarkstyle
 
 from PySide6 import QtCore
 from PySide6.QtWidgets import QApplication, QMainWindow, QDockWidget
-import qdarkstyle
 
 from Data.breeze_documents import Stage
 from Gui.panels.select_stage_panel import SelectStagePanel
