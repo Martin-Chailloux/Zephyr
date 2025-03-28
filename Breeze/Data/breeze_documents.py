@@ -46,7 +46,7 @@ class Asset(Document):
     }
 
     def __repr__(self):
-        return f"<Asset>: {self.longname}]"
+        return f"<Asset>: {self.longname}"
 
 
 class StageTemplate(Document):
