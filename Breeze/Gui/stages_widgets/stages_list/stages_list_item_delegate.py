@@ -1,7 +1,7 @@
 import qtawesome
 from PySide6 import QtCore
-from PySide6.QtCore import QModelIndex, QRect, QRectF
-from PySide6.QtGui import QPainter, QBrush, QColor, QPen, QPainterPath, QIcon
+from PySide6.QtCore import QModelIndex, QRect, QRectF, QPointF
+from PySide6.QtGui import QPainter, QBrush, QColor, QPen, QPainterPath, QIcon, QImage
 from PySide6.QtWidgets import QStyledItemDelegate, QStyleOptionViewItem, QStyleOption, QStyle
 
 from Data.breeze_documents import Stage, StageTemplate, Asset
@@ -14,6 +14,8 @@ alignment = QtCore.Qt.AlignmentFlag
 
 class StageListItemDelegate(QStyledItemDelegate):
     palette: Palette = Palette.objects.get(name="dev")
+    logo_w: int = 48
+    status_w: int = 64
 
     def __init__(self):
         super().__init__()
@@ -22,8 +24,9 @@ class StageListItemDelegate(QStyledItemDelegate):
         self.stage: Stage = index.data(StageItemRoles.stage)
         self.asset: Asset = self.stage.asset
         self.stage_template: StageTemplate = self.stage.stage_template
-        self.is_selected = bool(option.state & QStyle.StateFlag.State_Selected)
         self.is_hovered = bool(option.state & QStyle.StateFlag.State_MouseOver)
+        self.is_selected = bool(option.state & QStyle.StateFlag.State_Selected)
+        self.opacity: float = 1 if self.is_hovered or self.is_selected else 0.5
         self.item_rect: QRect = option.rect
 
     def get_item_rect_data(self) -> (int, int, int, int):
@@ -38,37 +41,36 @@ class StageListItemDelegate(QStyledItemDelegate):
         painter.save()
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
 
+        self.paint_selected_background(painter)
+        self.paint_hover(painter)
+
         self.paint_logo(painter)
         self.paint_text(painter)
-        self.paint_user(painter)
         self.paint_status(painter)
 
-        self.paint_mouse_hover(painter)
-        self.paint_selected(painter)
+        self.paint_selected_underline(painter)
+        self.paint_user(painter)
 
         painter.restore()
 
     def paint_logo(self, painter: QPainter):
         x, y, w, h = self.get_item_rect_data()
-        width = 48
         margin = 3 if self.is_hovered or self.is_selected else 4
 
-        background_color = QColor(self.stage_template.color)
-        icon_color = QColor(self.palette.white_text)
-        opacity: float = 1 if self.is_selected else 0.3
-        for color in [background_color, icon_color]:
-            color.setAlphaF(opacity)
+        background_color = self.stage_template.color
+        icon_color = self.palette.white_text
 
         painter.save()
 
+        painter.setOpacity(self.opacity)
         painter.setPen(QColor(0, 0, 0, 0))
-        rect = QRectF(x, y, width, h)
+        rect = QRectF(x, y, self.logo_w, h)
         painter.setBrush(QBrush(background_color))
         painter.drawRect(rect)
 
         painter.setBrush(QBrush(icon_color))
-        rect = QRect(x + margin, y + margin, width - 2*margin, h - 2*margin)
-        icon: QIcon = qtawesome.icon(self.stage_template.icon_name, opacity=opacity)
+        rect = QRect(x+margin, y+margin, self.logo_w-2*margin, h-2*margin)
+        icon: QIcon = qtawesome.icon(self.stage_template.icon_name, opacity=self.opacity)
         icon.paint(painter, rect, QtCore.Qt.AlignmentFlag.AlignRight)
 
         painter.restore()
@@ -76,26 +78,45 @@ class StageListItemDelegate(QStyledItemDelegate):
     def paint_text(self, painter: QPainter):
         x, y, w, h = self.get_item_rect_data()
         color = QColor(self.palette.white_text)
-        opacity: float = 1 if self.is_selected else 0.5
         padding = 12
-        color.setAlphaF(opacity)
 
         painter.save()
+        painter.setOpacity(self.opacity)
         painter.setPen(QPen(color))
-        rect = QRect(x + padding + 48, y, w, h)
+        rect = QRect(x + padding + self.logo_w, y, w, h)
         painter.drawText(rect, self.stage_template.label, alignment.AlignVCenter | alignment.AlignLeft)
         painter.restore()
 
     def paint_user(self, painter: QPainter):
-        icon_path = f"Breeze/Resources/Icons/Users/martin.jpg"
-        # TODO
-        return
+        x, y, w, h = self.get_item_rect_data()
+        margin = 2 if self.is_hovered else 3
+        x = w - self.status_w - h + margin
+        rect = QRect(x, y+margin, h-2*margin, h-2*margin)
+        icon_path = f"Breeze/Resources/Icons/Users/user_test2.png"
+        image = QImage(icon_path)
+
+        painter.save()
+
+        # Set drawing data
+        painter.setOpacity(self.opacity)
+        painter.setBrush(QBrush(painter.background()))
+        painter.setPen(QtCore.Qt.PenStyle.NoPen)
+
+        # Set clip path
+        path = QPainterPath(QPointF(x, y))
+        path.addEllipse(rect)
+        painter.setClipPath(path)
+
+        # Draw image
+        painter.drawImage(rect, image)
+
+        painter.restore()
 
     def paint_status(self, painter: QPainter):
         # TODO
         return
 
-    def paint_mouse_hover(self, painter: QPainter):
+    def paint_hover(self, painter: QPainter):
         if not self.is_hovered:
             return
 
@@ -109,26 +130,34 @@ class StageListItemDelegate(QStyledItemDelegate):
         painter.drawRect(QRectF(QRectF(x, y, w, h)))
         painter.restore()
 
-    def paint_selected(self, painter: QPainter):
+    def paint_selected_background(self, painter: QPainter):
         if not self.is_selected:
             return
 
-        background_color = QColor(self.palette.white_text)
-        background_color.setAlphaF(0.2)
-        underline_color = self.palette.green
-
-        height = 2
         x, y, w, h = self.get_item_rect_data()
+        color = QColor(self.palette.white_text)
+        color.setAlphaF(0.2)
 
         painter.save()
 
-        # paint highlight
         painter.setPen(QPen(QColor(0, 0, 0, 0)))
-        painter.setBrush(QBrush(background_color))
+        painter.setBrush(QBrush(color))
         painter.drawRect(x, y, w, h)
 
-        # paint underline
-        painter.setBrush(QBrush(underline_color))
-        painter.drawRect(QRectF(x, y + h - height, w, height))
+        painter.restore()
+
+    def paint_selected_underline(self, painter: QPainter):
+        if not self.is_selected:
+            return
+
+        x, y, w, h = self.get_item_rect_data()
+        color = self.palette.green
+        height = 2
+
+        painter.save()
+
+        painter.setPen(QPen(QColor(0, 0, 0, 0)))
+        painter.setBrush(QBrush(color))
+        painter.drawRect(QRectF(x, y+h-height, w, height))
 
         painter.restore()

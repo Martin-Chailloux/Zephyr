@@ -26,7 +26,7 @@ class StageListModel(QStandardItemModel):
         row = self.rowCount()
 
         item = QStandardItem()
-        item.setSizeHint(QSize(0, 30))
+        item.setSizeHint(QSize(0, 36))
         item.setEditable(False)
 
         item.setData(stage, StageItemRoles.stage)
