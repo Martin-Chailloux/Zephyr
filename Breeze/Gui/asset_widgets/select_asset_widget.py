@@ -28,13 +28,10 @@ class SelectAssetWidget(QWidget):
     def _init_ui(self):
         self.setMaximumWidth(512)
 
-        layout = QVBoxLayout()
-        self.setLayout(layout)
-        layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop | QtCore.Qt.AlignmentFlag.AlignLeft)
-
         grid_layout = QGridLayout()
-        layout.addLayout(grid_layout)
-        grid_layout.setContentsMargins(7, 7, 7, 7)
+        self.setLayout(grid_layout)
+
+        grid_layout.setContentsMargins(0, 0, 0, 0)
         grid_layout.setVerticalSpacing(1)
         grid_layout.setHorizontalSpacing(5)
 
@@ -62,11 +59,6 @@ class SelectAssetWidget(QWidget):
 
         set_bookmark_button = SetBookmarkIconButton()
         grid_layout.addWidget(set_bookmark_button, 1, 4)
-
-        line = QFrame()
-        layout.addWidget(line)
-        line.setFrameShape(QFrame.Shape.HLine)
-        line.setFrameShadow(QFrame.Shadow.Sunken)
 
         # ------------------------
         # public vars
