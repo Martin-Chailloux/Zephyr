@@ -4,6 +4,7 @@ from Data.breeze_documents import Project, Asset
 from Dialogs import projects_dialog
 from Gui.asset_widgets.select_asset_widget import SelectAssetWidget
 from Gui.stage_widgets.stage_list import StageListWidget
+from Gui.stage_widgets.stages_list.stages_list_view import StageListView
 
 
 class SelectStagePanel(QWidget):
@@ -22,7 +23,7 @@ class SelectStagePanel(QWidget):
         select_asset_widget = SelectAssetWidget(project)
         layout.addWidget(select_asset_widget)
 
-        stage_list_widget = StageListWidget()
+        stage_list_widget = StageListView()
         layout.addWidget(stage_list_widget)
 
         self.select_asset_widget = select_asset_widget
