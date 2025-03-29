@@ -2,8 +2,8 @@ from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QListView
 
 from Data.breeze_documents import Asset
-from Gui.stage_widgets.stages_list.stages_list_item_delegate import StageListItemDelegate
-from Gui.stage_widgets.stages_list.stages_list_model import StageListModel
+from Gui.stages_widgets.stages_list.stages_list_item_delegate import StageListItemDelegate
+from Gui.stages_widgets.stages_list.stages_list_model import StageListModel
 
 # TODO: recover edit stages button
 

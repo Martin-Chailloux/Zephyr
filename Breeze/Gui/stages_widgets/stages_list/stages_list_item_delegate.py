@@ -6,7 +6,7 @@ from PySide6.QtWidgets import QStyledItemDelegate, QStyleOptionViewItem, QStyleO
 
 from Data.breeze_documents import Stage, StageTemplate, Asset
 from Data.gui_documents import Palette
-from Gui.stage_widgets.stages_list.stages_list_model import StageItemRoles
+from Gui.stages_widgets.stages_list.stages_list_model import StageItemRoles
 
 
 alignment = QtCore.Qt.AlignmentFlag
