@@ -15,6 +15,8 @@ from Gui.version_widgets.versions_list.versions_list_model import VersionItemRol
 #   - time spent
 #   - software
 
+alignment = QtCore.Qt.AlignmentFlag
+
 class VersionsListItemDelegate(QStyledItemDelegate):
     def __init__(self):
         super().__init__()
@@ -26,12 +28,11 @@ class VersionsListItemDelegate(QStyledItemDelegate):
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
 
         item_rect = option.rect
-        af = QtCore.Qt.AlignmentFlag
 
         number = f"   {index.data(VersionItemRoles.number):03d}"
-        painter.drawText(item_rect, number, af.AlignVCenter | af.AlignLeft)
+        painter.drawText(item_rect, number, alignment.AlignVCenter | alignment.AlignLeft)
 
         name = index.data(VersionItemRoles.name)
-        painter.drawText(item_rect, name, af.AlignVCenter | af.AlignCenter)
+        painter.drawText(item_rect, name, alignment.AlignVCenter | alignment.AlignCenter)
 
         painter.restore()
