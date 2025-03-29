@@ -1,24 +1,23 @@
 import qtawesome
 from PySide6 import QtCore
-from PySide6.QtCore import QModelIndex, QRect, QRectF, QPointF
-from PySide6.QtGui import QPainter, QBrush, QColor, QPen, QPainterPath, QIcon, QImage
-from PySide6.QtWidgets import QStyledItemDelegate, QStyleOptionViewItem, QStyleOption, QStyle
+from PySide6.QtCore import QModelIndex, QRect, QRectF, QPointF, QPoint
+from PySide6.QtGui import QPainter, QBrush, QColor, QPen, QPainterPath, QIcon, QImage, QCursor
+from PySide6.QtWidgets import QStyledItemDelegate, QStyleOptionViewItem, QStyle, QListView
 
 from Data.breeze_documents import Stage, StageTemplate, Asset
 from Data.gui_documents import Palette
 from Gui.stages_widgets.stages_list.stages_list_model import StageItemRoles
-
+from Gui.stages_widgets.stages_list.stages_list_model import StageListItemSizes as dimensions
 
 alignment = QtCore.Qt.AlignmentFlag
 
 
 class StageListItemDelegate(QStyledItemDelegate):
     palette: Palette = Palette.objects.get(name="dev")
-    logo_w: int = 48
-    status_w: int = 64
 
-    def __init__(self):
+    def __init__(self, widget: QListView):
         super().__init__()
+        self.widget = widget
 
     def _set_data(self, option: QStyleOptionViewItem, index: QModelIndex):
         self.stage: Stage = index.data(StageItemRoles.stage)
@@ -29,13 +28,21 @@ class StageListItemDelegate(QStyledItemDelegate):
         self.opacity: float = 1 if self.is_hovered or self.is_selected else 0.5
         self.item_rect: QRect = option.rect
 
+    def get_mouse_position(self) -> (int, int):
+        position: QPoint = self.widget.mapFromGlobal(QCursor.pos())
+        return position.x(), position.y()
+
+    def is_mouse_in_rect(self, rect: QRect | QRectF) -> bool:
+        x, y, w, h = rect.x(), rect.y(), rect.width(), rect.height()
+        mouse_x, mouse_y = self.get_mouse_position()
+        is_in_rect: bool = x < mouse_x < x + w and y < mouse_y < y + h
+        return is_in_rect
+
     def get_item_rect_data(self) -> (int, int, int, int):
         item_rect = self.item_rect
         return item_rect.x(), item_rect.y()+1, item_rect.width(), item_rect.height()-2
 
     def paint(self, painter: QPainter, option: QStyleOptionViewItem , index: QModelIndex):
-        # super().paint(painter, option, index)
-
         self._set_data(option, index)
 
         painter.save()
@@ -55,7 +62,7 @@ class StageListItemDelegate(QStyledItemDelegate):
 
     def paint_logo(self, painter: QPainter):
         x, y, w, h = self.get_item_rect_data()
-        margin = 3 if self.is_hovered or self.is_selected else 4
+        margin = 3 if self.is_hovered or self.is_selected else 5
 
         background_color = self.stage_template.color
         icon_color = self.palette.white_text
@@ -64,12 +71,12 @@ class StageListItemDelegate(QStyledItemDelegate):
 
         painter.setOpacity(self.opacity)
         painter.setPen(QColor(0, 0, 0, 0))
-        rect = QRectF(x, y, self.logo_w, h)
+        rect = QRectF(x, y, dimensions.logo_w, h)
         painter.setBrush(QBrush(background_color))
         painter.drawRect(rect)
 
         painter.setBrush(QBrush(icon_color))
-        rect = QRect(x+margin, y+margin, self.logo_w-2*margin, h-2*margin)
+        rect = QRect(x+margin, y+margin, dimensions.logo_w-2*margin, h-2*margin)
         icon: QIcon = qtawesome.icon(self.stage_template.icon_name, opacity=self.opacity)
         icon.paint(painter, rect, QtCore.Qt.AlignmentFlag.AlignRight)
 
@@ -83,15 +90,17 @@ class StageListItemDelegate(QStyledItemDelegate):
         painter.save()
         painter.setOpacity(self.opacity)
         painter.setPen(QPen(color))
-        rect = QRect(x + padding + self.logo_w, y, w, h)
+        rect = QRect(x + padding + dimensions.logo_w, y, w, h)
         painter.drawText(rect, self.stage_template.label, alignment.AlignVCenter | alignment.AlignLeft)
         painter.restore()
 
     def paint_user(self, painter: QPainter):
         x, y, w, h = self.get_item_rect_data()
-        margin = 2 if self.is_hovered else 3
-        x = w - self.status_w - h + margin
+        full_rect = QRect(w-dimensions.status_w-h, y, h, h)
+        margin = 2 if self.is_mouse_in_rect(full_rect) else 4
+        x = w - dimensions.status_w - h + margin
         rect = QRect(x, y+margin, h-2*margin, h-2*margin)
+
         icon_path = f"Breeze/Resources/Icons/Users/user_test2.png"
         image = QImage(icon_path)
 

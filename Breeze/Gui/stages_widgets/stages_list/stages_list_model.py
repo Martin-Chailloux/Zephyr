@@ -12,6 +12,13 @@ class StageItemRoles:
     stage = QtCore.Qt.ItemDataRole.UserRole
 
 
+@dataclass
+class StageListItemSizes:
+    height: int = 36
+    logo_w: int = 48
+    status_w: int = 48
+
+
 class StageListModel(QStandardItemModel):
     def __init__(self):
         super().__init__()
@@ -26,7 +33,7 @@ class StageListModel(QStandardItemModel):
         row = self.rowCount()
 
         item = QStandardItem()
-        item.setSizeHint(QSize(0, 36))
+        item.setSizeHint(QSize(0, StageListItemSizes.height))
         item.setEditable(False)
 
         item.setData(stage, StageItemRoles.stage)
