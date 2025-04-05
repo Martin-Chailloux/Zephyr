@@ -25,20 +25,12 @@ class StageListItemDelegate(QStyledItemDelegate):
         self.stage_template: StageTemplate = self.stage.stage_template
         self.is_hovered = bool(option.state & QStyle.StateFlag.State_MouseOver)
         self.is_selected = bool(option.state & QStyle.StateFlag.State_Selected)
+        self.user_is_hovered = index.data(StageItemRoles.user_is_hovered)
+        self.status_is_hovered = index.data(StageItemRoles.status_is_hovered)
         self.opacity: float = 1 if self.is_hovered or self.is_selected else 0.5
         self.item_rect: QRect = option.rect
 
-    def get_mouse_position(self) -> (int, int):
-        position: QPoint = self.widget.mapFromGlobal(QCursor.pos())
-        return position.x(), position.y()
-
-    def is_mouse_in_rect(self, rect: QRect | QRectF) -> bool:
-        x, y, w, h = rect.x(), rect.y(), rect.width(), rect.height()
-        mouse_x, mouse_y = self.get_mouse_position()
-        is_in_rect: bool = x < mouse_x < x + w and y < mouse_y < y + h
-        return is_in_rect
-
-    def get_item_rect_data(self) -> (int, int, int, int):
+    def get_item_rect(self) -> (int, int, int, int):
         item_rect = self.item_rect
         return item_rect.x(), item_rect.y()+1, item_rect.width(), item_rect.height()-2
 
@@ -61,7 +53,7 @@ class StageListItemDelegate(QStyledItemDelegate):
         painter.restore()
 
     def paint_logo(self, painter: QPainter):
-        x, y, w, h = self.get_item_rect_data()
+        x, y, w, h = self.get_item_rect()
         margin = 3 if self.is_hovered or self.is_selected else 5
 
         background_color = self.stage_template.color
@@ -83,7 +75,7 @@ class StageListItemDelegate(QStyledItemDelegate):
         painter.restore()
 
     def paint_text(self, painter: QPainter):
-        x, y, w, h = self.get_item_rect_data()
+        x, y, w, h = self.get_item_rect()
         color = QColor(self.palette.white_text)
         padding = 12
 
@@ -95,9 +87,8 @@ class StageListItemDelegate(QStyledItemDelegate):
         painter.restore()
 
     def paint_user(self, painter: QPainter):
-        x, y, w, h = self.get_item_rect_data()
-        full_rect = QRect(w-dimensions.status_w-h, y, h, h)
-        margin = 2 if self.is_mouse_in_rect(full_rect) else 4
+        x, y, w, h = self.get_item_rect()
+        margin = 2 if self.user_is_hovered else 4
         x = w - dimensions.status_w - h + margin
         rect = QRect(x, y+margin, h-2*margin, h-2*margin)
 
@@ -129,7 +120,7 @@ class StageListItemDelegate(QStyledItemDelegate):
         if not self.is_hovered:
             return
 
-        x, y, w, h = self.get_item_rect_data()
+        x, y, w, h = self.get_item_rect()
 
         painter.save()
         color = QColor(self.palette.white_text)
@@ -143,7 +134,7 @@ class StageListItemDelegate(QStyledItemDelegate):
         if not self.is_selected:
             return
 
-        x, y, w, h = self.get_item_rect_data()
+        x, y, w, h = self.get_item_rect()
         color = QColor(self.palette.white_text)
         color.setAlphaF(0.2)
 
@@ -159,7 +150,7 @@ class StageListItemDelegate(QStyledItemDelegate):
         if not self.is_selected:
             return
 
-        x, y, w, h = self.get_item_rect_data()
+        x, y, w, h = self.get_item_rect()
         color = self.palette.green
         height = 2
 

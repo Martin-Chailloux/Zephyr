@@ -3,7 +3,7 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout
 from Data.breeze_documents import Project, Asset
 from Dialogs import projects_dialog
 from Gui.asset_widgets.select_asset_widget import SelectAssetWidget
-from Gui.stages_widgets.stage_list import StageListWidget
+from Gui.stages_widgets.stage_list_widget import StageListWidget
 from Gui.stages_widgets.stages_list.stages_list_view import StageListView
 
 
@@ -23,7 +23,7 @@ class SelectStagePanel(QWidget):
         select_asset_widget = SelectAssetWidget(project)
         layout.addWidget(select_asset_widget)
 
-        stage_list_widget = StageListView()
+        stage_list_widget = StageListWidget(asset=select_asset_widget.current_asset)
         layout.addWidget(stage_list_widget)
 
         self.select_asset_widget = select_asset_widget
@@ -33,9 +33,12 @@ class SelectStagePanel(QWidget):
         self.select_asset_widget.asset_selected.connect(self.on_asset_selected)
 
     def on_asset_selected(self, longname: str):
-        asset = Asset.objects.get(longname=longname)
-        self.stage_list_widget.set_asset(asset)
+        if not longname:
+            asset = None
+        else:
+            asset = Asset.objects.get(longname=longname)
+        self.stage_list_widget.set_current_asset(asset)
 
     def init_state(self):
         asset = self.select_asset_widget.current_asset
-        self.stage_list_widget.set_asset(asset)
+        self.stage_list_widget.stage_list_view.set_asset(asset)

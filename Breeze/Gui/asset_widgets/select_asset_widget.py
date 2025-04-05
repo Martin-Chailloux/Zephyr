@@ -130,6 +130,7 @@ class SelectAssetWidget(QWidget):
         forbidden = [self.add_item_label, ""]
         for s in self.category, self.name, self.variant:
             if s in forbidden:
+                self.asset_selected.emit("")
                 return
 
         self.asset_selected.emit(self.current_asset.longname)
