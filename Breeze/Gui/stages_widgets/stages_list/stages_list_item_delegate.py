@@ -47,10 +47,10 @@ class StageListItemDelegate(QStyledItemDelegate):
 
         self.paint_logo(painter)
         self.paint_text(painter)
-        self.paint_status(painter)
 
         self.paint_selected_underline(painter)
         self.paint_user(painter)
+        self.paint_status(painter)
 
         painter.restore()
 
@@ -115,7 +115,7 @@ class StageListItemDelegate(QStyledItemDelegate):
         painter.restore()
 
     def paint_status(self, painter: QPainter):
-        margin = 2 if self.status_is_hovered else 4
+        margin = 2 if self.status_is_hovered else 3
         x, y, w, h = self.get_item_rect()
         x = w - StageListItemSizes.status_w + margin
         rect = QRect(x, y+margin, StageListItemSizes.status_w-2*margin, h-2*margin)
