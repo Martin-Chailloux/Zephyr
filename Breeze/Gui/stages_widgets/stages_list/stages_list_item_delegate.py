@@ -8,7 +8,7 @@ from Data.breeze_documents import Stage, StageTemplate, Asset
 from Data.gui_documents import Palette
 from Data.status_model import palette
 from Gui.stages_widgets.stages_list.stages_list_model import StageItemRoles
-from Gui.stages_widgets.stages_list.stages_list_model import StageListItemSizes as dimensions
+from Gui.stages_widgets.stages_list.stages_list_model import StageListItemSizes
 
 
 alignment = QtCore.Qt.AlignmentFlag
@@ -65,12 +65,12 @@ class StageListItemDelegate(QStyledItemDelegate):
 
         painter.setOpacity(self.opacity)
         painter.setPen(QColor(0, 0, 0, 0))
-        rect = QRectF(x, y, dimensions.logo_w, h)
+        rect = QRectF(x, y, StageListItemSizes.logo_w, h)
         painter.setBrush(QBrush(background_color))
         painter.drawRect(rect)
 
         painter.setBrush(QBrush(icon_color))
-        rect = QRect(x+margin, y+margin, dimensions.logo_w-2*margin, h-2*margin)
+        rect = QRect(x+margin, y+margin, StageListItemSizes.logo_w-2*margin, h-2*margin)
         icon: QIcon = qtawesome.icon(self.stage_template.icon_name, opacity=self.opacity)
         icon.paint(painter, rect, QtCore.Qt.AlignmentFlag.AlignRight)
 
@@ -84,14 +84,14 @@ class StageListItemDelegate(QStyledItemDelegate):
         painter.save()
         painter.setOpacity(self.opacity)
         painter.setPen(QPen(color))
-        rect = QRect(x + padding + dimensions.logo_w, y, w, h)
+        rect = QRect(x + padding + StageListItemSizes.logo_w, y, w, h)
         painter.drawText(rect, self.stage_template.label, alignment.AlignVCenter | alignment.AlignLeft)
         painter.restore()
 
     def paint_user(self, painter: QPainter):
         margin = 3 if self.user_is_hovered else 4
         x, y, w, h = self.get_item_rect()
-        x = w - dimensions.status_w - h + margin
+        x = w - StageListItemSizes.status_w - h + margin
         rect = QRect(x, y+margin, h-2*margin, h-2*margin)
 
         icon_path = f"Breeze/Resources/Icons/Users/user_test2.png"
@@ -117,8 +117,8 @@ class StageListItemDelegate(QStyledItemDelegate):
     def paint_status(self, painter: QPainter):
         margin = 3 if self.status_is_hovered else 4
         x, y, w, h = self.get_item_rect()
-        x = w - dimensions.status_w + margin
-        rect = QRect(x, y+margin, dimensions.status_w-2*margin, h-2*margin)
+        x = w - StageListItemSizes.status_w + margin
+        rect = QRect(x, y+margin, StageListItemSizes.status_w-2*margin, h-2*margin)
 
         # colors
         pill_color = self.palette.yellow
