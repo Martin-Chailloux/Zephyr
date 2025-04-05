@@ -3,17 +3,17 @@ from PySide6 import QtCore
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QLabel, QHBoxLayout, QComboBox, QPushButton
 
-from Data.breeze_documents import StageTemplate
+from Data.breeze_documents import StageTemplate, Asset
+from Dialogs.breeze_dialog import create_stage
 from Gui.popups.line_edit_popup import LineEditPopup
 from Gui.stages_widgets.stage_item import StageButton
 from Gui.util_widgets.util_widgets import IconButton
 
 
 class StageTemplateSelector(QDialog):
-    confirmed = Signal(str)
-
-    def __init__(self):
+    def __init__(self, asset: Asset):
         super().__init__()
+        self.asset = asset
         self.templates: list[StageTemplate] = StageTemplate.objects()
 
         self.setWindowTitle("Stage templates")
@@ -147,8 +147,14 @@ class StageTemplateSelector(QDialog):
     def on_confirm(self):
         templates = [button.template for button in self.buttons if button.isChecked()]
         names = [template.name for template in templates]
-        s = "_".join(name for name in names)
-        self.confirmed.emit(s)
+        existing_stage_names = [stage.stage_template.name for stage in self.asset.stages]
+        names = [n for n in names if n not in existing_stage_names]
+
+        stage_templates: list[StageTemplate] = [StageTemplate.objects.get(name=name) for name in names]
+
+        for stage_template in stage_templates:
+            stage = create_stage(stage_template=stage_template, asset=self.asset)
+
         self.close()
 
     def create_preset(self, preset: str):
