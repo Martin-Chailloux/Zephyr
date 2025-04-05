@@ -45,6 +45,7 @@ class StageListModel(QStandardItemModel):
         item.setData(stage, StageItemRoles.stage)
         item.setData(False, StageItemRoles.user_is_hovered)
         item.setData(False, StageItemRoles.status_is_hovered)
+
         self.setItem(row, item)
 
     @property
