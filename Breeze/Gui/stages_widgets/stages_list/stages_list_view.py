@@ -62,6 +62,7 @@ class StageListView(QListView):
         return rect.x(), rect.y(), rect.width(), rect.height()
 
     def _set_mouse_cursor(self):
+        return
         # TODO: test alt: overlay an edit icon over the user
         if self.is_on_user or self.is_on_status:
             cursor_shape = QtCore.Qt.CursorShape.PointingHandCursor

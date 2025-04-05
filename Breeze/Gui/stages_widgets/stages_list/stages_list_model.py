@@ -18,7 +18,7 @@ class StageItemRoles:
 class StageListItemSizes:
     height: int = 36
     logo_w: int = 48
-    status_w: int = 48
+    status_w: int = 52
 
 
 class StageListModel(QStandardItemModel):

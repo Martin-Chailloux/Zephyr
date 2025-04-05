@@ -6,8 +6,10 @@ from PySide6.QtWidgets import QStyledItemDelegate, QStyleOptionViewItem, QStyle,
 
 from Data.breeze_documents import Stage, StageTemplate, Asset
 from Data.gui_documents import Palette
+from Data.status_model import palette
 from Gui.stages_widgets.stages_list.stages_list_model import StageItemRoles
 from Gui.stages_widgets.stages_list.stages_list_model import StageListItemSizes as dimensions
+
 
 alignment = QtCore.Qt.AlignmentFlag
 
@@ -87,8 +89,8 @@ class StageListItemDelegate(QStyledItemDelegate):
         painter.restore()
 
     def paint_user(self, painter: QPainter):
+        margin = 3 if self.user_is_hovered else 4
         x, y, w, h = self.get_item_rect()
-        margin = 2 if self.user_is_hovered else 4
         x = w - dimensions.status_w - h + margin
         rect = QRect(x, y+margin, h-2*margin, h-2*margin)
 
@@ -113,8 +115,35 @@ class StageListItemDelegate(QStyledItemDelegate):
         painter.restore()
 
     def paint_status(self, painter: QPainter):
-        # TODO
-        return
+        margin = 3 if self.status_is_hovered else 4
+        x, y, w, h = self.get_item_rect()
+        x = w - dimensions.status_w + margin
+        rect = QRect(x, y+margin, dimensions.status_w-2*margin, h-2*margin)
+
+        # colors
+        pill_color = self.palette.yellow
+        text_color = QColor(palette.black_text)
+        text_color.setAlphaF(0.9 if self.status_is_hovered else 0.8)
+
+        # font
+        font = painter.font()
+        if not self.status_is_hovered:
+            font.setPointSizeF(font.pointSizeF() - 0.5)
+
+        painter.save()
+
+        # Paint pill
+        painter.setBrush(QBrush(pill_color))
+        path = QPainterPath()
+        path.addRoundedRect(rect, 3, 3)
+        painter.fillPath(path, painter.brush())
+
+        # Paint text
+        painter.setPen(text_color)
+        painter.setFont(font)
+        painter.drawText(rect, "TODO", alignment.AlignHCenter | alignment.AlignVCenter)
+
+        painter.restore()
 
     def paint_hover(self, painter: QPainter):
         if not self.is_hovered:
