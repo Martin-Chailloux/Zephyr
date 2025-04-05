@@ -1,6 +1,5 @@
 import qtawesome
 from PySide6 import QtCore
-from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QLabel, QHBoxLayout, QComboBox, QPushButton
 
 from Data.breeze_documents import StageTemplate, Asset
