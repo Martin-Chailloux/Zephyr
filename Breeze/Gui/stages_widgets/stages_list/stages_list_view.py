@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from PySide6 import QtCore
-from PySide6.QtCore import Signal, QPoint
+from PySide6.QtCore import Signal, QPoint, QModelIndex
 from PySide6.QtGui import QCursor, QStandardItem
 from PySide6.QtWidgets import QListView
 
@@ -10,7 +10,12 @@ from Gui.stages_widgets.stages_list.stages_list_item_delegate import StageListIt
 from Gui.stages_widgets.stages_list.stages_list_model import StageListModel, StageItemRoles
 from Gui.stages_widgets.stages_list.stages_list_model import StageListItemSizes as dimensions
 
-# TODO: recover edit stages button
+
+@dataclass
+class HoverData:
+    index: QModelIndex = None
+    user: bool = False
+    status: bool = False
 
 
 class StageListView(QListView):
@@ -18,26 +23,22 @@ class StageListView(QListView):
 
     def __init__(self):
         super().__init__()
-        self._model = StageListModel()
-        self._item_delegate = StageListItemDelegate(widget=self)
+        self.setMouseTracking(True)
 
+        self._model = StageListModel()
         self.setModel(self._model)
+
+        self._item_delegate = StageListItemDelegate(widget=self)
         self.setItemDelegate(self._item_delegate)
 
-        self.setMouseTracking(True)
-        self.last_mouse_pos = self.get_mouse_pos()
-        self.last_hovered_item_index: int = self.get_hovered_item_index()
 
-        self.is_on_user: bool = False
-        self.is_on_status: bool = False
-
+        self.hover_data = HoverData(index=self.get_hovered_index(),
+                                    user=False,
+                                    status=False)
         self._connect_signals()
 
     def set_asset(self, asset: Asset):
         self._model.set_asset(asset)
-
-    # def refresh(self):
-    #     self._model.set_asset(asset=self._model.asset)
 
     def _connect_signals(self):
         self.selectionModel().currentChanged.connect(self.on_selection_changed)
@@ -52,10 +53,6 @@ class StageListView(QListView):
     def get_mouse_pos(self) -> QPoint:
         position: QPoint = self.mapFromGlobal(QCursor.pos())
         return position
-
-    def get_hovered_item_index(self) -> int:
-        mouse_position = self.get_mouse_pos()
-        return int(mouse_position.y() / dimensions.height)
 
     def get_viewport_rect(self) -> (int, int, int, int):
         rect = self.viewport().rect()
@@ -72,60 +69,41 @@ class StageListView(QListView):
         cursor.setShape(cursor_shape)
         self.setCursor(cursor)
 
+    def get_hovered_index(self) -> QModelIndex:
+        mouse_pos = self.get_mouse_pos()
+        index = self.indexAt(mouse_pos)
+        return index
+
     def get_hovered_item(self) -> QStandardItem:
-        current_index = self.indexAt(self.get_mouse_pos())
+        current_index = self.get_hovered_index()
         current_item = self._model.item(current_index.row())
         return current_item
 
     def mouseMoveEvent(self, event):
-        # TODO: update the delegate from here using the item index (from self.get_hovered_item_index())
-        #  <- bug: it does not work when moving very slowy
-        #  + the delegate should not be responsible for logic anyway
-        # optim: only update when needed
         x, y, w, h = self.get_viewport_rect()
         mouse_pos = self.get_mouse_pos()
 
         status_x = w - dimensions.status_w
         user_x = status_x - dimensions.height
 
-        needs_update: bool = False
+        current_hover = HoverData(index=self.get_hovered_index(),
+                                  user=user_x < mouse_pos.x() < status_x,
+                                  status=status_x< mouse_pos.x())
 
-        # crossed item
-        if self.get_hovered_item_index() != self.last_hovered_item_index:
-            needs_update = True
-
-        # crossed user
-        elif self.last_mouse_pos.x() >= user_x >= mouse_pos.x() or self.last_mouse_pos.x() <= user_x <= mouse_pos.x():
-            needs_update = True
-
-        # crossed status
-        elif self.last_mouse_pos.x() >= status_x >= mouse_pos.x() or self.last_mouse_pos.x() <= status_x <= mouse_pos.x():
-            needs_update = True
-
-        if needs_update:
-            self.is_on_user = user_x < mouse_pos.x() < status_x
-            self.is_on_status = status_x < mouse_pos.x()
-
+        if current_hover != self.hover_data:
             self._model.remove_items_hover()
-            self.set_hovered_items()
-
-            self._set_mouse_cursor()
+            self.hover_data = current_hover
+            self.set_items_hovered_parts()
             self.viewport().update()
 
         super().mouseMoveEvent(event)
-        self.last_mouse_pos = mouse_pos
-        self.last_hovered_item_index = self.get_hovered_item_index()
 
-    def set_hovered_items(self):
+    def set_items_hovered_parts(self):
         hovered_item = self.get_hovered_item()
         if hovered_item is not None:
-            hovered_item.setData(self.is_on_user, StageItemRoles.user_is_hovered)
-            hovered_item.setData(self.is_on_status, StageItemRoles.status_is_hovered)
+            hovered_item.setData(self.hover_data.user, StageItemRoles.user_is_hovered)
+            hovered_item.setData(self.hover_data.status, StageItemRoles.status_is_hovered)
 
     def leaveEvent(self, event):
         self._model.remove_items_hover()
         super().leaveEvent(event)
-
-    def enterEvent(self, event):
-        self.set_hovered_items()
-        super().enterEvent(event)
