@@ -28,10 +28,12 @@ class StageListModel(QStandardItemModel):
 
     def set_asset(self, asset: Asset):
         self.asset = asset
+        if asset is None:
+            return
+
         self.clear()
-        if asset is not None:
-            for stage in asset.stages:
-                self.add_item(stage=stage)
+        for stage in asset.stages:
+            self.add_item(stage=stage)
 
     def add_item(self, stage: Stage):
         row = self.rowCount()
