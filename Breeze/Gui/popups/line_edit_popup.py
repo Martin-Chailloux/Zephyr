@@ -4,7 +4,7 @@ from PySide6.QtWidgets import QVBoxLayout, QPushButton, QHBoxLayout, QDialog, QL
 
 from Dialogs import breeze_dialog
 
-
+# TODO: checkbox to stay on after enter
 class LineEditPopup(QDialog):
     create_clicked = Signal(str)
 
