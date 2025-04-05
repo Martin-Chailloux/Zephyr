@@ -100,9 +100,23 @@ class StageListView(QListView):
 
     def set_items_hovered_parts(self):
         hovered_item = self.get_hovered_item()
-        if hovered_item is not None:
-            hovered_item.setData(self.hover_data.user, StageItemRoles.user_is_hovered)
-            hovered_item.setData(self.hover_data.status, StageItemRoles.status_is_hovered)
+        if hovered_item is None:
+            return
+
+        # Set hovered components for the delegate
+        hovered_item.setData(self.hover_data.user, StageItemRoles.user_is_hovered)
+        hovered_item.setData(self.hover_data.status, StageItemRoles.status_is_hovered)
+
+        # Set tooltip
+        # TODO: pollutes the gui, use a help bar at the bottom instead
+        #  GOAL: global setting and shortcut to show / hide the help bars
+        if hovered_item.data(StageItemRoles.user_is_hovered):
+            tooltip = "Edit user"
+        elif hovered_item.data(StageItemRoles.status_is_hovered):
+            tooltip = "Edit status"
+        else:
+            tooltip = ""
+        hovered_item.setToolTip(tooltip)
 
     def leaveEvent(self, event):
         self._model.remove_items_hover()
