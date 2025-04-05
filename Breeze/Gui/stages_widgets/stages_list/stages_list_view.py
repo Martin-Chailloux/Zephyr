@@ -8,11 +8,11 @@ from PySide6.QtWidgets import QListView
 from Data.breeze_documents import Asset, Stage
 from Gui.stages_widgets.stages_list.stages_list_item_delegate import StageListItemDelegate
 from Gui.stages_widgets.stages_list.stages_list_model import StageListModel, StageItemRoles
-from Gui.stages_widgets.stages_list.stages_list_model import StageListItemSizes as dimensions
+from Gui.stages_widgets.stages_list.stages_list_model import StageListItemSizes
 
 
 @dataclass
-class HoverData:
+class StageListHoverData:
     index: QModelIndex = None
     user: bool = False
     status: bool = False
@@ -32,9 +32,9 @@ class StageListView(QListView):
         self.setItemDelegate(self._item_delegate)
 
 
-        self.hover_data = HoverData(index=self.get_hovered_index(),
-                                    user=False,
-                                    status=False)
+        self.hover_data = StageListHoverData(index=self.get_hovered_index(),
+                                             user=False,
+                                             status=False)
         self._connect_signals()
 
     def set_asset(self, asset: Asset):
@@ -83,12 +83,12 @@ class StageListView(QListView):
         x, y, w, h = self.get_viewport_rect()
         mouse_pos = self.get_mouse_pos()
 
-        status_x = w - dimensions.status_w
-        user_x = status_x - dimensions.height
+        status_x = w - StageListItemSizes.status_w
+        user_x = status_x - StageListItemSizes.height
 
-        current_hover = HoverData(index=self.get_hovered_index(),
-                                  user=user_x < mouse_pos.x() < status_x,
-                                  status=status_x< mouse_pos.x())
+        current_hover = StageListHoverData(index=self.get_hovered_index(),
+                                           user=user_x < mouse_pos.x() < status_x,
+                                           status=status_x< mouse_pos.x())
 
         if current_hover != self.hover_data:
             self._model.remove_items_hover()
