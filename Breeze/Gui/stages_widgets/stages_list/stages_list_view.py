@@ -121,3 +121,15 @@ class StageListView(QListView):
     def leaveEvent(self, event):
         self._model.remove_items_hover()
         super().leaveEvent(event)
+
+    def mousePressEvent(self, event):
+        if self.hover_data.on_user:
+            print("USER")
+
+        elif self.hover_data.on_status:
+            print("STATUS")
+            menu = SelectStatusMenu()
+            menu.exec()
+
+        else:
+            super().mousePressEvent(event)
