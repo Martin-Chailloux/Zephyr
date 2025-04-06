@@ -1,16 +1,13 @@
 from dataclasses import dataclass
 
-from PySide6 import QtCore
-from PySide6.QtCore import Signal, QPoint, QModelIndex
-from PySide6.QtGui import QCursor, QStandardItem
-from PySide6.QtWidgets import QListView
+from PySide6.QtCore import Signal, QModelIndex
 
 from Data.project_documents import Asset, Stage
 from Dialogs.status_dialog import EditStatusMenu
+from Gui.abstract_widgets.abstract_mvd import AbstractListView
 from Gui.stages_widgets.stages_list.stages_list_item_delegate import StageListItemDelegate
 from Gui.stages_widgets.stages_list.stages_list_model import StageListModel, StageItemRoles
 from Gui.stages_widgets.stages_list.stages_list_model import StageListItemSizes
-from Gui.status_widgets.status_subwidgets import SelectStatusMenu
 
 
 @dataclass
@@ -21,12 +18,11 @@ class StageListHoverData:
     stage: Stage = None
 
 
-class StageListView(QListView):
+class StageListView(AbstractListView):
     stage_selected = Signal(str)
 
     def __init__(self):
         super().__init__()
-        self.setMouseTracking(True)
 
         self._model = StageListModel()
         self.setModel(self._model)
@@ -34,11 +30,7 @@ class StageListView(QListView):
         self._item_delegate = StageListItemDelegate(widget=self)
         self.setItemDelegate(self._item_delegate)
 
-
-        self.hover_data = StageListHoverData(index=self.get_hovered_index(),
-                                             on_user=False,
-                                             on_status=False,
-                                             stage=None)
+        self.last_hover_data = StageListHoverData()
         self._connect_signals()
 
     def set_asset(self, asset: Asset):
@@ -47,8 +39,11 @@ class StageListView(QListView):
     def _connect_signals(self):
         self.selectionModel().currentChanged.connect(self.on_selection_changed)
 
+    def on_selection_changed(self):
+        current_stage = self.get_selected_stage()
+        self.stage_selected.emit(current_stage.longname)
+
     def get_selected_stage(self) -> Stage | None:
-        # TODO: would make more sense with an always accessible property that updates on selection changed
         current_item = self._model.item(self.currentIndex().row())
         if current_item is None:
             return None
@@ -56,77 +51,47 @@ class StageListView(QListView):
         current_stage: Stage = current_item.data(StageItemRoles.stage)
         return current_stage
 
-    def get_hovered_stage(self):
-        hovered_item = self.get_hovered_item()
+    def _get_hovered_stage(self) -> Stage | None:
+        hovered_item = self._get_hovered_item()
+        if hovered_item is None:
+            return None
+
         stage = hovered_item.data(StageItemRoles.stage)
         return stage
 
-    def on_selection_changed(self):
-        current_stage = self.get_selected_stage()
-        if current_stage is None:
-            return
-        self.stage_selected.emit(current_stage.longname)
-
-    def get_mouse_pos(self) -> QPoint:
-        position: QPoint = self.mapFromGlobal(QCursor.pos())
-        return position
-
-    def get_viewport_rect(self) -> (int, int, int, int):
-        rect = self.viewport().rect()
-        return rect.x(), rect.y(), rect.width(), rect.height()
-
-    def _set_mouse_cursor(self):
-        return
-        # TODO: test alt: overlay an edit icon over the user
-        if self.is_on_user or self.is_on_status:
-            cursor_shape = QtCore.Qt.CursorShape.PointingHandCursor
-        else:
-            cursor_shape = QtCore.Qt.CursorShape.ArrowCursor
-        cursor = QCursor()
-        cursor.setShape(cursor_shape)
-        self.setCursor(cursor)
-
-    def get_hovered_index(self) -> QModelIndex:
-        mouse_pos = self.get_mouse_pos()
-        index = self.indexAt(mouse_pos)
-        return index
-
-    def get_hovered_item(self) -> QStandardItem:
-        current_index = self.get_hovered_index()
-        current_item = self._model.item(current_index.row())
-        return current_item
-
-    def mouseMoveEvent(self, event):
-        x, y, w, h = self.get_viewport_rect()
-        mouse_pos = self.get_mouse_pos()
-
+    def _get_hover_data(self) -> StageListHoverData:
+        x, y, w, h = self._get_viewport_rect()
+        mouse_pos = self._get_mouse_pos()
         status_x = w - StageListItemSizes.status_w
         user_x = status_x - StageListItemSizes.height
 
-        current_hover = StageListHoverData(index=self.get_hovered_index(),
+        hover_data = StageListHoverData(index=self._get_hovered_index(),
                                            on_user=user_x < mouse_pos.x() < status_x,
                                            on_status=status_x < mouse_pos.x())
+        return hover_data
 
-        if current_hover != self.hover_data:
+    def mouseMoveEvent(self, event):
+        current_hover_data = self._get_hover_data()
+
+        if current_hover_data != self.last_hover_data:
             self._model.remove_items_hover()
-            self.hover_data = current_hover
-            self.set_items_hovered_parts()
+            self.last_hover_data = current_hover_data
+            self.set_items_hover_infos()
             self.viewport().update()
 
         super().mouseMoveEvent(event)
 
-    def set_items_hovered_parts(self):
-        hovered_item = self.get_hovered_item()
+    def set_items_hover_infos(self):
+        hovered_item = self._get_hovered_item()
         if hovered_item is None:
             return
 
         # Set hovered components for the delegate
-        hovered_item.setData(self.hover_data.on_user, StageItemRoles.user_is_hovered)
-        hovered_item.setData(self.hover_data.on_status, StageItemRoles.status_is_hovered)
+        hovered_item.setData(self.last_hover_data.on_user, StageItemRoles.user_is_hovered)
+        hovered_item.setData(self.last_hover_data.on_status, StageItemRoles.status_is_hovered)
 
         # Set tooltip
-        # TODO: pollutes the gui, use a help bar at the bottom instead
-        #  GOAL: global setting and shortcut to show / hide the help bars
+        # TODO: pollutes the gui, use a help bar at the bottom of the app instead
         if hovered_item.data(StageItemRoles.user_is_hovered):
             tooltip = "Edit user"
         elif hovered_item.data(StageItemRoles.status_is_hovered):
@@ -140,15 +105,12 @@ class StageListView(QListView):
         super().leaveEvent(event)
 
     def mousePressEvent(self, event):
-        if self.hover_data.on_user:
-            print("USER")
-
-        elif self.hover_data.on_status:
-            print("STATUS")
-            menu = EditStatusMenu(stage=self.get_hovered_stage())
+        if self.last_hover_data.on_user:
+            pass
+            # TODO
+        elif self.last_hover_data.on_status:
+            menu = EditStatusMenu(stage=self._get_hovered_stage())
             menu.exec()
-            print(f".. UPDATE ...")
             self.viewport().update()
-
         else:
             super().mousePressEvent(event)
