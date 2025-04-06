@@ -2,6 +2,7 @@ from mongoengine import *
 
 
 class Palette(Document):
+    # TODO: move to Studio db
     name = StringField(required=True, primary_key=True)
 
     white_text = StringField()

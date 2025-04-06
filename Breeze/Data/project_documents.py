@@ -5,6 +5,8 @@ from Data.studio_documents import Status
 
 
 class Project(Document):
+    # TODO: move to Studio db + update with statuses / users / associated db / etc.
+
     #TODO: The database matches a single project : no need to have a project document model
     #  -> Replace with a json that saves the project's settings
     #  -> Same for users: they are related to a project
