@@ -1,5 +1,16 @@
-from Data.breeze_documents import Stage, StageTemplate, Asset
+import mongoengine
+
+from Data.studio_documents import Status
+
+mongoengine.connect(host="mongodb://localhost:27017", db="Studio", alias="default")
+mongoengine.connect(host="mongodb://localhost:27017", db="JourDeVent", alias="current_project")
+
+from Data.project_documents import Stage, StageTemplate, Asset
+from Data.status_model import default_statuses, StatusModel
 from Dialogs import breeze_dialog
+from Dialogs.status_dialog import create_status
+
+
 
 
 def update_stages_longname():
@@ -32,5 +43,16 @@ def clear_old_stages_from_assets():
         stages = [s for s in asset.stages if s in all_stages]
         asset.update(stages=stages)
 
+
+
 if __name__ == '__main__':
-    pass
+    # default_status = Status.objects.get(label="WAIT")
+    # print(f"{default_status = }")
+
+    for i, status in enumerate(default_statuses):
+        create_status(label=status.label, color=status.color, order=i)
+    # for stage in Stage.objects:
+    #     print(f"{stage.status = }")
+    #
+    #     print(f"{stage = }")
+    #     print(f"{stage.status = }")
