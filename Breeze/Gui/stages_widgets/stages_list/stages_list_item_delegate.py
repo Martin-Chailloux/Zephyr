@@ -121,9 +121,9 @@ class StageListItemDelegate(QStyledItemDelegate):
         rect = QRect(x, y+margin, StageListItemSizes.status_w-2*margin, h-2*margin)
 
         # colors
-        pill_color = self.palette.yellow
-        text_color = QColor(palette.black_text)
-        # text_color.setAlphaF(0.9 if self.status_is_hovered else 0.8)
+        pill_color = self.stage.status.color
+        text = self.stage.status.label
+        text_color = palette.black_text
 
         # font
         font = painter.font()
@@ -141,7 +141,7 @@ class StageListItemDelegate(QStyledItemDelegate):
         # Paint text
         painter.setPen(text_color)
         painter.setFont(font)
-        painter.drawText(rect, "TODO", alignment.AlignHCenter | alignment.AlignVCenter)
+        painter.drawText(rect, text, alignment.AlignHCenter | alignment.AlignVCenter)
 
         painter.restore()
 

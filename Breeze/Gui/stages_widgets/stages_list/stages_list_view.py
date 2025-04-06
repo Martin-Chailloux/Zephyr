@@ -18,6 +18,7 @@ class StageListHoverData:
     index: QModelIndex = None
     on_user: bool = False
     on_status: bool = False
+    stage: Stage = None
 
 
 class StageListView(QListView):
@@ -36,7 +37,8 @@ class StageListView(QListView):
 
         self.hover_data = StageListHoverData(index=self.get_hovered_index(),
                                              on_user=False,
-                                             on_status=False)
+                                             on_status=False,
+                                             stage=None)
         self._connect_signals()
 
     def set_asset(self, asset: Asset):
@@ -45,11 +47,24 @@ class StageListView(QListView):
     def _connect_signals(self):
         self.selectionModel().currentChanged.connect(self.on_selection_changed)
 
-    def on_selection_changed(self):
+    def get_selected_stage(self) -> Stage | None:
+        # TODO: would make more sense with an always accessible property that updates on selection changed
         current_item = self._model.item(self.currentIndex().row())
         if current_item is None:
-            return
+            return None
+
         current_stage: Stage = current_item.data(StageItemRoles.stage)
+        return current_stage
+
+    def get_hovered_stage(self):
+        hovered_item = self.get_hovered_item()
+        stage = hovered_item.data(StageItemRoles.stage)
+        return stage
+
+    def on_selection_changed(self):
+        current_stage = self.get_selected_stage()
+        if current_stage is None:
+            return
         self.stage_selected.emit(current_stage.longname)
 
     def get_mouse_pos(self) -> QPoint:
@@ -130,8 +145,10 @@ class StageListView(QListView):
 
         elif self.hover_data.on_status:
             print("STATUS")
-            menu = SelectStatusMenu()
+            menu = EditStatusMenu(stage=self.get_hovered_stage())
             menu.exec()
+            print(f".. UPDATE ...")
+            self.viewport().update()
 
         else:
             super().mousePressEvent(event)
