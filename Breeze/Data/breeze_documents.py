@@ -12,7 +12,8 @@ class Project(Document):
     users = SortedListField(StringField(), default = ["Martin", "Kim", "Elise", "Chloé", "Hugo", "Camille"])
 
     meta = {
-        'collection': 'Projects'
+        'collection': 'Projects',
+        'db_alias': 'current_project',
     }
 
     def __repr__(self):
@@ -42,7 +43,8 @@ class Asset(Document):
     stages = ListField(ReferenceField(document_type='Stage'), default=[])
 
     meta = {
-        'collection': 'Assets'
+        'collection': 'Assets',
+        'db_alias': 'current_project'
     }
 
     def __repr__(self):
@@ -64,7 +66,8 @@ class StageTemplate(Document):
     presets = ListField(StringField(), default=[])
 
     meta = {
-        'collection': 'Stage templates'
+        'collection': 'Stage templates',
+        'db_alias': 'current_project',
     }
 
     def __repr__(self):
@@ -86,7 +89,8 @@ class Stage(Document):
     ingredients = ListField(ReferenceField(document_type='Versions'), default=[]) # TODO: migration ?
 
     meta = {
-        'collection': 'Stages'
+        'collection': 'Stages',
+        'db_alias': 'current_project',
     }
 
     def __repr__(self):
@@ -122,7 +126,8 @@ class Component(Document):
     destinations = ListField(ReferenceField(document_type=Stage, default=[]))
 
     meta = {
-        'collection': 'Components'
+        'collection': 'Components',
+        'db_alias': 'current_project',
     }
 
     def __repr__(self):
@@ -151,7 +156,8 @@ class Version(Document):
     # todo_list = ReferenceField(document_type='Task', default=[])
 
     meta = {
-        'collection': 'Versions'
+        'collection': 'Versions',
+        'db_alias': 'current_project',
     }
 
     def __repr__(self):

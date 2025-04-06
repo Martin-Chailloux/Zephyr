@@ -6,7 +6,8 @@ import mongoengine
 
 chrono = Chronometer()
 print("Connecting ...")
-mongoengine.connect(host="mongodb://localhost:27017/JourDeVent")
+mongoengine.connect(host="mongodb://localhost:27017", db="Studio", alias="default")
+mongoengine.connect(host="mongodb://localhost:27017", db="JourDeVent", alias="current_project")
 chrono.tick("... Connected in:")
 
 

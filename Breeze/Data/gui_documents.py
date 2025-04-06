@@ -21,7 +21,8 @@ class Palette(Document):
     cyan = StringField()
 
     meta = {
-        'collection': 'Palettes'
+        'collection': 'Palettes',
+        'db_alias': 'current_project',
     }
 
     def __repr__(self):
