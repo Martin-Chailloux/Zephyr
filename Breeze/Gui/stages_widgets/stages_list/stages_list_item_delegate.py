@@ -115,7 +115,7 @@ class StageListItemDelegate(QStyledItemDelegate):
         painter.restore()
 
     def paint_status(self, painter: QPainter):
-        margin = 2 if self.status_is_hovered else 3
+        margin = 3 if self.status_is_hovered else 4
         x, y, w, h = self.get_item_rect()
         x = w - StageListItemSizes.status_w + margin
         rect = QRect(x, y+margin, StageListItemSizes.status_w-2*margin, h-2*margin)
@@ -123,7 +123,7 @@ class StageListItemDelegate(QStyledItemDelegate):
         # colors
         pill_color = self.palette.yellow
         text_color = QColor(palette.black_text)
-        text_color.setAlphaF(0.9 if self.status_is_hovered else 0.8)
+        # text_color.setAlphaF(0.9 if self.status_is_hovered else 0.8)
 
         # font
         font = painter.font()
