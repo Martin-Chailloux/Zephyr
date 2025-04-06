@@ -17,7 +17,7 @@ class StatusItem:
 class StatusModel:
     wait = StatusItem(label="WAIT", color=palette.white_text)
     todo = StatusItem(label="TODO", color=palette.yellow)
-    wip = StatusItem(label="WAIT", color=palette.orange)
+    wip = StatusItem(label="WIP", color=palette.orange)
     wfa = StatusItem(label="WFA", color=palette.purple)
     done = StatusItem(label="DONE", color=palette.green)
     error = StatusItem(label="ERROR", color=palette.red)
