@@ -9,6 +9,7 @@ from Data.breeze_documents import Asset, Stage
 from Gui.stages_widgets.stages_list.stages_list_item_delegate import StageListItemDelegate
 from Gui.stages_widgets.stages_list.stages_list_model import StageListModel, StageItemRoles
 from Gui.stages_widgets.stages_list.stages_list_model import StageListItemSizes
+from Gui.status_widgets.status_subwidgets import SelectStatusMenu
 
 
 @dataclass
