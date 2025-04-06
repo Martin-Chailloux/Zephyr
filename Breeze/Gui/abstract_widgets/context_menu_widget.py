@@ -1,6 +1,6 @@
 from PySide6 import QtCore
 from PySide6.QtCore import QSize, QPoint
-from PySide6.QtGui import QCursor
+from PySide6.QtGui import QCursor, QMouseEvent
 from PySide6.QtWidgets import QDialog
 
 
@@ -33,3 +33,9 @@ class ContextMenuWidget(QDialog):
 
         self.move(QPoint(x, y))
         super().exec()
+
+    def mousePressEvent(self, event):
+        super().mousePressEvent(event)
+        if isinstance(event, QMouseEvent):
+            if event.button() == QtCore.Qt.MouseButton.RightButton:
+                self.close()
