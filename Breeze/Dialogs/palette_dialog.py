@@ -1,4 +1,4 @@
-from Data.gui_documents import Palette
+from Data.studio_documents import Palette
 
 
 def create_palette(name: str,

@@ -1,4 +1,4 @@
-from Data.breeze_documents import Asset, Stage, StageTemplate
+from Data.project_documents import Asset, Stage, StageTemplate
 from Utils.chronometer import Chronometer
 
 

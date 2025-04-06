@@ -28,3 +28,16 @@ class Palette(Document):
     def __repr__(self):
         return f"<Palette>: {self.name}"
 
+
+class Status(Document):
+    label = StringField(required=True, primary_key=True)
+    color = StringField(required=True)
+    order = IntField(required=True)
+
+    meta = {
+        'collection': 'Statuses',
+        'db_alias': 'default',
+    }
+
+    def __repr__(self):
+        return f"<Status>: {self.label}"

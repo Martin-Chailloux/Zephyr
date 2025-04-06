@@ -2,7 +2,7 @@ import qtawesome
 from PySide6 import QtCore
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QLabel, QHBoxLayout, QComboBox, QPushButton
 
-from Data.breeze_documents import StageTemplate, Asset
+from Data.project_documents import StageTemplate, Asset
 from Dialogs.breeze_dialog import create_stage
 from Gui.popups.line_edit_popup import LineEditPopup
 from Gui.stages_widgets.stage_item import StageButton

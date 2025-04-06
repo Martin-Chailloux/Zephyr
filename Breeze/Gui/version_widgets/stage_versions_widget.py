@@ -8,7 +8,7 @@ from PySide6.QtWidgets import (QApplication, QDialog, QVBoxLayout, QHBoxLayout,
                                QLabel, QSizePolicy)
 
 from Data.software_model import SoftwareModel
-from Data.breeze_documents import Stage
+from Data.project_documents import Stage
 from Gui.stages_widgets.stage_item import StageItem
 from Gui.popups.select_software_popup import SelectSoftwarePopup
 from Gui.version_widgets.versions_list.versions_list_view import VersionsListView

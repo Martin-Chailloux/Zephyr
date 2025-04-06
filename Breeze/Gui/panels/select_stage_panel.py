@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QWidget, QVBoxLayout
 
-from Data.breeze_documents import Project, Asset
+from Data.project_documents import Project, Asset
 from Dialogs import projects_dialog
 from Gui.asset_widgets.select_asset_widget import SelectAssetWidget
 from Gui.stages_widgets.stage_list_widget import StageListWidget

@@ -5,7 +5,8 @@ from PySide6.QtCore import Signal, QPoint, QModelIndex
 from PySide6.QtGui import QCursor, QStandardItem
 from PySide6.QtWidgets import QListView
 
-from Data.breeze_documents import Asset, Stage
+from Data.project_documents import Asset, Stage
+from Dialogs.status_dialog import EditStatusMenu
 from Gui.stages_widgets.stages_list.stages_list_item_delegate import StageListItemDelegate
 from Gui.stages_widgets.stages_list.stages_list_model import StageListModel, StageItemRoles
 from Gui.stages_widgets.stages_list.stages_list_model import StageListItemSizes

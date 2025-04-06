@@ -1,6 +1,8 @@
 from datetime import datetime
 from mongoengine import *
 
+from Data.studio_documents import Status
+
 
 class Project(Document):
     #TODO: The database matches a single project : no need to have a project document model
@@ -87,6 +89,7 @@ class Stage(Document):
 
     components = ListField(ReferenceField(document_type='Component', default=[]))  # TODO: migration ?
     ingredients = ListField(ReferenceField(document_type='Versions'), default=[]) # TODO: migration ?
+    status = ReferenceField(document_type=Status)
 
     meta = {
         'collection': 'Stages',
@@ -103,6 +106,11 @@ class Stage(Document):
 
         self.asset.stages.append(self)
         self.asset.save()
+
+    def set_status(self, status: Status):
+        self.status = status
+        print(f"{status = }")
+        self.save()
 
 
 class Component(Document):

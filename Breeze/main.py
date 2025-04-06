@@ -17,7 +17,7 @@ import qdarkstyle
 from PySide6 import QtCore
 from PySide6.QtWidgets import QApplication, QMainWindow, QDockWidget
 
-from Data.breeze_documents import Stage
+from Data.project_documents import Stage
 from Gui.panels.select_stage_panel import SelectStagePanel
 from Gui.panels.stage_panel import StagePanel
 

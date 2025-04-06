@@ -3,7 +3,7 @@ from PySide6 import QtCore
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QComboBox, QLabel, QGridLayout, QFrame
 
-from Data.breeze_documents import Project, Asset
+from Data.project_documents import Project, Asset
 from Dialogs import breeze_dialog
 from Gui.popups.line_edit_popup import LineEditPopup
 from Gui.asset_widgets.asset_subwidgets import SetBookmarkIconButton

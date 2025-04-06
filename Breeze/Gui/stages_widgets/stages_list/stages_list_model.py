@@ -4,7 +4,7 @@ from PySide6 import QtCore
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QStandardItemModel, QStandardItem
 
-from Data.breeze_documents import Asset, Stage
+from Data.project_documents import Asset, Stage
 
 
 @dataclass
