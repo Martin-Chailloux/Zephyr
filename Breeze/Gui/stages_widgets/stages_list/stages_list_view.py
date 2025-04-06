@@ -35,12 +35,16 @@ class StageListView(AbstractListView):
 
     def set_asset(self, asset: Asset):
         self._model.set_asset(asset)
+        if asset is None:
+            self._model.clear()
 
     def _connect_signals(self):
         self.selectionModel().currentChanged.connect(self.on_selection_changed)
 
     def on_selection_changed(self):
         current_stage = self.get_selected_stage()
+        if current_stage is None:
+            return 
         self.stage_selected.emit(current_stage.longname)
 
     def get_selected_stage(self) -> Stage | None:
