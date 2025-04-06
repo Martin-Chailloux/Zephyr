@@ -15,8 +15,8 @@ from Gui.status_widgets.status_subwidgets import SelectStatusMenu
 @dataclass
 class StageListHoverData:
     index: QModelIndex = None
-    user: bool = False
-    status: bool = False
+    on_user: bool = False
+    on_status: bool = False
 
 
 class StageListView(QListView):
@@ -34,8 +34,8 @@ class StageListView(QListView):
 
 
         self.hover_data = StageListHoverData(index=self.get_hovered_index(),
-                                             user=False,
-                                             status=False)
+                                             on_user=False,
+                                             on_status=False)
         self._connect_signals()
 
     def set_asset(self, asset: Asset):
@@ -88,8 +88,8 @@ class StageListView(QListView):
         user_x = status_x - StageListItemSizes.height
 
         current_hover = StageListHoverData(index=self.get_hovered_index(),
-                                           user=user_x < mouse_pos.x() < status_x,
-                                           status=status_x< mouse_pos.x())
+                                           on_user=user_x < mouse_pos.x() < status_x,
+                                           on_status=status_x < mouse_pos.x())
 
         if current_hover != self.hover_data:
             self._model.remove_items_hover()
@@ -105,8 +105,8 @@ class StageListView(QListView):
             return
 
         # Set hovered components for the delegate
-        hovered_item.setData(self.hover_data.user, StageItemRoles.user_is_hovered)
-        hovered_item.setData(self.hover_data.status, StageItemRoles.status_is_hovered)
+        hovered_item.setData(self.hover_data.on_user, StageItemRoles.user_is_hovered)
+        hovered_item.setData(self.hover_data.on_status, StageItemRoles.status_is_hovered)
 
         # Set tooltip
         # TODO: pollutes the gui, use a help bar at the bottom instead
