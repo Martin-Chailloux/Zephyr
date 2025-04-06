@@ -70,17 +70,6 @@ class StageListView(AbstractListView):
                                            on_status=status_x < mouse_pos.x())
         return hover_data
 
-    def mouseMoveEvent(self, event):
-        current_hover_data = self._get_hover_data()
-
-        if current_hover_data != self.last_hover_data:
-            self._model.remove_items_hover()
-            self.last_hover_data = current_hover_data
-            self.set_items_hover_infos()
-            self.viewport().update()
-
-        super().mouseMoveEvent(event)
-
     def set_items_hover_infos(self):
         hovered_item = self._get_hovered_item()
         if hovered_item is None:
@@ -100,9 +89,16 @@ class StageListView(AbstractListView):
             tooltip = ""
         hovered_item.setToolTip(tooltip)
 
-    def leaveEvent(self, event):
-        self._model.remove_items_hover()
-        super().leaveEvent(event)
+    def mouseMoveEvent(self, event):
+        current_hover_data = self._get_hover_data()
+
+        if current_hover_data != self.last_hover_data:
+            self._model.remove_items_hover()
+            self.last_hover_data = current_hover_data
+            self.set_items_hover_infos()
+            self.viewport().update()
+
+        super().mouseMoveEvent(event)
 
     def mousePressEvent(self, event):
         if self.last_hover_data.on_user:
@@ -114,3 +110,7 @@ class StageListView(AbstractListView):
             self.viewport().update()
         else:
             super().mousePressEvent(event)
+
+    def leaveEvent(self, event):
+        self._model.remove_items_hover()
+        super().leaveEvent(event)
