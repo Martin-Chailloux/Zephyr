@@ -111,7 +111,6 @@ class Stage(Document):
 
     def set_status(self, status: Status):
         self.status = status
-        print(f"{status = }")
         self.save()
 
 

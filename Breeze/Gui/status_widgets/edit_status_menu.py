@@ -54,7 +54,6 @@ class EditStatusMenu(ContextMenuWidget):
         # TODO: subclass button to send more infos than label
         button: QPushButton = self.sender()
         status = self.status_per_label[button.text()]
-        print(f"Selected status: {status}")
 
         self.stage.set_status(status=status)
 
