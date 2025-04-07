@@ -1,7 +1,7 @@
 import subprocess
 import bpy
 
-from Softwares.Abstract.abstract_io import AbstractSoftwareFile
+from Software.Abstract.abstract_io import AbstractSoftwareFile
 
 
 class BlenderFile(AbstractSoftwareFile):
