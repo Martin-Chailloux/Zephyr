@@ -3,11 +3,11 @@ from dataclasses import dataclass
 from PySide6.QtCore import Signal, QModelIndex
 
 from Data.project_documents import Asset, Stage
-from Dialogs.status_dialog import EditStatusMenu
 from Gui.abstract_widgets.abstract_mvd import AbstractListView
 from Gui.stages_widgets.stages_list.stages_list_item_delegate import StageListItemDelegate
 from Gui.stages_widgets.stages_list.stages_list_model import StageListModel, StageItemRoles
 from Gui.stages_widgets.stages_list.stages_list_model import StageListItemSizes
+from Gui.status_widgets.edit_status_menu import EditStatusMenu
 
 
 @dataclass

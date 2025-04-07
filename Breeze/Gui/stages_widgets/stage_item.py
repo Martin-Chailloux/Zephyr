@@ -8,7 +8,7 @@ from PySide6.QtWidgets import QPushButton, QSizePolicy, QHBoxLayout, QComboBox, 
 import qtawesome
 
 from Data.project_documents import StageTemplate, Stage
-from Gui.status_widgets.status_subwidgets import SelectStatusWidget
+from Gui.status_widgets.edit_status_menu import EditStatusMenu
 
 
 class StageItem(QWidget):
@@ -64,7 +64,7 @@ class StageItem(QWidget):
         self.layout().addWidget(button)
         button.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
-        status_button = SelectStatusWidget(height=self.h)
+        status_button = EditStatusMenu(stage=None)
         self.layout().addWidget(status_button)
 
         button.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)

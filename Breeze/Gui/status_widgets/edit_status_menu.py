@@ -1,60 +1,29 @@
 from textwrap import dedent
 
 from PySide6 import QtCore
-from PySide6.QtCore import QSize, Signal
+from PySide6.QtCore import QSize
 from PySide6.QtGui import QColor
-from PySide6.QtWidgets import QPushButton, QGridLayout
+from PySide6.QtWidgets import QGridLayout, QPushButton
 
-from Data.status_model import default_statuses
-from Dialogs.palette_dialog import Palette
-from Gui.util_widgets.util_widgets import ContextMenuWidget
+from Data.project_documents import Stage
+from Data.studio_documents import Palette, Status
+from Gui.abstract_widgets.context_menu_widget import ContextMenuWidget
 
 
-class SelectStatusWidget(QPushButton):
+class EditStatusMenu(ContextMenuWidget):
     palette: Palette = Palette.objects.get(name="dev")
-    statuses = default_statuses
-
-    w: int = 48
-
-    def __init__(self, height: int = 26, starting_status: str = "TODO"):
-        super().__init__()
-        self.h = height
-        self.setFixedSize(self.w, self.h)
-        self.set_new_status(text=starting_status)
-
-    def set_new_status(self, text: str):
-        success = False
-        for status in self.statuses:
-            if text == status.label:
-                self.setText(text)
-                set_stylesheet(self, status.color)
-                success = True
-        if not success:
-            raise ValueError("Unknown status, cannot set.")
-
-    def mousePressEvent(self, event):
-        self.create_menu()
-
-    def create_menu(self):
-        menu = SelectStatusMenu()
-        menu.status_selected.connect(self.set_new_status)
-        menu.exec()
-
-
-class SelectStatusMenu(ContextMenuWidget):
-    palette: Palette = Palette.objects.get(name="dev")
-
-    status_selected = Signal(str)
-
+    statuses = Status.objects
+    statuses = sorted(statuses, key=lambda x: x.order)
     margin = 2
     spacing = 1
     button_w = 48
     button_h = 28
     max_columns = 2
 
-    statuses = default_statuses
+    def __init__(self, stage: Stage):
+        self.stage = stage
+        self.status_per_label: dict[str, Status] = {}
 
-    def __init__(self):
         max_rows = int(len(self.statuses) / self.max_columns) + 1
         w = (self.button_w * self.max_columns) + (2 * self.margin)
         h = (self.button_h * max_rows) + (2 * self.margin)
@@ -70,11 +39,12 @@ class SelectStatusMenu(ContextMenuWidget):
         layout.setContentsMargins(self.margin, self.margin, self.margin, self.margin)
         layout.setSpacing(self.spacing)
 
-        for i, _status in enumerate(self.statuses):
-            button = QPushButton(_status.label)
-            set_stylesheet(button, _status.color)
+        for i, status in enumerate(self.statuses):
+            button = QPushButton(status.label)
+            set_stylesheet(button, status.color)
             button.clicked.connect(self.on_button_clicked)
             button.setFixedSize(QSize(self.button_w, self.button_h))
+            self.status_per_label[button.text()] = status
 
             row = int(i / self.max_columns)
             column = i % self.max_columns
@@ -83,9 +53,11 @@ class SelectStatusMenu(ContextMenuWidget):
     def on_button_clicked(self):
         # TODO: subclass button to send more infos than label
         button: QPushButton = self.sender()
-        _status: str = button.text()
-        self.status_selected.emit(_status)
-        print(f"Selected status: {_status}")
+        status = self.status_per_label[button.text()]
+        print(f"Selected status: {status}")
+
+        self.stage.set_status(status=status)
+
         self.close()
 
 
