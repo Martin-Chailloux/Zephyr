@@ -28,7 +28,7 @@ class StageListView(AbstractListView):
         self._model = StageListModel()
         self.setModel(self._model)
 
-        self._item_delegate = StageListItemDelegate(widget=self)
+        self._item_delegate = StageListItemDelegate()
         self.setItemDelegate(self._item_delegate)
 
         self.last_hover_data = StageListHoverData()

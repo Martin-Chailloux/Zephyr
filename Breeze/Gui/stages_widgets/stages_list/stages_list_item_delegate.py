@@ -17,9 +17,8 @@ alignment = QtCore.Qt.AlignmentFlag
 class StageListItemDelegate(QStyledItemDelegate):
     palette: Palette = Palette.objects.get(name="dev")
 
-    def __init__(self, widget: QListView):
+    def __init__(self):
         super().__init__()
-        self.widget = widget
 
     def _set_data(self, option: QStyleOptionViewItem, index: QModelIndex):
         self.stage: Stage = index.data(StageItemRoles.stage)
