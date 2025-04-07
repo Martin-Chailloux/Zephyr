@@ -52,20 +52,20 @@ class Breeze(QMainWindow):
         self.select_stage_panel.stage_list_widget.stage_list_view.stage_selected.connect(self.on_stage_selected)
 
         self.select_stage_panel.stage_list_widget.stage_list_view.stage_data_modified.connect(self.refresh_versions_stage)
-        self.stage_panel.stage_versions_widget.stage_list_view.stage_data_modified.connect(self.refresh_stage_list)
+        self.stage_panel.work_versions_widget.stage_list_view.stage_data_modified.connect(self.refresh_stage_list)
 
     def on_stage_selected(self, longname: str):
         if longname == "":
-            self.stage_panel.stage_versions_widget.stage_list_view.set_stage(stage=None)
+            self.stage_panel.work_versions_widget.stage_list_view.set_stage(stage=None)
         else:
             stage = Stage.objects.get(longname=longname)
-            self.stage_panel.stage_versions_widget.stage_list_view.set_stage(stage=stage)
+            self.stage_panel.work_versions_widget.stage_list_view.set_stage(stage=stage)
 
     def refresh_stage_list(self):
         self.select_stage_panel.stage_list_widget.stage_list_view.refresh()
 
     def refresh_versions_stage(self):
-        self.stage_panel.stage_versions_widget.stage_list_view.refresh()
+        self.stage_panel.work_versions_widget.stage_list_view.refresh()
 
 if __name__ == '__main__':
     print(f"Launching 'Breeze' ...")

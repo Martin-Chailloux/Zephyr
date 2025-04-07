@@ -15,7 +15,7 @@ from Gui.version_widgets.versions_list.versions_list_view import VersionsListVie
 from Gui.util_widgets.util_widgets import TextBox, PushButtonAutoWidth
 
 
-class StageVersionsWidget(QDialog):
+class WorkVersionsWidget(QDialog):
     h = 28
     buttons_spacing = 2
 
@@ -156,7 +156,7 @@ if __name__ == '__main__':
 
     app.setStyleSheet(qdarkstyle.load_stylesheet())
 
-    window = StageVersionsWidget()
+    window = WorkVersionsWidget()
     window.show()
 
     app.exec()

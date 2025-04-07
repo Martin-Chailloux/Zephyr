@@ -1,7 +1,7 @@
 from PySide6 import QtCore
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QSplitter, QLabel
 
-from Gui.version_widgets.stage_versions_widget import StageVersionsWidget
+from Gui.version_widgets.work_versions_widget import WorkVersionsWidget
 
 
 class StagePanel(QWidget):
@@ -14,13 +14,13 @@ class StagePanel(QWidget):
         self.setLayout(layout)
 
         placeholder1 = QLabel()
-        stage_versions_widget = StageVersionsWidget()
+        work_versions_widget = WorkVersionsWidget()
         placeholder2 = QLabel()
 
         v_splitter = QSplitter()
         v_splitter.setOrientation(QtCore.Qt.Orientation.Vertical)
         v_splitter.setChildrenCollapsible(False)
-        v_splitter.addWidget(stage_versions_widget)
+        v_splitter.addWidget(work_versions_widget)
         v_splitter.addWidget(placeholder2)
 
         h_splitter = QSplitter()
@@ -32,4 +32,4 @@ class StagePanel(QWidget):
         h_splitter.addWidget(v_splitter)
 
         # public vars
-        self.stage_versions_widget = stage_versions_widget
+        self.work_versions_widget = work_versions_widget
