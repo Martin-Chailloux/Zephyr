@@ -57,7 +57,6 @@ class StageListView(AbstractListView):
         self.selectionModel().selectionChanged.connect(self.on_selection_changed)
 
     def on_selection_changed(self):
-        print(f"SELECTION CHANGED")
         current_stage = self.get_selected_stage()
         if current_stage is None:
             self.stage_selected.emit("")
