@@ -23,8 +23,8 @@ class SoftwareItem:
 
 @dataclass
 class SoftwareModel:
-    krita = SoftwareItem(label="Krita", icon_path="Breeze/Resources/Icons/Software/krita.png")
-    maya = SoftwareItem(label="Maya", icon_path="Breeze/Resources/Icons/Software/maya.png")
-    blender = SoftwareItem(label="Blender", icon_path="Breeze/Resources/Icons/Software/blender.png")
-    guerilla = SoftwareItem(label="Guerilla", icon_path="Breeze/Resources/Icons/Software/guerilla.png")
-    nuke = SoftwareItem(label="Nuke", icon_path="Breeze/Resources/Icons/Software/nuke.png")
+    krita = SoftwareItem(label="Krita", icon_path="Resources/Icons/Software/krita.png")
+    maya = SoftwareItem(label="Maya", icon_path="Resources/Icons/Software/maya.png")
+    blender = SoftwareItem(label="Blender", icon_path="Resources/Icons/Software/blender.png")
+    guerilla = SoftwareItem(label="Guerilla", icon_path="Resources/Icons/Software/guerilla.png")
+    nuke = SoftwareItem(label="Nuke", icon_path="Resources/Icons/Software/nuke.png")

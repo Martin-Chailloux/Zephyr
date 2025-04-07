@@ -94,7 +94,7 @@ class StageListItemDelegate(QStyledItemDelegate):
         x = w - StageListItemSizes.status_w - h + margin
         rect = QRect(x, y+margin, h-2*margin, h-2*margin)
 
-        icon_path = f"Breeze/Resources/Icons/Users/user_test2.png"
+        icon_path = f"Resources/Icons/Users/user_test2.png"
         image = QImage(icon_path)
 
         painter.save()
