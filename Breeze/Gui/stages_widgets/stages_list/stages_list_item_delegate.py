@@ -5,7 +5,7 @@ from PySide6.QtGui import QPainter, QBrush, QColor, QPen, QPainterPath, QIcon, Q
 from PySide6.QtWidgets import QStyledItemDelegate, QStyleOptionViewItem, QStyle, QListView
 
 from Data.project_documents import Stage, StageTemplate, Asset
-from Data.studio_documents import Palette
+from Data.studio_documents import Palette, User
 from Data.status_model import palette
 from Gui.stages_widgets.stages_list.stages_list_model import StageItemRoles
 from Gui.stages_widgets.stages_list.stages_list_model import StageListItemSizes
@@ -94,8 +94,8 @@ class StageListItemDelegate(QStyledItemDelegate):
         x = w - StageListItemSizes.status_w - h + margin
         rect = QRect(x, y+margin, h-2*margin, h-2*margin)
 
-        icon_path = f"Resources/Icons/Users/user_test2.png"
-        image = QImage(icon_path)
+        user = User.objects.get(pseudo="Martin")
+        image = QImage(user.icon_path)
 
         painter.save()
 

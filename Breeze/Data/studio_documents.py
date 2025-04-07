@@ -48,9 +48,8 @@ class User(Document):
     pseudo = StringField(required=True, primary_key=True)
     fullname = StringField(required=True)
     password = StringField(default="zephyr")
-    picture_path = StringField(required=True)
+    icon_path = StringField(required=True)
     mail = StringField()
-    birthday = DateField()
 
     meta = {
         'collection': 'Users',
