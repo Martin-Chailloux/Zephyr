@@ -9,8 +9,8 @@ from PySide6.QtWidgets import (QApplication, QDialog, QVBoxLayout, QHBoxLayout,
 
 from Data.software_model import SoftwareModel
 from Data.project_documents import Stage
-from Gui.stages_widgets.stage_item import StageItem
 from Gui.popups.select_software_popup import SelectSoftwarePopup
+from Gui.stages_widgets.stages_list.stages_list_view import StageListView
 from Gui.version_widgets.versions_list.versions_list_view import VersionsListView
 from Gui.util_widgets.util_widgets import TextBox, PushButtonAutoWidth
 
@@ -39,9 +39,8 @@ class StageVersionsWidget(QDialog):
         sub_layout.addWidget(label)
         label.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
 
-        stage_item = StageItem(stage=Stage.objects[0])
-        sub_layout.addWidget(stage_item)
-        stage_item.setFixedWidth(248)
+        stage_list_view = StageListView()
+        sub_layout.addWidget(stage_list_view)
 
         # ------------------------
         # main layout
@@ -127,7 +126,7 @@ class StageVersionsWidget(QDialog):
         # public vars
         # ------------------------
         self.from_scratch_button = from_scratch_button
-        self.stage_item = stage_item
+        self.stage_list_view = stage_list_view
 
     def connect_signals(self):
         self.from_scratch_button.clicked.connect(self.on_from_scratch_clicked)

@@ -1,7 +1,7 @@
 import qtawesome
 
 from PySide6 import QtCore
-from PySide6.QtCore import Signal, QSize
+from PySide6.QtCore import QSize
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QPushButton, QSizePolicy)
 
 from Data.project_documents import StageTemplate, Asset, Stage
@@ -12,7 +12,6 @@ from Gui.stages_widgets.stages_list.stages_list_view import StageListView
 
 
 class StageListWidget(QWidget):
-    stage_selected = Signal(str)
     margin: int = 7
 
     def __init__(self, asset: Asset):
@@ -20,7 +19,6 @@ class StageListWidget(QWidget):
         self.current_asset: Asset = asset
         self.stage_items: list[StageItem] = []
         self._init_ui()
-        self._connect_signals()
 
     def _init_ui(self):
         layout = QVBoxLayout()
@@ -53,9 +51,6 @@ class StageListWidget(QWidget):
     def refresh(self):
         self.stage_list_view.set_asset(self.current_asset)
 
-    def _connect_signals(self):
-        self.stage_list_view.stage_selected.connect(self.on_stage_selected)
-
     # ------------------------
     # Events
     # ------------------------
@@ -63,6 +58,3 @@ class StageListWidget(QWidget):
         popup = StageTemplateSelector(asset=self.current_asset)
         popup.exec()
         self.refresh()
-
-    def on_stage_selected(self, longname: str):
-        self.stage_selected.emit(longname)

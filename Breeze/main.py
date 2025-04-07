@@ -1,6 +1,8 @@
 import sys
 from datetime import timedelta
 
+from Cython.Compiler.Errors import reset
+
 from Utils.chronometer import Chronometer
 import mongoengine
 
@@ -47,12 +49,23 @@ class Breeze(QMainWindow):
         self.stage_panel = stage_panel
 
     def connect_signals(self):
-        self.select_stage_panel.stage_list_widget.stage_selected.connect(self.on_stage_selected)
+        self.select_stage_panel.stage_list_widget.stage_list_view.stage_selected.connect(self.on_stage_selected)
+
+        self.select_stage_panel.stage_list_widget.stage_list_view.stage_data_modified.connect(self.refresh_versions_stage)
+        self.stage_panel.stage_versions_widget.stage_list_view.stage_data_modified.connect(self.refresh_stage_list)
 
     def on_stage_selected(self, longname: str):
-        stage = Stage.objects.get(longname=longname)
-        self.stage_panel.stage_versions_widget.stage_item.set_stage(stage=stage)
+        if longname == "":
+            self.stage_panel.stage_versions_widget.stage_list_view.set_stage(stage=None)
+        else:
+            stage = Stage.objects.get(longname=longname)
+            self.stage_panel.stage_versions_widget.stage_list_view.set_stage(stage=stage)
 
+    def refresh_stage_list(self):
+        self.select_stage_panel.stage_list_widget.stage_list_view.refresh()
+
+    def refresh_versions_stage(self):
+        self.stage_panel.stage_versions_widget.stage_list_view.refresh()
 
 if __name__ == '__main__':
     print(f"Launching 'Breeze' ...")

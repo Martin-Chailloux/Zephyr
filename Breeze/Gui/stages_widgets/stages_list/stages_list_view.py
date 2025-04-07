@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
-from PySide6.QtCore import Signal, QModelIndex
+from PySide6.QtCore import Signal, QModelIndex, QItemSelectionModel
+from mongoengine.queryset import update
 
 from Data.project_documents import Asset, Stage
 from Gui.abstract_widgets.abstract_mvd import AbstractListView
@@ -15,11 +16,11 @@ class StageListHoverData:
     index: QModelIndex = None
     on_user: bool = False
     on_status: bool = False
-    stage: Stage = None
 
 
 class StageListView(AbstractListView):
     stage_selected = Signal(str)
+    stage_data_modified = Signal()
 
     def __init__(self):
         super().__init__()
@@ -33,26 +34,46 @@ class StageListView(AbstractListView):
         self.last_hover_data = StageListHoverData()
         self._connect_signals()
 
+    def refresh(self):
+        selected_indexes = self.selectionModel().selectedIndexes()
+        self._model.refresh()
+        if selected_indexes:
+            index = self._model.index(selected_indexes[0].row(), 0)
+            self.selectionModel().setCurrentIndex(index, QItemSelectionModel.SelectionFlag.Select)
+        self.set_items_hover_infos()
+        self.viewport().update()
+
     def set_asset(self, asset: Asset):
         self._model.set_asset(asset)
         if asset is None:
             self._model.clear()
 
+    def set_stage(self, stage: Stage):
+        self._model.clear()
+        if stage is not None:
+            self._model.add_item(stage=stage)
+
     def _connect_signals(self):
-        self.selectionModel().currentChanged.connect(self.on_selection_changed)
+        self.selectionModel().selectionChanged.connect(self.on_selection_changed)
 
     def on_selection_changed(self):
+        print(f"SELECTION CHANGED")
         current_stage = self.get_selected_stage()
         if current_stage is None:
-            return 
+            self.stage_selected.emit("")
+            return
         self.stage_selected.emit(current_stage.longname)
 
     def get_selected_stage(self) -> Stage | None:
-        current_item = self._model.item(self.currentIndex().row())
-        if current_item is None:
+        selected_indexes = self.selectionModel().selectedIndexes()
+        if not selected_indexes:
+            return None
+        selected_index = selected_indexes[0]
+        selected_item = self._model.item(selected_index.row())
+        if selected_item is None:
             return None
 
-        current_stage: Stage = current_item.data(StageItemRoles.stage)
+        current_stage: Stage = selected_item.data(StageItemRoles.stage)
         return current_stage
 
     def _get_hovered_stage(self) -> Stage | None:
@@ -111,7 +132,8 @@ class StageListView(AbstractListView):
         elif self.last_hover_data.on_status:
             menu = EditStatusMenu(stage=self._get_hovered_stage())
             menu.exec()
-            self.viewport().update()
+            self.stage_data_modified.emit()
+            self.refresh()
         else:
             super().mousePressEvent(event)
 

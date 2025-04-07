@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from turtledemo.sorting_animate import start_qsort
 
 from PySide6 import QtCore
 from PySide6.QtCore import QSize
@@ -52,6 +53,18 @@ class StageListModel(QStandardItemModel):
     def items(self):
         items = [self.item(row) for row in range(self.rowCount())]
         return items
+
+    def refresh(self):
+        stages = [item.data(StageItemRoles.stage) for item in self.items]
+        if len(stages) <= 1:
+            return
+        stages = Asset.objects.get(longname=stages[0].asset.longname).stages  # query the data from db else it is not up to date
+
+        self.blockSignals(True)
+        self.clear()
+        for stage in stages:
+            self.add_item(stage=stage)
+        self.blockSignals(False)
 
     def remove_items_hover(self):
         for item in self.items:

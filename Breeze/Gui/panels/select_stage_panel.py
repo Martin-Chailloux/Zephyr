@@ -4,7 +4,6 @@ from Data.project_documents import Project, Asset
 from Dialogs import projects_dialog
 from Gui.asset_widgets.select_asset_widget import SelectAssetWidget
 from Gui.stages_widgets.stage_list_widget import StageListWidget
-from Gui.stages_widgets.stages_list.stages_list_view import StageListView
 
 
 class SelectStagePanel(QWidget):
