@@ -42,3 +42,20 @@ class Status(Document):
 
     def __repr__(self):
         return f"<Status>: {self.label}"
+
+
+class User(Document):
+    pseudo = StringField(required=True, primary_key=True)
+    fullname = StringField(required=True)
+    password = StringField(default="zephyr")
+    picture_path = StringField(required=True)
+    mail = StringField()
+    birthday = DateField()
+
+    meta = {
+        'collection': 'Users',
+        'db_alias': 'default',
+    }
+
+    def __repr__(self):
+        return f"<User>: {self.pseudo}"
