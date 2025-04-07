@@ -4,8 +4,7 @@ from PySide6 import QtCore
 from PySide6.QtCore import QSize
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QPushButton, QSizePolicy)
 
-from Data.project_documents import StageTemplate, Asset, Stage
-from Dialogs.breeze_dialog import create_stage
+from Data.project_documents import Asset
 from Gui.stage_templates_widgets.select_stage_templates import StageTemplateSelector
 from Gui.stages_widgets.stage_item import StageItem
 from Gui.stages_widgets.stages_list.stages_list_view import StageListView
