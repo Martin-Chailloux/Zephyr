@@ -8,8 +8,9 @@ from PySide6.QtWidgets import (QApplication, QDialog, QVBoxLayout, QHBoxLayout,
                                QLabel, QSizePolicy)
 
 from Data.software_model import SoftwareModel
-from Data.project_documents import Stage
 from Gui.popups.select_software_popup import SelectSoftwarePopup
+from Gui.stages_widgets.stages_list.stages_list_item_delegate import StageListItemAlwaysOnDelegate
+from Gui.stages_widgets.stages_list.stages_list_model import StageListItemSizes
 from Gui.stages_widgets.stages_list.stages_list_view import StageListView
 from Gui.version_widgets.versions_list.versions_list_view import VersionsListView
 from Gui.util_widgets.util_widgets import TextBox, PushButtonAutoWidth
@@ -27,24 +28,35 @@ class WorkVersionsWidget(QDialog):
     def _init_ui(self):
         layout = QVBoxLayout()
         self.setLayout(layout)
+        layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop)
 
-        # ------------------------
-        # header
-        # ------------------------
-        sub_layout = QHBoxLayout()
+        sub_layout = QVBoxLayout()
         layout.addLayout(sub_layout)
-        sub_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeft)
+        sub_layout.setContentsMargins(0, 0, 0, 0)
+        sub_layout.setSpacing(0)
 
-        label = QLabel("Selected stage:")
-        sub_layout.addWidget(label)
-        label.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        # ------------------------
+        # current asset
+        # ------------------------
+        asset_label = QLabel("Character > Baby > -")
+        sub_layout.addWidget(asset_label)
+        asset_label.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
 
+        # ------------------------
+        # current stage
+        # ------------------------
         stage_list_view = StageListView()
         sub_layout.addWidget(stage_list_view)
+        stage_list_view.setFixedWidth(256)
+        stage_list_view.setFixedSize(QSize(256, StageListItemSizes.height + 6))
+        stage_list_view.setItemDelegate(StageListItemAlwaysOnDelegate())
+        # stage_list_view.setStyleSheet("border: none")
 
         # ------------------------
         # main layout
         # ------------------------
+        layout.addSpacing(12)
+
         sub_layout = QHBoxLayout()
         layout.addLayout(sub_layout)
 
@@ -53,8 +65,6 @@ class WorkVersionsWidget(QDialog):
         # ------------------------
         v_layout = QVBoxLayout()
         sub_layout.addLayout(v_layout)
-
-        v_layout.addSpacing(28)
 
         # new buttons
         label = QLabel("Create new version:")

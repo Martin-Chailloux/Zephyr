@@ -188,3 +188,20 @@ class StageListItemDelegate(QStyledItemDelegate):
         painter.drawRect(QRectF(x, y+h-height, w, height))
 
         painter.restore()
+
+
+class StageListItemAlwaysOnDelegate(StageListItemDelegate):
+    def __init__(self):
+        super().__init__()
+
+    def _set_data(self, option: QStyleOptionViewItem, index: QModelIndex):
+        super()._set_data(option, index)
+        self.opacity = 1
+        self.is_hovered = True
+        self.is_selected = True
+
+    def paint_hover(self, painter: QPainter):
+        return
+
+    def paint_selected_underline(self, painter: QPainter):
+        return
