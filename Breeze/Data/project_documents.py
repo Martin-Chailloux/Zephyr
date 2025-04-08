@@ -1,4 +1,6 @@
 from datetime import datetime
+from typing import Self
+
 from mongoengine import *
 
 from Data.studio_documents import Status
@@ -54,6 +56,17 @@ class Asset(Document):
     def __repr__(self):
         return f"<Asset>: {self.longname}"
 
+    @classmethod
+    def create(cls, category: str, name : str, variant: str = None, **kwargs) -> Self:
+        v = variant or "-"  # pre-compute the longname using the default variant value if it is None
+        longname = "_".join(s for s in [category, name, v])
+        kwargs = dict(name=name, category=category, variant=variant, longname=longname, **kwargs)
+        kwargs = {k: v for k, v in kwargs.items() if v is not None}
+        asset = cls(**kwargs)
+        asset.save()
+        print(f"Created: {asset.__repr__()}")
+        return asset
+
 
 class StageTemplate(Document):
     """
@@ -77,6 +90,16 @@ class StageTemplate(Document):
     def __repr__(self):
         return f"<Stage template>: {self.name}"
 
+    # NOTE: no GUI for now
+    @classmethod
+    def create(cls, name: str, label: str, color: str = None, icon_name: str = None, **kwargs) -> Self:
+        kwargs = dict(name=name, label=label, color=color, icon_name=icon_name, **kwargs)
+        kwargs = {k: v for k, v in kwargs.items() if v is not None}
+        stage_template = cls(**kwargs)
+        stage_template.save()
+        print(f"Created: {stage_template.__repr__()}")
+        return stage_template
+
 
 class Stage(Document):
     """
@@ -91,7 +114,7 @@ class Stage(Document):
 
     components = ListField(ReferenceField(document_type='Component', default=[]))  # TODO: migration ?
     ingredients = ListField(ReferenceField(document_type='Versions'), default=[]) # TODO: migration ?
-    status = ReferenceField(document_type=Status)
+    status = ReferenceField(document_type=Status, default=Status.objects.get(label='WAIT'))
 
     meta = {
         'collection': 'Stages',
@@ -100,6 +123,19 @@ class Stage(Document):
 
     def __repr__(self):
         return f"<Stage>: {self.longname}'"
+
+    @classmethod
+    def create(cls, asset: Asset, stage_template: StageTemplate, **kwargs) -> Self:
+        longname = "_".join(s for s in [asset.longname, stage_template.name])
+        kwargs = dict(asset=asset, stage_template=stage_template, longname=longname, **kwargs)
+        kwargs = {k: v for k, v in kwargs.items() if v is not None}
+        stage = cls(**kwargs)
+        stage.save()
+        print(f"Created: {stage.__repr__()}")
+
+        stage.append_to_asset()
+
+        return stage
 
     def append_to_asset(self):
         if self in self.asset.stages:
