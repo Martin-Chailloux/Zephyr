@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 
 from PySide6.QtCore import Signal, QModelIndex, QItemSelectionModel
-from mongoengine.queryset import update
 
 from Data.project_documents import Asset, Stage
 from Gui.abstract_widgets.abstract_mvd import AbstractListView
@@ -89,9 +88,12 @@ class StageListView(AbstractListView):
         status_x = w - StageListItemSizes.status_w
         user_x = status_x - StageListItemSizes.height
 
-        hover_data = StageListHoverData(index=self._get_hovered_index(),
-                                           on_user=user_x < mouse_pos.x() < status_x,
-                                           on_status=status_x < mouse_pos.x())
+        index = self._get_hovered_index()
+        on_user = index.row() != -1 and user_x < mouse_pos.x() < status_x
+        on_status = index.row() != -1 and status_x < mouse_pos.x()
+        hover_data = StageListHoverData(index=index,
+                                        on_user=on_user,
+                                        on_status=on_status)
         return hover_data
 
     def set_items_hover_infos(self):
@@ -125,10 +127,11 @@ class StageListView(AbstractListView):
         super().mouseMoveEvent(event)
 
     def mousePressEvent(self, event):
-        if self.last_hover_data.on_user:
+        hover_data = self._get_hover_data()
+        if hover_data.on_user:
             pass
             # TODO
-        elif self.last_hover_data.on_status:
+        elif hover_data.on_status:
             menu = EditStatusMenu(stage=self._get_hovered_stage())
             menu.exec()
             self.stage_data_modified.emit()
