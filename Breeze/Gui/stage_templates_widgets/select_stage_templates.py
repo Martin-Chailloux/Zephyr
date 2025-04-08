@@ -2,8 +2,7 @@ import qtawesome
 from PySide6 import QtCore
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QLabel, QHBoxLayout, QComboBox, QPushButton
 
-from Data.project_documents import StageTemplate, Asset
-from Dialogs.breeze_dialog import create_stage
+from Data.project_documents import StageTemplate, Asset, Stage
 from Gui.popups.line_edit_popup import LineEditPopup
 from Gui.stages_widgets.stage_item import StageButton
 from Gui.util_widgets.util_widgets import IconButton
@@ -152,7 +151,7 @@ class StageTemplateSelector(QDialog):
         stage_templates: list[StageTemplate] = [StageTemplate.objects.get(name=name) for name in names]
 
         for stage_template in stage_templates:
-            stage = create_stage(stage_template=stage_template, asset=self.asset)
+            Stage.create(stage_template=stage_template, asset=self.asset)
 
         self.close()
 

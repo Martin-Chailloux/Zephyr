@@ -1,15 +1,11 @@
 import mongoengine
 
-from Data.studio_documents import Status
-from Dialogs.user_dialog import create_user
+from Data.studio_documents import Status, User, Palette
 
 mongoengine.connect(host="mongodb://localhost:27017", db="Studio", alias="default")
 mongoengine.connect(host="mongodb://localhost:27017", db="JourDeVent", alias="current_project")
 
 from Data.project_documents import Stage, StageTemplate, Asset
-from Data.status_model import default_statuses, StatusModel
-from Dialogs import breeze_dialog
-from Dialogs.status_dialog import create_status
 
 
 def update_stages_longname():
@@ -22,10 +18,7 @@ def update_stages_longname():
         stage_template = stage.stage_template
         stage.delete()
 
-        breeze_dialog.create_stage(
-            asset=asset,
-            stage_template=stage_template
-        )
+        Stage.create(asset=asset, stage_template=stage_template)
 
 def stage_templates_description_to_tooltip():
     stage_templates = StageTemplate.objects()
@@ -42,6 +35,26 @@ def clear_old_stages_from_assets():
         stages = [s for s in asset.stages if s in all_stages]
         asset.update(stages=stages)
 
+def create_palette():
+    Palette.create(
+            name = "dev",
+
+            white_text = "#F9F9F9",
+            black_text = "#2F2F32",
+
+            primary = "#303030",
+            secondary = "#545454",
+            tertiary = "#3D3D3D",
+            surface = "#262626",
+
+            purple = "#C8B8EA",
+            red = "#FFC3C4",
+            orange = "#FFD486",
+            yellow = "#FFF2A0",
+            green = "#C5FFAF",
+            blue = "#6BB6FF",
+            cyan = "#A5E5D9",
+    )
 
 def create_default_users():
     users = [
@@ -53,7 +66,8 @@ def create_default_users():
         ["Camille", "Camille Truding", "Resources/Icons/Users/camille"],
     ]
     for user in users:
-        create_user(pseudo=user[0], fullname=user[1], icon_path=user[2])
+        User.create(pseudo=user[0], fullname=user[1], icon_path=user[2])
 
 if __name__ == '__main__':
-    create_default_users()
+    user = User.create("avril", "Avril Zundel", "azohei")
+    print(f"{user.pseudo = }")

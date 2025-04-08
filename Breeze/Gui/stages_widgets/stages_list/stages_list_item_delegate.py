@@ -6,7 +6,6 @@ from PySide6.QtWidgets import QStyledItemDelegate, QStyleOptionViewItem, QStyle,
 
 from Data.project_documents import Stage, StageTemplate, Asset
 from Data.studio_documents import Palette, User
-from Data.status_model import palette
 from Gui.stages_widgets.stages_list.stages_list_model import StageItemRoles
 from Gui.stages_widgets.stages_list.stages_list_model import StageListItemSizes
 

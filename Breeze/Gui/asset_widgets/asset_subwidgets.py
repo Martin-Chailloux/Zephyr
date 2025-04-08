@@ -1,6 +1,6 @@
 import qtawesome
 
-from Dialogs.palette_dialog import Palette
+from Data.studio_documents import Palette
 from Gui.util_widgets.util_widgets import IconButton
 
 

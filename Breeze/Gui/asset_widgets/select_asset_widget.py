@@ -143,13 +143,13 @@ class SelectAssetWidget(QWidget):
 
     def on_name_created(self, name: str):
         print(f"NAME CREATED: {name}")
-        breeze_dialog.create_asset(category=self.category, name=name)
+        Asset.create(category=self.category, name=name)
         self.on_category_selected()
         self.name_cb.setCurrentText(name)
 
     def on_variant_created(self, variant: str):
         print(f"VARIANT CREATED: {variant}")
-        breeze_dialog.create_asset(category=self.category, name=self.name, variant=variant)
+        Asset.create(category=self.category, name=self.name, variant=variant)
         self.on_name_selected()
         self.variant_cb.setCurrentText(variant)
 

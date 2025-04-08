@@ -125,9 +125,9 @@ class Stage(Document):
         return f"<Stage>: {self.longname}'"
 
     @classmethod
-    def create(cls, asset: Asset, stage_template: StageTemplate, **kwargs) -> Self:
+    def create(cls, asset: Asset, stage_template: StageTemplate, status: Status=None, **kwargs) -> Self:
         longname = "_".join(s for s in [asset.longname, stage_template.name])
-        kwargs = dict(asset=asset, stage_template=stage_template, longname=longname, **kwargs)
+        kwargs = dict(longname=longname, asset=asset, stage_template=stage_template, status=status, **kwargs)
         kwargs = {k: v for k, v in kwargs.items() if v is not None}
         stage = cls(**kwargs)
         stage.save()
