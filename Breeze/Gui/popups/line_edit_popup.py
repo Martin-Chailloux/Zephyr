@@ -2,7 +2,7 @@ from PySide6 import QtCore
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QVBoxLayout, QPushButton, QHBoxLayout, QDialog, QLineEdit, QLabel
 
-from Dialogs import breeze_dialog
+from Data.converters import BreezeText
 
 # TODO: checkbox to stay on after enter
 class LineEditPopup(QDialog):
@@ -13,7 +13,7 @@ class LineEditPopup(QDialog):
         self.close_on_confirm = close_on_confirm
 
         self.setWindowTitle(title)
-        self.invalid_names = [] if invalid_entries is None else [breeze_dialog.text_to_conformed_text(t).lower() for t in invalid_entries]
+        self.invalid_names = [] if invalid_entries is None else [BreezeText(t).to_valid_name().lower() for t in invalid_entries]
 
         self._init_ui()
         self._create_input_buttons()
@@ -24,7 +24,7 @@ class LineEditPopup(QDialog):
     @property
     def current_text(self) -> str:
         text = self.line_edit.text()
-        return breeze_dialog.text_to_conformed_text(text)
+        return BreezeText(text).to_valid_name()
 
     def _init_ui(self):
         layout = QVBoxLayout()
@@ -71,7 +71,7 @@ class LineEditPopup(QDialog):
             super().keyPressEvent(event)
 
     def on_text_changed(self):
-        text = breeze_dialog.text_to_conformed_text(self.current_text)
+        text = BreezeText(self.current_text).to_valid_name()
         min_length = 1
         max_length = 12
         name_exists = text.lower() in self.invalid_names
