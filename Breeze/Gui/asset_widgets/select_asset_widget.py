@@ -4,7 +4,6 @@ from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QComboBox, QLabel, QGridLayout, QFrame
 
 from Data.project_documents import Project, Asset
-from Dialogs import breeze_dialog
 from Gui.popups.line_edit_popup import LineEditPopup
 from Gui.asset_widgets.asset_subwidgets import SetBookmarkIconButton
 
@@ -97,7 +96,7 @@ class SelectAssetWidget(QWidget):
     def on_category_selected(self):
         self.name_cb.blockSignals(True)  # Delay on_name_selected()
 
-        assets = breeze_dialog.get_asset(category=self.category, variant="-")
+        assets = Asset.objects(category=self.category, variant="-")
         names = [asset.name for asset in assets]
         self.name_cb.set_items(names)
 
@@ -112,7 +111,7 @@ class SelectAssetWidget(QWidget):
     def on_name_selected(self):
         self.variant_cb.blockSignals(True)
 
-        assets = breeze_dialog.get_asset(category=self.category, name=self.name)
+        assets = Asset.objects(category=self.category, name=self.name)
         variants = [asset.variant for asset in assets]
         self.variant_cb.set_items(variants)
 
