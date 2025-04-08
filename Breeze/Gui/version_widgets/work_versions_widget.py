@@ -7,6 +7,7 @@ from PySide6.QtCore import QSize
 from PySide6.QtWidgets import (QApplication, QDialog, QVBoxLayout, QHBoxLayout,
                                QLabel, QSizePolicy)
 
+from Data.project_documents import Stage
 from Data.software_model import SoftwareModel
 from Gui.popups.select_software_popup import SelectSoftwarePopup
 from Gui.stages_widgets.stages_list.stages_list_item_delegate import StageListItemAlwaysOnDelegate
@@ -38,7 +39,7 @@ class WorkVersionsWidget(QDialog):
         # ------------------------
         # current asset
         # ------------------------
-        asset_label = QLabel("Character > Baby > -")
+        asset_label = QLabel()
         sub_layout.addWidget(asset_label)
         asset_label.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
 
@@ -137,6 +138,7 @@ class WorkVersionsWidget(QDialog):
         # ------------------------
         self.from_scratch_button = from_scratch_button
         self.stage_list_view = stage_list_view
+        self._asset_label = asset_label
 
     def connect_signals(self):
         self.from_scratch_button.clicked.connect(self.on_from_scratch_clicked)
@@ -156,9 +158,13 @@ class WorkVersionsWidget(QDialog):
                 SoftwareModel.nuke,
             ],
         )
-
         dialog.resize(QSize(420, 360))
         dialog.exec()
+
+    def set_stage(self, stage: Stage):
+        self.stage_list_view.set_stage(stage)
+        text = f"{stage.asset.category} > {stage.asset.name} > {stage.asset.variant}"
+        self._asset_label.setText(text)
 
 
 if __name__ == '__main__':

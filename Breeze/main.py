@@ -59,7 +59,7 @@ class Breeze(QMainWindow):
             self.stage_panel.work_versions_widget.stage_list_view.set_stage(stage=None)
         else:
             stage = Stage.objects.get(longname=longname)
-            self.stage_panel.work_versions_widget.stage_list_view.set_stage(stage=stage)
+            self.stage_panel.work_versions_widget.set_stage(stage=stage)
 
     def refresh_stage_list(self):
         self.select_stage_panel.stage_list_widget.stage_list_view.refresh()
