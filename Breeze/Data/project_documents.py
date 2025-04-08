@@ -6,36 +6,6 @@ from mongoengine import *
 from Data.studio_documents import Status
 
 
-class Project(Document):
-    # TODO: move to Studio db + update with statuses / users / associated db / etc.
-
-    #TODO: The database matches a single project : no need to have a project document model
-    #  -> Replace with a json that saves the project's settings
-    #  -> Same for users: they are related to a project
-    # There should be a database that contains every project, with related users, etc
-    name = StringField(required=True, unique=True)
-    categories = SortedListField(StringField(), default = ["Characters", "Decors", "Elements", "Props", "Shots"])
-    users = SortedListField(StringField(), default = ["Martin", "Kim", "Elise", "Chloé", "Hugo", "Camille"])
-
-    meta = {
-        'collection': 'Projects',
-        'db_alias': 'current_project',
-    }
-
-    def __repr__(self):
-        return f"<Project>: name ='{self.name}'"
-
-    def add_category(self, new_categories: str | list[str]):
-        if type(new_categories) is str:
-            new_categories = [new_categories]
-
-        categories = list(self.categories)
-        categories.extend(new_categories)
-
-        self.categories = categories
-        self.save()
-
-
 class Asset(Document):
     """
     Category + Name + Variant. Contains stages.

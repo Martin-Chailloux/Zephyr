@@ -96,3 +96,43 @@ class User(Document):
         user.save()
         print(f"Created: {user.__repr__()}")
         return user
+
+
+class Project(Document):
+    name = StringField(required=True, primary_key=True)
+    db_name = StringField(required=True, unique=True)
+    categories = SortedListField(StringField(), default=["Character", "Decor", "Element", "Prop", "Shot"])
+    users = SortedListField(ReferenceField(document_type=User), default=[])
+
+    meta = {
+        'collection': 'Projects',
+        'db_alias': 'default',
+    }
+
+    def __repr__(self):
+        return f"<Project>: name ='{self.name}'"
+
+    def add_category(self, new_categories: str | list[str]):
+        if type(new_categories) is str:
+            new_categories = [new_categories]
+
+        categories = list(self.categories)
+        categories.extend(new_categories)
+
+        self.categories = categories
+        self.save()
+
+    @classmethod
+    def create(cls, name: str = None, db_name: str=None,
+               categories: list[str] = None, users: list[User] = None,
+               **kwargs):
+        kwargs = dict(name=name, db_name=db_name, categories=categories, users=users, **kwargs)
+        kwargs = {k: v for k, v in kwargs.items() if v is not None}
+        project = cls(**kwargs)
+        project.save()
+        print(f"Created: {project.__repr__()}")
+        return project
+
+    def add_users(self, users: list[User]):
+        self.users.extend(users)
+        self.save()

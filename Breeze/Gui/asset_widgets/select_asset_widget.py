@@ -1,9 +1,9 @@
 import qtawesome
-from PySide6 import QtCore
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QComboBox, QLabel, QGridLayout, QFrame
 
-from Data.project_documents import Project, Asset
+from Data.project_documents import Asset
+from Data.studio_documents import Project
 from Gui.popups.line_edit_popup import LineEditPopup
 from Gui.asset_widgets.asset_subwidgets import SetBookmarkIconButton
 
@@ -81,7 +81,7 @@ class SelectAssetWidget(QWidget):
 
     @property
     def current_asset(self) -> Asset:
-        current_asset =  Asset.objects.get(category=self.category, name=self.name, variant=self.variant)
+        current_asset = Asset.objects.get(category=self.category, name=self.name, variant=self.variant)
         return current_asset
 
     def connect_signals(self):

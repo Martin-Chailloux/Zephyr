@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QWidget, QVBoxLayout
 
-from Data.project_documents import Project, Asset
-from Dialogs import projects_dialog
+from Data.studio_documents import Project
+from Data.project_documents import Asset
 from Gui.asset_widgets.select_asset_widget import SelectAssetWidget
 from Gui.stages_widgets.stage_list_widget import StageListWidget
 
@@ -17,7 +17,7 @@ class SelectStagePanel(QWidget):
         layout = QVBoxLayout()
         self.setLayout(layout)
 
-        project: Project = projects_dialog.get_project("Dev")
+        project = Project.objects.get(name="dev")
 
         select_asset_widget = SelectAssetWidget(project)
         layout.addWidget(select_asset_widget)

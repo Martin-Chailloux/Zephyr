@@ -1,6 +1,6 @@
 import mongoengine
 
-from Data.studio_documents import Status, User, Palette
+from Data.studio_documents import Status, User, Palette, Project
 
 mongoengine.connect(host="mongodb://localhost:27017", db="Studio", alias="default")
 mongoengine.connect(host="mongodb://localhost:27017", db="JourDeVent", alias="current_project")
@@ -69,5 +69,10 @@ def create_default_users():
         User.create(pseudo=user[0], fullname=user[1], icon_path=user[2])
 
 if __name__ == '__main__':
-    user = User.create("avril", "Avril Zundel", "azohei")
-    print(f"{user.pseudo = }")
+    # project = Project.create(name="dev", db_name="JourDeVent",
+    #                          categories=["Character", "Decor", "Element", "Library", "Prop", "Sandbox", "Sequence"])
+
+    project = Project.objects.get(name="dev")
+    users = User.objects
+    project.add_users(users)
+    pass
