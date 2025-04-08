@@ -11,7 +11,6 @@ from Gui.stages_widgets.stages_list.stages_list_view import StageListView
 
 
 class StageListWidget(QWidget):
-    margin: int = 7
 
     def __init__(self, asset: Asset):
         super().__init__()
@@ -23,7 +22,7 @@ class StageListWidget(QWidget):
         layout = QVBoxLayout()
         self.setLayout(layout)
         layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop | QtCore.Qt.AlignmentFlag.AlignLeft)
-        layout.setContentsMargins(self.margin, self.margin, self.margin, self.margin)
+        layout.setContentsMargins(0, 7, 0, 0)
         layout.setSpacing(5)
 
         stages_list_view = StageListView()
