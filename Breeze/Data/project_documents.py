@@ -8,7 +8,8 @@ from Data.studio_documents import Status, User
 
 class Asset(Document):
     """
-    Category + Name + Variant. Contains stages.
+    An element from the film. Contains stages.
+    category > name > variant
     """
     longname = StringField(required=True, primary_key=True)
 
@@ -40,12 +41,11 @@ class Asset(Document):
 
 class StageTemplate(Document):
     """
-    Template for a Stage. \n
-    Infos: name, label, description, color, icon
+    Infos about a specific kind of stage: \n
+    name, label, description, color, icon
     """
     name = StringField(required=True, primary_key=True)
     label = StringField(required=True, unique=True)
-    tooltip = StringField(default="")
 
     color = StringField(default="#ffffff")
     icon_name = StringField(default="fa5s.question")
@@ -73,17 +73,16 @@ class StageTemplate(Document):
 
 class Stage(Document):
     """
-    Belongs to an Asset. Working step in its utilisation.
+    Step in the creation of an asset, based on a StageTemplate
     (ex: modeling, rigging, animation, lighting, etc.) \n
-    Is based on a StageTemplate. \n
-    Contains a Work Component, and Exports Components.
+    Contains a Collection 'Work', and export Collections.
     """
     longname = StringField(required=True, primary_key=True)
     asset = ReferenceField(document_type=Asset)
     stage_template = ReferenceField(document_type=StageTemplate)
 
-    components = ListField(ReferenceField(document_type='Component', default=[]))  # TODO: migration ?
-    ingredients = ListField(ReferenceField(document_type='Versions'), default=[]) # TODO: migration ?
+    collections = ListField(ReferenceField(document_type='Collection', default=[]))
+    ingredients = ListField(ReferenceField(document_type='Version'), default=[])
     status = ReferenceField(document_type=Status, default=Status.objects.get(label='WAIT'))
     user = ReferenceField(document_type=User, default=User.objects.get(pseudo="Martin"))
 
@@ -125,7 +124,7 @@ class Stage(Document):
         self.save()
 
 
-class Component(Document):
+class Collection(Document):
     """
     Belongs to a Stage. Contains Versions. \n
     Work Component: contains the working versions of a Stage. \n
@@ -161,7 +160,7 @@ class Version(Document):
     """
     longname = StringField(required=True, primary_key=True)
 
-    source = ReferenceField(document_type=Component, required=True)
+    source = ReferenceField(document_type=Collection, required=True)
 
     number = IntField(required=True)
     filepath = IntField(required=True)
