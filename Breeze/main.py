@@ -1,27 +1,14 @@
 import sys
 from datetime import timedelta
 
-from Cython.Compiler.Errors import reset
-
 from Utils.chronometer import Chronometer
 import mongoengine
-
-chrono = Chronometer()
-print("Connecting ...")
-mongoengine.connect(host="mongodb://localhost:27017", db="Studio", alias="default")
-mongoengine.connect(host="mongodb://localhost:27017", db="JourDeVent", alias="current_project")
-chrono.tick("... Connected in:")
-
 
 import qtawesome
 import qdarkstyle
 
 from PySide6 import QtCore
 from PySide6.QtWidgets import QApplication, QMainWindow, QDockWidget
-
-from Data.project_documents import Stage
-from Gui.panels.select_stage_panel import SelectStagePanel
-from Gui.panels.stage_panel import StagePanel
 
 
 class Breeze(QMainWindow):
@@ -71,8 +58,22 @@ if __name__ == '__main__':
     print(f"Launching 'Breeze' ...")
     chrono = Chronometer()
 
+    print("Connecting ...")
+    mongoengine.connect(host="mongodb://localhost:27017", db="Studio", alias="default")
+
+    from Data import app_dialog
+
     app = QApplication(sys.argv)
+    app_dialog.set_project("dev")
+    app_dialog.set_user("Martin")
     app.setStyleSheet(qdarkstyle.load_stylesheet())
+
+    mongoengine.connect(host="mongodb://localhost:27017", db=app_dialog.get_project().db_name, alias="current_project")
+    chrono.tick("... Connected in:")
+
+    from Data.project_documents import Stage
+    from Gui.panels.select_stage_panel import SelectStagePanel
+    from Gui.panels.stage_panel import StagePanel
 
     window = Breeze()
     window.show()
