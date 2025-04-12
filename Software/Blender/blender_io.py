@@ -5,16 +5,17 @@ from Software.Abstract.abstract_io import AbstractSoftwareFile
 
 
 class BlenderFile(AbstractSoftwareFile):
+    label: str = "Blender"
     exe_path: str = "C:/Program Files/Blender Foundation/Blender 4.3/blender-launcher.exe"
     
     def __init__(self, filepath: str):
         super().__init__(filepath=filepath)
 
-    def open_interactive(self):
-        subprocess.Popen([self.exe_path, self.filepath])
-
-    def open(self):
-        bpy.ops.wm.open_mainfile(filepath=self.filepath)
+    def open(self, interactive: bool=False):
+        if interactive:
+            subprocess.Popen([self.exe_path, self.filepath])
+        else:
+            bpy.ops.wm.open_mainfile(filepath=self.filepath)
 
     def save(self):
         bpy.ops.wm.save_mainfile(filepath=self.filepath)
@@ -23,6 +24,9 @@ class BlenderFile(AbstractSoftwareFile):
         # TODO: testing
         self.filepath = filepath
         bpy.ops.wm.save_as_mainfile(filepath=self.filepath)
+
+    def test(self):
+        print(f"TEST")
 
 
 if __name__ == "__main__":
