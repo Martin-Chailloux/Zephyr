@@ -54,7 +54,7 @@ class StatusSelectMenu(ContextMenuWidget):
         button: QPushButton = self.sender()
         status = self.status_per_label[button.text()]
 
-        self.stage.set_status(status=status)
+        self.stage.update(status=status)
 
         self.close()
 

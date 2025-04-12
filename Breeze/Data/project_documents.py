@@ -115,14 +115,6 @@ class Stage(Document):
         self.asset.stages.append(self)
         self.asset.save()
 
-    def set_status(self, status: Status):
-        self.status = status
-        self.save()
-
-    def set_user(self, user: User):
-        self.user = user
-        self.save()
-
 
 class Collection(Document):
     """

@@ -81,7 +81,6 @@ class User(Document):
     palette = ReferenceField(document_type=Palette, default=Palette.objects.get(name="dev"))
     mail = StringField()
 
-
     meta = {
         'collection': 'Users',
         'db_alias': 'default',
@@ -100,10 +99,6 @@ class User(Document):
         print(f"Created: {user.__repr__()}")
         return user
 
-    def set_palette(self, palette: Palette):
-        self.palette = palette
-        self.save()
-
 
 class Project(Document):
     name = StringField(required=True, primary_key=True)
@@ -119,14 +114,8 @@ class Project(Document):
     def __repr__(self):
         return f"<Project>: '{self.name}'"
 
-    def add_category(self, new_categories: str | list[str]):
-        if type(new_categories) is str:
-            new_categories = [new_categories]
-
-        categories = list(self.categories)
-        categories.extend(new_categories)
-
-        self.categories = categories
+    def add_category(self, category: str):
+        self.categories.append(category)
         self.save()
 
     @classmethod
@@ -139,6 +128,11 @@ class Project(Document):
         project.save()
         print(f"Created: {project.__repr__()}")
         return project
+
+    def add_user(self, user: User):
+        # Probably with a gui set_users() from 0 will make more sense and be enough
+        self.users.append(user)
+        self.save()
 
     def add_users(self, users: list[User]):
         self.users.extend(users)
