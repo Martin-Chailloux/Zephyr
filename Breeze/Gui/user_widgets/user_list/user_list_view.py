@@ -36,8 +36,3 @@ class UserListView(AbstractListView):
         super().mousePressEvent(event)
         user = self._get_hovered_item().data(UserItemRoles.user)
         self.user_selected.emit(user.pseudo)
-
-    # def mouseDoubleClickEvent(self, event):
-    #     super().mouseDoubleClickEvent(event)
-    #     user = self._get_hovered_item().data(UserItemRoles.user)
-    #     self.user_selected.emit(user.pseudo)
