@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import Self
+from xmlrpc.client import SafeTransport
 
 from mongoengine import *
 
@@ -11,13 +12,13 @@ class Asset(Document):
     An element from the film. Contains stages.
     category > name > variant
     """
-    longname = StringField(required=True, primary_key=True)
+    longname: str = StringField(required=True, primary_key=True)
 
-    category = StringField(required=True)
-    name = StringField(required=True)
-    variant = StringField(default="-")
+    category: str = StringField(required=True)
+    name: str = StringField(required=True)
+    variant: str = StringField(default="-")
 
-    stages = ListField(ReferenceField(document_type='Stage'), default=[])
+    stages: list['Stage'] = ListField(ReferenceField(document_type='Stage'), default=[])
 
     meta = {
         'collection': 'Assets',
@@ -44,14 +45,14 @@ class StageTemplate(Document):
     Infos about a specific kind of stage: \n
     name, label, description, color, icon
     """
-    name = StringField(required=True, primary_key=True)
-    label = StringField(required=True, unique=True)
+    name: str = StringField(required=True, primary_key=True)
+    label: str = StringField(required=True, unique=True)
 
-    color = StringField(default="#ffffff")
-    icon_name = StringField(default="fa5s.question")
+    color: str = StringField(default="#ffffff")
+    icon_name: str = StringField(default="fa5s.question")
 
-    software = SortedListField(ReferenceField(document_type=Software), default=[])
-    presets = ListField(StringField(), default=[])
+    software: list[Software] = SortedListField(ReferenceField(document_type=Software), default=[])
+    presets: list[str] = ListField(StringField(), default=[])  # TODO: a db to register presets would be easier to edit
 
     meta = {
         'collection': 'Stage templates',
@@ -78,14 +79,14 @@ class Stage(Document):
     (ex: modeling, rigging, animation, lighting, etc.) \n
     Contains a Collection 'Work', and export Collections.
     """
-    longname = StringField(required=True, primary_key=True)
-    asset = ReferenceField(document_type=Asset)
-    stage_template = ReferenceField(document_type=StageTemplate)
+    longname: str = StringField(required=True, primary_key=True)
+    asset: Asset = ReferenceField(document_type=Asset)
+    stage_template: StageTemplate = ReferenceField(document_type=StageTemplate)
 
-    collections = ListField(ReferenceField(document_type='Collection', default=[]))
-    ingredients = ListField(ReferenceField(document_type='Version'), default=[])
-    status = ReferenceField(document_type=Status, default=Status.objects.get(label='WAIT'))
-    user = ReferenceField(document_type=User, default=User.objects.get(pseudo="Martin"))
+    collections: list['Collection'] = ListField(ReferenceField(document_type='Collection', default=[]))
+    ingredients: list['Version'] = ListField(ReferenceField(document_type='Version'), default=[])
+    status: Status = ReferenceField(document_type=Status, default=Status.objects.get(label='WAIT'))
+    user: User = ReferenceField(document_type=User, default=User.objects.get(pseudo="Martin"))
 
     meta = {
         'collection': 'Stages',
@@ -124,15 +125,13 @@ class Collection(Document):
     Export Component: contains the versions of an exported item. \n
     Ingredient: Version of a component that is used inside a Stage.
     """
-    longname = StringField(required=True, primary_key=True)
+    longname: str = StringField(required=True, primary_key=True)
 
-    label = StringField(required=True)
-    stage = ReferenceField(document_type=Stage, required=True)
+    label: str = StringField(required=True)
+    stage: Stage = ReferenceField(document_type=Stage, required=True)
 
-    versions = ListField(ReferenceField(document_type='Version'), default=[])
-    recommended_version = ReferenceField(document_type='Version')
-
-    destinations = ListField(ReferenceField(document_type=Stage, default=[]))
+    versions: list['Version'] = SortedListField(ReferenceField(document_type='Version'), default=[])
+    recommended_version: 'Version' = ReferenceField(document_type='Version')
 
     meta = {
         'collection': 'Collections',
@@ -155,12 +154,15 @@ class Version(Document):
     """
     longname = StringField(required=True, primary_key=True)
 
-    collection = ReferenceField(document_type=Collection, required=True)
-    number = IntField(required=True)  # -1 is head
-    extension = StringField(required=True)  # blend, kra, png, jpg, mov, etc.
-    filepath = StringField()  # deduced from upper documents
+    collection: Collection = ReferenceField(document_type=Collection, required=True)
+    number: int = IntField(required=True)  # -1 is head
+    extension: str = StringField(required=True)  # blend, kra, png, jpg, mov, etc.
+    filepath: str = StringField()  # deduced from upper documents
 
-    creation_user = ReferenceField(document_type='User')
+    creation_user: User = ReferenceField(document_type='User')
+
+    destinations: list[Stage] = SortedListField(ReferenceField(document_type=Stage, default=[]))
+
     # creation_time = DateTimeField(default=datetime.utcnow())
     # last_user = ReferenceField(document_type='User')
     # last_time = DateTimeField(default=datetime.utcnow())

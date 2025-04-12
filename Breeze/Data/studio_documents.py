@@ -4,23 +4,23 @@ from mongoengine import *
 
 
 class Palette(Document):
-    name = StringField(required=True, primary_key=True)
+    name: str = StringField(required=True, primary_key=True)
 
-    white_text = StringField(required=True)
-    black_text = StringField(required=True)
+    white_text: str = StringField(required=True)
+    black_text: str = StringField(required=True)
 
-    primary = StringField(required=True)
-    secondary = StringField(required=True)
-    tertiary = StringField(required=True)
-    surface = StringField(required=True)
+    primary: str = StringField(required=True)
+    secondary: str = StringField(required=True)
+    tertiary: str = StringField(required=True)
+    surface: str = StringField(required=True)
 
-    purple = StringField(required=True)
-    red = StringField(required=True)
-    orange = StringField(required=True)
-    yellow = StringField(required=True)
-    green = StringField(required=True)
-    blue = StringField(required=True)
-    cyan = StringField(required=True)
+    purple: str = StringField(required=True)
+    red: str = StringField(required=True)
+    orange: str = StringField(required=True)
+    yellow: str = StringField(required=True)
+    green: str = StringField(required=True)
+    blue: str = StringField(required=True)
+    cyan: str = StringField(required=True)
 
     meta = {
         'collection': 'Palettes',
@@ -50,9 +50,9 @@ class Palette(Document):
 
 
 class Status(Document):
-    label = StringField(required=True, primary_key=True)
-    color = StringField(required=True)
-    order = IntField(required=True)
+    label: str = StringField(required=True, primary_key=True)
+    color: str = StringField(required=True)
+    order: int = IntField(required=True)
 
     meta = {
         'collection': 'Statuses',
@@ -73,13 +73,13 @@ class Status(Document):
 
 
 class User(Document):
-    pseudo = StringField(required=True, primary_key=True)
-    fullname = StringField(required=True)
-    password = StringField(default="zephyr")
-    icon_path = StringField(required=True)
+    pseudo: str = StringField(required=True, primary_key=True)
+    fullname: str = StringField(required=True)
+    password: str = StringField(default="zephyr")
+    icon_path: str = StringField(required=True)
 
-    palette = ReferenceField(document_type=Palette, default=Palette.objects.get(name="dev"))
-    mail = StringField()
+    palette: Palette = ReferenceField(document_type=Palette, default=Palette.objects.get(name="dev"))
+    mail: str = StringField()  # Not used yet
 
     meta = {
         'collection': 'Users',
@@ -101,10 +101,10 @@ class User(Document):
 
 
 class Software(Document):
-    label = StringField(required=True, primary_key=True)
-    icon_path = StringField(required=True)
+    label: str = StringField(required=True, primary_key=True)
+    icon_path: str = StringField(required=True)
 
-    exe_path = StringField(required=True)
+    exe_path: str = StringField(required=True)
 
     meta = {
         'collection': 'Software',
@@ -125,10 +125,10 @@ class Software(Document):
 
 
 class Project(Document):
-    name = StringField(required=True, primary_key=True)
-    db_name = StringField(required=True, unique=True)
-    categories = SortedListField(StringField(), default=["Character", "Decor", "Element", "Prop", "Shot"])
-    users = SortedListField(ReferenceField(document_type=User), default=[])
+    name: str = StringField(required=True, primary_key=True)
+    db_name: str = StringField(required=True, unique=True)
+    categories: list[str] = SortedListField(StringField(), default=["Character", "Decor", "Element", "Prop", "Shot"])
+    users: list[User] = SortedListField(ReferenceField(document_type=User), default=[])
 
     meta = {
         'collection': 'Projects',
@@ -154,7 +154,7 @@ class Project(Document):
         return project
 
     def add_user(self, user: User):
-        # Probably with a gui set_users() from 0 will make more sense and be enough
+        # With a gui set_users() will probably make more sense and be enough
         self.users.append(user)
         self.save()
 
