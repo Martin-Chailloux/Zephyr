@@ -1,9 +1,11 @@
 import mongoengine
 
-from Data.studio_documents import Status, User, Palette, Project
-
 mongoengine.connect(host="mongodb://localhost:27017", db="Studio", alias="default")
 mongoengine.connect(host="mongodb://localhost:27017", db="JourDeVent", alias="current_project")
+
+from Data import app_dialog
+from Data.studio_documents import Status, User, Palette, Project
+
 
 from Data.project_documents import Stage, StageTemplate, Asset
 
@@ -72,7 +74,8 @@ if __name__ == '__main__':
     # project = Project.create(name="dev", db_name="JourDeVent",
     #                          categories=["Character", "Decor", "Element", "Library", "Prop", "Sandbox", "Sequence"])
 
-    project = Project.objects.get(name="dev")
-    users = User.objects
-    project.add_users(users)
+    palette = Palette.objects.get(name="dev")
+    for user in User.objects:
+        user.set_palette(palette)
+
     pass
