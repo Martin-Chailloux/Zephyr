@@ -125,24 +125,26 @@ class Collection(Document):
     """
     longname = StringField(required=True, primary_key=True)
 
-    name = StringField(required=True)
     label = StringField(required=True)
-    description = StringField(required=True)
-    extension = StringField(required=True)
-
     stage = ReferenceField(document_type=Stage, required=True)
+
     versions = ListField(ReferenceField(document_type='Version'), default=[])
-    head_version = ReferenceField(document_type='Version')
+    recommended_version = ReferenceField(document_type='Version')
 
     destinations = ListField(ReferenceField(document_type=Stage, default=[]))
 
     meta = {
-        'collection': 'Components',
+        'collection': 'Collections',
         'db_alias': 'current_project',
     }
 
     def __repr__(self):
         return f"<Component>: {self.longname}"
+
+    @classmethod
+    def create(cls, label: str, stage: Stage, extension: str):
+        # TODO
+        pass
 
 
 class Version(Document):
@@ -152,19 +154,19 @@ class Version(Document):
     """
     longname = StringField(required=True, primary_key=True)
 
-    source = ReferenceField(document_type=Collection, required=True)
+    collection = ReferenceField(document_type=Collection, required=True)
+    number = IntField(required=True)  # -1 is head
+    extension = StringField(required=True)  # blend, kra, png, jpg, mov, etc.
+    filepath = StringField()  # deduced from upper documents
 
-    number = IntField(required=True)
-    filepath = IntField(required=True)
-
-    creation_time = DateTimeField(default=datetime.utcnow())
-    # creation_user = ReferenceField(document_type='User')
-    last_time = DateTimeField(default=datetime.utcnow())
+    creation_user = ReferenceField(document_type='User')
+    # creation_time = DateTimeField(default=datetime.utcnow())
     # last_user = ReferenceField(document_type='User')
+    # last_time = DateTimeField(default=datetime.utcnow())
 
-    comment = StringField(default="")
-    thumbnail_path = StringField()
+    # comment = StringField(default="")
     # todo_list = ReferenceField(document_type='Task', default=[])
+    # thumbnail_path = StringField()
 
     meta = {
         'collection': 'Versions',
