@@ -117,7 +117,7 @@ class Project(Document):
     }
 
     def __repr__(self):
-        return f"<Project>: name ='{self.name}'"
+        return f"<Project>: '{self.name}'"
 
     def add_category(self, new_categories: str | list[str]):
         if type(new_categories) is str:
