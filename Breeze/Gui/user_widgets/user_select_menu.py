@@ -31,6 +31,7 @@ class UserSelectMenu(ContextMenuWidget):
 
     def _connect_signals(self):
         self.users_list.user_selected.connect(self.on_user_selected)
+        self.users_list.right_clicked.connect(self.close)
 
     def on_user_selected(self, pseudo: str):
         user = User.objects.get(pseudo=pseudo)
