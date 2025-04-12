@@ -3,7 +3,7 @@ from typing import Self
 
 from mongoengine import *
 
-from Data.studio_documents import Status
+from Data.studio_documents import Status, User
 
 
 class Asset(Document):
@@ -85,6 +85,7 @@ class Stage(Document):
     components = ListField(ReferenceField(document_type='Component', default=[]))  # TODO: migration ?
     ingredients = ListField(ReferenceField(document_type='Versions'), default=[]) # TODO: migration ?
     status = ReferenceField(document_type=Status, default=Status.objects.get(label='WAIT'))
+    user = ReferenceField(document_type=User, default=User.objects.get(pseudo="Martin"))
 
     meta = {
         'collection': 'Stages',
@@ -117,6 +118,10 @@ class Stage(Document):
 
     def set_status(self, status: Status):
         self.status = status
+        self.save()
+
+    def set_user(self, user: User):
+        self.user = user
         self.save()
 
 
