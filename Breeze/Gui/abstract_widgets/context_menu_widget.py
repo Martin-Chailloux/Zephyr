@@ -1,14 +1,19 @@
+from dataclasses import dataclass
+
 from PySide6 import QtCore
 from PySide6.QtCore import QSize, QPoint
 from PySide6.QtGui import QCursor, QMouseEvent
 from PySide6.QtWidgets import QDialog
 
 
+
 class ContextMenuWidget(QDialog):
-    def __init__(self, w: int, h: int, remove_borders: bool=True):
+    def __init__(self, w: int, h: int, remove_borders: bool=True,
+                 position: list[float] = None):
         super().__init__()
         self.w = w
         self.h = h
+        self.position = position or [0, 0]
 
         if remove_borders:
             self.setWindowFlag(QtCore.Qt.WindowType.FramelessWindowHint)
@@ -18,9 +23,9 @@ class ContextMenuWidget(QDialog):
         x = int(QCursor.pos().x())
         y = int(QCursor.pos().y())
 
-        # Place at center
-        x -= self.w / 2
-        y -= self.h / 2
+        x -= self.w * self.position[0]
+        y -= self.h * self.position[1]
+
         self.move(QPoint(x, y))
 
         super().exec()

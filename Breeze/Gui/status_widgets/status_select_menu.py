@@ -29,7 +29,7 @@ class StatusSelectMenu(ContextMenuWidget):
         w = (self.button_w * self.max_columns) + (2 * self.margin)
         h = (self.button_h * max_rows) + (2 * self.margin)
 
-        super().__init__(w=w, h=h)
+        super().__init__(w=w, h=h, position=[0.5, 0.5])
         self._init_ui()
 
     def _init_ui(self):

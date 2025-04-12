@@ -1,8 +1,10 @@
-from PySide6.QtWidgets import QVBoxLayout, QApplication
+from PySide6 import QtCore
+from PySide6.QtGui import QMouseEvent
+from PySide6.QtWidgets import QVBoxLayout
 
 from Data import app_dialog
 from Data.project_documents import Stage
-from Data.studio_documents import Project, User
+from Data.studio_documents import User
 from Gui.abstract_widgets.context_menu_widget import ContextMenuWidget
 from Gui.user_widgets.user_list.user_list_view import UserListView
 
@@ -12,7 +14,7 @@ class UserSelectMenu(ContextMenuWidget):
     users = project.users
 
     def __init__(self, stage: Stage):
-        super().__init__(w=168, h=248)
+        super().__init__(w=168, h=248, position=[0.5, 0.25])
         self.stage = stage
         self._init_ui()
         self._connect_signals()
