@@ -5,13 +5,14 @@ from PySide6.QtCore import QSize
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import QGridLayout, QPushButton
 
+from Data import app_dialog
 from Data.project_documents import Stage
 from Data.studio_documents import Palette, Status
 from Gui.abstract_widgets.context_menu_widget import ContextMenuWidget
 
 
-class EditStatusMenu(ContextMenuWidget):
-    palette: Palette = Palette.objects.get(name="dev")
+class StatusSelectMenu(ContextMenuWidget):
+    palette = app_dialog.get_palette()
     statuses = Status.objects
     statuses = sorted(statuses, key=lambda x: x.order)
     margin = 2
@@ -28,9 +29,7 @@ class EditStatusMenu(ContextMenuWidget):
         w = (self.button_w * self.max_columns) + (2 * self.margin)
         h = (self.button_h * max_rows) + (2 * self.margin)
 
-        super().__init__(w=w, h=h,
-                         align_h=QtCore.Qt.AlignmentFlag.AlignHCenter,
-                         align_v=QtCore.Qt.AlignmentFlag.AlignVCenter)
+        super().__init__(w=w, h=h)
         self._init_ui()
 
     def _init_ui(self):

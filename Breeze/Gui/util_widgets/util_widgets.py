@@ -4,11 +4,12 @@ from PySide6.QtCore import QSize, QPoint
 from PySide6.QtGui import QCursor, QIcon
 from PySide6.QtWidgets import QPushButton, QLabel, QWidget, QVBoxLayout, QTextEdit, QDialog
 
+from Data import app_dialog
 from Data.studio_documents import Palette
 
 
 class IconButton(QPushButton):
-    palette: Palette = Palette.objects.get(name="dev")
+    palette = app_dialog.get_palette()
 
     def __init__(self, icon_name: str, width: int = 30, icon_size: int=20, color: str = "white"):
         super().__init__()
