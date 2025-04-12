@@ -4,10 +4,11 @@ from PySide6.QtCore import Signal, QModelIndex, QItemSelectionModel
 
 from Data.project_documents import Asset, Stage
 from Gui.abstract_widgets.abstract_mvd import AbstractListView
-from Gui.stages_widgets.stages_list.stages_list_item_delegate import StageListItemDelegate
-from Gui.stages_widgets.stages_list.stages_list_model import StageListModel, StageItemRoles
-from Gui.stages_widgets.stages_list.stages_list_model import StageListItemSizes
-from Gui.status_widgets.edit_status_menu import EditStatusMenu
+from Gui.stages_widgets.stage_list.stage_list_item_delegate import StageListItemDelegate
+from Gui.stages_widgets.stage_list.stage_list_model import StageListModel, StageItemRoles
+from Gui.stages_widgets.stage_list.stage_list_model import StageItemMetrics
+from Gui.status_widgets.status_select_menu import StatusSelectMenu
+from Gui.user_widgets.user_select_menu import UserSelectMenu
 
 
 @dataclass
@@ -85,8 +86,8 @@ class StageListView(AbstractListView):
     def _get_hover_data(self) -> StageListHoverData:
         x, y, w, h = self._get_viewport_rect()
         mouse_pos = self._get_mouse_pos()
-        status_x = w - StageListItemSizes.status_w
-        user_x = status_x - StageListItemSizes.height
+        status_x = w - StageItemMetrics.status_w
+        user_x = status_x - StageItemMetrics.height
 
         index = self._get_hovered_index()
         on_user = index.row() != -1 and user_x < mouse_pos.x() < status_x
@@ -129,10 +130,12 @@ class StageListView(AbstractListView):
     def mousePressEvent(self, event):
         hover_data = self._get_hover_data()
         if hover_data.on_user:
-            pass
-            # TODO
+            menu = UserSelectMenu(stage=self._get_hovered_stage())
+            menu.exec()
+            self.stage_data_modified.emit()
+            self.refresh()
         elif hover_data.on_status:
-            menu = EditStatusMenu(stage=self._get_hovered_stage())
+            menu = StatusSelectMenu(stage=self._get_hovered_stage())
             menu.exec()
             self.stage_data_modified.emit()
             self.refresh()

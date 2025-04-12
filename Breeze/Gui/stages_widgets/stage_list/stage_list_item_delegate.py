@@ -1,38 +1,29 @@
 import qtawesome
 from PySide6 import QtCore
-from PySide6.QtCore import QModelIndex, QRect, QRectF, QPointF, QPoint
+from PySide6.QtCore import QModelIndex, QRect, QRectF, QPointF
 from PySide6.QtGui import QPainter, QBrush, QColor, QPen, QPainterPath, QIcon, QImage, QCursor
-from PySide6.QtWidgets import QStyledItemDelegate, QStyleOptionViewItem, QStyle, QListView
+from PySide6.QtWidgets import QStyleOptionViewItem, QStyle
 
 from Data.project_documents import Stage, StageTemplate, Asset
 from Data.studio_documents import Palette, User
-from Gui.stages_widgets.stages_list.stages_list_model import StageItemRoles
-from Gui.stages_widgets.stages_list.stages_list_model import StageListItemSizes
+from Gui.abstract_widgets.abstract_mvd import AbstractListDelegate
+from Gui.stages_widgets.stage_list.stage_list_model import StageItemRoles
+from Gui.stages_widgets.stage_list.stage_list_model import StageItemMetrics
 
 
 alignment = QtCore.Qt.AlignmentFlag
 
 
-class StageListItemDelegate(QStyledItemDelegate):
-    palette: Palette = Palette.objects.get(name="dev")
-
+class StageListItemDelegate(AbstractListDelegate):
     def __init__(self):
         super().__init__()
 
-    def _set_data(self, option: QStyleOptionViewItem, index: QModelIndex):
+    def _set_custom_data(self, option: QStyleOptionViewItem, index: QModelIndex):
         self.stage: Stage = index.data(StageItemRoles.stage)
         self.asset: Asset = self.stage.asset
         self.stage_template: StageTemplate = self.stage.stage_template
-        self.is_hovered = bool(option.state & QStyle.StateFlag.State_MouseOver)
-        self.is_selected = bool(option.state & QStyle.StateFlag.State_Selected)
         self.user_is_hovered = index.data(StageItemRoles.user_is_hovered)
         self.status_is_hovered = index.data(StageItemRoles.status_is_hovered)
-        self.opacity: float = 1 if self.is_hovered or self.is_selected else 0.5
-        self.item_rect: QRect = option.rect
-
-    def get_item_rect(self) -> (int, int, int, int):
-        item_rect = self.item_rect
-        return item_rect.x(), item_rect.y()+1, item_rect.width(), item_rect.height()-2
 
     def paint(self, painter: QPainter, option: QStyleOptionViewItem , index: QModelIndex):
         self._set_data(option, index)
@@ -63,12 +54,12 @@ class StageListItemDelegate(QStyledItemDelegate):
 
         painter.setOpacity(self.opacity)
         painter.setPen(QColor(0, 0, 0, 0))
-        rect = QRectF(x, y, StageListItemSizes.logo_w, h)
+        rect = QRectF(x, y, StageItemMetrics.logo_w, h)
         painter.setBrush(QBrush(background_color))
         painter.drawRect(rect)
 
         painter.setBrush(QBrush(icon_color))
-        rect = QRect(x+margin, y+margin, StageListItemSizes.logo_w-2*margin, h-2*margin)
+        rect = QRect(x + margin, y + margin, StageItemMetrics.logo_w - 2 * margin, h - 2 * margin)
         icon: QIcon = qtawesome.icon(self.stage_template.icon_name, opacity=self.opacity)
         icon.paint(painter, rect, QtCore.Qt.AlignmentFlag.AlignRight)
 
@@ -82,17 +73,17 @@ class StageListItemDelegate(QStyledItemDelegate):
         painter.save()
         painter.setOpacity(self.opacity)
         painter.setPen(QPen(color))
-        rect = QRect(x + padding + StageListItemSizes.logo_w, y, w, h)
+        rect = QRect(x + padding + StageItemMetrics.logo_w, y, w, h)
         painter.drawText(rect, self.stage_template.label, alignment.AlignVCenter | alignment.AlignLeft)
         painter.restore()
 
     def paint_user(self, painter: QPainter):
         margin = 2 if self.user_is_hovered else 3
         x, y, w, h = self.get_item_rect()
-        x = w - StageListItemSizes.status_w - h + margin
+        x = w - StageItemMetrics.status_w - h + margin
         rect = QRect(x, y+margin, h-2*margin, h-2*margin)
 
-        user = User.objects.get(pseudo="Martin")
+        user = self.stage.user
         image = QImage(user.icon_path)
 
         painter.save()
@@ -116,8 +107,8 @@ class StageListItemDelegate(QStyledItemDelegate):
         # metrics
         margin = 3 if self.status_is_hovered else 4
         x, y, w, h = self.get_item_rect()
-        x = w - StageListItemSizes.status_w + margin
-        rect = QRect(x, y+margin, StageListItemSizes.status_w-2*margin, h-2*margin)
+        x = w - StageItemMetrics.status_w + margin
+        rect = QRect(x, y + margin, StageItemMetrics.status_w - 2 * margin, h - 2 * margin)
 
         # gui
         text = self.stage.status.label
@@ -142,59 +133,13 @@ class StageListItemDelegate(QStyledItemDelegate):
 
         painter.restore()
 
-    def paint_hover(self, painter: QPainter):
-        if not self.is_hovered:
-            return
-
-        x, y, w, h = self.get_item_rect()
-
-        painter.save()
-        color = QColor(self.palette.white_text)
-        color.setAlphaF(0.1)
-        painter.setPen(QColor(0, 0, 0, 0))
-        painter.setBrush(QBrush(color))
-        painter.drawRect(QRectF(QRectF(x, y, w, h)))
-        painter.restore()
-
-    def paint_selected_background(self, painter: QPainter):
-        if not self.is_selected:
-            return
-
-        x, y, w, h = self.get_item_rect()
-        color = QColor(self.palette.white_text)
-        color.setAlphaF(0.2)
-
-        painter.save()
-
-        painter.setPen(QPen(QColor(0, 0, 0, 0)))
-        painter.setBrush(QBrush(color))
-        painter.drawRect(x, y, w, h)
-
-        painter.restore()
-
-    def paint_selected_underline(self, painter: QPainter):
-        if not self.is_selected:
-            return
-
-        x, y, w, h = self.get_item_rect()
-        color = self.palette.green
-        height = 2
-
-        painter.save()
-
-        painter.setPen(QPen(QColor(0, 0, 0, 0)))
-        painter.setBrush(QBrush(color))
-        painter.drawRect(QRectF(x, y+h-height, w, height))
-
-        painter.restore()
-
 
 class StageListItemAlwaysOnDelegate(StageListItemDelegate):
     def __init__(self):
         super().__init__()
 
-    def _set_data(self, option: QStyleOptionViewItem, index: QModelIndex):
-        super()._set_data(option, index)
+    def _set_custom_data(self, option: QStyleOptionViewItem, index: QModelIndex):
+        super()._set_custom_data(option, index)
         self.opacity = 1
         self.is_hovered = True
         self.is_selected = True

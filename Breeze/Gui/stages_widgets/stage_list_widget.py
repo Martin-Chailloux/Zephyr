@@ -7,7 +7,7 @@ from PySide6.QtWidgets import (QWidget, QVBoxLayout, QPushButton, QSizePolicy)
 from Data.project_documents import Asset
 from Gui.stage_templates_widgets.select_stage_templates import StageTemplateSelector
 from Gui.stages_widgets.stage_item import StageItem
-from Gui.stages_widgets.stages_list.stages_list_view import StageListView
+from Gui.stages_widgets.stage_list.stage_list_view import StageListView
 
 
 class StageListWidget(QWidget):

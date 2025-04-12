@@ -10,9 +10,9 @@ from PySide6.QtWidgets import (QApplication, QDialog, QVBoxLayout, QHBoxLayout,
 from Data.project_documents import Stage
 from Data.software_model import SoftwareModel
 from Gui.popups.select_software_popup import SelectSoftwarePopup
-from Gui.stages_widgets.stages_list.stages_list_item_delegate import StageListItemAlwaysOnDelegate
-from Gui.stages_widgets.stages_list.stages_list_model import StageListItemSizes
-from Gui.stages_widgets.stages_list.stages_list_view import StageListView
+from Gui.stages_widgets.stage_list.stage_list_item_delegate import StageListItemAlwaysOnDelegate
+from Gui.stages_widgets.stage_list.stage_list_model import StageItemMetrics
+from Gui.stages_widgets.stage_list.stage_list_view import StageListView
 from Gui.version_widgets.versions_list.versions_list_view import VersionsListView
 from Gui.util_widgets.util_widgets import TextBox, PushButtonAutoWidth
 
@@ -49,7 +49,7 @@ class WorkVersionsWidget(QDialog):
         stage_list_view = StageListView()
         sub_layout.addWidget(stage_list_view)
         stage_list_view.setFixedWidth(256)
-        stage_list_view.setFixedSize(QSize(256, StageListItemSizes.height + 6))
+        stage_list_view.setFixedSize(QSize(256, StageItemMetrics.height + 6))
         stage_list_view.setItemDelegate(StageListItemAlwaysOnDelegate())
         # stage_list_view.setStyleSheet("border: none")
 

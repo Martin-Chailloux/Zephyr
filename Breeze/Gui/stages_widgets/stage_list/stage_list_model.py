@@ -1,11 +1,11 @@
 from dataclasses import dataclass
-from turtledemo.sorting_animate import start_qsort
 
 from PySide6 import QtCore
 from PySide6.QtCore import QSize
-from PySide6.QtGui import QStandardItemModel, QStandardItem
+from PySide6.QtGui import QStandardItem
 
 from Data.project_documents import Asset, Stage
+from Gui.abstract_widgets.abstract_mvd import AbstractListModel
 
 
 @dataclass
@@ -16,13 +16,13 @@ class StageItemRoles:
 
 
 @dataclass
-class StageListItemSizes:
+class StageItemMetrics:
     height: int = 36
     logo_w: int = 48
     status_w: int = 52
 
 
-class StageListModel(QStandardItemModel):
+class StageListModel(AbstractListModel):
     def __init__(self):
         super().__init__()
         self.asset: Asset = None
@@ -40,7 +40,7 @@ class StageListModel(QStandardItemModel):
         row = self.rowCount()
 
         item = QStandardItem()
-        item.setSizeHint(QSize(0, StageListItemSizes.height))
+        item.setSizeHint(QSize(0, StageItemMetrics.height))
         item.setEditable(False)
 
         item.setData(stage, StageItemRoles.stage)
@@ -48,11 +48,6 @@ class StageListModel(QStandardItemModel):
         item.setData(False, StageItemRoles.status_is_hovered)
 
         self.setItem(row, item)
-
-    @property
-    def items(self):
-        items = [self.item(row) for row in range(self.rowCount())]
-        return items
 
     def refresh(self):
         stages = [item.data(StageItemRoles.stage) for item in self.items]
