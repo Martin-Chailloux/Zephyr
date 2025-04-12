@@ -8,21 +8,21 @@ from PySide6.QtWidgets import (QApplication, QDialog, QVBoxLayout, QHBoxLayout,
                                QLabel, QSizePolicy)
 
 from Data.project_documents import Stage
-from Data.software_model import SoftwareModel
-from Gui.popups.select_software_popup import SelectSoftwarePopup
 from Gui.stages_widgets.stage_list.stage_list_item_delegate import StageListItemAlwaysOnDelegate
 from Gui.stages_widgets.stage_list.stage_list_model import StageItemMetrics
 from Gui.stages_widgets.stage_list.stage_list_view import StageListView
 from Gui.version_widgets.versions_list.versions_list_view import VersionsListView
 from Gui.util_widgets.util_widgets import TextBox, PushButtonAutoWidth
+from software_widgets.software_select_menu import SoftwareSelectMenu
 
 
 class WorkVersionsWidget(QDialog):
     h = 28
     buttons_spacing = 2
 
-    def __init__(self):
+    def __init__(self, stage: Stage):
         super().__init__()
+        self.stage = stage
         self._init_ui()
         self.connect_signals()
 
@@ -145,34 +145,13 @@ class WorkVersionsWidget(QDialog):
         self.from_scratch_button.customContextMenuRequested.connect(self.on_from_scratch_clicked)
 
     def on_from_scratch_clicked(self):
-        dialog = SelectSoftwarePopup(
-            available_soft= [
-                SoftwareModel.krita,
-                SoftwareModel.maya,
-                SoftwareModel.blender,
-                SoftwareModel.guerilla,
-                SoftwareModel.nuke,
-            ],
-            recommended_soft= [
-                SoftwareModel.blender,
-                SoftwareModel.nuke,
-            ],
-        )
-        dialog.resize(QSize(420, 360))
+        if self.stage is None:
+            return
+        dialog = SoftwareSelectMenu(stage=self.stage)
         dialog.exec()
 
     def set_stage(self, stage: Stage):
+        self.stage = stage
         self.stage_list_view.set_stage(stage)
         text = f"{stage.asset.category} > {stage.asset.name} > {stage.asset.variant}"
         self._asset_label.setText(text)
-
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-
-    app.setStyleSheet(qdarkstyle.load_stylesheet())
-
-    window = WorkVersionsWidget()
-    window.show()
-
-    app.exec()

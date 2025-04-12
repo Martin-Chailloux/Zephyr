@@ -4,7 +4,8 @@ from PySide6 import QtCore
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QStandardItem, QStandardItemModel
 
-from Data.studio_documents import User, Project
+from Data import app_dialog
+from Data.studio_documents import User
 
 
 @dataclass
@@ -34,6 +35,6 @@ class UserListModel(QStandardItemModel):
 
     def populate(self):
         self.clear()
-        project = Project.objects.get(name="dev")
+        project = app_dialog.get_project()
         for user in project.users:
             self.add_item(user)

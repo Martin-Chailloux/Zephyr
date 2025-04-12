@@ -14,7 +14,7 @@ class StagePanel(QWidget):
         self.setLayout(layout)
 
         placeholder1 = QLabel()
-        work_versions_widget = WorkVersionsWidget()
+        work_versions_widget = WorkVersionsWidget(stage=None)
         placeholder2 = QLabel()
 
         v_splitter = QSplitter()

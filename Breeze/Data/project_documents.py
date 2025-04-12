@@ -3,7 +3,7 @@ from typing import Self
 
 from mongoengine import *
 
-from Data.studio_documents import Status, User
+from Data.studio_documents import Status, User, Software
 
 
 class Asset(Document):
@@ -50,6 +50,7 @@ class StageTemplate(Document):
     color = StringField(default="#ffffff")
     icon_name = StringField(default="fa5s.question")
 
+    software = SortedListField(ReferenceField(document_type=Software), default=[])
     presets = ListField(StringField(), default=[])
 
     meta = {

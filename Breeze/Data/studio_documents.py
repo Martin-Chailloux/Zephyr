@@ -100,6 +100,30 @@ class User(Document):
         return user
 
 
+class Software(Document):
+    label = StringField(required=True, primary_key=True)
+    icon_path = StringField(required=True)
+
+    exe_path = StringField(required=True)
+
+    meta = {
+        'collection': 'Software',
+        'db_alias': 'default',
+    }
+
+    def __repr__(self):
+        return f"<Software>: {self.label}"
+
+    @classmethod
+    def create(cls, label: str, icon_path: str, exe_path: str, **kwargs) -> Self:
+        kwargs = dict(label=label, icon_path=icon_path, exe_path=exe_path, **kwargs)
+        kwargs = {k: v for k, v in kwargs.items() if v is not None}
+        software = cls(**kwargs)
+        software.save()
+        print(f"Created: {software.__repr__()}")
+        return software
+
+
 class Project(Document):
     name = StringField(required=True, primary_key=True)
     db_name = StringField(required=True, unique=True)
