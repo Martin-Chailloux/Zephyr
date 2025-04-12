@@ -77,7 +77,10 @@ class User(Document):
     fullname = StringField(required=True)
     password = StringField(default="zephyr")
     icon_path = StringField(required=True)
+
+    palette = ReferenceField(document_type=Palette, default=Palette.objects.get(name="dev"))
     mail = StringField()
+
 
     meta = {
         'collection': 'Users',
@@ -96,6 +99,10 @@ class User(Document):
         user.save()
         print(f"Created: {user.__repr__()}")
         return user
+
+    def set_palette(self, palette: Palette):
+        self.palette = palette
+        self.save()
 
 
 class Project(Document):
