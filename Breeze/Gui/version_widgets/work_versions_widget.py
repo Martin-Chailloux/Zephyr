@@ -13,6 +13,7 @@ from Gui.stages_widgets.stage_list.stage_list_model import StageItemMetrics
 from Gui.stages_widgets.stage_list.stage_list_view import StageListView
 from Gui.version_widgets.versions_list.versions_list_view import VersionsListView
 from Gui.util_widgets.util_widgets import TextBox, PushButtonAutoWidth
+from blender_io import BlenderFile
 from software_widgets.software_select_menu import SoftwareSelectMenu
 
 
@@ -149,6 +150,13 @@ class WorkVersionsWidget(QDialog):
             return
         dialog = SoftwareSelectMenu(stage=self.stage)
         dialog.exec()
+        software = dialog.software
+        if software.label == "Blender":
+            software_file = BlenderFile(filepath="")  # TODO: version.filepath
+            BlenderFile.new_file()
+        else:
+            raise NotImplementedError(f"Creation of a {software.label} file.")
+        # software_file.open(interactive=True)
 
     def set_stage(self, stage: Stage):
         self.stage = stage

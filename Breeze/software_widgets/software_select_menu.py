@@ -11,6 +11,7 @@ class SoftwareSelectMenu(ContextMenuWidget):
     def __init__(self, stage: Stage):
         super().__init__(w=168, h=248, position=[0.5, 0])
         self.stage = stage
+        self.software: Software = None  # is set when closed
         self._init_ui()
         self._connect_signals()
 
@@ -30,5 +31,5 @@ class SoftwareSelectMenu(ContextMenuWidget):
 
     def on_software_selected(self, label: str):
         software = Software.objects.get(label=label)
-        print(f"{software = }")
+        self.software = software
         self.close()
