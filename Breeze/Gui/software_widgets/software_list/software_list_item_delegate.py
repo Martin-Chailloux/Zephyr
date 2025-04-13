@@ -1,6 +1,6 @@
 from PySide6 import QtCore
-from PySide6.QtCore import QModelIndex, QRect, QPointF
-from PySide6.QtGui import QPainter, QColor, QPen, QImage, QBrush, QPainterPath
+from PySide6.QtCore import QModelIndex, QRect
+from PySide6.QtGui import QPainter, QColor, QPen
 from PySide6.QtWidgets import QStyleOptionViewItem
 
 from Data.studio_documents import Software
