@@ -4,6 +4,7 @@ from xmlrpc.client import SafeTransport
 
 from mongoengine import *
 
+from Data import app_dialog
 from Data.studio_documents import Status, User, Software
 
 
@@ -38,6 +39,12 @@ class Asset(Document):
         asset.save()
         print(f"Created: {asset.__repr__()}")
         return asset
+
+    def add_stage(self, stage: 'Stage'):
+        if stage in self.stages:
+            raise ValueError(f"{stage.__repr__()} is already a stage of {self.__repr__()}")
+        self.stages.append(stage)
+        self.save()
 
 
 class StageTemplate(Document):
@@ -96,6 +103,21 @@ class Stage(Document):
     def __repr__(self):
         return f"<Stage>: {self.longname}'"
 
+    def add_collection(self, collection: 'Collection'):
+        if collection in self.collections:
+            raise ValueError(f"{collection.__repr__()} is already a collection of {self.__repr__()}")
+        self.collections.append(collection)
+        self.save()
+
+    def create_collection(self, name: str, label: str) -> 'Collection':
+        collection = Collection.create(name=name, label=label, stage=self)
+        self.add_collection(collection)
+        return collection
+
+    def create_work_collection(self) -> 'Collection':
+        collection = self.create_collection(name="work", label="Work")
+        return collection
+
     @classmethod
     def create(cls, asset: Asset, stage_template: StageTemplate, status: Status=None, **kwargs) -> Self:
         longname = "_".join(s for s in [asset.longname, stage_template.name])
@@ -105,17 +127,10 @@ class Stage(Document):
         stage.save()
         print(f"Created: {stage.__repr__()}")
 
-        stage.append_to_asset()
+        asset.add_stage(stage=stage)
+        stage.create_work_collection()
 
         return stage
-
-    def append_to_asset(self):
-        if self in self.asset.stages:
-            print(f"WARNING: {self.__repr__()} is already a stage of {self.asset.__repr__()}. Cannot append.")
-            return
-
-        self.asset.stages.append(self)
-        self.asset.save()
 
 
 class Collection(Document):
@@ -127,6 +142,7 @@ class Collection(Document):
     """
     longname: str = StringField(required=True, primary_key=True)
 
+    name: str = StringField(required=True, unique_with='stage')  # unique_with seems to not be working as intended
     label: str = StringField(required=True)
     stage: Stage = ReferenceField(document_type=Stage, required=True)
 
@@ -139,12 +155,40 @@ class Collection(Document):
     }
 
     def __repr__(self):
-        return f"<Component>: {self.longname}"
+        return f"<Collection>: {self.longname}"
 
     @classmethod
-    def create(cls, label: str, stage: Stage, extension: str):
-        # TODO
-        pass
+    def create(cls, name: str, label: str, stage: Stage, **kwargs):
+        longname = "_".join(s for s in [stage.longname, name])
+        kwargs = dict(longname=longname, name=name, label=label, stage=stage, **kwargs)
+        kwargs = {k: v for k, v in kwargs.items() if v is not None}
+
+        existing_collection = Collection.objects(longname=longname)
+        if existing_collection:
+            raise FileExistsError(f"{existing_collection[0].__repr__()}")
+
+        collection = cls(**kwargs)
+        collection.save()
+        print(f"Created: {collection.__repr__()}")
+
+        return collection
+
+    def add_version(self, version: 'Version'):
+        if version in self.versions:
+            raise ValueError(f"{version.__repr__()} is already a version of {self.__repr__()}")
+        self.versions.append(version)
+        self.save()
+
+    def create_last_version(self, extension: str) -> 'Version':
+        versions: list[Version] = self.versions
+        if not versions:
+            number = 1
+        else:
+            versions = sorted(versions, key=lambda v: v.number, reverse=True)
+            number: int = versions[0].number + 1
+
+        version = Version.create(collection=self, number=number, extension=extension)
+        return version
 
 
 class Version(Document):
@@ -157,15 +201,22 @@ class Version(Document):
     collection: Collection = ReferenceField(document_type=Collection, required=True)
     number: int = IntField(required=True)  # -1 is head
     extension: str = StringField(required=True)  # blend, kra, png, jpg, mov, etc.
-    filepath: str = StringField()  # deduced from upper documents
 
-    creation_user: User = ReferenceField(document_type='User')
+    # deduced from upper documents
+    label: str = StringField(required=True)  # TODO: sert à rine on le compute dans le delegate directement
+    filepath: str = StringField(required=True)
+
+    creation_user: User = ReferenceField(document_type='User', required=True)
+    last_user = ReferenceField(document_type='User', required=True)
 
     destinations: list[Stage] = SortedListField(ReferenceField(document_type=Stage, default=[]))
 
-    # creation_time = DateTimeField(default=datetime.utcnow())
-    # last_user = ReferenceField(document_type='User')
-    # last_time = DateTimeField(default=datetime.utcnow())
+    # TODO: set delete_rules
+    # TODO: test timestamp related methods
+    # TODO: compute_filepath and create Path architecture
+    # TODO: work / publish ?
+    # creation_timestamp = DateTimeField(default=datetime.utcnow())
+    # last_timestamp = DateTimeField(default=datetime.utcnow())
 
     # comment = StringField(default="")
     # todo_list = ReferenceField(document_type='Task', default=[])
@@ -178,3 +229,28 @@ class Version(Document):
 
     def __repr__(self):
         return f"<Version>: {self.longname}"
+
+    @classmethod
+    def create(cls, collection: Collection, number: int, extension: str, **kwargs):
+        longname = f"{collection.longname}_{number:03d}.{extension}"
+
+        filepath = ""  # TODO
+        label = f"{collection.name}_{number}.{extension}"
+        creation_user = app_dialog.get_user()
+        last_user = creation_user
+
+        kwargs = dict(longname=longname, collection=collection, number=number, extension=extension,
+                      filepath=filepath, label=label,
+                      creation_user=creation_user, last_user=last_user,
+                      **kwargs)
+        kwargs = {k: v for k, v in kwargs.items() if v is not None}
+
+        existing_version = Version.objects(longname=longname)
+        if existing_version:
+            raise FileExistsError(f"{existing_version[0].__repr__()}")
+
+        version = cls(**kwargs)
+        version.save()
+        print(f"Created: {version.__repr__()}")
+        collection.add_version(version)
+        return version

@@ -1,13 +1,13 @@
 import mongoengine
 
+
 mongoengine.connect(host="mongodb://localhost:27017", db="Studio", alias="default")
 mongoengine.connect(host="mongodb://localhost:27017", db="JourDeVent", alias="current_project")
 
 from Data import app_dialog
-from Data.studio_documents import Status, User, Palette, Project
+from Data.studio_documents import Status, User, Palette, Project, Software
 
-
-from Data.project_documents import Stage, StageTemplate, Asset
+from Data.project_documents import Stage, StageTemplate, Asset, Collection
 
 
 def update_stages_longname():
@@ -61,21 +61,43 @@ def create_palette():
 def create_default_users():
     users = [
         ["Martin", "Martin Chailloux", "Resources/Icons/Users/user_test2"],
-        ["Kim", "Ai Kim Crespin", "Resources/Icons/Users/kim"],
-        ["Elise", "Elise Golfouse", "Resources/Icons/Users/elise"],
+        ["Kim", "Ai Kim Crespin", "Resources/Icons/Users/kim_porto"],
+        ["Elise", "Elise Golfouse", "Resources/Icons/Users/elise_chibi"],
         ["Chloé", "Chloé Lab", "Resources/Icons/Users/chloé"],
-        ["Hugo", "Hugo Taillez", "Resources/Icons/Users/hugo"],
-        ["Camille", "Camille Truding", "Resources/Icons/Users/camille"],
+        ["Hugo", "Hugo Taillez", "Resources/Icons/Users/hugo_alien"],
+        ["Camille", "Camille Truding", "Resources/Icons/Users/camille_coccinelle"],
     ]
     for user in users:
         User.create(pseudo=user[0], fullname=user[1], icon_path=user[2])
 
+
+def remove_field():
+    StageTemplate.objects.update(unset__tooltip=True)
+
+def reload_stage_templates_software():
+    stage_templates: list[StageTemplate] = StageTemplate.objects
+    for stage_template in stage_templates:
+        software = stage_template.software
+        software = sorted(software, key=lambda k: k.label)
+        stage_template.update(software=software)
+
+def random_list_query():
+    stages: list[Stage] = Stage.objects()
+    print(f"{stages = }")
+    stages = [s for s in stages if s.stage_template.label == "Animation"]
+    print(stages)
+
+
+def create_work_collections():
+    for stage in Stage.objects:
+        work_collection = stage.collections[0]
+        # stage.update(collections = [work_collection])
+        try:
+            stage.create_work_collection()
+        except Exception as e:
+            print(f"{e = }")
+
+
 if __name__ == '__main__':
-    # project = Project.create(name="dev", db_name="JourDeVent",
-    #                          categories=["Character", "Decor", "Element", "Library", "Prop", "Sandbox", "Sequence"])
-
-    palette = Palette.objects.get(name="dev")
-    for user in User.objects:
-        user.set_palette(palette)
-
-    pass
+    for collection in Collection.objects:
+        collection.update(versions=[])

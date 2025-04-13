@@ -7,7 +7,7 @@ from PySide6.QtCore import QSize
 from PySide6.QtWidgets import (QApplication, QDialog, QVBoxLayout, QHBoxLayout,
                                QLabel, QSizePolicy)
 
-from Data.project_documents import Stage
+from Data.project_documents import Stage, Collection
 from Gui.stages_widgets.stage_list.stage_list_item_delegate import StageListItemAlwaysOnDelegate
 from Gui.stages_widgets.stage_list.stage_list_model import StageItemMetrics
 from Gui.stages_widgets.stage_list.stage_list_view import StageListView
@@ -151,6 +151,23 @@ class WorkVersionsWidget(QDialog):
         dialog = SoftwareSelectMenu(stage=self.stage)
         dialog.exec()
         software = dialog.software
+
+        # Get work collection for this stage
+        work_collection = Collection.objects(name="work", stage=self.stage)
+        if len(work_collection) > 1:
+            raise ValueError(f"Found more than 1 'work' Collection for: {self.stage}")
+        elif work_collection:
+            print("Found an existing Work Collection ... ")
+            work_collection = work_collection[0]
+        else:
+            print("Create a new Work Collection ... ")
+            work_collection = self.stage.create_work_collection()
+        print(f"{work_collection = }")
+
+        work_collection.create_last_version(software.extension)
+
+
+        return
         if software.label == "Blender":
             software_file = BlenderFile(filepath="")  # TODO: version.filepath
             BlenderFile.new_file()

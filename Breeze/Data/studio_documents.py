@@ -103,6 +103,7 @@ class User(Document):
 class Software(Document):
     label: str = StringField(required=True, primary_key=True)
     icon_path: str = StringField(required=True)
+    extension: str = StringField(required=True)
 
     exe_path: str = StringField(required=True)
 
