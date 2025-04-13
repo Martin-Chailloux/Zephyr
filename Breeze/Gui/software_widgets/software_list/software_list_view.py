@@ -1,12 +1,11 @@
 from PySide6 import QtCore
-from PySide6.QtCore import Signal, QItemSelectionModel
+from PySide6.QtCore import Signal
 from PySide6.QtGui import QMouseEvent
 
 from Data.project_documents import Stage
-from Data.studio_documents import Software
 from Gui.abstract_widgets.abstract_mvd import AbstractListView
-from software_widgets.software_list.software_list_item_delegate import SoftwareListItemDelegate
-from software_widgets.software_list.software_list_model import SoftwareListModel, SoftwareItemRoles
+from Gui.software_widgets.software_list.software_list_item_delegate import SoftwareListItemDelegate
+from Gui.software_widgets.software_list.software_list_model import SoftwareListModel, SoftwareItemRoles
 
 
 class SoftwareListView(AbstractListView):

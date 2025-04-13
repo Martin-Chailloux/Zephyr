@@ -5,7 +5,7 @@ from PySide6.QtWidgets import QStyleOptionViewItem
 
 from Data.studio_documents import Software
 from Gui.abstract_widgets.abstract_mvd import AbstractListDelegate
-from software_widgets.software_list.software_list_model import SoftwareItemRoles
+from Gui.software_widgets.software_list.software_list_model import SoftwareItemRoles
 
 alignment = QtCore.Qt.AlignmentFlag
 

@@ -3,7 +3,7 @@ from PySide6.QtWidgets import QVBoxLayout
 from Data.project_documents import Stage
 from Data.studio_documents import Software
 from Gui.abstract_widgets.context_menu_widget import ContextMenuWidget
-from software_widgets.software_list.software_list_view import SoftwareListView
+from Gui.software_widgets.software_list.software_list_view import SoftwareListView
 
 
 class SoftwareSelectMenu(ContextMenuWidget):
