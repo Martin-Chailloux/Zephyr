@@ -151,6 +151,8 @@ class WorkVersionsWidget(QDialog):
         dialog = SoftwareSelectMenu(stage=self.stage)
         dialog.exec()
         software = dialog.software
+        if software is None:
+            return
 
         # Get work collection for this stage
         work_collection = Collection.objects(name="work", stage=self.stage)
