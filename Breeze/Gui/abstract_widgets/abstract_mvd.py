@@ -1,5 +1,7 @@
-from PySide6.QtCore import QPoint, QModelIndex, QRect, QRectF
-from PySide6.QtGui import QCursor, QStandardItem, QStandardItemModel, QPainter, QColor, QBrush, QPen
+from PySide6 import QtCore
+from PySide6.QtCore import QPoint, QModelIndex, QRect, QRectF, QPointF
+from PySide6.QtGui import QCursor, QStandardItem, QStandardItemModel, QPainter, QColor, QBrush, QPen, QImage, \
+    QPainterPath
 from PySide6.QtWidgets import QListView, QStyledItemDelegate, QStyleOptionViewItem, QStyle
 
 from Data import app_dialog
@@ -115,5 +117,28 @@ class AbstractListDelegate(QStyledItemDelegate):
         painter.setPen(QPen(QColor(0, 0, 0, 0)))
         painter.setBrush(QBrush(color))
         painter.drawRect(QRectF(x, y+h-height, w, height))
+
+        painter.restore()
+
+    def paint_icon_circle(self, painter: QPainter, path: str, margin: int=2, offset: int=0):
+        x, y, w, h = self.get_item_rect()
+        rect = QRect(x+margin+offset, y+margin, h-2*margin, h-2*margin)
+
+        image = QImage(path)
+
+        painter.save()
+
+        # Set drawing data
+        painter.setOpacity(self.opacity)
+        painter.setBrush(QBrush(painter.background()))
+        painter.setPen(QtCore.Qt.PenStyle.NoPen)
+
+        # Set clip path
+        path = QPainterPath(QPointF(x, y))
+        path.addEllipse(rect)
+        painter.setClipPath(path)
+
+        # Draw image
+        painter.drawImage(rect, image)
 
         painter.restore()

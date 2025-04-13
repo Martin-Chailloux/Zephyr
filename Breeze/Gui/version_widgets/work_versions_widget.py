@@ -1,10 +1,6 @@
-import sys
-
-import qdarkstyle
-
 from PySide6 import QtCore
 from PySide6.QtCore import QSize
-from PySide6.QtWidgets import (QApplication, QDialog, QVBoxLayout, QHBoxLayout,
+from PySide6.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout,
                                QLabel, QSizePolicy)
 
 from Data.project_documents import Stage, Collection
@@ -14,7 +10,7 @@ from Gui.stages_widgets.stage_list.stage_list_view import StageListView
 from Gui.version_widgets.versions_list.versions_list_view import VersionsListView
 from Gui.util_widgets.util_widgets import TextBox, PushButtonAutoWidth
 from blender_io import BlenderFile
-from software_widgets.software_select_menu import SoftwareSelectMenu
+from Gui.software_widgets.software_select_menu import SoftwareSelectMenu
 
 
 class WorkVersionsWidget(QDialog):

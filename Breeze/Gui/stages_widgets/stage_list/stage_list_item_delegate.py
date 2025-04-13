@@ -30,6 +30,7 @@ class StageListItemDelegate(AbstractListDelegate):
 
         painter.save()
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        x, y, w, h = self.get_item_rect()
 
         self.paint_selected_background(painter)
         self.paint_hover(painter)
@@ -38,7 +39,12 @@ class StageListItemDelegate(AbstractListDelegate):
         self.paint_text(painter)
 
         self.paint_selected_underline(painter)
-        self.paint_user(painter)
+        self.paint_icon_circle(
+            painter,
+            path=self.stage.user.icon_path,
+            margin=2 if self.user_is_hovered else 3,
+            offset= w - StageItemMetrics.status_w - h,
+            )
         self.paint_status(painter)
 
         painter.restore()
@@ -75,32 +81,6 @@ class StageListItemDelegate(AbstractListDelegate):
         painter.setPen(QPen(color))
         rect = QRect(x + padding + StageItemMetrics.logo_w, y, w, h)
         painter.drawText(rect, self.stage_template.label, alignment.AlignVCenter | alignment.AlignLeft)
-        painter.restore()
-
-    def paint_user(self, painter: QPainter):
-        margin = 2 if self.user_is_hovered else 3
-        x, y, w, h = self.get_item_rect()
-        x = w - StageItemMetrics.status_w - h + margin
-        rect = QRect(x, y+margin, h-2*margin, h-2*margin)
-
-        user = self.stage.user
-        image = QImage(user.icon_path)
-
-        painter.save()
-
-        # Set drawing data
-        painter.setOpacity(self.opacity)
-        painter.setBrush(QBrush(painter.background()))
-        painter.setPen(QtCore.Qt.PenStyle.NoPen)
-
-        # Set clip path
-        path = QPainterPath(QPointF(x, y))
-        path.addEllipse(rect)
-        painter.setClipPath(path)
-
-        # Draw image
-        painter.drawImage(rect, image)
-
         painter.restore()
 
     def paint_status(self, painter: QPainter):

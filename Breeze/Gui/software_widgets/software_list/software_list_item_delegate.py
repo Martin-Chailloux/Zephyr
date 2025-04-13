@@ -26,34 +26,9 @@ class SoftwareListItemDelegate(AbstractListDelegate):
         self.paint_selected_background(painter)
         self.paint_hover(painter)
         self.paint_selected_underline(painter)
-        self.paint_software(painter)
+        self.paint_icon_circle(painter, path=self.software.icon_path)
 
         self.paint_text(painter)
-
-        painter.restore()
-
-    def paint_software(self, painter: QPainter):
-        margin = 2
-        padding = 3
-        x, y, w, h = self.get_item_rect()
-        rect = QRect(x + padding, y+margin, h-2*margin, h-2*margin)
-
-        image = QImage(self.software.icon_path)
-
-        painter.save()
-
-        # Set drawing data
-        painter.setOpacity(self.opacity)
-        painter.setBrush(QBrush(painter.background()))
-        painter.setPen(QtCore.Qt.PenStyle.NoPen)
-
-        # Set clip path
-        path = QPainterPath(QPointF(x, y))
-        path.addEllipse(rect)
-        painter.setClipPath(path)
-
-        # Draw image
-        painter.drawImage(rect, image)
 
         painter.restore()
 
