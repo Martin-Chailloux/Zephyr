@@ -1,5 +1,6 @@
 from typing import Self
 
+import mongoengine
 from mongoengine import *
 
 
@@ -162,3 +163,9 @@ class Project(Document):
     def add_users(self, users: list[User]):
         self.users.extend(users)
         self.save()
+
+
+# Delete rules
+Project.register_delete_rule(User, 'users', mongoengine.PULL)
+
+User.register_delete_rule(Palette, 'palette', mongoengine.DENY)

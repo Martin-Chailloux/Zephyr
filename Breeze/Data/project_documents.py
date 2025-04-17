@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Self
-from xmlrpc.client import SafeTransport
 
+import mongoengine
 from mongoengine import *
 
 from Data import app_dialog
@@ -90,9 +90,11 @@ class Stage(Document):
     asset: Asset = ReferenceField(document_type=Asset)
     stage_template: StageTemplate = ReferenceField(document_type=StageTemplate)
 
-    collections: list['Collection'] = ListField(ReferenceField(document_type='Collection', default=[]))
+    collections: list['Collection'] = ListField(ReferenceField(document_type='Collection'), default=[])
     ingredients: list['Version'] = ListField(ReferenceField(document_type='Version'), default=[])
     status: Status = ReferenceField(document_type=Status, default=Status.objects.get(label='WAIT'))
+    # TODO: User unknown, with a question mark icon
+    #  it should appear first in lists, add User.order to have some special users at -1
     user: User = ReferenceField(document_type=User, default=User.objects.get(pseudo="Martin"))
 
     meta = {
@@ -147,7 +149,7 @@ class Collection(Document):
     stage: Stage = ReferenceField(document_type=Stage, required=True)
 
     versions: list['Version'] = SortedListField(ReferenceField(document_type='Version'), default=[])
-    recommended_version: 'Version' = ReferenceField(document_type='Version')
+    recommended_version: 'Version' = ReferenceField(document_type='Version', default=None)
 
     meta = {
         'collection': 'Collections',
@@ -200,13 +202,13 @@ class Version(Document):
 
     collection: Collection = ReferenceField(document_type=Collection, required=True)
     number: int = IntField(required=True)  # -1 is head
-    software: Software = ReferenceField(document_type=Software)  # TODO: required
+    software: Software = ReferenceField(document_type=Software, required=True)
 
     # deduced from upper documents
     filepath: str = StringField(required=True)
 
-    creation_user: User = ReferenceField(document_type='User', required=True)
-    last_user: User = ReferenceField(document_type='User', required=True)
+    creation_user: User = ReferenceField(document_type=User, required=True)
+    last_user: User = ReferenceField(document_type=User, required=True)
 
     destinations: list[Stage] = SortedListField(ReferenceField(document_type=Stage, default=[]))
 
@@ -235,9 +237,6 @@ class Version(Document):
     @classmethod
     def create(cls, collection: Collection, number: int, software: Software, **kwargs):
         extension = software.extension
-        print(f"{software = }")
-        print(f"{software.label = }")
-        print(f"{extension = }")
         longname = f"{collection.longname}_{number:03d}.{extension}"
 
         filepath = ""  # TODO
@@ -260,3 +259,25 @@ class Version(Document):
         print(f"Created: {version.__repr__()}")
         collection.add_version(version)
         return version
+
+# delete rules
+Asset.register_delete_rule(Stage, 'stages', mongoengine.PULL)
+
+StageTemplate.register_delete_rule(Software, 'software', mongoengine.DENY)
+
+Stage.register_delete_rule(Asset, 'asset', mongoengine.CASCADE)
+Stage.register_delete_rule(StageTemplate, 'stage_template', mongoengine.DENY)
+Stage.register_delete_rule(Collection, 'collections', mongoengine.PULL)
+Stage.register_delete_rule(Version, 'ingredients', mongoengine.DENY)
+Stage.register_delete_rule(Status, 'status', mongoengine.DENY)
+Stage.register_delete_rule(User, 'user', mongoengine.DENY)
+
+Collection.register_delete_rule(Stage, 'stage', mongoengine.CASCADE)
+Collection.register_delete_rule(Version, 'versions', mongoengine.PULL)
+Collection.register_delete_rule(Version, 'recommended_version', mongoengine.NULLIFY)
+
+Version.register_delete_rule(Collection, 'collection', mongoengine.CASCADE)
+Version.register_delete_rule(Software, 'software', mongoengine.DENY)
+Version.register_delete_rule(User, 'creation_user', mongoengine.DENY)
+Version.register_delete_rule(User, 'last_user', mongoengine.DENY)
+Version.register_delete_rule(Stage, 'destinations', mongoengine.PULL)
