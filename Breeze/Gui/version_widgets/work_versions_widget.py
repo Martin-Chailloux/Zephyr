@@ -2,13 +2,14 @@ from PySide6 import QtCore
 from PySide6.QtCore import QSize
 from PySide6.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout,
                                QLabel, QSizePolicy)
+from Tools.scripts.fixnotice import NEW_NOTICE
 
 from Data.project_documents import Stage, Collection
 from Gui.stages_widgets.stage_list.stage_list_item_delegate import StageListItemAlwaysOnDelegate
 from Gui.stages_widgets.stage_list.stage_list_model import StageItemMetrics
 from Gui.stages_widgets.stage_list.stage_list_view import StageListView
-from Gui.version_widgets.versions_list.versions_list_view import VersionsListView
 from Gui.util_widgets.util_widgets import TextBox, PushButtonAutoWidth
+from Gui.version_widgets.versions_list.versions_list_view import VersionListView
 from blender_io import BlenderFile
 from Gui.software_widgets.software_select_menu import SoftwareSelectMenu
 
@@ -86,10 +87,8 @@ class WorkVersionsWidget(QDialog):
         h_layout.addWidget(increment_button)
 
         # versions list
-        versions_list = VersionsListView()
+        versions_list = VersionListView()
         v_layout.addWidget(versions_list)
-        for i in range(51, 0, -1):
-            versions_list.add_version(i)
 
         # buttons
         h_layout = QHBoxLayout()
@@ -136,6 +135,7 @@ class WorkVersionsWidget(QDialog):
         self.from_scratch_button = from_scratch_button
         self.stage_list_view = stage_list_view
         self._asset_label = asset_label
+        self.versions_list = versions_list
 
     def connect_signals(self):
         self.from_scratch_button.clicked.connect(self.on_from_scratch_clicked)
@@ -150,19 +150,9 @@ class WorkVersionsWidget(QDialog):
         if software is None:
             return
 
-        # Get work collection for this stage
-        work_collection = Collection.objects(name="work", stage=self.stage)
-        if len(work_collection) > 1:
-            raise ValueError(f"Found more than 1 'work' Collection for: {self.stage}")
-        elif work_collection:
-            print("Found an existing Work Collection ... ")
-            work_collection = work_collection[0]
-        else:
-            print("Create a new Work Collection ... ")
-            work_collection = self.stage.create_work_collection()
-        print(f"{work_collection = }")
-
+        work_collection = self.get_work_collection()
         work_collection.create_last_version(software.extension)
+        self.versions_list.refresh()
 
 
         return
@@ -173,8 +163,26 @@ class WorkVersionsWidget(QDialog):
             raise NotImplementedError(f"Creation of a {software.label} file.")
         # software_file.open(interactive=True)
 
+    def get_work_collection(self) -> None | Collection:
+        if self.stage is None:
+            return None
+
+        work_collection = Collection.objects(name="work", stage=self.stage)
+        if len(work_collection) > 1:
+            raise ValueError(f"Found more than 1 'work' Collection for: {self.stage}")
+        elif work_collection:
+            print("Found an existing Work Collection ... ")
+            work_collection = work_collection[0]
+        else:
+            print("Create a new Work Collection ... ")
+            work_collection = self.stage.create_work_collection()
+        return work_collection
+
     def set_stage(self, stage: Stage):
         self.stage = stage
         self.stage_list_view.set_stage(stage)
         text = f"{stage.asset.category} > {stage.asset.name} > {stage.asset.variant}"
         self._asset_label.setText(text)
+
+        work_collection = self.get_work_collection()
+        self.versions_list.set_collection(work_collection)

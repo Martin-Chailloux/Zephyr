@@ -207,7 +207,7 @@ class Version(Document):
     filepath: str = StringField(required=True)
 
     creation_user: User = ReferenceField(document_type='User', required=True)
-    last_user = ReferenceField(document_type='User', required=True)
+    last_user: User = ReferenceField(document_type='User', required=True)
 
     destinations: list[Stage] = SortedListField(ReferenceField(document_type=Stage, default=[]))
 
