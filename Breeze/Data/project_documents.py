@@ -254,7 +254,6 @@ class Version(Document):
             raise FileExistsError(f"{existing_version[0].__repr__()}")
 
         version = cls(**kwargs)
-        print(f"{version.__repr__() = }")
         version.save()
         print(f"Created: {version.__repr__()}")
         collection.add_version(version)
