@@ -151,7 +151,7 @@ class WorkVersionsWidget(QDialog):
             return
 
         work_collection = self.get_work_collection()
-        work_collection.create_last_version(software.extension)
+        work_collection.create_last_version(dialog.software)
         self.versions_list.refresh()
 
 
