@@ -13,7 +13,7 @@ class VersionItemRoles:
 
 @dataclass
 class VersionItemMetrics:
-    height: int = 28
+    height: int = 32
 
 
 class VersionListModel(QStandardItemModel):
