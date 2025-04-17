@@ -179,7 +179,7 @@ class Collection(Document):
         self.versions.append(version)
         self.save()
 
-    def create_last_version(self, extension: str) -> 'Version':
+    def create_last_version(self, software: Software) -> 'Version':
         versions: list[Version] = self.versions
         if not versions:
             number = 1
@@ -187,7 +187,7 @@ class Collection(Document):
             versions = sorted(versions, key=lambda v: v.number, reverse=True)
             number: int = versions[0].number + 1
 
-        version = Version.create(collection=self, number=number, extension=extension)
+        version = Version.create(collection=self, number=number, software=software)
         return version
 
 
@@ -200,16 +200,18 @@ class Version(Document):
 
     collection: Collection = ReferenceField(document_type=Collection, required=True)
     number: int = IntField(required=True)  # -1 is head
-    extension: str = StringField(required=True)  # blend, kra, png, jpg, mov, etc.
+    software: Software = ReferenceField(document_type=Software)  # TODO: required
 
     # deduced from upper documents
-    label: str = StringField(required=True)  # TODO: sert à rine on le compute dans le delegate directement
     filepath: str = StringField(required=True)
 
     creation_user: User = ReferenceField(document_type='User', required=True)
     last_user: User = ReferenceField(document_type='User', required=True)
 
     destinations: list[Stage] = SortedListField(ReferenceField(document_type=Stage, default=[]))
+
+    # user editable
+    comment: str = StringField(default="")
 
     # TODO: set delete_rules
     # TODO: test timestamp related methods
@@ -231,16 +233,19 @@ class Version(Document):
         return f"<Version>: {self.longname}"
 
     @classmethod
-    def create(cls, collection: Collection, number: int, extension: str, **kwargs):
+    def create(cls, collection: Collection, number: int, software: Software, **kwargs):
+        extension = software.extension
+        print(f"{software = }")
+        print(f"{software.label = }")
+        print(f"{extension = }")
         longname = f"{collection.longname}_{number:03d}.{extension}"
 
         filepath = ""  # TODO
-        label = f"{collection.name}_{number}.{extension}"
         creation_user = app_dialog.get_user()
         last_user = creation_user
 
-        kwargs = dict(longname=longname, collection=collection, number=number, extension=extension,
-                      filepath=filepath, label=label,
+        kwargs = dict(longname=longname, collection=collection, number=number, software=software,
+                      filepath=filepath,
                       creation_user=creation_user, last_user=last_user,
                       **kwargs)
         kwargs = {k: v for k, v in kwargs.items() if v is not None}
@@ -250,6 +255,7 @@ class Version(Document):
             raise FileExistsError(f"{existing_version[0].__repr__()}")
 
         version = cls(**kwargs)
+        print(f"{version.__repr__() = }")
         version.save()
         print(f"Created: {version.__repr__()}")
         collection.add_version(version)
