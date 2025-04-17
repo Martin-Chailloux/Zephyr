@@ -77,7 +77,7 @@ if __name__ == '__main__':
 
     window = Breeze()
     window.show()
-    print(f"... Finished launching 'Breeze' in: {chrono.tick()}")
+    chrono.tick(f"... Finished launching 'Breeze' in:")
     print("-----------------")
 
     app.exec()

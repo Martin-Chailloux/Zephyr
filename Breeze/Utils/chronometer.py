@@ -9,7 +9,7 @@ class Chronometer:
         delta = now - self.previous
 
         if text is not None:
-            print(f"{text} {delta:3.2f}s")
+            print(f"{text} {delta:3.2f} seconds")
 
         self.previous = time.time()
         return delta
