@@ -171,10 +171,10 @@ class WorkVersionsWidget(QDialog):
         if len(work_collection) > 1:
             raise ValueError(f"Found more than 1 'work' Collection for: {self.stage}")
         elif work_collection:
-            print("Found an existing Work Collection ... ")
+            # found an existing Work Collection
             work_collection = work_collection[0]
         else:
-            print("Create a new Work Collection ... ")
+            # create a new Work Collection
             work_collection = self.stage.create_work_collection()
         return work_collection
 
