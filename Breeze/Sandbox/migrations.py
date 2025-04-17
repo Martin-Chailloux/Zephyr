@@ -7,7 +7,7 @@ mongoengine.connect(host="mongodb://localhost:27017", db="JourDeVent", alias="cu
 from Data import app_dialog
 from Data.studio_documents import Status, User, Palette, Project, Software
 
-from Data.project_documents import Stage, StageTemplate, Asset, Collection
+from Data.project_documents import Stage, StageTemplate, Asset, Collection, Version
 
 
 def update_stages_longname():
@@ -99,5 +99,11 @@ def create_work_collections():
 
 
 if __name__ == '__main__':
-    for collection in Collection.objects:
-        collection.update(versions=[])
+    # for collection in Collection.objects:
+    #     # collection.update(versions=[])
+    #     # print(f"{collection = }")
+    #     collection.update(recommended_version=None)
+    for version in Version.objects:
+        print(f"{version = }")
+        print(f"{version.software = }")
+        version.delete()
