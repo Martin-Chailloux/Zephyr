@@ -215,7 +215,6 @@ class Version(Document):
     # user editable
     comment: str = StringField(default="")
 
-    # TODO: set delete_rules
     # TODO: test timestamp related methods
     # TODO: compute_filepath and create Path architecture
     # TODO: work / publish ?
@@ -258,6 +257,7 @@ class Version(Document):
         print(f"Created: {version.__repr__()}")
         collection.add_version(version)
         return version
+
 
 # delete rules
 Stage.register_delete_rule(Asset, 'stages', mongoengine.PULL)
