@@ -166,6 +166,6 @@ class Project(Document):
 
 
 # Delete rules
-Project.register_delete_rule(User, 'users', mongoengine.PULL)
+User.register_delete_rule(Project, 'users', mongoengine.PULL)
 
-User.register_delete_rule(Palette, 'palette', mongoengine.DENY)
+Palette.register_delete_rule(User, 'palette', mongoengine.DENY)

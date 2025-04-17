@@ -261,23 +261,23 @@ class Version(Document):
         return version
 
 # delete rules
-Asset.register_delete_rule(Stage, 'stages', mongoengine.PULL)
+Stage.register_delete_rule(Asset, 'stages', mongoengine.PULL)
 
-StageTemplate.register_delete_rule(Software, 'software', mongoengine.DENY)
+Software.register_delete_rule(StageTemplate, 'software', mongoengine.DENY)
 
-Stage.register_delete_rule(Asset, 'asset', mongoengine.CASCADE)
-Stage.register_delete_rule(StageTemplate, 'stage_template', mongoengine.DENY)
-Stage.register_delete_rule(Collection, 'collections', mongoengine.PULL)
-Stage.register_delete_rule(Version, 'ingredients', mongoengine.DENY)
-Stage.register_delete_rule(Status, 'status', mongoengine.DENY)
-Stage.register_delete_rule(User, 'user', mongoengine.DENY)
+Asset.register_delete_rule(Stage, 'asset', mongoengine.CASCADE)
+StageTemplate.register_delete_rule(Stage, 'stage_template', mongoengine.DENY)
+Collection.register_delete_rule(Stage, 'collections', mongoengine.PULL)
+Version.register_delete_rule(Stage, 'ingredients', mongoengine.DENY)
+Status.register_delete_rule(Stage, 'status', mongoengine.DENY)
+User.register_delete_rule(Stage, 'user', mongoengine.DENY)
 
-Collection.register_delete_rule(Stage, 'stage', mongoengine.CASCADE)
-Collection.register_delete_rule(Version, 'versions', mongoengine.PULL)
-Collection.register_delete_rule(Version, 'recommended_version', mongoengine.NULLIFY)
+Stage.register_delete_rule(Collection, 'stage', mongoengine.CASCADE)
+Version.register_delete_rule(Collection, 'versions', mongoengine.PULL)
+Version.register_delete_rule(Collection, 'recommended_version', mongoengine.NULLIFY)
 
-Version.register_delete_rule(Collection, 'collection', mongoengine.CASCADE)
-Version.register_delete_rule(Software, 'software', mongoengine.DENY)
-Version.register_delete_rule(User, 'creation_user', mongoengine.DENY)
-Version.register_delete_rule(User, 'last_user', mongoengine.DENY)
-Version.register_delete_rule(Stage, 'destinations', mongoengine.PULL)
+Collection.register_delete_rule(Version, 'collection', mongoengine.CASCADE)
+Software.register_delete_rule(Version, 'software', mongoengine.DENY)
+User.register_delete_rule(Version, 'creation_user', mongoengine.DENY)
+User.register_delete_rule(Version, 'last_user', mongoengine.DENY)
+Stage.register_delete_rule(Version, 'destinations', mongoengine.PULL)
