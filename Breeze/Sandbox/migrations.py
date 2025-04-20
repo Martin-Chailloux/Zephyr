@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import mongoengine
 
 
@@ -103,7 +105,7 @@ if __name__ == '__main__':
     #     # collection.update(versions=[])
     #     # print(f"{collection = }")
     #     collection.update(recommended_version=None)
-    for version in Version.objects:
-        print(f"{version = }")
-        print(f"{version.software = }")
-        version.delete()
+
+    version = Version.objects[0]
+    timestamp: datetime = version.timestamp
+    print(f"{timestamp.hour = }")
