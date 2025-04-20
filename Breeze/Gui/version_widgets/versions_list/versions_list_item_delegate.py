@@ -1,3 +1,4 @@
+from datetime import datetime
 from wsgiref.simple_server import software_version
 
 from PySide6 import QtCore
@@ -13,6 +14,11 @@ alignment = QtCore.Qt.AlignmentFlag
 
 
 class VersionListItemDelegate(AbstractListDelegate):
+    small_font_size: int = 7
+    comment_font_size: int = 8
+    datetime_width: int = 56
+    num_width: int = 32
+
     def __init__(self):
         super().__init__()
 
@@ -28,11 +34,16 @@ class VersionListItemDelegate(AbstractListDelegate):
         self.paint_selected_background(painter)
         self.paint_hover(painter)
         self.paint_selected_underline(painter)
-        self.paint_icon_circle(
-            painter,
-            path=self.version.last_user.icon_path
-        )
+
+        # left
+        self.paint_user(painter)
         self.paint_version_num(painter)
+
+        # middle
+        self.paint_comment(painter)
+
+        # right
+        self.paint_timestamp(painter)
         self.paint_software(painter)
 
         painter.restore()
@@ -40,36 +51,86 @@ class VersionListItemDelegate(AbstractListDelegate):
     def paint_user(self, painter: QPainter):
         self.paint_icon_circle(
             painter,
-            path=self.version.last_user.icon_path
+            path=self.version.last_user.icon_path,
         )
 
     def paint_version_num(self, painter: QPainter):
         x, y, w, h = self.get_item_rect()
-        padding = 2
         text = f"{self.version.number:03d}"
 
         painter.save()
 
         painter.setOpacity(self.opacity)
-        rect = QRect(x + padding + h, y, w, h)
-        painter.drawText(rect, text, alignment.AlignLeft | alignment.AlignVCenter)
+        font = painter.font()
+        font.setBold(True)
+        painter.setFont(font)
+        rect = QRect(x + h, y, self.num_width, h)
+        painter.drawText(rect, text, alignment.AlignHCenter | alignment.AlignVCenter)
 
         painter.restore()
 
     def paint_software(self, painter: QPainter):
         x, y, w, h = self.get_item_rect()
-        text_start: int = w - 36
+        margin: int = 4
         text = f".{self.version.software.extension}"
+        x_offset = w - h
 
         painter.save()
-
         painter.setOpacity(self.opacity)
+
+        # paint icon
         self.paint_icon_circle(
             painter,
             path = self.version.software.icon_path,
-            offset= text_start - h - 2,
+            margin = margin,
+            offset = [x_offset, - margin - 1, 0, 0],
         )
-        rect = QRect(text_start, y, w, h)
+
+        # paint text
+        font = painter.font()
+        font.setPointSizeF(self.small_font_size)
+        painter.setFont(font)
+        rect = QRect(x_offset, y, h, h-1)
+        painter.drawText(rect, text, alignment.AlignHCenter | alignment.AlignBottom)
+
+        painter.restore()
+
+    def paint_comment(self, painter: QPainter):
+        x, y, w, h = self.get_item_rect()
+        text = self.version.comment
+        start_x = x + h + self.num_width
+        end_x = w - h - self.datetime_width - start_x
+        margin = 8
+
+        painter.save()
+        painter.setOpacity(self.opacity)
+        font = painter.font()
+        font.setPointSizeF(self.comment_font_size)
+        
+        painter.setFont(font)
+        rect = QRect(start_x + margin, y, end_x - margin, h)
         painter.drawText(rect, text, alignment.AlignLeft | alignment.AlignVCenter)
 
+        painter.restore()
+
+
+    def paint_timestamp(self, painter: QPainter):
+        x, y, w, h = self.get_item_rect()
+        timestamp: datetime = self.version.timestamp
+        x = w - h - self.datetime_width
+
+        time_text = f"{timestamp.hour:02d}h{timestamp.minute:02d}"
+        date_text = f"{timestamp.day:02d}/{timestamp.month:02d}/{timestamp.year:04d}"
+
+        painter.save()
+        painter.setOpacity(self.opacity)
+        font = painter.font()
+        font.setPointSizeF(self.small_font_size)
+        painter.setFont(font)
+        # paint time
+        rect = QRect(x, y, self.datetime_width, h/2)
+        painter.drawText(rect, time_text, alignment.AlignHCenter | alignment.AlignBottom)
+        # paint date
+        rect = QRect(x, y + h/2, self.datetime_width, h/2)
+        painter.drawText(rect, date_text, alignment.AlignHCenter | alignment.AlignTop)
         painter.restore()

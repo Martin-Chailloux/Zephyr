@@ -120,9 +120,12 @@ class AbstractListDelegate(QStyledItemDelegate):
 
         painter.restore()
 
-    def paint_icon_circle(self, painter: QPainter, path: str, margin: int=2, offset: int=0):
+    def paint_icon_circle(self, painter: QPainter, path: str, margin: int=2, offset: list[int] = None, rect: QRect = None):
         x, y, w, h = self.get_item_rect()
-        rect = QRect(x+margin+offset, y+margin, h-2*margin, h-2*margin)
+        offset = offset or [0, 0, 0, 0]
+        if len(offset) != 4:
+            raise ValueError("Could not read offset, should be: [x, y, w, h]")
+        rect = rect or QRect(x+margin+offset[0], y+margin+offset[1], h-2*margin+offset[2], h-2*margin+offset[3])
 
         image = QImage(path)
 

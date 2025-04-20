@@ -43,7 +43,7 @@ class StageListItemDelegate(AbstractListDelegate):
             painter,
             path=self.stage.user.icon_path,
             margin=2 if self.user_is_hovered else 3,
-            offset= w - StageItemMetrics.status_w - h,
+            offset= [w - StageItemMetrics.status_w - h, 0, 0, 0]
             )
         self.paint_status(painter)
 
