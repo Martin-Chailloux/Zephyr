@@ -1,7 +1,5 @@
 import sys
-from datetime import timedelta, datetime
-
-from PySide6.QtGui import QAction
+from datetime import timedelta
 
 from Utils.chronometer import Chronometer
 import mongoengine
@@ -10,7 +8,7 @@ import qtawesome
 import qdarkstyle
 
 from PySide6 import QtCore
-from PySide6.QtWidgets import QApplication, QMainWindow, QDockWidget, QToolBar, QMenu
+from PySide6.QtWidgets import QApplication, QMainWindow, QDockWidget, QMenu
 
 
 class BreezeMainWindow(QMainWindow):
@@ -98,8 +96,8 @@ if __name__ == '__main__':
     chrono.tick("... Connected in:")
 
     from Data.project_documents import Stage
-    from Gui.panels.select_stage_panel import SelectStagePanel
-    from Gui.panels.stage_panel import StagePanel
+    from Gui.GuiPanels.select_stage_panel import SelectStagePanel
+    from Gui.GuiPanels.stage_panel import StagePanel
 
     window = BreezeMainWindow()
     window.show()
