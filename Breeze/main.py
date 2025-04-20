@@ -1,6 +1,8 @@
 import sys
 from datetime import timedelta, datetime
 
+from PySide6.QtGui import QAction
+
 from Utils.chronometer import Chronometer
 import mongoengine
 
@@ -8,15 +10,16 @@ import qtawesome
 import qdarkstyle
 
 from PySide6 import QtCore
-from PySide6.QtWidgets import QApplication, QMainWindow, QDockWidget
+from PySide6.QtWidgets import QApplication, QMainWindow, QDockWidget, QToolBar, QMenu
 
 
-class Breeze(QMainWindow):
+class BreezeMainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Breeze")
         self.setWindowIcon(qtawesome.icon("fa5s.wind"))
         self._init_ui()
+        self._add_menu_bar()
         self.connect_signals()
 
     def _init_ui(self):
@@ -34,6 +37,28 @@ class Breeze(QMainWindow):
         # public vars
         self.select_stage_panel = select_stage_panel
         self.stage_panel = stage_panel
+
+    def _add_menu_bar(self):
+        menu_bar = self.menuBar()
+
+        settings_menu = QMenu("Settings")
+        menu_bar.addMenu(settings_menu)
+        sub_menu = QMenu("Set stylesheet", )
+        sub_menu.setIcon(qtawesome.icon("msc.symbol-color"))
+        settings_menu.addMenu(sub_menu)
+        sub_menu.addAction("Breeze")
+        sub_menu.addAction("Dark")
+        sub_menu.addAction("Light")
+
+        project_menu = QMenu("Project")
+        menu_bar.addMenu(project_menu)
+        project_menu.addAction("Select project")
+        project_menu.addAction("Project settings")
+
+        user_menu = QMenu("User")
+        menu_bar.addMenu(user_menu)
+        user_menu.addAction("Select user")
+        user_menu.addAction("Edit user")
 
     def connect_signals(self):
         self.select_stage_panel.stage_list_widget.stage_list_view.stage_selected.connect(self.on_stage_selected)
@@ -53,6 +78,7 @@ class Breeze(QMainWindow):
 
     def refresh_versions_stage(self):
         self.stage_panel.work_versions_widget.stage_list_view.refresh()
+
 
 if __name__ == '__main__':
     print(f"Launching 'Breeze' ...")
@@ -75,7 +101,7 @@ if __name__ == '__main__':
     from Gui.panels.select_stage_panel import SelectStagePanel
     from Gui.panels.stage_panel import StagePanel
 
-    window = Breeze()
+    window = BreezeMainWindow()
     window.show()
     chrono.tick(f"... Finished launching 'Breeze' in:")
     print("-----------------")
