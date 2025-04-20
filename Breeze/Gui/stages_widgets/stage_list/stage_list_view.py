@@ -35,6 +35,7 @@ class StageListView(AbstractListView):
         self._connect_signals()
 
     def refresh(self):
+        # TODO: quand y en a qu'un ça refresh pas
         selected_indexes = self.selectionModel().selectedIndexes()
         self._model.refresh()
         if selected_indexes:
@@ -45,8 +46,6 @@ class StageListView(AbstractListView):
 
     def set_asset(self, asset: Asset):
         self._model.set_asset(asset)
-        if asset is None:
-            self._model.clear()
 
     def set_stage(self, stage: Stage):
         self._model.clear()
