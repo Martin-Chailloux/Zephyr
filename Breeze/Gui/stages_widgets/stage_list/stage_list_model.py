@@ -29,10 +29,11 @@ class StageListModel(AbstractListModel):
 
     def set_asset(self, asset: Asset):
         self.asset = asset
+        self.clear()
+
         if asset is None:
             return
 
-        self.clear()
         for stage in asset.stages:
             self.add_item(stage=stage)
 
@@ -51,9 +52,8 @@ class StageListModel(AbstractListModel):
 
     def refresh(self):
         stages = [item.data(StageItemRoles.stage) for item in self.items]
-        if len(stages) <= 1:
-            return
-        stages = Asset.objects.get(longname=stages[0].asset.longname).stages  # query the data from db else it is not up to date
+        asset = Asset.objects.get(longname=stages[0].asset.longname)
+        stages = asset.stages  # query the data from db else it is not up to date
 
         self.blockSignals(True)
         self.clear()
