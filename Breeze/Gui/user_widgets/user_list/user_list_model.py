@@ -4,7 +4,7 @@ from PySide6 import QtCore
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QStandardItem, QStandardItemModel
 
-from Data import app_dialog
+from Data.breeze_app import BreezeApp
 from Data.studio_documents import User
 
 
@@ -35,6 +35,6 @@ class UserListModel(QStandardItemModel):
 
     def populate(self):
         self.clear()
-        project = app_dialog.get_project()
+        project = BreezeApp.project
         for user in project.users:
             self.add_item(user)

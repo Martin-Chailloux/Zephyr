@@ -6,10 +6,9 @@ import mongoengine
 mongoengine.connect(host="mongodb://localhost:27017", db="Studio", alias="default")
 mongoengine.connect(host="mongodb://localhost:27017", db="JourDeVent", alias="current_project")
 
-from Data import app_dialog
-from Data.studio_documents import Status, User, Palette, Project, Software
+from Data.studio_documents import User, Palette
 
-from Data.project_documents import Stage, StageTemplate, Asset, Collection, Version
+from Data.project_documents import Stage, StageTemplate, Asset, Version
 
 
 def update_stages_longname():

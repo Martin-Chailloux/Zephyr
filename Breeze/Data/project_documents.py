@@ -4,7 +4,7 @@ from typing import Self
 import mongoengine
 from mongoengine import *
 
-from Data import app_dialog
+from Data.breeze_app import BreezeApp
 from Data.studio_documents import Status, User, Software
 
 
@@ -239,7 +239,7 @@ class Version(Document):
         longname = f"{collection.longname}_{number:03d}.{extension}"
 
         filepath = ""  # TODO
-        creation_user = app_dialog.get_user()
+        creation_user = BreezeApp.user
         last_user = creation_user
 
         kwargs = dict(longname=longname, collection=collection, number=number, software=software,

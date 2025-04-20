@@ -1,15 +1,13 @@
 import qtawesome
-from PySide6 import QtCore
-from PySide6.QtCore import QSize, QPoint
-from PySide6.QtGui import QCursor, QIcon
-from PySide6.QtWidgets import QPushButton, QLabel, QWidget, QVBoxLayout, QTextEdit, QDialog
+from PySide6.QtCore import QSize
+from PySide6.QtGui import QIcon
+from PySide6.QtWidgets import QPushButton, QLabel, QWidget, QVBoxLayout, QTextEdit
 
-from Data import app_dialog
-from Data.studio_documents import Palette
+from Data.breeze_app import BreezeApp
 
 
 class IconButton(QPushButton):
-    palette = app_dialog.get_palette()
+    palette = BreezeApp.palette
 
     def __init__(self, icon_name: str, width: int = 28, icon_size: int=18, color: str = "white"):
         super().__init__()

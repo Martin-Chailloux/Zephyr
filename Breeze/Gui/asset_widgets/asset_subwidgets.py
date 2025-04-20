@@ -1,12 +1,11 @@
 import qtawesome
 
-from Data import app_dialog
-from Data.studio_documents import Palette
+from Data.breeze_app import BreezeApp
 from Gui.util_widgets.util_widgets import IconButton
 
 
 class SetBookmarkIconButton(IconButton):
-    palette = app_dialog.get_palette()
+    palette = BreezeApp.palette
 
     def __init__(self):
         super().__init__(icon_name="fa.star", width=24, icon_size=18, color=self.palette.white_text)

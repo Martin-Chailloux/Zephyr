@@ -1,10 +1,10 @@
 from PySide6 import QtCore
 from PySide6.QtCore import QPoint, QModelIndex, QRect, QRectF, QPointF
-from PySide6.QtGui import QCursor, QStandardItem, QStandardItemModel, QPainter, QColor, QBrush, QPen, QImage, \
-    QPainterPath
+from PySide6.QtGui import (QCursor, QStandardItem, QStandardItemModel, QPainter, QColor,
+                           QBrush, QPen, QImage, QPainterPath)
 from PySide6.QtWidgets import QListView, QStyledItemDelegate, QStyleOptionViewItem, QStyle
 
-from Data import app_dialog
+from Data.breeze_app import BreezeApp
 
 
 class AbstractListView(QListView):
@@ -52,7 +52,7 @@ class AbstractListModel(QStandardItemModel):
 
 
 class AbstractListDelegate(QStyledItemDelegate):
-    palette = app_dialog.get_palette()
+    palette = BreezeApp.palette
 
     def __init__(self):
         super().__init__()

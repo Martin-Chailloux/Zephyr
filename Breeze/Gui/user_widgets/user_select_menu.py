@@ -1,8 +1,6 @@
-from PySide6 import QtCore
-from PySide6.QtGui import QMouseEvent
 from PySide6.QtWidgets import QVBoxLayout
 
-from Data import app_dialog
+from Data.breeze_app import BreezeApp
 from Data.project_documents import Stage
 from Data.studio_documents import User
 from Gui.abstract_widgets.context_menu_widget import ContextMenuWidget
@@ -10,7 +8,7 @@ from Gui.user_widgets.user_list.user_list_view import UserListView
 
 
 class UserSelectMenu(ContextMenuWidget):
-    project = app_dialog.get_project()
+    project = BreezeApp.project
     users = project.users
 
     def __init__(self, stage: Stage):

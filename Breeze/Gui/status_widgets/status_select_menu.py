@@ -1,18 +1,17 @@
 from textwrap import dedent
 
-from PySide6 import QtCore
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import QGridLayout, QPushButton
 
-from Data import app_dialog
+from Data.breeze_app import BreezeApp
 from Data.project_documents import Stage
-from Data.studio_documents import Palette, Status
+from Data.studio_documents import Status
 from Gui.abstract_widgets.context_menu_widget import ContextMenuWidget
 
 
 class StatusSelectMenu(ContextMenuWidget):
-    palette = app_dialog.get_palette()
+    palette = BreezeApp.palette
     statuses = Status.objects
     statuses = sorted(statuses, key=lambda x: x.order)
     margin = 2
