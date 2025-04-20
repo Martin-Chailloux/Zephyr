@@ -128,7 +128,7 @@ class Software(Document):
 
 class Project(Document):
     name: str = StringField(required=True, primary_key=True)
-    db_name: str = StringField(required=True, unique=True)
+    root_path: str = StringField(required=True)
     categories: list[str] = SortedListField(StringField(), default=["Character", "Decor", "Element", "Prop", "Shot"])
     users: list[User] = SortedListField(ReferenceField(document_type=User), default=[])
 
@@ -145,10 +145,10 @@ class Project(Document):
         self.save()
 
     @classmethod
-    def create(cls, name: str = None, db_name: str=None,
-               categories: list[str] = None, users: list[User] = None,
-               **kwargs):
-        kwargs = dict(name=name, db_name=db_name, categories=categories, users=users, **kwargs)
+    def create(cls, name: str, db_name: str, root_path: str,
+               categories: list[str], users: list[User],
+                **kwargs):
+        kwargs = dict(name=name, root_path=root_path, categories=categories, users=users, **kwargs)
         kwargs = {k: v for k, v in kwargs.items() if v is not None}
         project = cls(**kwargs)
         project.save()

@@ -69,11 +69,11 @@ if __name__ == '__main__':
     from Data.breeze_app import BreezeApp
 
     app = QApplication(sys.argv)
-    BreezeApp.set_project("dev")
+    BreezeApp.set_project("JourDeVent")
     BreezeApp.set_user("Martin")
     app.setStyleSheet(qdarkstyle.load_stylesheet())
 
-    mongoengine.connect(host="mongodb://localhost:27017", db=BreezeApp.project.db_name, alias="current_project")
+    mongoengine.connect(host="mongodb://localhost:27017", db=BreezeApp.project.name, alias="current_project")
     chrono.tick("... Connected in:")
 
     from Data.project_documents import Stage

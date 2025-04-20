@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QWidget, QVBoxLayout
 
-from Data.studio_documents import Project
+from Data.breeze_app import BreezeApp
 from Data.project_documents import Asset
 from Gui.GuiWidgets.asset_widgets.select_asset_widget import SelectAssetWidget
 from Gui.GuiWidgets.stages_widgets.stage_list_widget import StageListWidget
@@ -17,7 +17,7 @@ class SelectStagePanel(QWidget):
         layout = QVBoxLayout()
         self.setLayout(layout)
 
-        project = Project.objects.get(name="dev")
+        project = BreezeApp.project
 
         select_asset_widget = SelectAssetWidget(project)
         layout.addWidget(select_asset_widget)
