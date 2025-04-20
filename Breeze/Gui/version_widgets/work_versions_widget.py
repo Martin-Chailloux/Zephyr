@@ -2,7 +2,6 @@ from PySide6 import QtCore
 from PySide6.QtCore import QSize
 from PySide6.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout,
                                QLabel, QSizePolicy)
-from Tools.scripts.fixnotice import NEW_NOTICE
 
 from Data.project_documents import Stage, Collection
 from Gui.stages_widgets.stage_list.stage_list_item_delegate import StageListItemAlwaysOnDelegate
@@ -44,12 +43,15 @@ class WorkVersionsWidget(QDialog):
         # ------------------------
         # current stage
         # ------------------------
+        # TODO: si on update la data ça reload avec l'asset entier, avec un look de spinbox
+        #  C'est joli est pratique, donc:
+        #  Relier la selection du stage avec ce scroll
+        # TODO: cette info concerne toute la fenetre et pas que ce panel, donc faire une status bar au-dessus de l'ensemble plutôt
         stage_list_view = StageListView()
         sub_layout.addWidget(stage_list_view)
         stage_list_view.setFixedWidth(256)
         stage_list_view.setFixedSize(QSize(256, StageItemMetrics.height + 6))
         stage_list_view.setItemDelegate(StageListItemAlwaysOnDelegate())
-        # stage_list_view.setStyleSheet("border: none")
 
         # ------------------------
         # main layout
@@ -146,16 +148,22 @@ class WorkVersionsWidget(QDialog):
             return
         dialog = SoftwareSelectMenu(stage=self.stage)
         dialog.exec()
+
+        if dialog.is_canceled:
+            return
+
         software = dialog.software
+        comment = dialog.comment
         if software is None:
             return
 
         work_collection = self.get_work_collection()
-        work_collection.create_last_version(dialog.software)
+        version = work_collection.create_last_version(dialog.software)
+        version.update(comment=comment)
         self.versions_list.refresh()
 
-
         return
+        # TODO: accurate code, run it on double click on a version
         if software.label == "Blender":
             software_file = BlenderFile(filepath="")  # TODO: version.filepath
             BlenderFile.new_file()

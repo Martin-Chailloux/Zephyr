@@ -2,6 +2,8 @@ class BreezeText:
     def __init__(self, text: str):
         self.text = text
 
+        # TODO: def is_valid() to have the logic here rather than elsewhere
+
     def to_valid_name(self):
         split_text = self.text.replace("_", " ").replace("-", " ").split()
         if len(split_text) == 0:
