@@ -1,4 +1,5 @@
 import mongoengine
+from pathlib import Path
 
 mongoengine.connect(host="mongodb://localhost:27017", db="Studio", alias="default")
 mongoengine.connect(host="mongodb://localhost:27017", db="JourDeVent", alias="current_project")
@@ -16,9 +17,6 @@ def sb_datetime():
 
 
 if __name__ == '__main__':
-    BreezeApp.set_project("dev")
-    BreezeApp.set_user("Martin")
-
-    print(f"{BreezeApp.project = }")
-    print(f"{BreezeApp.palette = }")
+    p = Path.home()
+    print(f"{p = }")
 

@@ -1,14 +1,19 @@
+from copy import deepcopy
 from datetime import datetime
+from pathlib import Path
 
 import mongoengine
 
 
 mongoengine.connect(host="mongodb://localhost:27017", db="Studio", alias="default")
-mongoengine.connect(host="mongodb://localhost:27017", db="JourDeVent", alias="current_project")
 
-from Data.studio_documents import User, Palette
-
+from Data.studio_documents import User, Palette, Project
+from Data.breeze_app import BreezeApp
+BreezeApp.set_project("JourDeVent")
+BreezeApp.set_user("Martin")
 from Data.project_documents import Stage, StageTemplate, Asset, Version
+
+mongoengine.connect(host="mongodb://localhost:27017", db="JourDeVent", alias="current_project")
 
 
 def update_stages_longname():
@@ -98,13 +103,17 @@ def create_work_collections():
         except Exception as e:
             print(f"{e = }")
 
+def set_root_paths():
+    p = Path.home().joinpath("OneDrive", "Documents", "__work", "_dev", "zephyr_projects")
+    for project in Project.objects:
+        project.update(root_path=str(p.joinpath(project.name)))
 
 if __name__ == '__main__':
-    # for collection in Collection.objects:
-    #     # collection.update(versions=[])
-    #     # print(f"{collection = }")
-    #     collection.update(recommended_version=None)
+    for version in Version.objects:
+        subfolders = version.collection.longname.split("_")
+        folder = Path(BreezeApp.project.root_path).joinpath(*subfolders)
+        folder.mkdir(parents=True, exist_ok=True)
 
-    version = Version.objects[0]
-    timestamp: datetime = version.timestamp
-    print(f"{timestamp.hour = }")
+        file = folder.joinpath(version.longname)
+        file.touch()
+        print(f"{folder = }")
