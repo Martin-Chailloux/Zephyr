@@ -1,6 +1,7 @@
 import sys
 from datetime import timedelta
 
+from Gui.GuiPanels.top_menu_bar import TopMenuBar
 from Utils.chronometer import Chronometer
 import mongoengine
 
@@ -8,7 +9,7 @@ import qtawesome
 import qdarkstyle
 
 from PySide6 import QtCore
-from PySide6.QtWidgets import QApplication, QMainWindow, QDockWidget, QMenu
+from PySide6.QtWidgets import QApplication, QMainWindow, QDockWidget, QMenu, QMenuBar
 
 
 class BreezeMainWindow(QMainWindow):
@@ -17,10 +18,12 @@ class BreezeMainWindow(QMainWindow):
         self.setWindowTitle("Breeze")
         self.setWindowIcon(qtawesome.icon("fa5s.wind"))
         self._init_ui()
-        self._add_menu_bar()
         self.connect_signals()
 
     def _init_ui(self):
+        # top menu bar
+        self.setMenuBar(TopMenuBar())
+
         # stage central widget
         stage_panel = StagePanel()
         self.setCentralWidget(stage_panel)
@@ -35,28 +38,6 @@ class BreezeMainWindow(QMainWindow):
         # public vars
         self.select_stage_panel = select_stage_panel
         self.stage_panel = stage_panel
-
-    def _add_menu_bar(self):
-        menu_bar = self.menuBar()
-
-        settings_menu = QMenu("Settings")
-        menu_bar.addMenu(settings_menu)
-        sub_menu = QMenu("Set stylesheet", )
-        sub_menu.setIcon(qtawesome.icon("msc.symbol-color"))
-        settings_menu.addMenu(sub_menu)
-        sub_menu.addAction("Breeze")
-        sub_menu.addAction("Dark")
-        sub_menu.addAction("Light")
-
-        project_menu = QMenu("Project")
-        menu_bar.addMenu(project_menu)
-        project_menu.addAction("Select project")
-        project_menu.addAction("Project settings")
-
-        user_menu = QMenu("User")
-        menu_bar.addMenu(user_menu)
-        user_menu.addAction("Select user")
-        user_menu.addAction("Edit user")
 
     def connect_signals(self):
         self.select_stage_panel.stage_list_widget.stage_list_view.stage_selected.connect(self.on_stage_selected)
