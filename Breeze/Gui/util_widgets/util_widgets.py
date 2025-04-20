@@ -11,7 +11,7 @@ from Data.studio_documents import Palette
 class IconButton(QPushButton):
     palette = app_dialog.get_palette()
 
-    def __init__(self, icon_name: str, width: int = 30, icon_size: int=20, color: str = "white"):
+    def __init__(self, icon_name: str, width: int = 28, icon_size: int=18, color: str = "white"):
         super().__init__()
 
         self.setFixedSize(QSize(width, width))
@@ -40,7 +40,7 @@ class IconLabel(QLabel):
 
 
 class TextBox(QWidget):
-    def __init__(self, title: str):
+    def __init__(self, title: str=None):
         super().__init__()
         self.title = title
 
@@ -50,9 +50,14 @@ class TextBox(QWidget):
         layout = QVBoxLayout()
         self.setLayout(layout)
         layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
 
-        label = QLabel(self.title)
-        layout.addWidget(label)
+        if self.title is not None:
+            label = QLabel(self.title)
+            layout.addWidget(label)
+            font = label.font()
+            font.setBold(True)
+            label.setFont(font)
 
         text_edit = QTextEdit()
         layout.addWidget(text_edit)
