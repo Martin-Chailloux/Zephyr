@@ -218,8 +218,8 @@ class Version(Document):
     # TODO: test timestamp related methods
     # TODO: compute_filepath and create Path architecture
     # TODO: work / publish ?
-    # creation_timestamp = DateTimeField(default=datetime.utcnow())
-    # last_timestamp = DateTimeField(default=datetime.utcnow())
+    creation_time = DateTimeField(default=datetime.now)
+    timestamp = DateTimeField(default=datetime.now)
 
     # comment = StringField(default="")
     # todo_list = ReferenceField(document_type='Task', default=[])
