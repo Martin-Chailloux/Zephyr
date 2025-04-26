@@ -52,6 +52,8 @@ class StageListModel(AbstractListModel):
 
     def refresh(self):
         stages = [item.data(StageItemRoles.stage) for item in self.items]
+        if not stages:
+            return
         asset = Asset.objects.get(longname=stages[0].asset.longname)
         stages = asset.stages  # query the data from db else it is not up to date
 
