@@ -157,8 +157,7 @@ class WorkVersionsWidget(QDialog):
         if software is None:
             return
 
-        work_collection = self.get_work_collection()
-        version = work_collection.create_last_version(dialog.software)
+        version = self.stage.work_collection.create_last_version(dialog.software)
         version.update(comment=comment)
         self.versions_list.refresh()
 
@@ -171,26 +170,14 @@ class WorkVersionsWidget(QDialog):
             raise NotImplementedError(f"Creation of a {software.label} file.")
         # software_file.open(interactive=True)
 
-    def get_work_collection(self) -> None | Collection:
-        if self.stage is None:
-            return None
-
-        work_collection = Collection.objects(name="work", stage=self.stage)
-        if len(work_collection) > 1:
-            raise ValueError(f"Found more than 1 'work' Collection for: {self.stage}")
-        elif work_collection:
-            # found an existing Work Collection
-            work_collection = work_collection[0]
-        else:
-            # create a new Work Collection
-            work_collection = self.stage.create_work_collection()
-        return work_collection
-
     def set_stage(self, stage: Stage):
         self.stage = stage
         self.stage_list_view.set_stage(stage)
-        text = f"{stage.asset.category} > {stage.asset.name} > {stage.asset.variant}"
+
+        if stage is None:
+            text = ""
+        else:
+            text = f"{stage.asset.category} > {stage.asset.name} > {stage.asset.variant}"
         self._asset_label.setText(text)
 
-        work_collection = self.get_work_collection()
-        self.versions_list.set_collection(work_collection)
+        self.versions_list.set_collection(stage.work_collection)

@@ -91,6 +91,8 @@ class Stage(Document):
     stage_template: StageTemplate = ReferenceField(document_type=StageTemplate)
 
     collections: list['Collection'] = ListField(ReferenceField(document_type='Collection'), default=[])
+    work_collection: 'Collection' = ReferenceField(document_type='Collection')
+
     ingredients: list['Version'] = ListField(ReferenceField(document_type='Version'), default=[])
     status: Status = ReferenceField(document_type=Status, default=Status.objects.get(label='WAIT'))
     # TODO: User unknown, with a question mark icon
@@ -126,11 +128,13 @@ class Stage(Document):
         kwargs = dict(longname=longname, asset=asset, stage_template=stage_template, status=status, **kwargs)
         kwargs = {k: v for k, v in kwargs.items() if v is not None}
         stage = cls(**kwargs)
-        stage.save()
-        print(f"Created: {stage.__repr__()}")
 
         asset.add_stage(stage=stage)
-        stage.create_work_collection()
+        work_collection = stage.create_work_collection()
+        stage.work_collection = work_collection
+
+        stage.save()
+        print(f"Created: {stage.__repr__()}")
 
         return stage
 
