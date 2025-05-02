@@ -8,19 +8,22 @@ class AbstractSoftwareFile:
     def __init__(self, filepath: str):
         self.filepath = filepath
 
-    def open_interactive(self):
-        pass
-
     @classmethod
-    def new_file(cls):
+    def open_empty_file(cls):
         print(f"Opening a new {cls.label} file ... ")
         subprocess.Popen([cls.exe_path])
 
-    def open(self, interactive: bool=False):
+    def open_interactive(self):
+        pass
+
+    def open(self):
         pass
 
     def save(self):
         pass
 
-    def save_as(self, filepath: str):
+    def save_as(self, filepath: str = None):
+        pass
+
+    def new_file(self):
         pass

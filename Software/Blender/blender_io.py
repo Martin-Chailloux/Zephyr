@@ -11,19 +11,25 @@ class BlenderFile(AbstractSoftwareFile):
     def __init__(self, filepath: str):
         super().__init__(filepath=filepath)
 
-    def open(self, interactive: bool=False):
-        if interactive:
-            subprocess.Popen([self.exe_path, self.filepath])
-        else:
-            bpy.ops.wm.open_mainfile(filepath=self.filepath)
+    def open_interactive(self):
+        subprocess.Popen([self.exe_path, self.filepath])
+
+    def open(self):
+        bpy.ops.wm.open_mainfile(filepath=self.filepath)
 
     def save(self):
         bpy.ops.wm.save_mainfile(filepath=self.filepath)
 
-    def save_as(self, filepath: str):
-        # TODO: testing
-        self.filepath = filepath
+    def save_as(self, filepath: str = None):
+        # TODO: seems keep the current file opened and create an other copy
+        #  -> needs testing
+        # if filepath is not None:
+        #     self.filepath = filepath
         bpy.ops.wm.save_as_mainfile(filepath=self.filepath)
+
+    def new_file(self):
+        bpy.ops.wm.read_homefile()
+        self.save()
 
     def test(self):
         print(f"TEST")
