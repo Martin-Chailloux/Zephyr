@@ -1,4 +1,5 @@
 from datetime import datetime
+from pathlib import Path
 from typing import Self
 
 import mongoengine
@@ -219,9 +220,6 @@ class Version(Document):
     # user editable
     comment: str = StringField(default="")
 
-    # TODO: test timestamp related methods
-    # TODO: compute_filepath and create Path architecture
-    # TODO: work / publish ?
     creation_time = DateTimeField(default=datetime.now)
     timestamp = DateTimeField(default=datetime.now)
 
@@ -242,43 +240,56 @@ class Version(Document):
         extension = software.extension
         longname = f"{collection.longname}_{number:03d}.{extension}"
 
-        filepath = ""  # TODO
         creation_user = BreezeApp.user
         last_user = creation_user
 
+        # get filepath
+        subfolders = collection.stage.longname.split("_")
+        subfolders.append(f"{number:03d}")
+        filepath = Path(BreezeApp.project.root_path).joinpath(*subfolders).joinpath(longname)
+        # create dirs
+        Path(filepath).parent.mkdir(parents=True, exist_ok=True)
+
         kwargs = dict(longname=longname, collection=collection, number=number, software=software,
-                      filepath=filepath,
-                      creation_user=creation_user, last_user=last_user,
+                      creation_user=creation_user, last_user=last_user, filepath=str(filepath),
                       **kwargs)
         kwargs = {k: v for k, v in kwargs.items() if v is not None}
 
         existing_version = Version.objects(longname=longname)
         if existing_version:
-            raise FileExistsError(f"{existing_version[0].__repr__()}")
+            raise InvalidDocumentError(f"Version already exists: {existing_version[0].__repr__()}")
 
         version = cls(**kwargs)
         version.save()
-        print(f"Created: {version.__repr__()}")
+
         collection.add_version(version)
+
+        print(f"Created: {version.__repr__()}")
         return version
 
 
 # delete rules
+# Asset
 Stage.register_delete_rule(Asset, 'stages', mongoengine.PULL)
 
+# StageTemplate
 Software.register_delete_rule(StageTemplate, 'software', mongoengine.DENY)
 
+# Stage
 Asset.register_delete_rule(Stage, 'asset', mongoengine.CASCADE)
 StageTemplate.register_delete_rule(Stage, 'stage_template', mongoengine.DENY)
 Collection.register_delete_rule(Stage, 'collections', mongoengine.PULL)
+Collection.register_delete_rule(Stage, 'work_collection', mongoengine.DENY)
 Version.register_delete_rule(Stage, 'ingredients', mongoengine.DENY)
 Status.register_delete_rule(Stage, 'status', mongoengine.DENY)
 User.register_delete_rule(Stage, 'user', mongoengine.DENY)
 
+# Collection
 Stage.register_delete_rule(Collection, 'stage', mongoengine.CASCADE)
 Version.register_delete_rule(Collection, 'versions', mongoengine.PULL)
 Version.register_delete_rule(Collection, 'recommended_version', mongoengine.NULLIFY)
 
+# Version
 Collection.register_delete_rule(Version, 'collection', mongoengine.CASCADE)
 Software.register_delete_rule(Version, 'software', mongoengine.DENY)
 User.register_delete_rule(Version, 'creation_user', mongoengine.DENY)
