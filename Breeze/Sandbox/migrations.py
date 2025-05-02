@@ -11,7 +11,7 @@ from Data.studio_documents import User, Palette, Project
 from Data.breeze_app import BreezeApp
 BreezeApp.set_project("JourDeVent")
 BreezeApp.set_user("Martin")
-from Data.project_documents import Stage, StageTemplate, Asset, Version
+from Data.project_documents import Stage, StageTemplate, Asset, Version, Collection
 
 mongoengine.connect(host="mongodb://localhost:27017", db="JourDeVent", alias="current_project")
 
@@ -109,11 +109,4 @@ def set_root_paths():
         project.update(root_path=str(p.joinpath(project.name)))
 
 if __name__ == '__main__':
-    for version in Version.objects:
-        subfolders = version.collection.longname.split("_")
-        folder = Path(BreezeApp.project.root_path).joinpath(*subfolders)
-        folder.mkdir(parents=True, exist_ok=True)
-
-        file = folder.joinpath(version.longname)
-        file.touch()
-        print(f"{folder = }")
+    pass
