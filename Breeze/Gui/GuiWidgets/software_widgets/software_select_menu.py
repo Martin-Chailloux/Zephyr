@@ -35,7 +35,7 @@ class SoftwareSelectMenu(ContextMenuWidget):
 
 
     def on_software_selected(self, label: str):
-        comment_box = CommentEditMenu(title="Add Comment: ", text="From scratch")
+        comment_box = CommentEditMenu(title="Add Comment: ", text="New file")
         comment_box.exec()
 
         software = Software.objects.get(label=label)
