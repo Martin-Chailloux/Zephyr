@@ -1,3 +1,10 @@
+from blender_io import BlenderFile
+
+software_from_label = {
+    "Blender": BlenderFile,
+}
+
+
 class BreezeText:
     def __init__(self, text: str):
         self.text = text
