@@ -3,13 +3,13 @@ from PySide6.QtCore import QSize
 from PySide6.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout,
                                QLabel, QSizePolicy)
 
-from Data.project_documents import Stage, Collection
+from Data.converters import software_from_label
+from Data.project_documents import Stage
 from Gui.GuiWidgets.stages_widgets.stage_list.stage_list_item_delegate import StageListItemAlwaysOnDelegate
 from Gui.GuiWidgets.stages_widgets.stage_list.stage_list_model import StageItemMetrics
 from Gui.GuiWidgets.stages_widgets.stage_list.stage_list_view import StageListView
 from Gui.GuiWidgets.util_widgets.util_widgets import TextBox, PushButtonAutoWidth
 from Gui.GuiWidgets.version_widgets.versions_list.versions_list_view import VersionListView
-from blender_io import BlenderFile
 from Gui.GuiWidgets.software_widgets.software_select_menu import SoftwareSelectMenu
 
 
@@ -75,16 +75,17 @@ class WorkVersionsWidget(QDialog):
         v_layout.addLayout(h_layout)
         h_layout.setSpacing(self.buttons_spacing)
 
-        from_scratch_button = PushButtonAutoWidth(
-            text=" Empty", icon_name='ph.selection-bold',
-            tooltip="use an empty file",
+        new_file_button = PushButtonAutoWidth(
+            text=" New", icon_name='ph.selection-bold',
+            tooltip="Create an empty file",
             fixed_width=True,
         )
-        h_layout.addWidget(from_scratch_button)
+        h_layout.addWidget(new_file_button)
 
+        # TODO: par defaut selectionner la version la plus récente
         increment_button = PushButtonAutoWidth(
             text=" Increment", icon_name='fa5s.arrow-up',
-            tooltip="use a copy of the selected version",
+            tooltip="Create a copy of the selected version",
         )
         h_layout.addWidget(increment_button)
 
@@ -134,21 +135,21 @@ class WorkVersionsWidget(QDialog):
         # ------------------------
         # public vars
         # ------------------------
-        self.from_scratch_button = from_scratch_button
+        self.new_file_button = new_file_button
         self.stage_list_view = stage_list_view
         self._asset_label = asset_label
         self.versions_list = versions_list
 
     def connect_signals(self):
-        self.from_scratch_button.clicked.connect(self.on_from_scratch_clicked)
-        self.from_scratch_button.customContextMenuRequested.connect(self.on_from_scratch_clicked)
+        self.new_file_button.clicked.connect(self.on_new_file_button_clicked)
+        self.new_file_button.customContextMenuRequested.connect(self.on_new_file_button_clicked)
 
-    def on_from_scratch_clicked(self):
+    def on_new_file_button_clicked(self):
         if self.stage is None:
             return
+
         dialog = SoftwareSelectMenu(stage=self.stage)
         dialog.exec()
-
         if dialog.is_canceled:
             return
 
@@ -161,14 +162,12 @@ class WorkVersionsWidget(QDialog):
         version.update(comment=comment)
         self.versions_list.refresh()
 
-        return
-        # TODO: accurate code, run it on double click on a version
-        if software.label == "Blender":
-            software_file = BlenderFile(filepath="")  # TODO: version.filepath
-            BlenderFile.new_file()
-        else:
+        if software.label not in software_from_label:
             raise NotImplementedError(f"Creation of a {software.label} file.")
-        # software_file.open(interactive=True)
+        software = software_from_label[software.label]
+        software_file = software(filepath=version.filepath)
+        software_file.new_file()
+        print(f"Created file: {software_file.filepath}")
 
     def set_stage(self, stage: Stage):
         self.stage = stage
