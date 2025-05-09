@@ -35,7 +35,7 @@ class SoftwareSelectMenu(ContextMenuWidget):
 
 
     def on_software_selected(self, label: str):
-        comment_box = CommentEditMenu(title="Add Comment: ", text="New file")
+        comment_box = CommentEditMenu(title="Comment: ", default_comment="New file")
         comment_box.exec()
 
         software = Software.objects.get(label=label)
@@ -47,10 +47,10 @@ class SoftwareSelectMenu(ContextMenuWidget):
 
 
 class CommentEditMenu(ContextMenuWidget):
-    def __init__(self, title: str=None, text: str=None):
-        super().__init__(w=168, h=168, position=[0.5, -0.2], show_borders=True)
-        self.setWindowTitle(title)
-        self.initial_text: str = text
+    def __init__(self, title: str=None, default_comment: str=None):
+        super().__init__(w=168, h=168, position=[0.5, 0.3], show_borders=False)
+        self.title = title
+        self.default_comment: str = default_comment
 
         self._init_ui()
         self._connect_signals()
@@ -68,9 +68,9 @@ class CommentEditMenu(ContextMenuWidget):
         layout.setContentsMargins(2, 2, 2, 2)
         layout.setSpacing(2)
 
-        textbox = TextBox(title=None)
+        textbox = TextBox(title=self.title)
         layout.addWidget(textbox)
-        textbox.text_edit.setText(self.initial_text)
+        textbox.text_edit.setText(self.default_comment)
 
         sub_layout = QHBoxLayout()
         layout.addLayout(sub_layout)
