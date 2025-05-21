@@ -34,7 +34,7 @@ class UserListView(AbstractListView):
                 return
 
         super().mousePressEvent(event)
-        hovered_item = self._get_hovered_item()
+        hovered_item = self.get_hovered_item()
         if hovered_item is None:
             return
         user = hovered_item.data(UserItemRoles.user)

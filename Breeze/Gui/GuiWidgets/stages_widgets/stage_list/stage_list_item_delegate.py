@@ -40,7 +40,7 @@ class StageListItemDelegate(AbstractListDelegate):
         self.paint_selected_underline(painter)
         self.paint_icon_circle(
             painter,
-            path=self.stage.user.icon_path,
+            icon_path=self.stage.user.icon_path,
             margin=2 if self.user_is_hovered else 3,
             offset= [w - StageItemMetrics.status_w - h, 0, 0, 0]
             )

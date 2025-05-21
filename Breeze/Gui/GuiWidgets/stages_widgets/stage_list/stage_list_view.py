@@ -75,7 +75,7 @@ class StageListView(AbstractListView):
         return current_stage
 
     def _get_hovered_stage(self) -> Stage | None:
-        hovered_item = self._get_hovered_item()
+        hovered_item = self.get_hovered_item()
         if hovered_item is None:
             return None
 
@@ -97,7 +97,7 @@ class StageListView(AbstractListView):
         return hover_data
 
     def set_items_hover_infos(self):
-        hovered_item = self._get_hovered_item()
+        hovered_item = self.get_hovered_item()
         if hovered_item is None:
             return
 

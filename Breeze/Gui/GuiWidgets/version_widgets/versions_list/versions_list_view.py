@@ -30,9 +30,20 @@ class VersionListView(AbstractListView):
         collection = Collection.objects.get(longname=self._model.collection.longname)
         self.set_collection(collection)
 
-    def mouseDoubleClickEvent(self, event):
-        item = self._get_hovered_item()
+    def get_selected_version(self) -> Version | None:
+        items = self.get_selected_items()
+        if not items:
+            return None
+        version = items[0].data(VersionItemRoles.version)
+        return version
+
+    def get_hovered_version(self) -> Version:
+        item = self.get_hovered_item()
         version = item.data(VersionItemRoles.version)
+        return version
+
+    def mouseDoubleClickEvent(self, event):
+        version = self.get_hovered_version()
 
         # get matching Software's instance
         if version.software.label not in software_from_label:

@@ -50,7 +50,7 @@ class VersionListItemDelegate(AbstractListDelegate):
     def paint_user(self, painter: QPainter):
         self.paint_icon_circle(
             painter,
-            path=self.version.last_user.icon_path,
+            icon_path=self.version.last_user.icon_path,
         )
 
     def paint_version_num(self, painter: QPainter):
@@ -80,7 +80,7 @@ class VersionListItemDelegate(AbstractListDelegate):
         # paint icon
         self.paint_icon_circle(
             painter,
-            path = self.version.software.icon_path,
+            icon_path= self.version.software.icon_path,
             margin = margin,
             offset = [x_offset, - margin - 1, 0, 0],
         )

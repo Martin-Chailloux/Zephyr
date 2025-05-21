@@ -26,7 +26,7 @@ class SoftwareListItemDelegate(AbstractListDelegate):
         self.paint_selected_background(painter)
         self.paint_hover(painter)
         self.paint_selected_underline(painter)
-        self.paint_icon_circle(painter, path=self.software.icon_path)
+        self.paint_icon_circle(painter, icon_path=self.software.icon_path)
 
         self.paint_text(painter)
 

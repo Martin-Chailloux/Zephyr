@@ -27,7 +27,7 @@ class SoftwareListView(AbstractListView):
                 return
 
         super().mousePressEvent(event)
-        hovered_item = self._get_hovered_item()
+        hovered_item = self.get_hovered_item()
         if hovered_item is None:
             return
         software = hovered_item.data(SoftwareItemRoles.software)

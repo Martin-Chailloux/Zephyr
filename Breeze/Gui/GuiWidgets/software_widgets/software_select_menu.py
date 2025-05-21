@@ -108,7 +108,7 @@ class CommentEditMenu(ContextMenuWidget):
         self.textbox.text_edit.selectAll()
 
     def on_text_changed(self):
-        # TODO: create class BreezeComment in converters.py to manage the comments
+        # TODO: create class BreezeComment in breeze_converters.py to manage the comments
         is_valid: bool = 3 < len(self.comment) < 100
         self.confirm_button.setEnabled(is_valid)
 
