@@ -1,7 +1,13 @@
+import sys
+# externalize logs
+sys.stdout.reconfigure(line_buffering=True)
+sys.stderr.reconfigure(line_buffering=True)
+
 import subprocess
+import threading
 import bpy
 
-from Software.Abstract.abstract_io import AbstractSoftwareFile
+from abstract_io import AbstractSoftwareFile
 
 
 class BlenderFile(AbstractSoftwareFile):
@@ -11,8 +17,28 @@ class BlenderFile(AbstractSoftwareFile):
     def __init__(self, filepath: str):
         super().__init__(filepath=filepath)
 
+    def _open_interactive(self):
+        # env = os.environ.copy()
+        # env["PYTHONUNBUFFERED"] = "1"  # not needed, delete later (with env=env below)
+
+        process = subprocess.Popen(
+            # [self.exe_path, self.filepath, "--debug-python", self.start_up_script],  # TODO: ca crash (utiliser logging a la place pour prints dans draw() etc)
+            [self.exe_path, self.filepath, "--python", self.start_up_script],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            # env=env,   # not needed, delete later
+        )
+        while True:
+            line = process.stdout.readline()
+            if not line and process.poll() is not None:
+                break
+            elif line:
+                print("[Blender]", line.strip())
+
     def open_interactive(self):
-        subprocess.Popen([self.exe_path, self.filepath])
+        # TODO: @as_thread
+        threading.Thread(target=self._open_interactive, daemon=False).start()
 
     def open(self):
         bpy.ops.wm.open_mainfile(filepath=self.filepath)
@@ -33,6 +59,7 @@ class BlenderFile(AbstractSoftwareFile):
 
     def test(self):
         print(f"TEST")
+        bpy.data.objects['Cube'].location[0] = 5
 
 
 if __name__ == "__main__":
