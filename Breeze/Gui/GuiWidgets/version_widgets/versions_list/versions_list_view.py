@@ -1,7 +1,7 @@
 from PySide6.QtCore import Signal
 
-from Data.converters import software_from_label
-from Data.project_documents import Collection
+from Data import breeze_converters
+from Data.project_documents import Collection, Version
 from Gui.GuiWidgets.abstract_widgets.abstract_mvd import AbstractListView
 from Gui.GuiWidgets.version_widgets.versions_list.versions_list_item_delegate import VersionListItemDelegate
 from Gui.GuiWidgets.version_widgets.versions_list.versions_list_model import VersionListModel, VersionItemRoles
@@ -46,8 +46,9 @@ class VersionListView(AbstractListView):
         version = self.get_hovered_version()
 
         # get matching Software's instance
-        if version.software.label not in software_from_label:
-            raise NotImplementedError(f"Creation of a {version.software.label} file.")
-        software_file = software_from_label[version.software.label](filepath=version.filepath)
-        software_file.open_interactive()
+        software_instance = breeze_converters.get_file_instance_from_software(
+            software=version.software,
+            filepath=version.filepath
+        )
+        software_instance.open_interactive()
         print(f"Opening {version.software.label} file: {version.filepath}")

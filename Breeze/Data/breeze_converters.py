@@ -1,9 +1,12 @@
+from Data.studio_documents import Software
 from blender_io import BlenderFile
 
-software_from_label = {
-    "Blender": BlenderFile,
-}
 
+def get_file_instance_from_software(software: Software, filepath: str):
+    if software.label == 'Blender':
+        return BlenderFile(filepath=filepath)
+    else:
+        raise NotImplementedError(f"File instance for: {software.__repr__()}")
 
 class BreezeText:
     def __init__(self, text: str):

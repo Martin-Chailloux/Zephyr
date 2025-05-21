@@ -3,14 +3,13 @@ from PySide6.QtCore import QSize
 from PySide6.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout,
                                QLabel, QSizePolicy)
 
-from Data.converters import software_from_label
 from Data.project_documents import Stage
 from Gui.GuiWidgets.stages_widgets.stage_list.stage_list_item_delegate import StageListItemAlwaysOnDelegate
 from Gui.GuiWidgets.stages_widgets.stage_list.stage_list_model import StageItemMetrics
 from Gui.GuiWidgets.stages_widgets.stage_list.stage_list_view import StageListView
 from Gui.GuiWidgets.util_widgets.util_widgets import TextBox, PushButtonAutoWidth
+from Gui.GuiWidgets.version_widgets import work_versions_api
 from Gui.GuiWidgets.version_widgets.versions_list.versions_list_view import VersionListView
-from Gui.GuiWidgets.software_widgets.software_select_menu import SoftwareSelectMenu
 
 
 class WorkVersionsWidget(QDialog):
@@ -135,39 +134,39 @@ class WorkVersionsWidget(QDialog):
         # ------------------------
         # public vars
         # ------------------------
-        self.new_file_button = new_file_button
-        self.stage_list_view = stage_list_view
         self._asset_label = asset_label
+
+        self.new_file_button = new_file_button
+        self.increment_button = increment_button
+
+        self.stage_list_view = stage_list_view
+
         self.versions_list = versions_list
 
     def connect_signals(self):
         self.new_file_button.clicked.connect(self.on_new_file_button_clicked)
+        self.increment_button.clicked.connect(self.on_increment_button_clicked)
+
         self.new_file_button.customContextMenuRequested.connect(self.on_new_file_button_clicked)
 
     def on_new_file_button_clicked(self):
         if self.stage is None:
             return
 
-        dialog = SoftwareSelectMenu(stage=self.stage)
-        dialog.exec()
-        if dialog.is_canceled:
-            return
+        work_versions_api.new_empty_version(stage=self.stage)
 
-        software = dialog.software
-        comment = dialog.comment
-        if software is None:
-            return
-
-        version = self.stage.work_collection.create_last_version(dialog.software)
-        version.update(comment=comment)
         self.versions_list.refresh()
+        self.versions_list.select_row(0)
 
-        if software.label not in software_from_label:
-            raise NotImplementedError(f"Creation of a {software.label} file.")
-        software = software_from_label[software.label]
-        software_file = software(filepath=version.filepath)
-        software_file.new_file()
-        print(f"Created file: {software_file.filepath}")
+    def on_increment_button_clicked(self):
+        if self.stage is None:
+            return
+
+        old_version = self.versions_list.get_selected_version()
+        work_versions_api.increment(old_version=old_version)
+
+        self.versions_list.refresh()
+        self.versions_list.select_row(0)
 
     def set_stage(self, stage: Stage):
         self.stage = stage
@@ -180,3 +179,4 @@ class WorkVersionsWidget(QDialog):
         self._asset_label.setText(text)
 
         self.versions_list.set_collection(stage.work_collection)
+        self.versions_list.select_row(0)
