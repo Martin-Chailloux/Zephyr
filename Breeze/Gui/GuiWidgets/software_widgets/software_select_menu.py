@@ -25,25 +25,17 @@ class SoftwareSelectMenu(ContextMenuWidget):
 
         software_list = SoftwareListView(stage=self.stage)
         layout.addWidget(software_list)
-        # software_list.set_selected_user(self.stage.user)
 
         self.software_list = software_list
 
     def _connect_signals(self):
         self.software_list.software_selected.connect(self.on_software_selected)
-        self.software_list.right_clicked.connect(self.close)
-
+        self.software_list.right_clicked.connect(self.reject)
 
     def on_software_selected(self, label: str):
-        comment_box = CommentEditMenu(title="Comment: ", default_comment="New file")
-        comment_box.exec()
-
         software = Software.objects.get(label=label)
         self.software = software
-        self.comment = comment_box.comment
-
-        self.is_canceled = comment_box.is_canceled
-        self.close()
+        self.accept()
 
 
 class CommentEditMenu(ContextMenuWidget):
@@ -60,7 +52,6 @@ class CommentEditMenu(ContextMenuWidget):
         self.setShortcutEnabled(True)
         # It is canceled by default and does nothing on close
         # When confirmed, it switches to not canceled
-        self.is_canceled = True
 
     def _init_ui(self):
         layout = QVBoxLayout()
@@ -94,7 +85,7 @@ class CommentEditMenu(ContextMenuWidget):
     def _connect_signals(self):
         self.textbox.text_edit.textChanged.connect(self.on_text_changed)
         self.confirm_button.clicked.connect(self.on_confirm)
-        self.cancel_button.clicked.connect(self.close)
+        self.cancel_button.clicked.connect(self.reject)
 
     def _connect_shortcuts(self):
         modifiers = QtCore.Qt.Modifier
@@ -116,5 +107,4 @@ class CommentEditMenu(ContextMenuWidget):
         print(f"CONFIRM")
         if not self.confirm_button.isEnabled():
             return
-        self.is_canceled = False
-        self.close()
+        self.accept()

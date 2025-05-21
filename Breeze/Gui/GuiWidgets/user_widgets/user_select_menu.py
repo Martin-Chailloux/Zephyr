@@ -34,4 +34,4 @@ class UserSelectMenu(ContextMenuWidget):
     def on_user_selected(self, pseudo: str):
         user = User.objects.get(pseudo=pseudo)
         self.stage.update(user=user)
-        self.close()
+        self.accept()

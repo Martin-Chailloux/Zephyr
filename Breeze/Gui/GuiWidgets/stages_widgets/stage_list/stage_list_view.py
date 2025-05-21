@@ -130,14 +130,16 @@ class StageListView(AbstractListView):
         hover_data = self._get_hover_data()
         if hover_data.on_user:
             menu = UserSelectMenu(stage=self._get_hovered_stage())
-            menu.exec()
-            self.stage_data_modified.emit()
-            self.refresh()
+            result = menu.exec()
+            if result:
+                self.stage_data_modified.emit()
+                self.refresh()
         elif hover_data.on_status:
             menu = StatusSelectMenu(stage=self._get_hovered_stage())
-            menu.exec()
-            self.stage_data_modified.emit()
-            self.refresh()
+            result = menu.exec()
+            if result:
+                self.stage_data_modified.emit()
+                self.refresh()
         else:
             super().mousePressEvent(event)
 

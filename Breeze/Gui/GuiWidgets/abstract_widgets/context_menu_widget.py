@@ -14,7 +14,6 @@ class ContextMenuWidget(QDialog):
         self.w = w
         self.h = h
         self.position = position or [0, 0]
-        self.is_canceled: bool=False
 
         if not show_borders:
             self.setWindowFlag(QtCore.Qt.WindowType.FramelessWindowHint)
@@ -22,6 +21,7 @@ class ContextMenuWidget(QDialog):
             self.setFixedWidth(w)
         if h is not None:
             self.setFixedHeight(h)
+
 
     def exec(self):
         x = int(QCursor.pos().x())
@@ -32,11 +32,11 @@ class ContextMenuWidget(QDialog):
 
         self.move(QPoint(x, y))
 
-        super().exec()
+        return super().exec()
+
 
     def mousePressEvent(self, event):
         super().mousePressEvent(event)
         if isinstance(event, QMouseEvent):
             if event.button() == QtCore.Qt.MouseButton.RightButton:
-                self.is_canceled = True
-                self.close()
+                self.reject()

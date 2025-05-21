@@ -54,8 +54,7 @@ class StatusSelectMenu(ContextMenuWidget):
         status = self.status_per_label[button.text()]
 
         self.stage.update(status=status)
-
-        self.close()
+        self.accept()
 
 
 def set_stylesheet(widget, color: str):
