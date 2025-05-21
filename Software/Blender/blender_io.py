@@ -12,7 +12,9 @@ from abstract_io import AbstractSoftwareFile
 
 class BlenderFile(AbstractSoftwareFile):
     label: str = "Blender"
-    exe_path: str = "C:/Program Files/Blender Foundation/Blender 4.3/blender-launcher.exe"
+    exe_path: str = "C:/Program Files/Blender Foundation/Blender 4.3/blender.exe"
+    port = 9000
+    start_up_script: str = "C:/Users/marti/OneDrive/Documents/__work/_dev/Zephyr/Software/Blender/startup/on_startup.py"
     
     def __init__(self, filepath: str):
         super().__init__(filepath=filepath)

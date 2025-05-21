@@ -79,6 +79,9 @@ if __name__ == '__main__':
     from Data.project_documents import Stage
     from Gui.GuiPanels.select_stage_panel import SelectStagePanel
     from Gui.GuiPanels.stage_panel import StagePanel
+    from Data import breeze_dialog
+
+    breeze_dialog.Listener()
 
     window = BreezeMainWindow()
     window.show()
