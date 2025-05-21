@@ -4,14 +4,13 @@ import subprocess
 class AbstractSoftwareFile:
     label: str = "Abstract Software"
     exe_path: str = ""
+    port: int = 9999
 
     def __init__(self, filepath: str):
         self.filepath = filepath
 
-    @classmethod
-    def open_empty_file(cls):
-        print(f"Opening a new {cls.label} file ... ")
-        subprocess.Popen([cls.exe_path])
+    def set_filepath(self, filepath: str):
+        self.filepath = filepath
 
     def open_interactive(self):
         pass
