@@ -1,3 +1,5 @@
+import subprocess
+import tkinter
 from datetime import datetime
 from pathlib import Path
 from typing import Self
@@ -266,6 +268,21 @@ class Version(Document):
 
         print(f"Created: {version.__repr__()}")
         return version
+
+    def open_folder(self):
+        print(f"Opening in explorer ... '{self.filepath}'")
+        subprocess.Popen(f'explorer /select,{self.filepath}')
+
+    def copy_filepath(self):
+        """source: https://stackoverflow.com/questions/579687/how-do-i-copy-a-string-to-the-clipboard"""
+
+        print(f"Copying to clipboard ... '{self.filepath}'")
+        r = tkinter.Tk()
+        r.withdraw()
+        r.clipboard_clear()
+        r.clipboard_append(self.filepath)
+        r.update()  # now it stays on the clipboard after the window is closed
+        r.destroy()
 
 
 # delete rules

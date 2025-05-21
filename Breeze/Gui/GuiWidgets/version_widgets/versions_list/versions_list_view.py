@@ -1,4 +1,8 @@
-from PySide6.QtCore import Signal
+import subprocess
+
+import qtawesome
+from PySide6.QtCore import Signal, Qt, QPoint
+from PySide6.QtWidgets import QMenu
 
 from Data import breeze_converters
 from Data.project_documents import Collection, Version
@@ -18,6 +22,8 @@ class VersionListView(AbstractListView):
 
         self._item_delegate = VersionListItemDelegate()
         self.setItemDelegate(self._item_delegate)
+        self.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+        self.customContextMenuRequested.connect(self.show_context_menu)
 
     def set_collection(self, collection: Collection):
         self._model.collection = collection
@@ -52,3 +58,28 @@ class VersionListView(AbstractListView):
         )
         software_instance.open_interactive()
         print(f"Opening {version.software.label} file: {version.filepath}")
+
+    def show_context_menu(self, position: QPoint):
+        # TODO: rmb -> exit, remove close button if done
+        version = self.get_hovered_version()
+
+        # create menu
+        menu = QMenu()
+        close_action = menu.addAction("Close")
+        close_action.setIcon(qtawesome.icon('fa.close'))
+        menu.addSeparator()
+        copy_path_action = menu.addAction("Copy filepath")
+        copy_path_action.setIcon(qtawesome.icon('fa5s.copy'))
+        open_folder_action = menu.addAction("Open folder")
+        open_folder_action.setIcon(qtawesome.icon('fa5s.folder-open'))
+
+        # open menu
+        requested_action = menu.exec_(self.mapToGlobal(position))
+
+        # result
+        if requested_action is copy_path_action:
+            version.open_folder()
+        elif requested_action is open_folder_action:
+            version.copy_filepath()
+        else:
+            return
