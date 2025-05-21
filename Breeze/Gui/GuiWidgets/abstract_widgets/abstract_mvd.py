@@ -1,3 +1,5 @@
+from distutils.core import setup_keywords
+
 from PySide6 import QtCore
 from PySide6.QtCore import QPoint, QModelIndex, QRect, QRectF, QPointF
 from PySide6.QtGui import (QCursor, QStandardItem, QStandardItemModel, QPainter, QColor,
@@ -29,11 +31,19 @@ class AbstractListView(QListView):
         index = self.indexAt(mouse_pos)
         return index
 
-    def _get_hovered_item(self) -> QStandardItem:
-        current_index = self._get_hovered_index()
-        current_item = self._model.item(current_index.row())
-        return current_item
+    def get_hovered_item(self) -> QStandardItem:
+        hovered_index = self._get_hovered_index()
+        hovered_item = self._model.item(hovered_index.row())
+        return hovered_item
 
+    def get_selected_items(self) -> list[QStandardItem]:
+        selected_indexes = self.selectionModel().selectedIndexes()
+        selected_items = [self._model.item(index.row()) for index in selected_indexes]
+        return selected_items
+
+    def select_row(self, row: int):
+        index = self._model.index(row, 0)
+        self.setCurrentIndex(index)
 
 class AbstractListModel(QStandardItemModel):
     def __init__(self):
@@ -120,14 +130,14 @@ class AbstractListDelegate(QStyledItemDelegate):
 
         painter.restore()
 
-    def paint_icon_circle(self, painter: QPainter, path: str, margin: int=2, offset: list[int] = None, rect: QRect = None):
+    def paint_icon_circle(self, painter: QPainter, icon_path: str, margin: int=2, offset: list[int] = None, rect: QRect = None):
         x, y, w, h = self.get_item_rect()
         offset = offset or [0, 0, 0, 0]
         if len(offset) != 4:
             raise ValueError("Could not read offset, should be: [x, y, w, h]")
         rect = rect or QRect(x+margin+offset[0], y+margin+offset[1], h-2*margin+offset[2], h-2*margin+offset[3])
 
-        image = QImage(path)
+        image = QImage(icon_path)
 
         painter.save()
 
@@ -137,9 +147,9 @@ class AbstractListDelegate(QStyledItemDelegate):
         painter.setPen(QtCore.Qt.PenStyle.NoPen)
 
         # Set clip path
-        path = QPainterPath(QPointF(x, y))
-        path.addEllipse(rect)
-        painter.setClipPath(path)
+        icon_path = QPainterPath(QPointF(x, y))
+        icon_path.addEllipse(rect)
+        painter.setClipPath(icon_path)
 
         # Draw image
         painter.drawImage(rect, image)
