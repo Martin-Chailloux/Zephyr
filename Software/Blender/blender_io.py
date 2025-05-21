@@ -49,11 +49,9 @@ class BlenderFile(AbstractSoftwareFile):
         bpy.ops.wm.save_mainfile(filepath=self.filepath)
 
     def save_as(self, filepath: str = None):
-        # TODO: seems keep the current file opened and create an other copy
-        #  -> needs testing
-        # if filepath is not None:
-        #     self.filepath = filepath
-        bpy.ops.wm.save_as_mainfile(filepath=self.filepath)
+        self.open()
+        bpy.ops.wm.save_as_mainfile(filepath=filepath)
+        self.set_filepath(filepath)
 
     def new_file(self):
         bpy.ops.wm.read_homefile()
