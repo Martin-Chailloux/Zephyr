@@ -78,8 +78,9 @@ class VersionListView(AbstractListView):
 
         # result
         if requested_action is copy_path_action:
-            version.open_folder()
-        elif requested_action is open_folder_action:
             version.copy_filepath()
+        elif requested_action is open_folder_action:
+            version.open_folder()
+
         else:
             return
