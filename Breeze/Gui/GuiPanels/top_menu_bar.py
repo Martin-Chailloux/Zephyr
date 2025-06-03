@@ -8,7 +8,7 @@ modifiers = QtCore.Qt.Modifier
 keys = QtCore.Qt.Key
 
 
-class TopMenuBar(QMenuBar):
+class BreezeTopMenuBar(QMenuBar):
     def __init__(self):
         super().__init__()
         # settings_menu = self.add_menu(self, label="Settings", icon_name="fa.gear")  # Not needed yet
