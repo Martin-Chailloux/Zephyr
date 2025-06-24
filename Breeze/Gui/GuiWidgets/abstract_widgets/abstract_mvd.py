@@ -1,4 +1,4 @@
-from distutils.core import setup_keywords
+import datetime
 
 from PySide6 import QtCore
 from PySide6.QtCore import QPoint, QModelIndex, QRect, QRectF, QPointF
@@ -7,6 +7,9 @@ from PySide6.QtGui import (QCursor, QStandardItem, QStandardItemModel, QPainter,
 from PySide6.QtWidgets import QListView, QStyledItemDelegate, QStyleOptionViewItem, QStyle
 
 from Data.breeze_app import BreezeApp
+
+
+alignment = QtCore.Qt.AlignmentFlag
 
 
 class AbstractListView(QListView):
@@ -45,6 +48,7 @@ class AbstractListView(QListView):
         index = self._model.index(row, 0)
         self.setCurrentIndex(index)
 
+
 class AbstractListModel(QStandardItemModel):
     def __init__(self):
         super().__init__()
@@ -62,6 +66,8 @@ class AbstractListModel(QStandardItemModel):
 
 
 class AbstractListDelegate(QStyledItemDelegate):
+    small_font_size: int = 7
+    medium_font_size: int = 8
     palette = BreezeApp.palette
 
     def __init__(self):
@@ -154,4 +160,28 @@ class AbstractListDelegate(QStyledItemDelegate):
         # Draw image
         painter.drawImage(rect, image)
 
+        painter.restore()
+
+    def paint_time(self, painter: QPainter, time: datetime, rect: QRect=None):
+        if rect is None:
+            x, y, w, h = self.get_item_rect()
+        else:
+            x, y, w, h = rect.x(), rect.y(), rect.width(), rect.height()
+
+        time_text = f"{time.hour:02d}h{time.minute:02d}"
+        date_text = f"{time.day:02d}/{time.month:02d}/{time.year:04d}"
+
+        painter.save()
+        painter.setOpacity(self.opacity)
+        font = painter.font()
+        font.setPointSizeF(self.small_font_size)
+        painter.setFont(font)
+
+        # paint time
+        rect = QRect(x, y, w, h/2)
+        painter.drawText(rect, time_text, alignment.AlignHCenter | alignment.AlignBottom)
+
+        # paint date
+        rect = QRect(x, y + h/2, w, h/2)
+        painter.drawText(rect, date_text, alignment.AlignHCenter | alignment.AlignTop)
         painter.restore()

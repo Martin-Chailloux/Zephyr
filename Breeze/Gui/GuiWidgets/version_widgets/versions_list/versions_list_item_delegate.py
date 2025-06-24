@@ -13,8 +13,6 @@ alignment = QtCore.Qt.AlignmentFlag
 
 
 class VersionListItemDelegate(AbstractListDelegate):
-    small_font_size: int = 7
-    comment_font_size: int = 8
     datetime_width: int = 56
     num_width: int = 32
 
@@ -42,7 +40,8 @@ class VersionListItemDelegate(AbstractListDelegate):
         self.paint_comment(painter)
 
         # right
-        self.paint_timestamp(painter)
+        x, y, w, h = self.get_item_rect()
+        self.paint_time(painter, time=self.version.timestamp, rect=QRect(w - h - self.datetime_width, y, self.datetime_width, h))
         self.paint_software(painter)
 
         painter.restore()
@@ -104,32 +103,10 @@ class VersionListItemDelegate(AbstractListDelegate):
         painter.save()
         painter.setOpacity(self.opacity)
         font = painter.font()
-        font.setPointSizeF(self.comment_font_size)
+        font.setPointSizeF(self.medium_font_size)
         
         painter.setFont(font)
         rect = QRect(start_x + margin, y, end_x - margin, h)
         painter.drawText(rect, text, alignment.AlignLeft | alignment.AlignVCenter)
 
-        painter.restore()
-
-
-    def paint_timestamp(self, painter: QPainter):
-        x, y, w, h = self.get_item_rect()
-        timestamp: datetime = self.version.timestamp
-        x = w - h - self.datetime_width
-
-        time_text = f"{timestamp.hour:02d}h{timestamp.minute:02d}"
-        date_text = f"{timestamp.day:02d}/{timestamp.month:02d}/{timestamp.year:04d}"
-
-        painter.save()
-        painter.setOpacity(self.opacity)
-        font = painter.font()
-        font.setPointSizeF(self.small_font_size)
-        painter.setFont(font)
-        # paint time
-        rect = QRect(x, y, self.datetime_width, h/2)
-        painter.drawText(rect, time_text, alignment.AlignHCenter | alignment.AlignBottom)
-        # paint date
-        rect = QRect(x, y + h/2, self.datetime_width, h/2)
-        painter.drawText(rect, date_text, alignment.AlignHCenter | alignment.AlignTop)
         painter.restore()
