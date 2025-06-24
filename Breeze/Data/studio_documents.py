@@ -165,6 +165,32 @@ class Project(Document):
         self.save()
 
 
+class MgProcess(Document):
+    # TODO: only longname and class_path are required, probably
+    #  others could stay for clarity
+    longname: str = StringField(required=True, primary_key=True)
+    label: str = StringField(required=True)
+    tooltip: str = StringField(required=True)
+    class_path: str = StringField(required=True)
+
+    meta = {
+        'collection': 'Processes',
+        'db_alias': 'default',
+    }
+
+    def __repr__(self):
+        return f"<Process>: {self.longname}"
+
+    @classmethod
+    def create(cls, longname: str, label: str, tooltip: str, class_path: str, **kwargs) -> Self:
+        kwargs = dict(longname=longname, label=label, tooltip=tooltip, class_path=class_path, **kwargs)
+        kwargs = {k: v for k, v in kwargs.items() if v is not None}
+        process = cls(**kwargs)
+        process.save()
+        print(f"Created: {process.__repr__()}")
+        return process
+
+
 # Delete rules
 User.register_delete_rule(Project, 'users', mongoengine.PULL)
 
