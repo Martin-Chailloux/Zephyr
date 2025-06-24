@@ -3,7 +3,8 @@ import qtawesome
 from PySide6.QtWidgets import QTabWidget, QWidget, QMainWindow
 
 from Gui.GuiPanels.top_menu_bar import BreezeTopMenuBar
-from Gui.MainWindows.breeze_main_window import BreezeWindow
+from Gui.MainWindows.browser_main_window import BrowserGui
+from Gui.MainWindows.turbine_main_window import TurbineGui
 
 
 # TODO: empty tabs to switch to when not loaded
@@ -16,16 +17,15 @@ class BreezeTabs(QTabWidget):
         self._init_ui()
 
     def _init_ui(self):
-        self.breeze_window = BreezeWindow()
-        self.breeze_tab = self.addTab(self.breeze_window, "Breeze")
+        self.setStyleSheet("QTabBar::tab {width: 56px;}")
+        self.browser_window = BrowserGui()
+        self.breeze_tab = self.addTab(self.browser_window, "Browser")
 
         self.turbine_window = TurbineGui()
         self.turbine_tab = self.addTab(self.turbine_window, "Turbine")
 
-
-class TurbineGui(QWidget):
-    def __init__(self):
-        super().__init__()
+        temp_window = QMainWindow()
+        temp_tab = self.addTab(temp_window, "Logs")
 
 
 class BreezeMainWindow(QMainWindow):
