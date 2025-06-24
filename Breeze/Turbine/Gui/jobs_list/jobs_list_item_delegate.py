@@ -68,7 +68,7 @@ class JobsListItemDelegate(AbstractListDelegate):
 
         color = QColor(self.palette.white_text)
 
-        stage = self.job.source_version.collection.stage
+        stage = self.job.source_version.component.stage
         asset = stage.asset
 
         painter.save()

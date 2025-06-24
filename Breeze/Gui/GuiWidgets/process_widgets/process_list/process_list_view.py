@@ -4,8 +4,7 @@ from PySide6 import QtCore
 from PySide6.QtCore import Signal
 from PySide6.QtGui import QMouseEvent
 
-from Data.project_documents import StageTemplate
-from Data.studio_documents import Process
+from Data.studio_documents import Process, StageTemplate
 from Gui.GuiWidgets.abstract_widgets.abstract_mvd import AbstractListView
 from Gui.GuiWidgets.process_widgets.process_list.process_list_item_delegate import ProcessListItemDelegate
 from Gui.GuiWidgets.process_widgets.process_list.process_list_model import ProcessListModel, ProcessItemRoles

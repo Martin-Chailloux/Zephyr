@@ -9,7 +9,7 @@ import mongoengine
 from mongoengine import *
 
 from Data.breeze_app import BreezeApp
-from Data.studio_documents import Status, User, Software, Process
+from Data.studio_documents import Status, User, Software, Process, StageTemplate
 
 
 class Asset(Document):
@@ -51,54 +51,18 @@ class Asset(Document):
         self.save()
 
 
-# TODO: move to studio db
-#  filter them for each project in a 'stage_templates' field on the Studio document
-class StageTemplate(Document):
-    """
-    Infos about a specific kind of stage: \n
-    name, label, description, color, icon
-    """
-    name: str = StringField(required=True, primary_key=True)
-    label: str = StringField(required=True, unique=True)
-
-    color: str = StringField(default="#ffffff")
-    icon_name: str = StringField(default="fa5s.question")
-
-    software: list[Software] = SortedListField(ReferenceField(document_type=Software), default=[])
-    presets: list[str] = ListField(StringField(), default=[])  # TODO: a db to register presets would be easier to edit
-    processes: list[Process] = SortedListField(ReferenceField(document_type=Process, default=[]))
-
-    meta = {
-        'collection': 'Stage templates',
-        'db_alias': 'current_project',
-    }
-
-    def __repr__(self):
-        return f"<Stage template>: {self.name}"
-
-    # NOTE: no GUI for now
-    @classmethod
-    def create(cls, name: str, label: str, color: str = None, icon_name: str = None, **kwargs) -> Self:
-        kwargs = dict(name=name, label=label, color=color, icon_name=icon_name, **kwargs)
-        kwargs = {k: v for k, v in kwargs.items() if v is not None}
-        stage_template = cls(**kwargs)
-        stage_template.save()
-        print(f"Created: {stage_template.__repr__()}")
-        return stage_template
-
-
 class Stage(Document):
     """
     Step in the creation of an asset, based on a StageTemplate
     (ex: modeling, rigging, animation, lighting, etc.) \n
-    Contains a Collection 'Work', and export Collections.
+    Contains a single Component 'Work', and multiple export Components.
     """
     longname: str = StringField(required=True, primary_key=True)
     asset: Asset = ReferenceField(document_type=Asset)
     stage_template: StageTemplate = ReferenceField(document_type=StageTemplate)
 
-    collections: list['Components'] = ListField(ReferenceField(document_type='Collection'), default=[])
-    work_collection: 'Components' = ReferenceField(document_type='Collection')
+    components: list['Component'] = ListField(ReferenceField(document_type='Component'), default=[])
+    work_component: 'Component' = ReferenceField(document_type='Component')
 
     ingredients: list['Version'] = ListField(ReferenceField(document_type='Version'), default=[])
     status: Status = ReferenceField(document_type=Status, default=Status.objects.get(label='WAIT'))
@@ -114,20 +78,13 @@ class Stage(Document):
     def __repr__(self):
         return f"<Stage>: {self.longname}'"
 
-    def add_collection(self, collection: 'Components'):
-        if collection in self.collections:
-            raise ValueError(f"{collection.__repr__()} is already a collection of {self.__repr__()}")
-        self.collections.append(collection)
+    def create_component(self, name: str, label: str) -> 'Component':
+        component = Component.create(name=name, label=label, stage=self)
+        if component in self.components:
+            raise ValueError(f"{component.__repr__()} is already a component of {self.__repr__()}")
+        self.components.append(component)
         self.save()
-
-    def create_collection(self, name: str, label: str) -> 'Components':
-        collection = Components.create(name=name, label=label, stage=self)
-        self.add_collection(collection)
-        return collection
-
-    def create_work_collection(self) -> 'Components':
-        collection = self.create_collection(name="work", label="Work")
-        return collection
+        return component
 
     @classmethod
     def create(cls, asset: Asset, stage_template: StageTemplate, status: Status=None, **kwargs) -> Self:
@@ -136,17 +93,16 @@ class Stage(Document):
         kwargs = {k: v for k, v in kwargs.items() if v is not None}
         stage = cls(**kwargs)
 
-        asset.add_stage(stage=stage)
-        work_collection = stage.create_work_collection()
-        stage.work_collection = work_collection
+        stage.update(work_component=stage.create_component(name="work", label="Work"))
 
-        stage.save()
+        asset.add_stage(stage=stage)
+
         print(f"Created: {stage.__repr__()}")
 
         return stage
 
 
-class Components(Document):
+class Component(Document):
     """
     Belongs to a Stage. Contains Versions. \n
     Work Component: contains the working versions of a Stage. \n
@@ -176,9 +132,9 @@ class Components(Document):
         kwargs = dict(longname=longname, name=name, label=label, stage=stage, **kwargs)
         kwargs = {k: v for k, v in kwargs.items() if v is not None}
 
-        existing_collection = Components.objects(longname=longname)
-        if existing_collection:
-            raise FileExistsError(f"{existing_collection[0].__repr__()}")
+        existing_component = Component.objects(longname=longname)
+        if existing_component:
+            raise FileExistsError(f"{existing_component[0].__repr__()}")
 
         component = cls(**kwargs)
         component.save()
@@ -200,7 +156,7 @@ class Components(Document):
             versions = sorted(versions, key=lambda v: v.number, reverse=True)
             number: int = versions[0].number + 1
 
-        version = Version.create(collection=self, number=number, software=software)
+        version = Version.create(component=self, number=number, software=software)
         return version
 
 
@@ -211,7 +167,7 @@ class Version(Document):
     """
     longname = StringField(required=True, primary_key=True)
 
-    collection: Components = ReferenceField(document_type=Components, required=True)
+    component: Component = ReferenceField(document_type=Component, required=True)
     number: int = IntField(required=True)  # -1 is head
     software: Software = ReferenceField(document_type=Software, required=True)
 
@@ -242,21 +198,21 @@ class Version(Document):
         return f"<Version>: {self.longname}"
 
     @classmethod
-    def create(cls, collection: Components, number: int, software: Software, **kwargs):
+    def create(cls, component: Component, number: int, software: Software, **kwargs):
         extension = software.extension
-        longname = f"{collection.longname}_{number:03d}.{extension}"
+        longname = f"{component.longname}_{number:03d}.{extension}"
 
         creation_user = BreezeApp.user
         last_user = creation_user
 
         # get filepath
-        subfolders = collection.stage.longname.split("_")
+        subfolders = component.stage.longname.split("_")
         subfolders.append(f"{number:03d}")
         filepath = Path(BreezeApp.project.root_path).joinpath(*subfolders).joinpath(longname)
         # create dirs
         Path(filepath).parent.mkdir(parents=True, exist_ok=True)
 
-        kwargs = dict(longname=longname, collection=collection, number=number, software=software,
+        kwargs = dict(longname=longname, component=component, number=number, software=software,
                       creation_user=creation_user, last_user=last_user, filepath=str(filepath),
                       **kwargs)
         kwargs = {k: v for k, v in kwargs.items() if v is not None}
@@ -268,7 +224,7 @@ class Version(Document):
         version = cls(**kwargs)
         version.save()
 
-        collection.add_version(version)
+        component.add_version(version)
 
         print(f"Created: {version.__repr__()}")
         return version
@@ -338,19 +294,19 @@ Software.register_delete_rule(StageTemplate, 'software', mongoengine.DENY)
 # Stage
 Asset.register_delete_rule(Stage, 'asset', mongoengine.CASCADE)
 StageTemplate.register_delete_rule(Stage, 'stage_template', mongoengine.DENY)
-Components.register_delete_rule(Stage, 'collections', mongoengine.PULL)
-Components.register_delete_rule(Stage, 'work_collection', mongoengine.DENY)
+Component.register_delete_rule(Stage, 'components', mongoengine.PULL)
+Component.register_delete_rule(Stage, 'work_component', mongoengine.DENY)
 Version.register_delete_rule(Stage, 'ingredients', mongoengine.DENY)
 Status.register_delete_rule(Stage, 'status', mongoengine.DENY)
 User.register_delete_rule(Stage, 'user', mongoengine.DENY)
 
-# Collection
-Stage.register_delete_rule(Components, 'stage', mongoengine.CASCADE)
-Version.register_delete_rule(Components, 'versions', mongoengine.PULL)
-Version.register_delete_rule(Components, 'recommended_version', mongoengine.NULLIFY)
+# Component
+Stage.register_delete_rule(Component, 'stage', mongoengine.CASCADE)
+Version.register_delete_rule(Component, 'versions', mongoengine.PULL)
+Version.register_delete_rule(Component, 'recommended_version', mongoengine.NULLIFY)
 
 # Version
-Components.register_delete_rule(Version, 'collection', mongoengine.CASCADE)
+Component.register_delete_rule(Version, 'component', mongoengine.CASCADE)
 Software.register_delete_rule(Version, 'software', mongoengine.DENY)
 User.register_delete_rule(Version, 'creation_user', mongoengine.DENY)
 User.register_delete_rule(Version, 'last_user', mongoengine.DENY)

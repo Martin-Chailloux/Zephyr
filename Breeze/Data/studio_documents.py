@@ -191,6 +191,42 @@ class Process(Document):
         return process
 
 
+class StageTemplate(Document):
+    """
+    Infos about a specific kind of stage: \n
+    name, label, description, color, icon
+    """
+    name: str = StringField(required=True, primary_key=True)
+    label: str = StringField(required=True, unique=True)
+
+    order: int = IntField(default=0)
+    color: str = StringField(default="#ffffff")
+    icon_name: str = StringField(default="fa5s.question")
+
+    software: list[Software] = SortedListField(ReferenceField(document_type=Software), default=[])
+    presets: list[str] = ListField(StringField(), default=[])  # TODO: a db to register presets would be easier to edit
+    processes: list[Process] = SortedListField(ReferenceField(document_type=Process, default=[]))
+
+    meta = {
+        'collection': 'Stage templates',
+        'db_alias': 'default',
+    }
+
+    def __repr__(self):
+        return f"<Stage template>: {self.name}"
+
+
+    # NOTE: no GUI for now
+    @classmethod
+    def create(cls, name: str, label: str, color: str = None, icon_name: str = None, **kwargs) -> Self:
+        kwargs = dict(name=name, label=label, color=color, icon_name=icon_name, **kwargs)
+        kwargs = {k: v for k, v in kwargs.items() if v is not None}
+        stage_template = cls(**kwargs)
+        stage_template.save()
+        print(f"Created: {stage_template.__repr__()}")
+        return stage_template
+
+
 # Delete rules
 User.register_delete_rule(Project, 'users', mongoengine.PULL)
 

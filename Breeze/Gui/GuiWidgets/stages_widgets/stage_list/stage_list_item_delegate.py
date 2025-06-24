@@ -4,7 +4,8 @@ from PySide6.QtCore import QModelIndex, QRect, QRectF
 from PySide6.QtGui import QPainter, QBrush, QColor, QPen, QPainterPath, QIcon
 from PySide6.QtWidgets import QStyleOptionViewItem
 
-from Data.project_documents import Stage, StageTemplate, Asset
+from Data.studio_documents import StageTemplate
+from Data.project_documents import Stage, Asset
 from Gui.GuiWidgets.abstract_widgets.abstract_mvd import AbstractListDelegate
 from Gui.GuiWidgets.stages_widgets.stage_list.stage_list_model import StageItemRoles
 from Gui.GuiWidgets.stages_widgets.stage_list.stage_list_model import StageItemMetrics

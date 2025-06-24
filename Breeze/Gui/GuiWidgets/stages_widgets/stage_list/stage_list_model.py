@@ -29,10 +29,18 @@ class StageListModel(AbstractListModel):
 
     def populate(self, stages: list[Stage]):
         self.clear()
+        stages = sorted(stages, key=lambda x: x.stage_template.order)
         self.stages = stages
 
         for stage in stages:
             self.add_item(stage=stage)
+
+    def refresh(self):
+        self.blockSignals(True)
+        longnames = [stage.longname for stage in self.stages]
+        stages = Stage.objects(longname__in=longnames)
+        self.populate(stages)
+        self.blockSignals(False)
 
     def add_item(self, stage: Stage):
         row = self.rowCount()
@@ -46,19 +54,6 @@ class StageListModel(AbstractListModel):
         item.setData(False, StageItemRoles.status_is_hovered)
 
         self.setItem(row, item)
-
-    def refresh(self):
-        self.blockSignals(True)
-        self.populate(self.stages)
-        # if not stages:
-        #     return
-        # asset = Asset.objects.get(longname=stages[0].asset.longname)
-        # stages = asset.stages  # query the data from db else it is not up to date
-        #
-        # self.clear()
-        # for stage in stages:
-        #     self.add_item(stage=stage)
-        self.blockSignals(False)
 
     def remove_items_hover(self):
         for item in self.items:

@@ -2,7 +2,7 @@ import qtawesome
 from PySide6.QtWidgets import QVBoxLayout, QPushButton
 
 from Data.breeze_app import BreezeApp
-from Data.project_documents import StageTemplate, Version
+from Data.project_documents import Version
 from Gui.GuiWidgets.abstract_widgets.context_menu_widget import ContextMenuWidget
 from Gui.GuiWidgets.process_widgets.process_list.process_list_view import ProcessListView
 from Turbine.tb_core import ProcessStep
@@ -24,7 +24,7 @@ class ProcessSelectMenu(ContextMenuWidget):
 
         process_list = ProcessListView()
         layout.addWidget(process_list)
-        process_list.set_stage_template(stage_template=self.version.collection.stage.stage_template)
+        process_list.set_stage_template(stage_template=self.version.component.stage.stage_template)
 
         launch_button = QPushButton("Launch")
         layout.addWidget(launch_button)

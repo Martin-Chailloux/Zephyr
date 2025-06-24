@@ -17,7 +17,7 @@ def new_empty_version(stage: Stage):
         return
 
     # reserve version
-    version = stage.work_collection.create_last_version(software_select.software)
+    version = stage.work_component.create_last_version(software_select.software)
     version.update(comment=comment_box.comment)
 
     # create file
@@ -35,7 +35,7 @@ def increment(old_version: Version):
         return
 
     # reserve version
-    new_version = old_version.collection.create_last_version(software=old_version.software)
+    new_version = old_version.component.create_last_version(software=old_version.software)
     new_version.update(comment=comment_box.comment)
 
     # create file

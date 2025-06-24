@@ -186,5 +186,5 @@ class WorkVersionsWidget(QDialog):
             text = f"{stage.asset.category} > {stage.asset.name} > {stage.asset.variant}"
         self._asset_label.setText(text)
 
-        self.versions_list.set_collection(stage.work_collection)
+        self.versions_list.set_collection(stage.work_component)
         self.versions_list.select_row(0)

@@ -5,7 +5,7 @@ from PySide6.QtCore import Signal, Qt, QPoint
 from PySide6.QtWidgets import QMenu
 
 from Data import breeze_converters
-from Data.project_documents import Components, Version
+from Data.project_documents import Component, Version
 from Gui.GuiWidgets.abstract_widgets.abstract_mvd import AbstractListView
 from Gui.GuiWidgets.version_widgets.versions_list.versions_list_item_delegate import VersionListItemDelegate
 from Gui.GuiWidgets.version_widgets.versions_list.versions_list_model import VersionListModel, VersionItemRoles
@@ -15,7 +15,7 @@ class VersionListView(AbstractListView):
     software_selected = Signal(str)
     right_clicked = Signal()
 
-    def __init__(self, collection: Components = None):
+    def __init__(self, collection: Component = None):
         super().__init__()
         self._model = VersionListModel(collection=collection)
         self.setModel(self._model)
@@ -25,7 +25,7 @@ class VersionListView(AbstractListView):
         self.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.customContextMenuRequested.connect(self.show_context_menu)
 
-    def set_collection(self, collection: Components):
+    def set_collection(self, collection: Component):
         self._model.collection = collection
         self._model.populate()
         self.viewport().update()
@@ -33,7 +33,7 @@ class VersionListView(AbstractListView):
     def refresh(self):
         print(f"REFRESH: {self.__class__.__name__}")
         # re-query the collection else it might not be up to date
-        collection = Components.objects.get(longname=self._model.collection.longname)
+        collection = Component.objects.get(longname=self._model.collection.longname)
         self.set_collection(collection)
 
     def get_selected_version(self) -> Version | None:

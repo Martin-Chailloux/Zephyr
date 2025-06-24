@@ -68,8 +68,8 @@ if __name__ == "__main__":
     blender_file.open()
 
     # test: create collection
-    collection = bpy.data.collections.new("MyTestCollection")
-    bpy.context.scene.collection.children.link(collection)
+    collection = bpy.data.components.new("MyTestCollection")
+    bpy.context.scene.component.children.link(collection)
     # ------------------------
 
     blender_file.save()

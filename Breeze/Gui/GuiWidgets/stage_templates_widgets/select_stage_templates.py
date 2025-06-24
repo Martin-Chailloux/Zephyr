@@ -2,7 +2,8 @@ import qtawesome
 from PySide6 import QtCore
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QLabel, QHBoxLayout, QComboBox, QPushButton
 
-from Data.project_documents import StageTemplate, Asset, Stage
+from Data.studio_documents import StageTemplate
+from Data.project_documents import Asset, Stage
 from Gui.GuiWidgets.popups.line_edit_popup import LineEditPopup
 from Gui.GuiWidgets.stages_widgets.stage_item import StageButton
 from Gui.GuiWidgets.util_widgets.util_widgets import IconButton

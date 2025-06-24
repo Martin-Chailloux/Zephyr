@@ -11,7 +11,8 @@ from Data.studio_documents import User, Palette, Project, Process
 from Data.breeze_app import BreezeApp
 BreezeApp.set_project("JourDeVent")
 BreezeApp.set_user("Martin")
-from Data.project_documents import Stage, StageTemplate, Asset, Version, Components
+from Data.studio_documents import StageTemplate
+from Data.project_documents import Stage, Asset, Version, Component
 from Turbine.tb_demo import CreateMovie
 
 mongoengine.connect(host="mongodb://localhost:27017", db="JourDeVent", alias="current_project")
@@ -97,10 +98,10 @@ def random_list_query():
 
 def create_work_collections():
     for stage in Stage.objects:
-        work_collection = stage.collections[0]
+        work_collection = stage.components[0]
         # stage.update(collections = [work_collection])
         try:
-            stage.create_work_collection()
+            stage.create_work_component()
         except Exception as e:
             print(f"{e = }")
 
@@ -114,5 +115,6 @@ def register_processes():
 
 
 if __name__ == '__main__':
-    for obj in Asset.objects():
-        obj.update(stages=[])
+    for i, obj in enumerate(StageTemplate.objects, start=1):
+        print(f"{obj = }")
+        obj.update(order=i)
