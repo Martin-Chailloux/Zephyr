@@ -73,7 +73,7 @@ class LineEditPopup(QDialog):
     def on_text_changed(self):
         text = BreezeText(self.current_text).to_valid_name()
         min_length = 1
-        max_length = 12
+        max_length = 24
         name_exists = text.lower() in self.invalid_names
 
         is_valid = False
