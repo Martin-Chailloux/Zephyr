@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import qtawesome
 from PySide6.QtWidgets import QTreeWidget, QTreeWidgetItem
 
-from Data.project_documents import MgJob
+from Data.project_documents import Job
 from Turbine.tb_core import Pills, PillModel
 
 
@@ -23,7 +23,7 @@ class StepsViewer(QTreeWidget):
     def __init__(self):
         super().__init__()
 
-    def populate(self, job: MgJob):
+    def populate(self, job: Job):
         # TODO: create a property in the document that returns the step with dot notation
         #  (or instead find a field that does it)
         #  (edit: NO) or just add a translator here, it might be enough

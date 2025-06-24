@@ -3,7 +3,7 @@ from PySide6.QtCore import QModelIndex, QRect
 from PySide6.QtGui import QPainter, QColor, QPen
 from PySide6.QtWidgets import QStyleOptionViewItem
 
-from Data.studio_documents import User, MgProcess
+from Data.studio_documents import User, Process
 from Gui.GuiWidgets.abstract_widgets.abstract_mvd import AbstractListDelegate
 from Gui.GuiWidgets.process_widgets.process_list.process_list_model import ProcessItemRoles
 from Gui.GuiWidgets.user_widgets.user_list.user_list_model import UserItemRoles
@@ -17,7 +17,7 @@ class ProcessListItemDelegate(AbstractListDelegate):
         super().__init__()
 
     def _set_custom_data(self, option: QStyleOptionViewItem, index: QModelIndex):
-        self.process: MgProcess = index.data(ProcessItemRoles.process)
+        self.process: Process = index.data(ProcessItemRoles.process)
 
     def paint(self, painter: QPainter, option: QStyleOptionViewItem , index: QModelIndex):
         self._set_data(option, index)

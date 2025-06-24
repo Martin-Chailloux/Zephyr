@@ -3,8 +3,8 @@ from dataclasses import dataclass
 
 from PySide6.QtCore import Signal, QObject
 
-from Data.project_documents import Version, MgJob, ProcessContext
-from Data.studio_documents import User, MgProcess
+from Data.project_documents import Version, Job, JobContext
+from Data.studio_documents import User, Process
 
 
 @dataclass
@@ -133,14 +133,14 @@ class Step(QObject):
         return infos
 
 
-class Process(Step):
+class ProcessStep(Step):
     name: str = "process_name"
     label = "process_label"
     tooltip = "process_tooltip"
 
     def __init__(self, user: User, version: Version):
         super().__init__()
-        self.context = ProcessContext(user=user, version=version)
+        self.context = JobContext(user=user, version=version)
         self.mg_job = self.register_mg_job()
         self.Pill.set_idle()
 
@@ -169,23 +169,23 @@ class Process(Step):
     def register_mg_process(cls):
         """ Saves the process class into the db """
         # check for duplicates
-        process = MgProcess.objects(longname=cls.name)
+        process = Process.objects(longname=cls.name)
         if process:
             raise ValueError(f"Process '{cls.name}' is already registered in the db")
 
         # create in db
-        MgProcess.create(longname=cls.name, label=cls.label, tooltip=cls.tooltip, class_path=cls.get_class_path())
+        Process.create(longname=cls.name, label=cls.label, tooltip=cls.tooltip, class_path=cls.get_class_path())
 
-    def get_registered_mg_process(self) -> MgProcess:
-        process = MgProcess.objects.get(longname=self.name, label=self.label, tooltip=self.tooltip, class_path=self.get_class_path())
+    def get_registered_mg_process(self) -> Process:
+        process = Process.objects.get(longname=self.name, label=self.label, tooltip=self.tooltip, class_path=self.get_class_path())
         return process
 
     # ------------------------
     # jobs
     # ------------------------
-    def register_mg_job(self) -> MgJob:
+    def register_mg_job(self) -> Job:
         """ Saves this instantiated process as a Job in the db"""
-        process = MgJob.create(source_process=self.get_registered_mg_process(), context=self.context, steps=self.to_dict())
+        process = Job.create(source_process=self.get_registered_mg_process(), context=self.context, steps=self.to_dict())
         return process
 
     def update_mg_job(self):

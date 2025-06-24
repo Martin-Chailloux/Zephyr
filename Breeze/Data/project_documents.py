@@ -9,7 +9,7 @@ import mongoengine
 from mongoengine import *
 
 from Data.breeze_app import BreezeApp
-from Data.studio_documents import Status, User, Software, MgProcess
+from Data.studio_documents import Status, User, Software, Process
 
 
 class Asset(Document):
@@ -66,7 +66,7 @@ class StageTemplate(Document):
 
     software: list[Software] = SortedListField(ReferenceField(document_type=Software), default=[])
     presets: list[str] = ListField(StringField(), default=[])  # TODO: a db to register presets would be easier to edit
-    processes: list[MgProcess] = SortedListField(ReferenceField(document_type=MgProcess, default=[]))
+    processes: list[Process] = SortedListField(ReferenceField(document_type=Process, default=[]))
 
     meta = {
         'collection': 'Stage templates',
@@ -290,18 +290,18 @@ class Version(Document):
 
 
 @dataclass
-class ProcessContext:
+class JobContext:
     user: User
     version: Version
     creation_time = datetime.now()
 
 
-class MgJob(Document):
+class Job(Document):
     # TODO: delete rules
     longname: str = StringField(required=True, primary_key=True) # name + date
     user: User = ReferenceField(document_type=User, required=True)
     creation_time = DateTimeField(default=datetime.now)
-    source_process: MgProcess = ReferenceField(document_type=MgProcess, required=True)
+    source_process: Process = ReferenceField(document_type=Process, required=True)
     source_version: Version = ReferenceField(document_type=Version, required=True)
     steps: dict = DictField(required=True)
 
@@ -311,10 +311,10 @@ class MgJob(Document):
     }
 
     def __repr__(self):
-        return f"<Process>: {self.longname}"
+        return f"<Job>: {self.longname}"
 
     @classmethod
-    def create(cls, source_process: MgProcess, context: ProcessContext, steps: dict[str, any], **kwargs) -> Self:
+    def create(cls, source_process: Process, context: JobContext, steps: dict[str, any], **kwargs) -> Self:
         longname = " ".join(s for s in [source_process.longname, context.version.longname, context.user.pseudo, str(context.creation_time)])
         kwargs = dict(longname=longname, creation_time=context.creation_time, user=context.user,
                       source_process=source_process, source_version=context.version,

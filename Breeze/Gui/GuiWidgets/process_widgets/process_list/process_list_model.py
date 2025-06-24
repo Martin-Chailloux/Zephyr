@@ -4,7 +4,7 @@ from PySide6 import QtCore
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QStandardItem, QStandardItemModel
 
-from Data.studio_documents import MgProcess
+from Data.studio_documents import Process
 
 
 @dataclass
@@ -20,7 +20,7 @@ class ProcessListModel(QStandardItemModel):
     def __init__(self):
         super().__init__()
 
-    def add_item(self, process: MgProcess):
+    def add_item(self, process: Process):
         row = self.rowCount()
 
         item = QStandardItem()
@@ -31,7 +31,7 @@ class ProcessListModel(QStandardItemModel):
 
         self.setItem(row, item)
 
-    def populate(self, processes: list[MgProcess]):
+    def populate(self, processes: list[Process]):
         self.clear()
         for process in processes:
             self.add_item(process=process)

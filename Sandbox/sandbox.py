@@ -5,11 +5,11 @@ import mongoengine
 
 
 mongoengine.connect(host="mongodb://localhost:27017", db="Studio", alias="default")
-from Data.project_documents import MgJob
+from Data.project_documents import Job
 
 mongoengine.connect(host="mongodb://localhost:27017", db="JourDeVent", alias="current_project")
 
-jobs = MgJob.objects()
+jobs = Job.objects()
 for job in jobs:
     print(f"{job = }")
     print(f"{job.steps = }")

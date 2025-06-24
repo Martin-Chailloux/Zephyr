@@ -5,11 +5,11 @@ from PySide6.QtCore import Signal
 from PySide6.QtGui import QMouseEvent
 
 from Data.project_documents import StageTemplate
-from Data.studio_documents import MgProcess
+from Data.studio_documents import Process
 from Gui.GuiWidgets.abstract_widgets.abstract_mvd import AbstractListView
 from Gui.GuiWidgets.process_widgets.process_list.process_list_item_delegate import ProcessListItemDelegate
 from Gui.GuiWidgets.process_widgets.process_list.process_list_model import ProcessListModel, ProcessItemRoles
-from Turbine.tb_core import Process
+from Turbine.tb_core import ProcessStep
 
 
 class ProcessListView(AbstractListView):
@@ -42,16 +42,16 @@ class ProcessListView(AbstractListView):
     def set_stage_template(self, stage_template: StageTemplate):
         self._model.populate(processes=stage_template.processes)
 
-    def get_selected_process(self) -> Process.__class__ | None:
+    def get_selected_process(self) -> ProcessStep.__class__ | None:
         items = self.get_selected_items()
         if not items:
             return None
         else:
-            process: MgProcess = items[0].data(ProcessItemRoles.process)
+            process: Process = items[0].data(ProcessItemRoles.process)
             path = process.class_path
             module_name, class_name = path.rsplit('.', 1)
             module = importlib.import_module(module_name)
-            process: Process.__class__ = getattr(module, class_name)
+            process: ProcessStep.__class__ = getattr(module, class_name)
             return process
 
     def on_selection_changed(self):

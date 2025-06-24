@@ -3,7 +3,7 @@ from PySide6.QtCore import QModelIndex, QRect
 from PySide6.QtGui import QPainter, QColor, QPen
 from PySide6.QtWidgets import QStyleOptionViewItem
 
-from Data.project_documents import MgJob
+from Data.project_documents import Job
 from Gui.GuiWidgets.abstract_widgets.abstract_mvd import AbstractListDelegate
 from Turbine.Gui.jobs_list.jobs_list_model import JobItemRoles, JobItemMetrics
 
@@ -15,7 +15,7 @@ class JobsListItemDelegate(AbstractListDelegate):
         super().__init__()
 
     def _set_custom_data(self, option: QStyleOptionViewItem, index: QModelIndex):
-        self.job: MgJob = index.data(JobItemRoles.job)
+        self.job: Job = index.data(JobItemRoles.job)
 
     def paint(self, painter: QPainter, option: QStyleOptionViewItem , index: QModelIndex):
         self._set_data(option, index)

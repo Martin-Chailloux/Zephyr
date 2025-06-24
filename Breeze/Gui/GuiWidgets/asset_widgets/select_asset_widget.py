@@ -97,6 +97,7 @@ class SelectAssetWidget(QWidget):
         self.name_cb.blockSignals(True)  # Delay on_name_selected()
 
         assets = Asset.objects(category=self.category, variant="-")
+        print(f"{assets = }")
         names = [asset.name for asset in assets]
         self.name_cb.set_items(names)
 

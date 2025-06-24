@@ -7,7 +7,7 @@ import mongoengine
 
 mongoengine.connect(host="mongodb://localhost:27017", db="Studio", alias="default")
 
-from Data.studio_documents import User, Palette, Project, MgProcess
+from Data.studio_documents import User, Palette, Project, Process
 from Data.breeze_app import BreezeApp
 BreezeApp.set_project("JourDeVent")
 BreezeApp.set_user("Martin")

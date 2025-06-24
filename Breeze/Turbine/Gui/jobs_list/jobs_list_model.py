@@ -4,7 +4,7 @@ from PySide6 import QtCore
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QStandardItem, QStandardItemModel
 
-from Data.project_documents import MgJob
+from Data.project_documents import Job
 
 
 @dataclass
@@ -24,9 +24,9 @@ class JobItemMetrics:
 class JobsListModel(QStandardItemModel):
     def __init__(self):
         super().__init__()
-        self.jobs: list[MgJob] = []
+        self.jobs: list[Job] = []
 
-    def add_item(self, job: MgJob):
+    def add_item(self, job: Job):
         row = self.rowCount()
 
         item = QStandardItem()
@@ -39,7 +39,7 @@ class JobsListModel(QStandardItemModel):
         self.setItem(row, item)
         self.jobs.append(job)
 
-    def populate(self, jobs: list[MgJob]):
+    def populate(self, jobs: list[Job]):
         self.clear()
         self.jobs = []
 

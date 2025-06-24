@@ -147,7 +147,7 @@ class Project(Document):
     @classmethod
     def create(cls, name: str, db_name: str, root_path: str,
                categories: list[str], users: list[User],
-                **kwargs):
+               **kwargs):
         kwargs = dict(name=name, root_path=root_path, categories=categories, users=users, **kwargs)
         kwargs = {k: v for k, v in kwargs.items() if v is not None}
         project = cls(**kwargs)
@@ -165,7 +165,7 @@ class Project(Document):
         self.save()
 
 
-class MgProcess(Document):
+class Process(Document):
     # TODO: only longname and class_path are required, probably
     #  others could stay for clarity
     longname: str = StringField(required=True, primary_key=True)

@@ -4,7 +4,7 @@ from PySide6 import QtCore
 from PySide6.QtCore import Signal
 from PySide6.QtGui import QMouseEvent
 
-from Data.project_documents import MgJob
+from Data.project_documents import Job
 from Gui.GuiWidgets.abstract_widgets.abstract_mvd import AbstractListView
 from Turbine.Gui.jobs_list.jobs_list_item_delegate import JobsListItemDelegate
 from Turbine.Gui.jobs_list.jobs_list_model import JobItemRoles, JobsListModel
@@ -34,15 +34,15 @@ class JobsListView(AbstractListView):
 
     def set_jobs(self):
         # TODO: filters: user, time, searchbar
-        jobs = MgJob.objects()
+        jobs = Job.objects()
         self._model.populate(jobs=jobs)
 
-    def get_selected_job(self) -> MgJob | None:
+    def get_selected_job(self) -> Job | None:
         items = self.get_selected_items()
         if not items:
             return None
         else:
-            job: MgJob = items[0].data(JobItemRoles.job)
+            job: Job = items[0].data(JobItemRoles.job)
             return job
 
     def on_selection_changed(self):
