@@ -4,6 +4,7 @@ from PySide6.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout,
                                QLabel, QSizePolicy)
 
 from Data.project_documents import Stage
+from Gui.GuiWidgets.process_widgets.process_launcher import ProcessSelectMenu
 from Gui.GuiWidgets.stages_widgets.stage_list.stage_list_item_delegate import StageListItemAlwaysOnDelegate
 from Gui.GuiWidgets.stages_widgets.stage_list.stage_list_model import StageItemMetrics
 from Gui.GuiWidgets.stages_widgets.stage_list.stage_list_view import StageListView
@@ -97,12 +98,12 @@ class WorkVersionsWidget(QDialog):
         v_layout.addLayout(h_layout)
         h_layout.setSpacing(self.buttons_spacing)
 
-        processes_button = PushButtonAutoWidth(
-            text=" Processes", icon_name='fa.gears',
-            tooltip="Choose a process to launch",
+        turbine_button = PushButtonAutoWidth(
+            text=" Turbine", icon_name='fa.gears',
+            tooltip="Choose a process to launch in turbine",
             fixed_width=True,
         )
-        h_layout.addWidget(processes_button)
+        h_layout.addWidget(turbine_button)
 
         launch_button = PushButtonAutoWidth(
             text=" Launch", icon_name='fa5s.rocket',
@@ -138,6 +139,7 @@ class WorkVersionsWidget(QDialog):
 
         self.new_file_button = new_file_button
         self.increment_button = increment_button
+        self.turbine_button = turbine_button
 
         self.stage_list_view = stage_list_view
 
@@ -146,8 +148,7 @@ class WorkVersionsWidget(QDialog):
     def connect_signals(self):
         self.new_file_button.clicked.connect(self.on_new_file_button_clicked)
         self.increment_button.clicked.connect(self.on_increment_button_clicked)
-
-        self.new_file_button.customContextMenuRequested.connect(self.on_new_file_button_clicked)
+        self.turbine_button.clicked.connect(self.on_turbine_button_clicked)
 
     def on_new_file_button_clicked(self):
         if self.stage is None:
@@ -167,6 +168,13 @@ class WorkVersionsWidget(QDialog):
 
         self.versions_list.refresh()
         self.versions_list.select_row(0)
+
+    def on_turbine_button_clicked(self):
+        if self.stage is None:
+            return
+        menu = ProcessSelectMenu(version=self.versions_list.get_selected_version())
+        confirm = menu.exec()
+        print(f"{confirm = }")
 
     def set_stage(self, stage: Stage):
         self.stage = stage
