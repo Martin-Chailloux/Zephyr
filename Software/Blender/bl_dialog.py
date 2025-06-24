@@ -1,7 +1,7 @@
 import socket
 import json
 
-from blender_io import BlenderFile
+from blender_file import BlenderFile
 
 
 def ask(command, **kwargs) -> json:

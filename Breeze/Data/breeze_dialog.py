@@ -3,7 +3,7 @@ import socket
 import threading
 
 from Data.project_documents import StageTemplate
-from blender_io import BlenderFile
+from blender_file import BlenderFile
 
 ports = [
     BlenderFile.port

@@ -1,5 +1,5 @@
 from Data.studio_documents import Software
-from blender_io import BlenderFile
+from blender_file import BlenderFile
 
 
 def get_file_instance_from_software(software: Software, filepath: str):
