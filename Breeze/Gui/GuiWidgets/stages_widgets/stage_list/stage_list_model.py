@@ -25,16 +25,13 @@ class StageItemMetrics:
 class StageListModel(AbstractListModel):
     def __init__(self):
         super().__init__()
-        self.asset: Asset = None
+        self.stages = []
 
-    def set_asset(self, asset: Asset):
-        self.asset = asset
+    def populate(self, stages: list[Stage]):
         self.clear()
+        self.stages = stages
 
-        if asset is None:
-            return
-
-        for stage in asset.stages:
+        for stage in stages:
             self.add_item(stage=stage)
 
     def add_item(self, stage: Stage):
@@ -51,16 +48,16 @@ class StageListModel(AbstractListModel):
         self.setItem(row, item)
 
     def refresh(self):
-        stages = [item.data(StageItemRoles.stage) for item in self.items]
-        if not stages:
-            return
-        asset = Asset.objects.get(longname=stages[0].asset.longname)
-        stages = asset.stages  # query the data from db else it is not up to date
-
         self.blockSignals(True)
-        self.clear()
-        for stage in stages:
-            self.add_item(stage=stage)
+        self.populate(self.stages)
+        # if not stages:
+        #     return
+        # asset = Asset.objects.get(longname=stages[0].asset.longname)
+        # stages = asset.stages  # query the data from db else it is not up to date
+        #
+        # self.clear()
+        # for stage in stages:
+        #     self.add_item(stage=stage)
         self.blockSignals(False)
 
     def remove_items_hover(self):

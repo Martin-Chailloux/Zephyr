@@ -11,7 +11,7 @@ from Data.studio_documents import User, Palette, Project, Process
 from Data.breeze_app import BreezeApp
 BreezeApp.set_project("JourDeVent")
 BreezeApp.set_user("Martin")
-from Data.project_documents import Stage, StageTemplate, Asset, Version, Collection
+from Data.project_documents import Stage, StageTemplate, Asset, Version, Components
 from Turbine.tb_demo import CreateMovie
 
 mongoengine.connect(host="mongodb://localhost:27017", db="JourDeVent", alias="current_project")
@@ -109,10 +109,10 @@ def set_root_paths():
     for project in Project.objects:
         project.update(root_path=str(p.joinpath(project.name)))
 
+def register_processes():
+    CreateMovie.register_mg_process()
+
 
 if __name__ == '__main__':
-    BlenderModelingExport.register_mg_process()
-    CreateMovie.register_mg_process()
-    # processes = MgProcess.objects()
-    # for template in StageTemplate.objects():
-    #     template.update(processes=processes)
+    for obj in Asset.objects():
+        obj.update(stages=[])

@@ -28,7 +28,6 @@ if __name__ == '__main__':
 
     from Data import breeze_dialog
     breeze_dialog.Listener()
-
     from Gui.MainWindows.main_tabs import BreezeMainWindow
     window = BreezeMainWindow()
     window.show()

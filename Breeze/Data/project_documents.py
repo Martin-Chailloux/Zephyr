@@ -97,8 +97,8 @@ class Stage(Document):
     asset: Asset = ReferenceField(document_type=Asset)
     stage_template: StageTemplate = ReferenceField(document_type=StageTemplate)
 
-    collections: list['Collection'] = ListField(ReferenceField(document_type='Collection'), default=[])
-    work_collection: 'Collection' = ReferenceField(document_type='Collection')
+    collections: list['Components'] = ListField(ReferenceField(document_type='Collection'), default=[])
+    work_collection: 'Components' = ReferenceField(document_type='Collection')
 
     ingredients: list['Version'] = ListField(ReferenceField(document_type='Version'), default=[])
     status: Status = ReferenceField(document_type=Status, default=Status.objects.get(label='WAIT'))
@@ -114,18 +114,18 @@ class Stage(Document):
     def __repr__(self):
         return f"<Stage>: {self.longname}'"
 
-    def add_collection(self, collection: 'Collection'):
+    def add_collection(self, collection: 'Components'):
         if collection in self.collections:
             raise ValueError(f"{collection.__repr__()} is already a collection of {self.__repr__()}")
         self.collections.append(collection)
         self.save()
 
-    def create_collection(self, name: str, label: str) -> 'Collection':
-        collection = Collection.create(name=name, label=label, stage=self)
+    def create_collection(self, name: str, label: str) -> 'Components':
+        collection = Components.create(name=name, label=label, stage=self)
         self.add_collection(collection)
         return collection
 
-    def create_work_collection(self) -> 'Collection':
+    def create_work_collection(self) -> 'Components':
         collection = self.create_collection(name="work", label="Work")
         return collection
 
@@ -146,7 +146,7 @@ class Stage(Document):
         return stage
 
 
-class Collection(Document):
+class Components(Document):
     """
     Belongs to a Stage. Contains Versions. \n
     Work Component: contains the working versions of a Stage. \n
@@ -163,12 +163,12 @@ class Collection(Document):
     recommended_version: 'Version' = ReferenceField(document_type='Version', default=None)
 
     meta = {
-        'collection': 'Collections',
+        'collection': 'Components',
         'db_alias': 'current_project',
     }
 
     def __repr__(self):
-        return f"<Collection>: {self.longname}"
+        return f"<Component>: {self.longname}"
 
     @classmethod
     def create(cls, name: str, label: str, stage: Stage, **kwargs):
@@ -176,15 +176,15 @@ class Collection(Document):
         kwargs = dict(longname=longname, name=name, label=label, stage=stage, **kwargs)
         kwargs = {k: v for k, v in kwargs.items() if v is not None}
 
-        existing_collection = Collection.objects(longname=longname)
+        existing_collection = Components.objects(longname=longname)
         if existing_collection:
             raise FileExistsError(f"{existing_collection[0].__repr__()}")
 
-        collection = cls(**kwargs)
-        collection.save()
-        print(f"Created: {collection.__repr__()}")
+        component = cls(**kwargs)
+        component.save()
+        print(f"Created: {component.__repr__()}")
 
-        return collection
+        return component
 
     def add_version(self, version: 'Version'):
         if version in self.versions:
@@ -211,7 +211,7 @@ class Version(Document):
     """
     longname = StringField(required=True, primary_key=True)
 
-    collection: Collection = ReferenceField(document_type=Collection, required=True)
+    collection: Components = ReferenceField(document_type=Components, required=True)
     number: int = IntField(required=True)  # -1 is head
     software: Software = ReferenceField(document_type=Software, required=True)
 
@@ -242,7 +242,7 @@ class Version(Document):
         return f"<Version>: {self.longname}"
 
     @classmethod
-    def create(cls, collection: Collection, number: int, software: Software, **kwargs):
+    def create(cls, collection: Components, number: int, software: Software, **kwargs):
         extension = software.extension
         longname = f"{collection.longname}_{number:03d}.{extension}"
 
@@ -338,19 +338,19 @@ Software.register_delete_rule(StageTemplate, 'software', mongoengine.DENY)
 # Stage
 Asset.register_delete_rule(Stage, 'asset', mongoengine.CASCADE)
 StageTemplate.register_delete_rule(Stage, 'stage_template', mongoengine.DENY)
-Collection.register_delete_rule(Stage, 'collections', mongoengine.PULL)
-Collection.register_delete_rule(Stage, 'work_collection', mongoengine.DENY)
+Components.register_delete_rule(Stage, 'collections', mongoengine.PULL)
+Components.register_delete_rule(Stage, 'work_collection', mongoengine.DENY)
 Version.register_delete_rule(Stage, 'ingredients', mongoengine.DENY)
 Status.register_delete_rule(Stage, 'status', mongoengine.DENY)
 User.register_delete_rule(Stage, 'user', mongoengine.DENY)
 
 # Collection
-Stage.register_delete_rule(Collection, 'stage', mongoengine.CASCADE)
-Version.register_delete_rule(Collection, 'versions', mongoengine.PULL)
-Version.register_delete_rule(Collection, 'recommended_version', mongoengine.NULLIFY)
+Stage.register_delete_rule(Components, 'stage', mongoengine.CASCADE)
+Version.register_delete_rule(Components, 'versions', mongoengine.PULL)
+Version.register_delete_rule(Components, 'recommended_version', mongoengine.NULLIFY)
 
 # Version
-Collection.register_delete_rule(Version, 'collection', mongoengine.CASCADE)
+Components.register_delete_rule(Version, 'collection', mongoengine.CASCADE)
 Software.register_delete_rule(Version, 'software', mongoengine.DENY)
 User.register_delete_rule(Version, 'creation_user', mongoengine.DENY)
 User.register_delete_rule(Version, 'last_user', mongoengine.DENY)

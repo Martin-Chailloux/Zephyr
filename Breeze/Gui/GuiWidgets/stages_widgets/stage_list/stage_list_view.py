@@ -45,12 +45,14 @@ class StageListView(AbstractListView):
         self.viewport().update()
 
     def set_asset(self, asset: Asset):
-        self._model.set_asset(asset)
+        if asset is None:
+            return
+        self._model.populate(stages=asset.stages)
 
     def set_stage(self, stage: Stage):
-        self._model.clear()
-        if stage is not None:
-            self._model.add_item(stage=stage)
+        if stage is None:
+            return
+        self._model.populate(stages=[stage])
 
     def _connect_signals(self):
         self.selectionModel().selectionChanged.connect(self.on_selection_changed)

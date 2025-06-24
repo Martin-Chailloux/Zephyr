@@ -4,7 +4,7 @@ from PySide6 import QtCore
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QStandardItem, QStandardItemModel
 
-from Data.project_documents import Collection, Version
+from Data.project_documents import Components, Version
 
 
 @dataclass
@@ -17,7 +17,7 @@ class VersionItemMetrics:
 
 
 class VersionListModel(QStandardItemModel):
-    def __init__(self, collection: Collection):
+    def __init__(self, collection: Components):
         super().__init__()
         self.collection = collection
         self.populate()
