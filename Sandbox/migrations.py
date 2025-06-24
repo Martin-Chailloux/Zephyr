@@ -7,11 +7,12 @@ import mongoengine
 
 mongoengine.connect(host="mongodb://localhost:27017", db="Studio", alias="default")
 
-from Data.studio_documents import User, Palette, Project
+from Data.studio_documents import User, Palette, Project, MgProcess
 from Data.breeze_app import BreezeApp
 BreezeApp.set_project("JourDeVent")
 BreezeApp.set_user("Martin")
 from Data.project_documents import Stage, StageTemplate, Asset, Version, Collection
+from Turbine.tb_demo import CreateMovie
 
 mongoengine.connect(host="mongodb://localhost:27017", db="JourDeVent", alias="current_project")
 
@@ -108,5 +109,10 @@ def set_root_paths():
     for project in Project.objects:
         project.update(root_path=str(p.joinpath(project.name)))
 
+
 if __name__ == '__main__':
-    pass
+    BlenderModelingExport.register_mg_process()
+    CreateMovie.register_mg_process()
+    # processes = MgProcess.objects()
+    # for template in StageTemplate.objects():
+    #     template.update(processes=processes)
