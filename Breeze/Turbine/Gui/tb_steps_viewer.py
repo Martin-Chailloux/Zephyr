@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 
 import qtawesome
+from PySide6 import QtCore
+from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QTreeWidget, QTreeWidgetItem
 
 from Data.project_documents import Job
@@ -20,8 +22,11 @@ class Translators:
 
 
 class StepsViewer(QTreeWidget):
+    step_selected = Signal(dict)
+
     def __init__(self):
         super().__init__()
+        self._connect_signals()
 
     def populate(self, job: Job):
         # TODO: create a property in the document that returns the step with dot notation
@@ -41,10 +46,25 @@ class StepsViewer(QTreeWidget):
 
     def add_step(self, parent: QTreeWidgetItem, step: dict):
         item = QTreeWidgetItem()
-        item.setText(0, step['label'])
+        text = step['label']
+        sub_label = step.get('sub_label', None)
+        if sub_label is not None:
+            text += f" |  {sub_label}"
+        item.setText(0, text)
         pill: PillModel = Translators.name_to_pill[step['pill']]
         icon = qtawesome.icon(pill.icon_name, color=pill.color)
         item.setIcon(0, icon)
+        item.setData(0, QtCore.Qt.ItemDataRole.UserRole, step)
         parent.addChild(item)
         for step in step['child_steps']:
             self.add_step(parent=item, step=step)
+
+    def _connect_signals(self):
+        self.selectionModel().selectionChanged.connect(self.on_selection_changed)
+
+    def on_selection_changed(self):
+        items = self.selectedItems()
+        if not items:
+            return
+        step = items[0].data(0, QtCore.Qt.ItemDataRole.UserRole)
+        self.step_selected.emit(step)

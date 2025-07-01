@@ -1,6 +1,6 @@
 from PySide6 import QtCore
-from PySide6.QtCore import QModelIndex, QRect
-from PySide6.QtGui import QPainter, QColor, QPen
+from PySide6.QtCore import QModelIndex, QRect, QRectF
+from PySide6.QtGui import QPainter, QColor, QPen, QFontMetrics
 from PySide6.QtWidgets import QStyleOptionViewItem
 
 from Data.project_documents import Job
@@ -28,59 +28,63 @@ class JobsListItemDelegate(AbstractListDelegate):
         self.paint_selected_underline(painter)
 
         self.paint_icon_circle(painter, icon_path=self.job.user.icon_path, offset=[2, 2,-4, -4])
-        self.paint_version_num(painter)
-        self.paint_label(painter)
-        self.paint_context(painter)
+        # self.paint_version_num(painter)
+        self.paint_job_context(painter)
+        self.paint_task_context(painter)
         x, y, w, h = self.get_item_rect()
         self.paint_time(painter, time=self.job.creation_time, rect=QRect(w - JobItemMetrics.datetime_w, y, JobItemMetrics.datetime_w, h))
 
         painter.restore()
 
-    def paint_version_num(self, painter: QPainter):
+    def paint_job_context(self, painter: QPainter):
         x, y, w, h = self.get_item_rect()
+        x += JobItemMetrics.user_w
         color = QColor(self.palette.white_text)
 
         painter.save()
         painter.setPen(QPen(color))
 
-        rect = QRect(x + JobItemMetrics.user_w, y, JobItemMetrics.user_w, h)
-        text = f"v{self.job.source_version.number:03d}"
+        # process label
+        rect = QRect(x, y, w, h)
+        text = self.job.source_process.label
         painter.drawText(rect, text, alignment.AlignLeft | alignment.AlignVCenter)
 
         painter.restore()
 
-    def paint_label(self, painter: QPainter):
+    def paint_task_context(self, painter: QPainter):
         x, y, w, h = self.get_item_rect()
-        color = QColor(self.palette.white_text)
-
-        painter.save()
-        painter.setPen(QPen(color))
-
-        rect = QRect(x + JobItemMetrics.version_w, y, w, h/2)
-        text = self.job.source_process.label
-        painter.drawText(rect, text, alignment.AlignLeft | alignment.AlignBottom)
-
-        painter.restore()
-
-    def paint_context(self, painter: QPainter):
-        x, y, w, h = self.get_item_rect()
-        y -= 2
-
-        color = QColor(self.palette.white_text)
+        x += + JobItemMetrics.version_w
 
         stage = self.job.source_version.component.stage
         asset = stage.asset
 
         painter.save()
 
-        painter.setPen(QPen(color))
+        # version num
+        painter.setPen(QPen(self.palette.white_text))
+        rect = QRect(x, y, w, h/2)
+        text = f"{self.job.source_version.number:03d} - "
+        painter.setPen(QPen(self.palette.white_text))
+        painter.drawText(rect, text, alignment.AlignLeft | alignment.AlignBottom)
+
+        # task template
+        font_metrics = QFontMetrics(painter.font())
+        text_w = font_metrics.horizontalAdvance(text)
+
+        painter.setPen(QPen(stage.stage_template.color))
+        rect = QRect(x + text_w, y, w, h/2)
+        text = f"{stage.stage_template.label}"
+        painter.drawText(rect, text, alignment.AlignLeft | alignment.AlignBottom)
+
+        # asset path
         font = painter.font()
         font.setPointSizeF(self.medium_font_size)
         painter.setFont(font)
         painter.setOpacity(self.opacity)
 
-        rect = QRect(x + JobItemMetrics.version_w, y + h/2, w, h/2)
-        text = f"{asset.category} > {asset.name} > {asset.variant} > {stage.stage_template.label}"
+        painter.setPen(QPen(self.palette.white_text))
+        rect = QRect(x, y + h/2, w, h/2)
+        text = f"{asset.category} > {asset.name} > {asset.variant}"
         painter.drawText(rect, text, alignment.AlignLeft | alignment.AlignTop)
 
         painter.restore()

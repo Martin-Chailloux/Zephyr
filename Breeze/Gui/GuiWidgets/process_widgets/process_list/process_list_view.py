@@ -8,7 +8,7 @@ from Data.studio_documents import Process, StageTemplate
 from Gui.GuiWidgets.abstract_widgets.abstract_mvd import AbstractListView
 from Gui.GuiWidgets.process_widgets.process_list.process_list_item_delegate import ProcessListItemDelegate
 from Gui.GuiWidgets.process_widgets.process_list.process_list_model import ProcessListModel, ProcessItemRoles
-from Turbine.tb_core import ProcessStep
+from Turbine.tb_core import CommonProcess
 
 
 class ProcessListView(AbstractListView):
@@ -41,7 +41,7 @@ class ProcessListView(AbstractListView):
     def set_stage_template(self, stage_template: StageTemplate):
         self._model.populate(processes=stage_template.processes)
 
-    def get_selected_process(self) -> ProcessStep.__class__ | None:
+    def get_selected_process(self) -> CommonProcess.__class__ | None:
         items = self.get_selected_items()
         if not items:
             return None
@@ -50,7 +50,7 @@ class ProcessListView(AbstractListView):
             path = process.class_path
             module_name, class_name = path.rsplit('.', 1)
             module = importlib.import_module(module_name)
-            process: ProcessStep.__class__ = getattr(module, class_name)
+            process: CommonProcess.__class__ = getattr(module, class_name)
             return process
 
     def on_selection_changed(self):

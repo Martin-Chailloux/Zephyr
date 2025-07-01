@@ -32,10 +32,12 @@ class JobsListView(AbstractListView):
 
         super().mousePressEvent(event)
 
-    def set_jobs(self):
+    def get_jobs(self):
         # TODO: filters: user, time, searchbar
+        self.blockSignals(True)
         jobs = Job.objects()
         self._model.populate(jobs=jobs)
+        self.blockSignals(False)
 
     def get_selected_job(self) -> Job | None:
         items = self.get_selected_items()

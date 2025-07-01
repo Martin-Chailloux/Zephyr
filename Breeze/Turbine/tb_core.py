@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from PySide6.QtCore import Signal, QObject
 
 from Data.project_documents import Version, Job, JobContext
-from Data.studio_documents import User, Process
+from Data.studio_documents import User, Process, Software
 
 
 @dataclass
@@ -49,60 +49,73 @@ class StepPill(QObject):
         self.pill = Pills.success
 
 
-class StepMessage:
+class StepLog:
     def __init__(self):
-        self.msg: str = ""
+        self.complete_log: str = ""
 
-    def set_msg(self, msg: str):
-        self.msg = msg
+    def add(self, msg: str):
+        self.complete_log += f"{msg}\n"
+
+    def set(self, msg: str):
+        self.complete_log = msg
 
 
 class Step(QObject):
-    label = "step_label"
-    tooltip = "step_tooltip"
     updated = Signal()
 
-    def __init__(self, sub_label: str=None):
-        super().__init__()
-        self.Pill = StepPill()
-        self.Msg = StepMessage()
+    label: str = "step_label"
+    sub_label: str = None
+    tooltip: str = "step_tooltip"
 
+    def __init__(self, sub_label: str = None):
+        super().__init__()
         self.sub_label = sub_label
-        self.needed_data: list = []
+
+        self.Pill = StepPill()
+        self.Logs = StepLog()
         self.steps: list[Step] = []
+
+    def set_sub_label(self, sub_label: str):
+        self.sub_label = sub_label
 
     @property
     def pill(self) -> PillModel:
         return self.Pill.pill
 
     @property
-    def msg(self) -> str:
-        return self.Msg.msg
+    def log(self) -> str:
+        return self.Logs.complete_log
 
     def add_step(self, step: Self) -> Self:
         self.steps.append(step)
         step.updated.connect(self.on_sub_step_updated)
         return step
 
-    def add_steps(self, steps: list[Self]):
+    def add_steps(self, steps: list['Step']):
         for step in steps:
             self.add_step(step=step)
 
-    def set_needed_data(self, needed_data: list):
-        self.needed_data = needed_data
-
     def on_sub_step_updated(self):
         self.updated.emit()
-        print(f"STEP UPDATE: {self.label}")
 
     def run(self, **kwargs):
+        self.Logs.add(msg=f"\n Starting step '{self.label}' ... ")
         # TODO: duration
+
+        self.Pill.set_running()
         try:
             self._inner_run(**kwargs)
             self._resolve()
             self.updated.emit()
+            self.Logs.add(msg=f"... step '{self.label}': SUCCESS \n")
+
         except Exception as e:
-            self.Msg.set_msg(str(e))
+            self.Logs.set(str(e))
+            print(f"ERROR IN STEP '{self.label}':")
+            print(e)
+            self.Logs.add(msg=str(e))
+            self.Logs.add(msg=f"... step '{self.label}': ERROR ")
+
             self.Pill.set_error()
             self.updated.emit()
             raise e
@@ -111,13 +124,16 @@ class Step(QObject):
         # override with actions
         pass
 
+    @property
+    def _is_success(self) -> bool:
+        return True
+
     def _resolve(self):
-        for data in self.needed_data:
-            if data is None:
-                self.Pill.set_error()
-                break
-        else:
+        if self._is_success:
             self.Pill.set_success()
+        else:
+            self.Pill.set_error()
+
 
     def to_dict(self) -> dict[str, any]:
         # TODO: log
@@ -127,30 +143,33 @@ class Step(QObject):
             'sub_label': self.sub_label,
             'tooltip': self.tooltip,
             'pill': self.pill.name,
-            'msg': self.msg,
+            'log': self.log,
             'child_steps': [step.to_dict() for step in self.steps],
         }
         return infos
 
 
-class ProcessStep(Step):
+class CommonProcess(Step):
     name: str = "process_name"
     label = "process_label"
     tooltip = "process_tooltip"
 
     def __init__(self, user: User, version: Version):
         super().__init__()
-        self.context = JobContext(user=user, version=version)
+        self.Context = JobContext(user=user, version=version)
         self.mg_job = self.register_mg_job()
         self.Pill.set_idle()
 
     def run(self):
         self.Pill.set_running()
+
         try:
-            self._inner_run()
+            super().run()
+            self.Pill.set_success()
         except Exception as e:
-            pass
-        self._resolve()
+            self.Logs.add(str(e))
+            self.Pill.set_error()
+
         self.update_mg_job()
 
     def on_sub_step_updated(self):
@@ -171,7 +190,8 @@ class ProcessStep(Step):
         # check for duplicates
         process = Process.objects(longname=cls.name)
         if process:
-            raise ValueError(f"Process '{cls.name}' is already registered in the db")
+            process = process[0]
+            process.update(label=cls.label, tooltip=cls.tooltip, class_path=cls.get_class_path())
 
         # create in db
         Process.create(longname=cls.name, label=cls.label, tooltip=cls.tooltip, class_path=cls.get_class_path())
@@ -185,9 +205,17 @@ class ProcessStep(Step):
     # ------------------------
     def register_mg_job(self) -> Job:
         """ Saves this instantiated process as a Job in the db"""
-        process = Job.create(source_process=self.get_registered_mg_process(), context=self.context, steps=self.to_dict())
+        process = Job.create(source_process=self.get_registered_mg_process(), context=self.Context, steps=self.to_dict())
         return process
 
     def update_mg_job(self):
         """ Updates this instantiated process in the db"""
         self.mg_job.update(steps=self.to_dict())
+
+
+class BuildProcess(CommonProcess):
+    def __init__(self, user: User, version: Version):
+        software = Software.objects.get(label='Blender')
+        version = version.component.create_last_version(software=software)
+        version.update(comment="Built file")
+        super().__init__(user=user, version=version)
