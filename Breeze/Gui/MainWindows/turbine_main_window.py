@@ -5,9 +5,6 @@ from Turbine.Gui.tb_select_process_panel import SelectProcessPanel
 from Turbine.Gui.tb_steps_viewer import StepsViewer
 
 
-
-
-
 class TurbineGui(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -17,6 +14,7 @@ class TurbineGui(QMainWindow):
     def _init_ui(self):
         select_process_panel = SelectProcessPanel()
         dock = QDockWidget()
+        dock.setWindowTitle("Jobs")
         dock.setWidget(select_process_panel)
         self.addDockWidget(QtCore.Qt.DockWidgetArea.LeftDockWidgetArea, dock)
         dock.setAllowedAreas(QtCore.Qt.DockWidgetArea.LeftDockWidgetArea)
@@ -27,6 +25,7 @@ class TurbineGui(QMainWindow):
         logs_panel = QLabel()
         logs_panel.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop)
         dock = QDockWidget()
+        dock.setWindowTitle("Logs")
         dock.setWidget(logs_panel)
         self.addDockWidget(QtCore.Qt.DockWidgetArea.BottomDockWidgetArea, dock)
         dock.setAllowedAreas(QtCore.Qt.DockWidgetArea.BottomDockWidgetArea)
