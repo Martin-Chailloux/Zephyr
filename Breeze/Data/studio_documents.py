@@ -166,8 +166,10 @@ class Project(Document):
 
 
 class Process(Document):
-    # TODO: only longname and class_path are required, probably
-    #  others could stay for clarity
+    # TODO: cast stage templates in this (reciprocal field)
+    #  Process.{set/add}_stage_templates(stage_template: list[StageTemplates])
+    #  or StageTemplates.{set/add}_processes(processes: list[Process])
+
     longname: str = StringField(required=True, primary_key=True)
     label: str = StringField(required=True)
     tooltip: str = StringField(required=True)
