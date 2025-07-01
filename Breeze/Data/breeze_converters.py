@@ -1,8 +1,9 @@
 from Data.studio_documents import Software
+from abstract_io import AbstractSoftwareFile
 from blender_file import BlenderFile
 
 
-def get_file_instance_from_software(software: Software, filepath: str):
+def get_file_instance_from_software(software: Software, filepath: str) -> AbstractSoftwareFile:
     if software.label == 'Blender':
         return BlenderFile(filepath=filepath)
     else:
