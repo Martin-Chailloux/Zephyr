@@ -195,7 +195,6 @@ class Version(Document):
     creation_time = DateTimeField(default=datetime.now)
     timestamp = DateTimeField(default=datetime.now)
 
-    # comment = StringField(default="")
     # todo_list = ReferenceField(document_type='Task', default=[])
     # thumbnail_path = StringField()
 
