@@ -3,8 +3,8 @@ from PySide6.QtWidgets import QVBoxLayout
 from Api.breeze_app import BreezeApp
 from Api.project_documents import Stage
 from Api.studio_documents import User
-from Gui.components.popups.abstract_popup_widget import AbstractPopupWidget
 from Gui.components.mvd.user_mvd.user_list_view import UserListView
+from Gui.components.popups.abstract_popup_widget import AbstractPopupWidget
 
 
 class UserSelectPopup(AbstractPopupWidget):

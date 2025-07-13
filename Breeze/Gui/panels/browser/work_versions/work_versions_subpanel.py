@@ -1,12 +1,8 @@
 from PySide6 import QtCore
-from PySide6.QtCore import QSize
-from PySide6.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout, QLabel, QSizePolicy)
+from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel
 
 from Api.project_documents import Stage
 from Gui.components.popups.process_launcher import ProcessSelectMenu
-from Gui.components.mvd.stage_mvd.stage_list_item_delegate import StageListItemAlwaysOnDelegate
-from Gui.components.mvd.stage_mvd.stage_list_model import StageItemMetrics
-from Gui.components.mvd.stage_mvd.stage_list_view import StageListView
 from Gui.sub_widgets.util_widgets.util_widgets import TextBox, PushButtonAutoWidth
 from Gui.panels.browser.work_versions import work_versions_api
 from Gui.components.mvd.version_mvd.version_list_view import VersionListView
@@ -16,7 +12,7 @@ class WorkVersionsWidget(QDialog):
     h = 28
     buttons_spacing = 2
 
-    def __init__(self, stage: Stage):
+    def __init__(self, stage: Stage=None):
         super().__init__()
         self.stage = stage
         self._init_ui()
@@ -25,38 +21,11 @@ class WorkVersionsWidget(QDialog):
     def _init_ui(self):
         layout = QVBoxLayout()
         self.setLayout(layout)
-        layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop)
-
-        sub_layout = QVBoxLayout()
-        layout.addLayout(sub_layout)
-        sub_layout.setContentsMargins(0, 0, 0, 0)
-        sub_layout.setSpacing(0)
-
-        # ------------------------
-        # current asset
-        # ------------------------
-        asset_label = QLabel()
-        sub_layout.addWidget(asset_label)
-        asset_label.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-
-        # ------------------------
-        # current stage
-        # ------------------------
-        # TODO: si on update la data ça reload avec l'asset entier, avec un look de spinbox
-        #  C'est joli est pratique, donc:
-        #  Relier la selection du stage avec ce scroll
-        # TODO: cette info concerne toute la fenetre et pas que ce panel, donc faire une status bar au-dessus de l'ensemble plutôt
-        stage_list_view = StageListView()
-        sub_layout.addWidget(stage_list_view)
-        stage_list_view.setFixedWidth(256)
-        stage_list_view.setFixedSize(QSize(256, StageItemMetrics.height + 6))
-        stage_list_view.setItemDelegate(StageListItemAlwaysOnDelegate())
+        layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop | QtCore.Qt.AlignmentFlag.AlignLeft)
 
         # ------------------------
         # main layout
         # ------------------------
-        layout.addSpacing(12)
-
         sub_layout = QHBoxLayout()
         layout.addLayout(sub_layout)
 
@@ -67,7 +36,7 @@ class WorkVersionsWidget(QDialog):
         sub_layout.addLayout(v_layout)
 
         # new buttons
-        label = QLabel("Create new version:")
+        label = QLabel("Work versions")
         v_layout.addWidget(label)
 
         h_layout = QHBoxLayout()
@@ -134,13 +103,9 @@ class WorkVersionsWidget(QDialog):
         # ------------------------
         # public vars
         # ------------------------
-        self._asset_label = asset_label
-
         self.new_file_button = new_file_button
         self.increment_button = increment_button
         self.turbine_button = turbine_button
-
-        self.stage_list_view = stage_list_view
 
         self.versions_list = versions_list
 
@@ -177,13 +142,6 @@ class WorkVersionsWidget(QDialog):
 
     def set_stage(self, stage: Stage):
         self.stage = stage
-        self.stage_list_view.set_stage(stage)
-
-        if stage is None:
-            text = ""
-        else:
-            text = f"{stage.asset.category} > {stage.asset.name} > {stage.asset.variant}"
-        self._asset_label.setText(text)
 
         self.versions_list.set_collection(stage.work_component)
         self.versions_list.select_row(0)

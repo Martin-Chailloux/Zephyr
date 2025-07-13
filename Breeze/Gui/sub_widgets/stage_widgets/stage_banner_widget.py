@@ -1,0 +1,47 @@
+from typing import Optional
+
+from PySide6 import QtCore
+from PySide6.QtCore import QSize
+from PySide6.QtWidgets import QLabel, QWidget, QVBoxLayout, QSizePolicy
+
+from Api.project_documents import Stage
+from Gui.components.mvd.stage_mvd.stage_list_item_delegate import StageListItemAlwaysOnDelegate
+from Gui.components.mvd.stage_mvd.stage_list_model import StageItemMetrics
+from Gui.components.mvd.stage_mvd.stage_list_view import StageListView
+
+
+class StageBannerWidget(QWidget):
+    def __init__(self):
+        super().__init__()
+        self._init_ui()
+        self.stage: Optional[Stage] = None
+
+    def _init_ui(self):
+        layout = QVBoxLayout()
+        self.setLayout(layout)
+        layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop | QtCore.Qt.AlignmentFlag.AlignLeft)
+
+        # show asset
+        asset_label = QLabel()
+        layout.addWidget(asset_label)
+        asset_label.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+
+        # show stage
+        stage_list_view = StageListView()
+        layout.addWidget(stage_list_view)
+        stage_list_view.setMaximumSize(QSize(256, StageItemMetrics.height + 6))
+        stage_list_view.setItemDelegate(StageListItemAlwaysOnDelegate())
+
+        # public vars
+        self._asset_label = asset_label
+        self.stage_list_view = stage_list_view
+
+    def set_stage(self, stage: Stage = None):
+        self.stage = stage
+        self.stage_list_view.set_stage(stage)
+
+        if stage is None:
+            text = ""
+        else:
+            text = f"{stage.asset.category} > {stage.asset.name} > {stage.asset.variant}"
+        self._asset_label.setText(text)

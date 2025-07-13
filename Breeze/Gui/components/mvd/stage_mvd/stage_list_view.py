@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 from PySide6.QtCore import Signal, QModelIndex, QItemSelectionModel
+from PySide6.QtWidgets import QSizePolicy
 
 from Api.project_documents import Asset, Stage
 from Gui.components.mvd.abstract_mvd import AbstractListView
@@ -24,7 +25,6 @@ class StageListView(AbstractListView):
 
     def __init__(self):
         super().__init__()
-
         self._model = StageListModel()
         self.setModel(self._model)
 
