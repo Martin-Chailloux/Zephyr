@@ -172,7 +172,7 @@ class WorkVersionsWidget(QDialog):
     def on_turbine_button_clicked(self):
         if self.stage is None:
             return
-        menu = ProcessSelectMenu(version=self.versions_list.get_selected_version())
+        menu = ProcessSelectMenu(component=self.stage.work_component, version=self.versions_list.get_selected_version())
         confirm = menu.exec()
         print(f"{confirm = }")
 

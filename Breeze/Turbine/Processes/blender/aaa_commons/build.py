@@ -28,20 +28,23 @@ class BlenderBuild(ProcessBuild):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        # TODO: get the template here
+
         # self.get_template_step = GetTemplateStep()
         # self.open_step = OpenStep()
         self.create_file_step = CreateFileStep(version=self.Context.version)
-        self.create_export_collection_step = CreateCollectionStep(name="Work")
-        self.create_work_collection_step = CreateCollectionStep(name="Export")
-        self.create_work_collection_step = CreateCollectionStep(name="Sandbox")
+        self.create_work_collection_step = CreateCollectionStep(name="Work")
+        self.create_export_collection_step = CreateCollectionStep(name="Export")
+        self.create_sandbox_collection_step = CreateCollectionStep(name="Sandbox")
         self.save_step = SaveStep()
 
         self.add_steps([
             # self.get_template_step,
             # self.open_step,
             self.create_file_step,
-            self.create_export_collection_step,
             self.create_work_collection_step,
+            self.create_export_collection_step,
+            self.create_sandbox_collection_step,
             self.save_step,
         ])
 
@@ -49,6 +52,7 @@ class BlenderBuild(ProcessBuild):
         # self.get_template_step.run()
         # self.open_step.run(filepath=self.get_template_step.version.filepath)
         self.create_file_step.run()
-        self.create_export_collection_step.run()
         self.create_work_collection_step.run()
+        self.create_export_collection_step.run()
+        self.create_sandbox_collection_step.run()
         self.save_step.run(file=self.create_file_step.file)

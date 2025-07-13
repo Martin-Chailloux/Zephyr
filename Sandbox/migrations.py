@@ -113,12 +113,19 @@ def set_root_paths():
         project.update(root_path=str(p.joinpath(project.name)))
 
 def register_processes():
-    CreateMovie.register_mg_process()
+    for process in Process.objects():
+        process.delete()
 
-
-if __name__ == '__main__':
     BlenderBuild.register_mg_process()
     BlenderModelingExport.register_mg_process()
     processes = Process.objects()
     for obj in StageTemplate.objects():
         obj.update(processes=processes)
+
+def clear_versions():
+    for version in Version.objects():
+        if 'Templates' not in version.component.stage.asset.category:
+            version.delete()
+
+if __name__ == '__main__':
+    register_processes()

@@ -111,7 +111,7 @@ class Component(Document):
     Export Component: contains the versions of an exported item. \n
     Ingredient: Version of a component that is used inside a Stage.
     """
-    longname: str = StringField(required=True, primary_key=True)
+    longname: str = StringField(required=True, primary_key=True)  # category_name_variant_stage_component
 
     name: str = StringField(required=True, unique_with='stage')  # unique_with seems to not be working as intended
     label: str = StringField(required=True)
@@ -206,33 +206,35 @@ class Version(Document):
     def __repr__(self):
         return f"<Version>: {self.longname}"
 
+
     @classmethod
     def create(cls, component: Component, number: int, software: Software, **kwargs):
         extension = software.extension
+
         longname = f"{component.longname}_{number:03d}.{extension}"
+        existing_version = Version.objects(longname=longname)
+        if existing_version:
+            raise InvalidDocumentError(f"Version already exists: {existing_version[0].__repr__()}")
 
         creation_user = BreezeApp.user
         last_user = creation_user
 
         # get filepath
-        subfolders = component.stage.longname.split("_")
-        subfolders.append(f"{number:03d}")
+        subfolders = component.longname.split("_")
         filepath = Path(BreezeApp.project.root_path).joinpath(*subfolders).joinpath(longname)
+
         # create dirs
         Path(filepath).parent.mkdir(parents=True, exist_ok=True)
 
+        # create document
         kwargs = dict(longname=longname, component=component, number=number, software=software,
                       creation_user=creation_user, last_user=last_user, filepath=str(filepath),
                       **kwargs)
         kwargs = {k: v for k, v in kwargs.items() if v is not None}
-
-        existing_version = Version.objects(longname=longname)
-        if existing_version:
-            raise InvalidDocumentError(f"Version already exists: {existing_version[0].__repr__()}")
-
         version = cls(**kwargs)
         version.save()
 
+        # add to component
         component.add_version(version)
 
         print(f"Created: {version.__repr__()}")

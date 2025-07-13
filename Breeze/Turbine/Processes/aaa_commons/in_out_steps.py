@@ -12,11 +12,16 @@ class CreateFileStep(Step):
     def __init__(self, version: Version):
         super().__init__()
         self.version = version
+        print(f"{self.version = }")
         self.file: Optional[AbstractSoftwareFile] = None
 
     def _inner_run(self):
         template_component: Component = Component.objects.get(longname='Templates_startup_Blender_modeling_work')
+        print(f"{template_component = }")
         source_version = template_component.get_last_version()
+        if source_version is None:
+            raise ValueError(f"No versions were found in the template component {template_component.__repr__()}")
+        print(f"{source_version = }")
         self.Logs.add(f"{source_version = }")
 
         file = source_version.to_file()

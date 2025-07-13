@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 from PySide6.QtCore import Signal, QObject
 
-from Data.project_documents import Version, Job, JobContext
+from Data.project_documents import Version, Job, JobContext, Component
 from Data.studio_documents import User, Process, Software
 
 
@@ -87,7 +87,7 @@ class Step(QObject):
     def log(self) -> str:
         return self.Logs.complete_log
 
-    def add_step(self, step: 'Step') -> Self:
+    def add_step(self, step: 'Step') -> 'Step':
         self.steps.append(step)
         step.updated.connect(self.on_sub_step_updated)
         return step
@@ -154,9 +154,10 @@ class ProcessBase(Step):
     label = "process_label"
     tooltip = "process_tooltip"
 
-    def __init__(self, user: User, version: Version):
+    def __init__(self, user: User, component: Component, version: Version = None):
+        # component and version are split for build process where the component may have 0 versions
         super().__init__()
-        self.Context = JobContext(user=user, component=version.component, version=version)
+        self.Context = JobContext(user=user, component=component, version=version)
         self.mg_job = self.register_mg_job()
         self.Pill.set_idle()
 
@@ -214,8 +215,8 @@ class ProcessBase(Step):
 
 
 class ProcessBuild(ProcessBase):
-    def __init__(self, user: User, version: Version):
+    def __init__(self, user: User, component: Component, **kwargs):
         software = Software.objects.get(label='Blender')
-        version = version.component.create_last_version(software=software)
+        version = component.create_last_version(software=software)
         version.update(comment="Built file")
-        super().__init__(user=user, version=version)
+        super().__init__(user=user, component=component, version=version)
