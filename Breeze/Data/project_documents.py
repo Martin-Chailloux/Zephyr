@@ -270,7 +270,6 @@ class JobContext:
 
 
 class Job(Document):
-    # TODO: delete rules
     longname: str = StringField(required=True, primary_key=True) # name + date
     user: User = ReferenceField(document_type=User, required=True)
     creation_time = DateTimeField(default=datetime.now)
@@ -302,6 +301,7 @@ class Job(Document):
 
 
 # delete rules
+
 # Asset
 Stage.register_delete_rule(Asset, 'stages', mongoengine.PULL)
 
@@ -328,3 +328,8 @@ Software.register_delete_rule(Version, 'software', mongoengine.DENY)
 User.register_delete_rule(Version, 'creation_user', mongoengine.DENY)
 User.register_delete_rule(Version, 'last_user', mongoengine.DENY)
 Stage.register_delete_rule(Version, 'destinations', mongoengine.PULL)
+
+# Job
+User.register_delete_rule(Job, 'user', mongoengine.DENY)
+Process.register_delete_rule(Job, 'source_process', mongoengine.CASCADE)
+Version.register_delete_rule(Job, 'source_version', mongoengine.CASCADE)

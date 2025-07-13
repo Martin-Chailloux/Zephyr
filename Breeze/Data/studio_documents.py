@@ -74,6 +74,7 @@ class Status(Document):
 
 
 class User(Document):
+    # NOTE: users should never be deleted, omit them instead
     pseudo: str = StringField(required=True, primary_key=True)
     fullname: str = StringField(required=True)
     password: str = StringField(default="zephyr")
