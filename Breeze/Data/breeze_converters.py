@@ -4,6 +4,7 @@ from blender_file import BlenderFile
 
 
 def get_file_instance_from_software(software: Software, filepath: str) -> AbstractSoftwareFile:
+    # TODO: replace everywhere with Version.to_file()
     if software.label == 'Blender':
         return BlenderFile(filepath=filepath)
     else:

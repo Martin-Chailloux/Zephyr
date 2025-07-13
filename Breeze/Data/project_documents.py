@@ -3,13 +3,15 @@ import tkinter
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Self
+from typing import Self, Optional
 
 import mongoengine
 from mongoengine import *
 
 from Data.breeze_app import BreezeApp
 from Data.studio_documents import Status, User, Software, Process, StageTemplate
+from abstract_io import AbstractSoftwareFile
+from blender_file import BlenderFile
 
 
 class Asset(Document):
@@ -158,6 +160,14 @@ class Component(Document):
 
         version = Version.create(component=self, number=number, software=software)
         return version
+
+    def get_last_version(self) -> Optional['Version']:
+        versions: list[Version] = self.versions
+        if not versions:
+            return None
+        else:
+            versions = sorted(versions, key=lambda v: v.number, reverse=True)
+            return versions[0]
 
 
 class Version(Document):
