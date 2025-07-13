@@ -2,7 +2,7 @@ from typing import Optional
 
 from Data.project_documents import Version
 from Data.studio_documents import User
-from Turbine.tb_core import Step, CommonProcess
+from Turbine.tb_core import Step, ProcessBase
 
 
 class AddSceneStep(Step):
@@ -33,7 +33,7 @@ class AddMusicStep(Step):
         print(f"{length = }")
 
 
-class CreateMovie(CommonProcess):
+class CreateMovie(ProcessBase):
     name: str = "create_movie"
     label: str = "Create Movie"
     tooltip: str = "demo process"

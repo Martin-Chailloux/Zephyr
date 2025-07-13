@@ -5,7 +5,7 @@ from Data.breeze_app import BreezeApp
 from Data.project_documents import Version
 from Gui.GuiWidgets.abstract_widgets.context_menu_widget import ContextMenuWidget
 from Gui.GuiWidgets.process_widgets.process_list.process_list_view import ProcessListView
-from Turbine.tb_core import CommonProcess
+from Turbine.tb_core import ProcessBase
 
 
 class ProcessSelectMenu(ContextMenuWidget):
@@ -46,7 +46,7 @@ class ProcessSelectMenu(ContextMenuWidget):
         # self.accept()
 
     def on_launch_button_clicked(self):
-        process: CommonProcess.__class__ = self.processes_list.get_selected_process()
+        process: ProcessBase.__class__ = self.processes_list.get_selected_process()
         # TODO: fix typing
         #  - here: emit signal
         #  - add user and version in inputs
