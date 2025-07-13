@@ -14,7 +14,8 @@ BreezeApp.set_user("Martin")
 from Data.studio_documents import StageTemplate
 from Data.project_documents import Stage, Asset, Version, Component
 from Turbine.tb_demo import CreateMovie
-from Turbine.Processes.blender.aaa_commons.build import BlenderBuildProcess
+from Turbine.Processes.blender.aaa_commons.build import BlenderBuild
+from Turbine.Processes.blender.modeling.export.core import BlenderModelingExport
 
 mongoengine.connect(host="mongodb://localhost:27017", db="JourDeVent", alias="current_project")
 
@@ -116,7 +117,8 @@ def register_processes():
 
 
 if __name__ == '__main__':
-    BlenderBuildProcess.register_mg_process()
+    BlenderBuild.register_mg_process()
+    BlenderModelingExport.register_mg_process()
     processes = Process.objects()
     for obj in StageTemplate.objects():
         obj.update(processes=processes)
