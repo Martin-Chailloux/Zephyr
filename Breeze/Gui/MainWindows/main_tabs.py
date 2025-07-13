@@ -25,7 +25,7 @@ class BreezeTabs(QTabWidget):
         self.turbine_tab = self.addTab(self.turbine_window, "Turbine")
 
         temp_window = QMainWindow()
-        temp_tab = self.addTab(temp_window, "Logs")
+        temp_tab = self.addTab(temp_window, "Admin")
 
 
 class BreezeMainWindow(QMainWindow):
