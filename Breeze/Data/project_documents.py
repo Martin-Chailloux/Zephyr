@@ -254,6 +254,12 @@ class Version(Document):
         r.update()  # now it stays on the clipboard after the window is closed
         r.destroy()
 
+    def to_file(self) -> AbstractSoftwareFile:
+        if self.software.label == 'Blender':
+            return BlenderFile(filepath=self.filepath)
+        else:
+            raise NotImplementedError(f"File instance for: {self.software.__repr__()}")
+
 
 @dataclass
 class JobContext:
