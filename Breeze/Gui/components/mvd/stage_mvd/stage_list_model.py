@@ -17,7 +17,7 @@ class StageItemRoles:
 
 @dataclass
 class StageItemMetrics:
-    height: int = 36
+    height: int = 42
     logo_w: int = 48
     status_w: int = 52
 
