@@ -21,7 +21,7 @@ class AbstractSoftwareFile:
     def save(self):
         pass
 
-    def save_as(self, filepath: str = None):
+    def save_as(self, filepath):
         pass
 
     def new_file(self):

@@ -1,4 +1,5 @@
 import sys
+
 # externalize logs
 sys.stdout.reconfigure(line_buffering=True)
 sys.stderr.reconfigure(line_buffering=True)
@@ -48,8 +49,7 @@ class BlenderFile(AbstractSoftwareFile):
     def save(self):
         bpy.ops.wm.save_mainfile(filepath=self.filepath)
 
-    def save_as(self, filepath: str = None):
-        self.open()
+    def save_as(self, filepath):
         bpy.ops.wm.save_as_mainfile(filepath=filepath)
         self.set_filepath(filepath)
 
