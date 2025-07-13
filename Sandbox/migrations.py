@@ -1,5 +1,3 @@
-from copy import deepcopy
-from datetime import datetime
 from pathlib import Path
 
 import mongoengine
@@ -7,15 +5,14 @@ import mongoengine
 
 mongoengine.connect(host="mongodb://localhost:27017", db="Studio", alias="default")
 
-from Data.studio_documents import User, Palette, Project, Process
-from Data.breeze_app import BreezeApp
+from Api.studio_documents import User, Palette, Project, Process
+from Api.breeze_app import BreezeApp
 BreezeApp.set_project("JourDeVent")
 BreezeApp.set_user("Martin")
-from Data.studio_documents import StageTemplate
-from Data.project_documents import Stage, Asset, Version, Component
-from Turbine.tb_demo import CreateMovie
-from Turbine.Processes.blender.aaa_commons.build import BlenderBuild
-from Turbine.Processes.blender.modeling.export.core import BlenderModelingExport
+from Api.studio_documents import StageTemplate
+from Api.project_documents import Stage, Asset, Version
+from Processes.blender.aaa_commons.build import BlenderBuild
+from Processes.blender.modeling.export.core import BlenderModelingExport
 
 mongoengine.connect(host="mongodb://localhost:27017", db="JourDeVent", alias="current_project")
 

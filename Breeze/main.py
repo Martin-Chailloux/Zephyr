@@ -16,7 +16,7 @@ if __name__ == '__main__':
     print("Connecting ...")
     mongoengine.connect(host="mongodb://localhost:27017", db="Studio", alias="default")
 
-    from Data.breeze_app import BreezeApp
+    from Api.breeze_app import BreezeApp
 
     app = QApplication(sys.argv)
     BreezeApp.set_project("JourDeVent")
@@ -26,9 +26,9 @@ if __name__ == '__main__':
     mongoengine.connect(host="mongodb://localhost:27017", db=BreezeApp.project.name, alias="current_project")
     chrono.tick("... Connected in:")
 
-    from Data import breeze_dialog
+    from Api import breeze_dialog
     breeze_dialog.Listener()
-    from Gui.MainWindows.main_tabs import BreezeMainWindow
+    from Gui.main_windows.main_tabs import BreezeMainWindow
     window = BreezeMainWindow()
     window.show()
     chrono.tick(f"... Finished launching 'Breeze' in:")
