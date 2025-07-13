@@ -264,7 +264,8 @@ class Version(Document):
 @dataclass
 class JobContext:
     user: User
-    version: Version
+    component: Component
+    version: Optional[Version]
     creation_time = datetime.now()
 
 

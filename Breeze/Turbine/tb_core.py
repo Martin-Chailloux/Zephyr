@@ -70,10 +70,11 @@ class Step(QObject):
     def __init__(self, sub_label: str = None):
         super().__init__()
         self.sub_label = sub_label
-
         self.Pill = StepPill()
         self.Logs = StepLog()
         self.steps: list[Step] = []
+
+        self.Logs.add(msg=f"\n Starting step '{self.label}' ... ")
 
     def set_sub_label(self, sub_label: str):
         self.sub_label = sub_label
@@ -86,7 +87,7 @@ class Step(QObject):
     def log(self) -> str:
         return self.Logs.complete_log
 
-    def add_step(self, step: Self) -> Self:
+    def add_step(self, step: 'Step') -> Self:
         self.steps.append(step)
         step.updated.connect(self.on_sub_step_updated)
         return step
@@ -99,7 +100,6 @@ class Step(QObject):
         self.updated.emit()
 
     def run(self, **kwargs):
-        self.Logs.add(msg=f"\n Starting step '{self.label}' ... ")
         # TODO: duration
 
         self.Pill.set_running()
@@ -149,14 +149,14 @@ class Step(QObject):
         return infos
 
 
-class CommonProcess(Step):
+class ProcessBase(Step):
     name: str = "process_name"
     label = "process_label"
     tooltip = "process_tooltip"
 
     def __init__(self, user: User, version: Version):
         super().__init__()
-        self.Context = JobContext(user=user, version=version)
+        self.Context = JobContext(user=user, component=version.component, version=version)
         self.mg_job = self.register_mg_job()
         self.Pill.set_idle()
 
@@ -213,7 +213,7 @@ class CommonProcess(Step):
         self.mg_job.update(steps=self.to_dict())
 
 
-class BuildProcess(CommonProcess):
+class ProcessBuild(ProcessBase):
     def __init__(self, user: User, version: Version):
         software = Software.objects.get(label='Blender')
         version = version.component.create_last_version(software=software)
