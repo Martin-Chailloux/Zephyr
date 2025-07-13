@@ -1,5 +1,5 @@
 from PySide6 import QtCore
-from PySide6.QtWidgets import QMainWindow, QWidget, QListView, QSplitter, QVBoxLayout, QLabel, QSizePolicy, QDockWidget
+from PySide6.QtWidgets import QMainWindow, QLabel, QDockWidget
 
 from Turbine.Gui.tb_select_process_panel import SelectProcessPanel
 from Turbine.Gui.tb_steps_viewer import StepsViewer
