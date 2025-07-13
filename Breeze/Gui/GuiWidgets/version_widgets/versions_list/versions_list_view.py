@@ -50,13 +50,8 @@ class VersionListView(AbstractListView):
 
     def mouseDoubleClickEvent(self, event):
         version = self.get_hovered_version()
-
-        # get matching Software's instance
-        software_instance = breeze_converters.get_file_instance_from_software(
-            software=version.software,
-            filepath=version.filepath
-        )
-        software_instance.open_interactive()
+        file = version.to_file()
+        file.open_interactive()
         print(f"Opening {version.software.label} file: {version.filepath}")
 
     def show_context_menu(self, position: QPoint):

@@ -17,14 +17,13 @@ def new_empty_version(stage: Stage):
         return
 
     # reserve version
-    version = stage.work_component.create_last_version(software_select.software)
+    version = stage.work_component.create_last_version(software=software_select.software)
     version.update(comment=comment_box.comment)
 
     # create file
-    software_instance = breeze_converters.get_file_instance_from_software(software=software_select.software,
-                                                                          filepath=version.filepath)
-    software_instance.new_file()
-    print(f"Created file: {software_instance.filepath}")
+    file = version.to_file()
+    file.new_file()
+    print(f"Created file: {file.filepath}")
 
 
 def increment(old_version: Version):
@@ -39,6 +38,5 @@ def increment(old_version: Version):
     new_version.update(comment=comment_box.comment)
 
     # create file
-    software_instance = breeze_converters.get_file_instance_from_software(software=new_version.software,
-                                                                          filepath=old_version.filepath)
-    software_instance.save_as(filepath=new_version.filepath)
+    file = old_version.to_file()
+    file.save_as(filepath=new_version.filepath)

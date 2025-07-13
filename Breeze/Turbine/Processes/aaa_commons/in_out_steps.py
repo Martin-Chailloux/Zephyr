@@ -1,6 +1,5 @@
 from typing import Optional
 
-from Data.breeze_converters import get_file_instance_from_software
 from Data.project_documents import Version, Component
 from Turbine.tb_core import Step
 from abstract_io import AbstractSoftwareFile
@@ -16,17 +15,15 @@ class CreateFileStep(Step):
         self.file: Optional[AbstractSoftwareFile] = None
 
     def _inner_run(self):
-        template_component = Component.objects.get(longname='Templates_startup_Blender_modeling_work')
+        template_component: Component = Component.objects.get(longname='Templates_startup_Blender_modeling_work')
         source_version = template_component.get_last_version()
         self.Logs.add(f"{source_version = }")
 
-        file = get_file_instance_from_software(software=source_version.software, filepath=source_version.filepath)
-        file.open()
+        file = source_version.to_file()
         file.save_as(filepath=self.version.filepath)
         self.file = file
         self.Logs.add(msg=f"Creating a {self.version.software.label} file ...")
         self.Logs.add(msg=f"{self.version = }")
-        # file.new_file()
 
     def _is_success(self) -> bool:
         return self.file is not None
