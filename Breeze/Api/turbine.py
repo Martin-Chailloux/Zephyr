@@ -1,3 +1,4 @@
+import traceback
 from dataclasses import dataclass
 
 from PySide6.QtCore import Signal, QObject
@@ -109,15 +110,10 @@ class Step(QObject):
             self.Logs.add(msg=f"... step '{self.label}': SUCCESS \n")
 
         except Exception as e:
-            self.Logs.set(str(e))
-            print(f"ERROR IN STEP '{self.label}':")
-            print(e)
-            self.Logs.add(msg=str(e))
-            self.Logs.add(msg=f"... step '{self.label}': ERROR ")
-
+            self.Logs.add(msg=traceback.format_exc())
             self.Pill.set_error()
             self.updated.emit()
-            raise e
+            raise RuntimeError(traceback.format_exc(chain=False))
 
     def _inner_run(self, **kwargs):
         # override with actions
@@ -166,8 +162,11 @@ class ProcessBase(Step):
         try:
             super().run()
             self.Pill.set_success()
-        except Exception as e:
-            self.Logs.add(str(e))
+        except RuntimeError:
+            print(f"{self.label = }")
+            print(traceback.format_exc(chain=False))
+
+            # self.Logs.add(traceback.format_exc())
             self.Pill.set_error()
 
         self.update_mg_job()
