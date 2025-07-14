@@ -19,6 +19,7 @@ class SelectedStagePanel(QWidget):
         self.setLayout(layout)
         layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop | QtCore.Qt.AlignmentFlag.AlignLeft)
 
+        # TODO [fix]: when changing asset this jumps to the last stage of the list
         stage_banner_widget = StageBannerWidget()
         layout.addWidget(stage_banner_widget)
 
