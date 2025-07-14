@@ -20,7 +20,7 @@ class StageListHoverData:
 
 
 class StageListView(AbstractListView):
-    stage_selected = Signal(str)
+    stage_selected = Signal()
     stage_data_modified = Signal()
 
     def __init__(self):
@@ -35,7 +35,6 @@ class StageListView(AbstractListView):
         self._connect_signals()
 
     def refresh(self):
-        # TODO: quand y en a qu'un ça refresh pas
         selected_indexes = self.selectionModel().selectedIndexes()
         self._model.refresh()
         if selected_indexes:
@@ -44,30 +43,30 @@ class StageListView(AbstractListView):
         self.set_items_hover_infos()
         self.viewport().update()
 
-    def set_asset(self, asset: Asset):
+    def set_asset(self, asset: Asset=None):
+        print(f"SET ASSET: {asset = }")
         if asset is None:
             return
-        self._model.populate(stages=asset.stages)
+        else:
+            self.selectionModel().blockSignals(True)
+            self._model.populate(stages=asset.stages)
+            self.selectionModel().blockSignals(False)
 
-    def set_stage(self, stage: Stage):
+    def set_stage(self, stage: Stage=None):
+        print(f"SET STAGE: {stage = }")
         if stage is None:
             return
-        self._model.populate(stages=[stage])
+        else:
+            self.selectionModel().blockSignals(True)
+            self._model.populate(stages=[stage])
+            self.selectionModel().blockSignals(False)
 
-    def _connect_signals(self):
-        self.selectionModel().selectionChanged.connect(self.on_selection_changed)
-
-    def on_selection_changed(self):
-        current_stage = self.get_selected_stage()
-        if current_stage is None:
-            self.stage_selected.emit("")
-            return
-        self.stage_selected.emit(current_stage.longname)
-
-    def get_selected_stage(self) -> Stage | None:
+    @property
+    def stage(self) -> Stage | None:
         selected_indexes = self.selectionModel().selectedIndexes()
         if not selected_indexes:
             return None
+
         selected_index = selected_indexes[0]
         selected_item = self._model.item(selected_index.row())
         if selected_item is None:
@@ -75,6 +74,13 @@ class StageListView(AbstractListView):
 
         current_stage: Stage = selected_item.data(StageItemRoles.stage)
         return current_stage
+
+    def _connect_signals(self):
+        self.selectionModel().selectionChanged.connect(self._on_selection_changed)
+
+    def _on_selection_changed(self):
+        print(f"SELECTION CHANGED")
+        self.stage_selected.emit()
 
     def _get_hovered_stage(self) -> Stage | None:
         hovered_item = self.get_hovered_item()
@@ -109,6 +115,7 @@ class StageListView(AbstractListView):
 
         # Set tooltip
         # TODO: pollutes the gui, use a help bar at the bottom of the app instead
+        #  it receives text signals
         if hovered_item.data(StageItemRoles.user_is_hovered):
             tooltip = "Edit user"
         elif hovered_item.data(StageItemRoles.status_is_hovered):

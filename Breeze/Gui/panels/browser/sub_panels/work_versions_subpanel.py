@@ -4,7 +4,7 @@ from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel
 from Api.project_documents import Stage
 from Gui.components.popups.process_launcher import ProcessSelectMenu
 from Gui.sub_widgets.util_widgets.util_widgets import TextBox, PushButtonAutoWidth
-from Gui.panels.browser.work_versions import work_versions_api
+from Gui.panels.browser.sub_panels import work_versions_api
 from Gui.components.mvd.version_mvd.version_list_view import VersionListView
 
 
@@ -142,6 +142,8 @@ class WorkVersionsWidget(QDialog):
 
     def set_stage(self, stage: Stage):
         self.stage = stage
+        if stage is None:
+            return
 
         self.versions_list.set_collection(stage.work_component)
         self.versions_list.select_row(0)

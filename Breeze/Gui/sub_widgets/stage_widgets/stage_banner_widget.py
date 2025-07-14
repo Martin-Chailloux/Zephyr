@@ -27,21 +27,23 @@ class StageBannerWidget(QWidget):
         asset_label.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
 
         # show stage
-        stage_list_view = StageListView()
-        layout.addWidget(stage_list_view)
-        stage_list_view.setMaximumSize(QSize(256, StageItemMetrics.height + 6))
-        stage_list_view.setItemDelegate(StageListItemAlwaysOnDelegate())
+        stage_list = StageListView()
+        layout.addWidget(stage_list)
+        stage_list.setMaximumSize(QSize(256, StageItemMetrics.height + 6))
+        stage_list.setItemDelegate(StageListItemAlwaysOnDelegate())
 
         # public vars
         self._asset_label = asset_label
-        self.stage_list_view = stage_list_view
+        self.stage_list = stage_list
 
     def set_stage(self, stage: Stage = None):
         self.stage = stage
-        self.stage_list_view.set_stage(stage)
 
-        if stage is None:
-            text = ""
-        else:
+        # asset
+        if stage is not None:
             text = f"{stage.asset.category} > {stage.asset.name} > {stage.asset.variant}"
-        self._asset_label.setText(text)
+            self._asset_label.setText(text)
+
+        # stage
+        self.stage_list.set_stage(stage)
+

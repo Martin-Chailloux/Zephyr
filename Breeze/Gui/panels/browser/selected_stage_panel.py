@@ -4,7 +4,8 @@ from PySide6 import QtCore
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QSplitter, QLabel
 
 from Api.project_documents import Stage
-from Gui.panels.browser.work_versions.work_versions_subpanel import WorkVersionsWidget
+from Gui.panels.browser.sub_panels.stage_exports_subpanel import SelectedStageSubPanel
+from Gui.panels.browser.sub_panels.work_versions_subpanel import WorkVersionsWidget
 from Gui.sub_widgets.stage_widgets.stage_banner_widget import StageBannerWidget
 
 
@@ -25,23 +26,24 @@ class SelectedStagePanel(QWidget):
 
         placeholder1 = QLabel()
         work_versions_widget = WorkVersionsWidget(stage=None)
-        placeholder2 = QLabel()
+        stage_exports_widget = SelectedStageSubPanel()
 
         v_splitter = QSplitter()
         layout.addWidget(v_splitter, 1)
         v_splitter.setChildrenCollapsible(False)
         v_splitter.addWidget(placeholder1)
         v_splitter.addWidget(work_versions_widget)
-        v_splitter.addWidget(placeholder2)
+        v_splitter.addWidget(stage_exports_widget)
 
         layout.setStretch(0, 0)
 
         # public vars
         self.stage_banner_widget = stage_banner_widget
         self.work_versions_widget = work_versions_widget
+        self.stage_exports_widget = stage_exports_widget
 
     def set_stage(self, stage: Stage = None):
         self.stage = stage
         self.stage_banner_widget.set_stage(stage=stage)
         self.work_versions_widget.set_stage(stage=stage)
-
+        self.stage_exports_widget.set_stage(stage=stage)

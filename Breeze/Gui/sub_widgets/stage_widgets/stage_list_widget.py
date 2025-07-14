@@ -1,3 +1,5 @@
+from typing import Optional
+
 import qtawesome
 
 from PySide6 import QtCore
@@ -12,9 +14,9 @@ from Gui.components.mvd.stage_mvd.stage_list_view import StageListView
 
 class StageListWidget(QWidget):
 
-    def __init__(self, asset: Asset):
+    def __init__(self):
         super().__init__()
-        self.current_asset: Asset = asset
+        self.asset: Optional[Asset] = None
         self.stage_items: list[StageItem] = []
         self._init_ui()
 
@@ -25,8 +27,8 @@ class StageListWidget(QWidget):
         layout.setContentsMargins(0, 7, 0, 0)
         layout.setSpacing(5)
 
-        stages_list_view = StageListView()
-        layout.addWidget(stages_list_view)
+        stage_list = StageListView()
+        layout.addWidget(stage_list)
 
         # 'Edit' button
         edit_button = QPushButton(" Edit stages")
@@ -40,19 +42,12 @@ class StageListWidget(QWidget):
 
         # public vars
         self.new_button = edit_button
-        self.stage_list_view = stages_list_view
-
-    def set_current_asset(self, asset: Asset):
-        self.current_asset = asset
-        self.refresh()
-
-    def refresh(self):
-        self.stage_list_view.set_asset(self.current_asset)
+        self.stage_list = stage_list
 
     # ------------------------
     # Events
     # ------------------------
     def on_edit_stages_clicked(self):
-        popup = StageTemplateSelector(asset=self.current_asset)
+        popup = StageTemplateSelector(asset=self.asset)
         popup.exec()
-        self.refresh()
+        self.stage_list.refresh()

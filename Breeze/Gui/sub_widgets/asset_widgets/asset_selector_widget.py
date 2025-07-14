@@ -14,7 +14,7 @@ from Gui.sub_widgets.asset_widgets.bookmark_widgets import BookmarkIconButton
 class AssetSelectorWidget(QWidget):
     h = 32
     add_item_label = "New"
-    asset_selected = Signal(str)
+    asset_selected = Signal()
 
     def __init__(self, project: Project):
         super().__init__()
@@ -80,9 +80,14 @@ class AssetSelectorWidget(QWidget):
         return self.variant_cb.currentText()
 
     @property
-    def current_asset(self) -> Asset:
-        current_asset = Asset.objects.get(category=self.category, name=self.name, variant=self.variant)
-        return current_asset
+    def asset(self) -> Asset | None:
+        asset = Asset.objects(category=self.category, name=self.name, variant=self.variant)
+        if not asset:
+            return None
+        elif len(asset) == 1:
+            return asset[0]
+        else:  # this is not supposed to happen
+            raise ValueError(f"Found more than 1 asset: {asset = }")
 
     def connect_signals(self):
         self.category_cb.currentTextChanged.connect(self.on_category_selected)
@@ -125,14 +130,8 @@ class AssetSelectorWidget(QWidget):
 
     def on_variant_selected(self):
         self.cache.set_key(self.category, self.name, self.variant)
-
-        forbidden = [self.add_item_label, ""]
-        for s in self.category, self.name, self.variant:
-            if s in forbidden:
-                self.asset_selected.emit("")
-                return
-
-        self.asset_selected.emit(self.current_asset.longname)
+        print(f"\n\nON VARIANT SELECTED")
+        self.asset_selected.emit()
 
     def on_category_created(self, category: str):
         print(f"CATEGORY CREATED: {category}")
