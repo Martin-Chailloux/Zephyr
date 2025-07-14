@@ -43,7 +43,7 @@ class ExportStep(Step):
         self.file = self.source_version.to_file()
         self.file.open()
 
-        component = self.source_version.component.stage.create_component(name="geo", label="Geo")
+        component = self.source_version.component.stage.create_component(name="geo", label="Geo", crash_if_exists=False)
         exported_version = component.create_last_version(software=self.source_version.software)
         self.file.save_as(filepath=exported_version.filepath)
 

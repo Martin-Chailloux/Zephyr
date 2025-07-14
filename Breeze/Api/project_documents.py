@@ -80,10 +80,15 @@ class Stage(Document):
     def __repr__(self):
         return f"<Stage>: {self.longname}'"
 
-    def create_component(self, name: str, label: str) -> 'Component':
+    def create_component(self, name: str, label: str, crash_if_exists: bool = True) -> 'Component':
+        component = Component.objects(name=name, label=label, stage=self)
+        if len(component) == 1:
+            if crash_if_exists:
+                raise ValueError(f"{component.__repr__()} is already a component of {self.__repr__()}")
+            else:
+                return component[0]
+
         component = Component.create(name=name, label=label, stage=self)
-        if component in self.components:
-            raise ValueError(f"{component.__repr__()} is already a component of {self.__repr__()}")
         self.components.append(component)
         self.save()
         return component
