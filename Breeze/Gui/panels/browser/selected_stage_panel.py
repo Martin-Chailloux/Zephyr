@@ -1,6 +1,7 @@
 from typing import Optional
 
 from PySide6 import QtCore
+from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QSplitter, QLabel
 
 from Api.project_documents import Stage
@@ -10,6 +11,8 @@ from Gui.sub_widgets.stage_widgets.stage_banner_widget import StageBannerWidget
 
 
 class SelectedStagePanel(QWidget):
+    stage_data_modified = Signal()
+
     def __init__(self):
         super().__init__()
         self._init_ui()
@@ -47,3 +50,13 @@ class SelectedStagePanel(QWidget):
         self.stage_banner_widget.set_stage(stage=stage)
         self.work_versions_widget.set_stage(stage=stage)
         self.stage_exports_widget.set_stage(stage=stage)
+
+    def _connect_signals(self):
+        # promote from sub-widgets
+        self.stage_banner_widget.stage_list.stage_data_modified.connect(self._on_stage_data_modified)
+
+    def _on_stage_data_modified(self):
+        self.stage_data_modified.emit()
+
+    def refresh(self):
+        self.stage_banner_widget.stage_list.refresh()

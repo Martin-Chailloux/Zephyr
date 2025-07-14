@@ -14,7 +14,7 @@ class BrowserGui(QMainWindow):
         self.setWindowTitle("Breeze")
         self.setWindowIcon(qtawesome.icon("fa5s.wind"))
         self._init_ui()
-        self.connect_signals()
+        self._connect_signals()
 
     def _init_ui(self):
         # stage central widget
@@ -32,26 +32,30 @@ class BrowserGui(QMainWindow):
         self.asset_browser_panel = asset_browser_panel
         self.selected_stage_panel = selected_stage_panel
 
-    def connect_signals(self):
-        self.asset_browser_panel.asset_selector_widget.asset_selected.connect(self.on_asset_selected)
-        self.asset_browser_panel.stage_list_widget.stage_list.stage_selected.connect(self.on_stage_selected)
+    def _connect_signals(self):
+        self.asset_browser_panel.asset_selected.connect(self._on_asset_selected)
+        self.asset_browser_panel.stage_selected.connect(self._on_stage_selected)
 
-        self.asset_browser_panel.stage_list_widget.stage_list.stage_data_modified.connect(self.refresh_versions_stage)
-        self.selected_stage_panel.stage_banner_widget.stage_list.stage_data_modified.connect(self.refresh_stage_list)
+        # match stage data between asset_browser_panel and selected_stage_panel
+        self.asset_browser_panel.stage_data_modified.connect(self.refresh_selected_stage_banner)
+        self.selected_stage_panel.stage_data_modified.connect(self.refresh_asset_stage_list)
 
-    def on_asset_selected(self):
-        selected_stage = self.selected_stage_panel.stage_banner_widget.stage
-
+    def _on_asset_selected(self):
+        # select stage from selected_stage_panel in list
+        selected_stage = self.selected_stage_panel.stage
         stages = self.asset_browser_panel.asset_stages
         if selected_stage in stages:
-            self.asset_browser_panel.stage_list_widget.stage_list.select_stage(stage=selected_stage)
+            self.asset_browser_panel.select_stage(stage=selected_stage)
 
-    def on_stage_selected(self):
-        stage = self.asset_browser_panel.stage_list_widget.stage_list.selected_stage
+    def _on_stage_selected(self):
+        # update selected_stage_panel
+        stage = self.asset_browser_panel.selected_stage
         self.selected_stage_panel.set_stage(stage=stage)
 
-    def refresh_stage_list(self):
-        self.asset_browser_panel.stage_list_widget.stage_list.refresh()
+    # TODO: the 2 refreshes below could refresh more than needed if they are expanded in the future
+    #  keep track of them
+    def refresh_asset_stage_list(self):
+        self.asset_browser_panel.refresh()  # refresh stage list
 
-    def refresh_versions_stage(self):
-        self.selected_stage_panel.stage_banner_widget.stage_list.refresh()
+    def refresh_selected_stage_banner(self):
+        self.selected_stage_panel.refresh()  # refresh stage in banner
