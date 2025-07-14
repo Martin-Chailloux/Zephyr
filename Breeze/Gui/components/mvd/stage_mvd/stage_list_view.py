@@ -44,7 +44,6 @@ class StageListView(AbstractListView):
         self.viewport().update()
 
     def set_asset(self, asset: Asset=None):
-        print(f"SET ASSET: {asset = }")
         if asset is None:
             return
         else:
@@ -53,7 +52,6 @@ class StageListView(AbstractListView):
             self.selectionModel().blockSignals(False)
 
     def set_stage(self, stage: Stage=None):
-        print(f"SET STAGE: {stage = }")
         if stage is None:
             return
         else:
@@ -62,7 +60,7 @@ class StageListView(AbstractListView):
             self.selectionModel().blockSignals(False)
 
     @property
-    def stage(self) -> Stage | None:
+    def selected_stage(self) -> Stage | None:
         selected_indexes = self.selectionModel().selectedIndexes()
         if not selected_indexes:
             return None
@@ -75,11 +73,20 @@ class StageListView(AbstractListView):
         current_stage: Stage = selected_item.data(StageItemRoles.stage)
         return current_stage
 
+    def select_stage(self, stage: Stage = None):
+        if stage is None:
+            self.selectionModel().clearSelection()
+            return
+
+        for row in range(self._model.rowCount()):
+            index = self._model.index(row, 0)
+            if stage == index.data(StageItemRoles.stage):
+                self.select_row(row)
+
     def _connect_signals(self):
         self.selectionModel().selectionChanged.connect(self._on_selection_changed)
 
     def _on_selection_changed(self):
-        print(f"SELECTION CHANGED")
         self.stage_selected.emit()
 
     def _get_hovered_stage(self) -> Stage | None:

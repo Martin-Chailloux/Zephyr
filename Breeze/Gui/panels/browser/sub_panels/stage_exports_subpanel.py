@@ -32,7 +32,6 @@ class SelectedStageSubPanel(QWidget):
         for component in stage.components:
             versions.extend(component.versions)
 
-        print(f"{versions = }")
         self.table.populate(versions=versions)
 
 

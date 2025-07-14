@@ -1,6 +1,7 @@
 from PySide6.QtWidgets import QWidget, QVBoxLayout
 
 from Api.breeze_app import BreezeApp
+from Api.project_documents import Stage
 from Gui.sub_widgets.asset_widgets.asset_selector_widget import AssetSelectorWidget
 from Gui.sub_widgets.stage_widgets.stage_list_widget import StageListWidget
 
@@ -26,6 +27,14 @@ class AssetBrowserPanel(QWidget):
 
         self.asset_selector_widget = asset_selector_widget
         self.stage_list_widget = stage_list_widget
+
+    @property
+    def asset_stages(self) -> list[Stage]:
+        asset = self.asset_selector_widget.asset
+        if asset is None:
+            return []
+        else:
+            return asset.stages
 
     def _connect_signals(self):
         self.asset_selector_widget.asset_selected.connect(self._on_asset_selected)

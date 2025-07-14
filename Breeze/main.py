@@ -28,7 +28,7 @@ if __name__ == '__main__':
 
     from Api import breeze_dialog
     breeze_dialog.Listener()
-    from Gui.main_windows.main_tabs import BreezeMainWindow
+    from Gui.main_windows.tabs import BreezeMainWindow
     window = BreezeMainWindow()
     window.show()
     chrono.tick(f"... Finished launching 'Breeze' in:")

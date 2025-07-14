@@ -33,13 +33,21 @@ class BrowserGui(QMainWindow):
         self.selected_stage_panel = selected_stage_panel
 
     def connect_signals(self):
+        self.asset_browser_panel.asset_selector_widget.asset_selected.connect(self.on_asset_selected)
         self.asset_browser_panel.stage_list_widget.stage_list.stage_selected.connect(self.on_stage_selected)
 
         self.asset_browser_panel.stage_list_widget.stage_list.stage_data_modified.connect(self.refresh_versions_stage)
         self.selected_stage_panel.stage_banner_widget.stage_list.stage_data_modified.connect(self.refresh_stage_list)
 
+    def on_asset_selected(self):
+        selected_stage = self.selected_stage_panel.stage_banner_widget.stage
+
+        stages = self.asset_browser_panel.asset_stages
+        if selected_stage in stages:
+            self.asset_browser_panel.stage_list_widget.stage_list.select_stage(stage=selected_stage)
+
     def on_stage_selected(self):
-        stage = self.asset_browser_panel.stage_list_widget.stage_list.stage
+        stage = self.asset_browser_panel.stage_list_widget.stage_list.selected_stage
         self.selected_stage_panel.set_stage(stage=stage)
 
     def refresh_stage_list(self):

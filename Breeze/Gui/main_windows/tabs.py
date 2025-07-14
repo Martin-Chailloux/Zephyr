@@ -3,8 +3,8 @@ import qtawesome
 from PySide6.QtWidgets import QTabWidget, QMainWindow
 
 from Gui.panels.browser.top_menu_bar import BreezeTopMenuBar
-from Gui.main_windows.browser_main_window import BrowserGui
-from Gui.main_windows.turbine_main_window import TurbineGui
+from Gui.main_windows.browser import BrowserGui
+from Gui.main_windows.turbine import TurbineGui
 
 
 # TODO: empty tabs to switch to when not loaded

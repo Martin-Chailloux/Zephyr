@@ -130,7 +130,6 @@ class AssetSelectorWidget(QWidget):
 
     def on_variant_selected(self):
         self.cache.set_key(self.category, self.name, self.variant)
-        print(f"\n\nON VARIANT SELECTED")
         self.asset_selected.emit()
 
     def on_category_created(self, category: str):
