@@ -3,11 +3,11 @@ from typing import Optional
 import bpy
 
 from Api.project_documents import Version
-from Api.turbine import ProcessBase, Step
+from Api.turbine import ProcessBase, StepBase, StepLabel
 from blender_file import BlenderFile
 
 
-class CollectStep(Step):
+class CollectStep(StepBase):
     label: str = "Collect"
     tooltip: str = ""
 
@@ -22,14 +22,19 @@ class CollectStep(Step):
         self.export_collection = bpy.data.collections.get('Export', None)
 
 
-class ExportStep(Step):
+class ExportStep(StepBase):
     label: str = "Export"
     tooltip: str = ""
+    allow_overwrite: bool = True  # TODO: log when a version is written over
 
     def __init__(self, version: Version):
         super().__init__()
         self.source_version = version
         self.file: Optional[BlenderFile] = None
+
+        self.step1 = self.add_step(StepLabel(label="Step 1"))
+        self.step1_bis = self.step1.add_step(StepLabel(label="Step 1 bis"))
+        self.step2 = self.add_step(StepLabel(label="Step 2"))
 
     def _is_success(self) -> bool:
         return self.file is not None
@@ -42,10 +47,20 @@ class ExportStep(Step):
         # create component
         self.file = self.source_version.to_file()
         self.file.open()
+        self.step1.run()
 
-        component = self.source_version.component.stage.create_component(name="geo", label="Geo", crash_if_exists=False)
-        exported_version = component.create_last_version(software=self.source_version.software)
-        self.file.save_as(filepath=exported_version.filepath)
+        component = self.source_version.component.stage.create_component(name="geo", label="Geo", crash_if_exists=False)  # TODO: create should not get, split in 2
+        self.step1_bis.run()
+        version = component.get_version(number=self.source_version.number)
+        if version is None:
+            version = component.create_version(number=self.source_version.number, software=self.source_version.software)
+        elif not self.allow_overwrite:
+            raise ValueError(f"Version {version.__repr__()} already exists. Use 'allow overwrite' to export over it.")
+
+        self.step2.run()
+
+
+        self.file.save_as(filepath=version.filepath)
 
 
 class BlenderModelingExport(ProcessBase):

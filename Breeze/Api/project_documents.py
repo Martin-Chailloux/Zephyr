@@ -161,8 +161,13 @@ class Component(Document):
             number = 1
         else:
             versions = sorted(versions, key=lambda v: v.number, reverse=True)
-            number: int = versions[0].number + 1
+            number: int = versions[0].number
+            number += 1
 
+        version = Version.create(component=self, number=number, software=software)
+        return version
+
+    def create_version(self, number: int, software: Software):
         version = Version.create(component=self, number=number, software=software)
         return version
 
@@ -172,6 +177,15 @@ class Component(Document):
             return None
         else:
             versions = sorted(versions, key=lambda v: v.number, reverse=True)
+            return versions[0]
+
+    def get_version(self, number: int) -> Optional['Version']:
+        versions = [v for v in self.versions if v.number == number]
+        if not versions:
+            return None
+        elif len(versions) > 1:  # this should not be possible
+            raise ValueError(f"Found more than 1 version with number {number}: {versions}")
+        else:
             return versions[0]
 
 
@@ -273,6 +287,9 @@ class JobContext:
     component: Component
     version: Optional[Version]
     creation_time = datetime.now()
+
+    def set_version(self, version: Version = None):
+        self.version = version
 
 
 class Job(Document):

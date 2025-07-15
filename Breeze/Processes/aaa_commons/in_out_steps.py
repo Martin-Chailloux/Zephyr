@@ -1,58 +1,44 @@
 from typing import Optional
 
 from Api.project_documents import Version, Component
-from Api.turbine import Step
+from Api.turbine import StepBase
 from abstract_io import AbstractSoftwareFile
 
 
-class CreateFileStep(Step):
-    label = "Create File"
-    tooltip = "Creates a new, empty file"
+class OpenStep(StepBase):
+    label = "Open Step"
+    tooltip = "Open a file from a version"
 
-    def __init__(self, version: Version):
+    def __init__(self):
         super().__init__()
-        self.version = version
-        print(f"{self.version = }")
+        self.version: Optional[Version] = None
         self.file: Optional[AbstractSoftwareFile] = None
 
-    def _inner_run(self):
-        template_component: Component = Component.objects.get(longname='Templates_startup_Blender_modeling_work')
-        print(f"{template_component = }")
-        source_version = template_component.get_last_version()
-        if source_version is None:
-            raise ValueError(f"No versions were found in the template component {template_component.__repr__()}")
-        print(f"{source_version = }")
-        self.Logs.add(f"{source_version = }")
-
-        file = source_version.to_file()
-        file.save_as(filepath=self.version.filepath)
-        self.file = file
-        self.Logs.add(msg=f"Creating a {self.version.software.label} file ...")
-        self.Logs.add(msg=f"{self.version = }")
-
     def _is_success(self) -> bool:
-        return self.file is not None
+        for x in [self.version, self.file]:
+            if x is None:
+                return False
+        else:
+            return True
 
+    def run(self, version: Version):
+        super().run(version=version)
 
-class OpenStep(Step):
-    label = "Open"
-    tooltip = "Opens a file"
-
-    def __init__(self, version: Version):
-        super().__init__()
+    def _inner_run(self, version: Version):
+        # source_version = template_component.get_last_version()
+        # if source_version is None:
+        #     raise ValueError(f"No versions were found in the template component {template_component.__repr__()}")
+        # self.Logs.add(f"{source_version = }")
+        self.Logs.add(msg=f"Opening a file from version: {version.__repr__()} ...")
+        self.Logs.add(msg=f"{version.filepath = }")
+        file = version.to_file()
+        file.open()
         self.version = version
-        self.file: Optional[str] = None
-
-    def _is_success(self) -> bool:
-        return self.file is not None
-
-    def _inner_run(self):
-        self.Logs.add(msg=f"Opening version: '{self.version}' ... ")
-        self.file = self.version.to_file()
-        self.file.open()
+        self.file = file
+        self.set_sub_label(self.version.longname)
 
 
-class SaveStep(Step):
+class SaveStep(StepBase):
     label = "Save"
     tooltip = "Saves the file"
 
@@ -62,3 +48,24 @@ class SaveStep(Step):
     def _inner_run(self, file: AbstractSoftwareFile):
         self.Logs.add(msg=f"Saving file: '{file.filepath}' ... ")
         file.save()
+
+
+class SaveAsStep(StepBase):
+    label = "Save As"
+    tooltip = "Saves a file in an other version"
+
+    def __init__(self):
+        super().__init__()
+        self.file: [AbstractSoftwareFile] = None
+
+    def _is_success(self) -> bool:
+        return self.file is not None
+
+    def run(self, file: AbstractSoftwareFile, target_version: Version):
+        super().run(file=file, target_version=target_version)
+
+    def _inner_run(self, file: AbstractSoftwareFile, target_version: Version):
+        self.Logs.add(msg=f"Saving file: '{file.filepath}' in version: {target_version.__repr__()} ... ")
+        file.save_as(filepath=target_version.filepath)
+        self.file = file
+        self.set_sub_label(target_version.longname)

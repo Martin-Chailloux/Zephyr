@@ -1,9 +1,9 @@
 import bpy
 
-from Api.turbine import Step
+from Api.turbine import StepBase
 
 
-class CreateCollectionStep(Step):
+class CreateCollectionStep(StepBase):
     label = "Create collection"
     tooltip = "Creates a new empty collection under the 'Scene Collection'"
 

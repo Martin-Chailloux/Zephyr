@@ -60,7 +60,7 @@ class StepLog:
         self.complete_log = msg
 
 
-class Step(QObject):
+class StepBase(QObject):
     updated = Signal()
 
     label: str = "step_label"
@@ -72,7 +72,7 @@ class Step(QObject):
         self.sub_label = sub_label
         self.Pill = StepPill()
         self.Logs = StepLog()
-        self.steps: list[Step] = []
+        self.steps: list[StepBase] = []
 
         self.Logs.add(msg=f"\n Starting step '{self.label}' ... ")
 
@@ -87,12 +87,12 @@ class Step(QObject):
     def log(self) -> str:
         return self.Logs.complete_log
 
-    def add_step(self, step: 'Step') -> 'Step':
+    def add_step(self, step: 'StepBase') -> 'StepBase':
         self.steps.append(step)
         step.updated.connect(self.on_sub_step_updated)
         return step
 
-    def add_steps(self, steps: list['Step']):
+    def add_steps(self, steps: list['StepBase']):
         for step in steps:
             self.add_step(step=step)
 
@@ -144,7 +144,16 @@ class Step(QObject):
         return infos
 
 
-class ProcessBase(Step):
+class StepLabel(StepBase):
+    def __init__(self, label: str, sub_label: str = None):
+        super().__init__(sub_label = sub_label)
+        self.label = label
+
+    def set_done(self):
+        super().run()
+
+
+class ProcessBase(StepBase):
     name: str = "process_name"
     label = "process_label"
     tooltip = "process_tooltip"
@@ -165,8 +174,6 @@ class ProcessBase(Step):
         except RuntimeError:
             print(f"{self.label = }")
             print(traceback.format_exc(chain=False))
-
-            # self.Logs.add(traceback.format_exc())
             self.Pill.set_error()
 
         self.update_mg_job()
@@ -174,6 +181,10 @@ class ProcessBase(Step):
     def on_sub_step_updated(self):
         super().on_sub_step_updated()
         self.update_mg_job()
+
+    def set_source_version(self, version: Version = None):
+        self.mg_job.update(source_version = version)
+        self.Context.set_version(version=version)
 
     # ------------------------
     # process
@@ -210,11 +221,3 @@ class ProcessBase(Step):
     def update_mg_job(self):
         """ Updates this instantiated process in the db"""
         self.mg_job.update(steps=self.to_dict())
-
-
-class ProcessBuild(ProcessBase):
-    def __init__(self, user: User, component: Component, **kwargs):
-        software = Software.objects.get(label='Blender')
-        version = component.create_last_version(software=software)
-        version.update(comment="Built file")
-        super().__init__(user=user, component=component, version=version)

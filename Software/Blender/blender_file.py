@@ -44,6 +44,7 @@ class BlenderFile(AbstractSoftwareFile):
         threading.Thread(target=self._open_interactive, daemon=False).start()
 
     def open(self):
+        # if this is not called the code still works, but it is done from the default file
         bpy.ops.wm.open_mainfile(filepath=self.filepath)
 
     def save(self):
