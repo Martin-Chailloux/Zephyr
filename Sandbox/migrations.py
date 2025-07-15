@@ -20,10 +20,10 @@ mongoengine.connect(host="mongodb://localhost:27017", db="JourDeVent", alias="cu
 def update_stages_longname():
     stages = Stage.objects()
     for stage in stages:
-        longname = f"{stage.current_asset.longname}_{stage.stage_template.name}"
+        longname = f"{stage.asset.longname}_{stage.stage_template.name}"
         print(f"{stage.__repr__()}: {longname}")
 
-        asset = stage.current_asset
+        asset = stage.asset
         stage_template = stage.stage_template
         stage.delete()
 
@@ -121,8 +121,8 @@ def register_processes():
 
 def clear_versions():
     for version in Version.objects():
-        if 'Templates' not in version.component.stage.asset.category:
+        if 'Templates' not in version.component.selected_stage.asset.category:
             version.delete()
 
 if __name__ == '__main__':
-    register_processes()
+    pass

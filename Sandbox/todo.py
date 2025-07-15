@@ -1,8 +1,7 @@
 
 # TODO: Browser -> selected stage panel
-#  - triple split central panel with display setups
 #  - checkboxes for each panel
-#  - out-components ui for stage
+#  - export-components gui for stage
 
 # TODO: confo common ui components
 #  - confo popup code for asset creation
@@ -15,3 +14,5 @@
 #  - task_templates management
 #    - process assignation
 #    - create, delete, icon, color, label, category_filters, assigned_users, etc.
+
+# TODO: save the gui's state between instances
