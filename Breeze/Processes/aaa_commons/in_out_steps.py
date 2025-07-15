@@ -25,12 +25,8 @@ class OpenStep(StepBase):
         super().run(version=version)
 
     def _inner_run(self, version: Version):
-        # source_version = template_component.get_last_version()
-        # if source_version is None:
-        #     raise ValueError(f"No versions were found in the template component {template_component.__repr__()}")
-        # self.Logs.add(f"{source_version = }")
-        self.Logs.add(msg=f"Opening a file from version: {version.__repr__()} ...")
-        self.Logs.add(msg=f"{version.filepath = }")
+        self.logger.info(msg=f"Opening a file from version: {version.__repr__()} ...")
+        self.logger.info(msg=f"{version.filepath = }")
         file = version.to_file()
         file.open()
         self.version = version
@@ -46,7 +42,7 @@ class SaveStep(StepBase):
         super().run(file=file)
 
     def _inner_run(self, file: AbstractSoftwareFile):
-        self.Logs.add(msg=f"Saving file: '{file.filepath}' ... ")
+        self.logger.info(msg=f"Saving file: '{file.filepath}' ... ")
         file.save()
 
 
@@ -65,7 +61,7 @@ class SaveAsStep(StepBase):
         super().run(file=file, target_version=target_version)
 
     def _inner_run(self, file: AbstractSoftwareFile, target_version: Version):
-        self.Logs.add(msg=f"Saving file: '{file.filepath}' in version: {target_version.__repr__()} ... ")
+        self.logger.info(msg=f"Saving file: '{file.filepath}' in version: {target_version.__repr__()} ... ")
         file.save_as(filepath=target_version.filepath)
         self.file = file
         self.set_sub_label(target_version.longname)

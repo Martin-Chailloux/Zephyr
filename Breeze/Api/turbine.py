@@ -1,5 +1,8 @@
+import logging
+import os
 import traceback
 from dataclasses import dataclass
+from io import StringIO
 
 from PySide6.QtCore import Signal, QObject
 
@@ -49,15 +52,43 @@ class StepPill(QObject):
         self.pill = Pills.success
 
 
-class StepLog:
-    def __init__(self):
-        self.complete_log: str = ""
+class StepLogger:
+    def __init__(self, name: str):
+        stream = StringIO()
+        formatter = logging.Formatter('%(asctime)s - %(levelname)-8s: %(message)s', datefmt='%H:%M:%S')
 
-    def add(self, msg: str):
-        self.complete_log += f"{msg}\n"
+        handler = logging.StreamHandler()
+        handler.setStream(stream)
+        handler.setLevel(logging.DEBUG)
+        handler.setFormatter(formatter)
 
-    def set(self, msg: str):
-        self.complete_log = msg
+        logger = logging.getLogger(name)
+        logger.setLevel(logging.DEBUG)
+        if logger.hasHandlers():
+            logger.handlers.clear()
+        logger.addHandler(handler)
+
+        self.logger = logger
+        self.stream = stream
+
+    def info(self, msg: str):
+        self.logger.info(msg)
+
+    def debug(self, msg: str):
+        self.logger.debug(msg)
+
+    def warning(self, msg: str):
+        self.logger.warning(msg)
+
+    def error(self, msg: str):
+        self.logger.error(msg)
+
+    def critical(self, msg: str):
+        self.logger.critical(msg)
+
+    @property
+    def output(self) -> str:
+        return self.stream.getvalue()
 
 
 class StepBase(QObject):
@@ -71,10 +102,11 @@ class StepBase(QObject):
         super().__init__()
         self.sub_label = sub_label
         self.Pill = StepPill()
-        self.Logs = StepLog()
+        self.logger = StepLogger(name=f"{self.label}__{self.sub_label}__{os.urandom(4)}")
+
         self.steps: list[StepBase] = []
 
-        self.Logs.add(msg=f"\n Starting step '{self.label}' ... ")
+        self.logger.info(f"Starting step '{self.label}' ... ")
 
     def set_sub_label(self, sub_label: str):
         self.sub_label = sub_label
@@ -82,10 +114,6 @@ class StepBase(QObject):
     @property
     def pill(self) -> PillModel:
         return self.Pill.pill
-
-    @property
-    def log(self) -> str:
-        return self.Logs.complete_log
 
     def add_step(self, step: 'StepBase') -> 'StepBase':
         self.steps.append(step)
@@ -107,10 +135,10 @@ class StepBase(QObject):
             self._inner_run(**kwargs)
             self._resolve()
             self.updated.emit()
-            self.Logs.add(msg=f"... step '{self.label}': SUCCESS \n")
+            self.logger.info(msg=f"... step '{self.label}': SUCCESS \n")
 
         except Exception as e:
-            self.Logs.add(msg=traceback.format_exc())
+            self.logger.error(msg=traceback.format_exc())
             self.Pill.set_error()
             self.updated.emit()
             raise RuntimeError(traceback.format_exc(chain=False))
@@ -129,16 +157,13 @@ class StepBase(QObject):
         else:
             self.Pill.set_error()
 
-
     def to_dict(self) -> dict[str, any]:
-        # TODO: log
-
         infos = {
             'label': self.label,
             'sub_label': self.sub_label,
             'tooltip': self.tooltip,
             'pill': self.pill.name,
-            'log': self.log,
+            'log': self.logger.output,
             'child_steps': [step.to_dict() for step in self.steps],
         }
         return infos
@@ -146,8 +171,8 @@ class StepBase(QObject):
 
 class StepLabel(StepBase):
     def __init__(self, label: str, sub_label: str = None):
-        super().__init__(sub_label = sub_label)
         self.label = label
+        super().__init__(sub_label = sub_label)
 
     def set_done(self):
         super().run()

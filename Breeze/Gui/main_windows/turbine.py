@@ -2,6 +2,7 @@ from PySide6 import QtCore
 from PySide6.QtWidgets import QMainWindow, QLabel, QDockWidget
 
 from Gui.panels.turbine.job_selector_panel import SelectProcessPanel
+from Gui.panels.turbine.step_logs_panel import StepLogsPanel
 from Gui.panels.turbine.steps_viewer_panel import StepsViewer
 
 
@@ -22,8 +23,7 @@ class TurbineGui(QMainWindow):
         steps_viewer_panel = StepsViewer()
         self.setCentralWidget(steps_viewer_panel)
 
-        logs_panel = QLabel()
-        logs_panel.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop)
+        logs_panel = StepLogsPanel()
         dock = QDockWidget()
         dock.setWindowTitle("Logs")
         dock.setWidget(logs_panel)
@@ -45,5 +45,6 @@ class TurbineGui(QMainWindow):
         self.steps_viewer_panel.populate(job=job)
 
     def on_step_selected(self, step: dict):
-        error: str = step.get('log', '')
-        self.logs_panel.setText(error)
+        log: str = step.get('log', '')
+        print(f"{log = }")
+        self.logs_panel.set_log(log=log)

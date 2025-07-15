@@ -12,7 +12,7 @@ class CreateCollectionStep(StepBase):
         self.collection_name = name
 
     def _inner_run(self):
-        self.Logs.add(msg=f"Creating collection: '{self.collection_name}' ... ")
+        self.logger.info(msg=f"Creating collection: '{self.collection_name}' ... ")
 
         collection = bpy.data.collections.new(name=self.collection_name)
         bpy.context.scene.collection.children.link(collection)
