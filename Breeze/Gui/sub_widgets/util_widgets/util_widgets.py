@@ -24,17 +24,14 @@ class IconButton(QPushButton):
 
 
 class IconLabel(QLabel):
-    def __init__(self, icon: QIcon, height: int = None):
+    def __init__(self, icon: QIcon, wh: int = 24):
         super().__init__()
-        if height is not None:
-            self.setFixedHeight(height)
 
-        height = self.sizeHint().height()
-
-        pixmap = icon.pixmap(height - int(height/8))  # A full size icon is too big to fit in
+        icon = qtawesome.icon(icon)
+        pixmap = icon.pixmap(wh - 2)
         self.setPixmap(pixmap)
 
-        self.setFixedSize(QSize(height, height))
+        self.setFixedSize(QSize(wh, wh))
 
 
 class TextBox(QWidget):

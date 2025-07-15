@@ -17,16 +17,16 @@ class BrowserGui(QMainWindow):
         self._connect_signals()
 
     def _init_ui(self):
-        # stage central widget
-        selected_stage_panel = SelectedStagePanel()
-        self.setCentralWidget(selected_stage_panel)
-
-        # stage select
+        # asset browse
         asset_browser_panel = AssetBrowserPanel()
         dock = QDockWidget("Select Stage")
         dock.setWidget(asset_browser_panel)
         self.addDockWidget(QtCore.Qt.DockWidgetArea.LeftDockWidgetArea, dock)
         dock.setAllowedAreas(QtCore.Qt.DockWidgetArea.LeftDockWidgetArea)
+
+        # selected stage
+        selected_stage_panel = SelectedStagePanel()
+        self.setCentralWidget(selected_stage_panel)
 
         # public vars
         self.asset_browser_panel = asset_browser_panel
@@ -41,14 +41,14 @@ class BrowserGui(QMainWindow):
         self.selected_stage_panel.stage_data_modified.connect(self.refresh_asset_stage_list)
 
     def _on_asset_selected(self):
-        # select stage from selected_stage_panel in list
+        """ selects the same stage as the stage from selected_stage_panel """
         selected_stage = self.selected_stage_panel.stage
         stages = self.asset_browser_panel.asset_stages
         if selected_stage in stages:
             self.asset_browser_panel.select_stage(stage=selected_stage)
 
     def _on_stage_selected(self):
-        # update selected_stage_panel
+        """ updates the selected_stage_panel's current stage """
         stage = self.asset_browser_panel.selected_stage
         self.selected_stage_panel.set_stage(stage=stage)
 

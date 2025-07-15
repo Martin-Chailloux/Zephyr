@@ -50,7 +50,6 @@ class WorkVersionsWidget(QDialog):
         )
         h_layout.addWidget(new_file_button)
 
-        # TODO: par defaut selectionner la version la plus récente
         increment_button = PushButtonAutoWidth(
             text=" Increment", icon_name='fa5s.arrow-up',
             tooltip="Create a copy of the selected version",
@@ -78,15 +77,6 @@ class WorkVersionsWidget(QDialog):
             tooltip="Open the selected file within its software",
         )
         h_layout.addWidget(launch_button)
-
-        # TODO: open_folder & copy_path in a context menu
-        # open_folder_button = IconButton(icon_name="fa5s.folder-open")
-        # h_layout.addWidget(open_folder_button)
-        # open_folder_button.setToolTip("Open folder")
-        #
-        # copy_path_button = IconButton(icon_name="fa5s.copy")
-        # h_layout.addWidget(copy_path_button)
-        # copy_path_button.setToolTip("Copy path")
 
         # ------------------------
         # boxes

@@ -38,8 +38,11 @@ class SelectedStageSubPanel(QWidget):
 class StageExportsTable(QTableWidget):
     def populate(self, versions: list[Version]):
         self.clear()
+        if not versions:
+            return
 
-        components: list[Component] = [v.component for v in versions]
+        work_component = versions[0].component.stage.work_component
+        components: list[Component] = [v.component for v in versions if v.component != work_component]
         components = list(set(components))
         self.setColumnCount(len(components))
         self.setHorizontalHeaderLabels([c.label for c in components])
@@ -53,8 +56,10 @@ class StageExportsTable(QTableWidget):
         rows = {f"{number:03d}": i for i, number in enumerate(numbers)}
 
         for version in versions:
-            row = rows[f"{version.number:03d}"]
-            column = columns[version.component.label]
+            row = rows.get(f"{version.number:03d}", None)
+            column = columns.get(version.component.label, None)
 
-            item = QTableWidgetItem("VERSION")
-            self.setItem(row, column, item)
+            if row is not None and column is not None:
+                text = f".{version.software.extension}"
+                item = QTableWidgetItem(text)
+                self.setItem(row, column, item)
