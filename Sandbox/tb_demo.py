@@ -2,10 +2,10 @@ from typing import Optional
 
 from Api.project_documents import Version
 from Api.studio_documents import User
-from Api.turbine import Step, ProcessBase
+from Api.turbine import StepBase, ProcessBase
 
 
-class AddSceneStep(Step):
+class AddSceneStep(StepBase):
     label = "Add Scene"
     tooltip = "adds a scene"
 
@@ -17,7 +17,7 @@ class AddSceneStep(Step):
         self.add_step(AddMusicStep())
 
 
-class AddMusicStep(Step):
+class AddMusicStep(StepBase):
     label = "Add Music"
     tooltip = "adds a music"
 
