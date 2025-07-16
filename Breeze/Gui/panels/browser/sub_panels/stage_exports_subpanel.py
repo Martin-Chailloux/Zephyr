@@ -21,28 +21,35 @@ class SelectedStageSubPanel(QWidget):
         table = StageExportsTable()
         layout.addWidget(table)
 
-        self.table = table
+        self.exports_table = table
 
     def set_stage(self, stage: Stage = None):
         self.stage = stage
-        if stage is None:
-            return
+        self.exports_table.set_stage(stage=stage)
 
-        versions = []
-        for component in stage.components:
-            versions.extend(component.versions)
-
-        self.table.populate(versions=versions)
+    def refresh(self):
+        self.exports_table.refresh()
 
 
 class StageExportsTable(QTableWidget):
+    def __init__(self):
+        super().__init__()
+        self.stage: Optional[Stage] = None
+        self.versions: list[Version] = []
+
     def populate(self, versions: list[Version]):
+        self.versions = versions
+
         self.clear()
         if not versions:
             return
 
         work_component = versions[0].component.stage.work_component
-        components: list[Component] = [v.component for v in versions if v.component != work_component]
+        print(f"{work_component = }")
+        components: list[Component] = [v.component for v in versions]
+        print(f"{components = }")
+        components: list[Component] = [c for c in components if c != work_component]
+        print(f"{components = }")
         components = list(set(components))
         self.setColumnCount(len(components))
         self.setHorizontalHeaderLabels([c.label for c in components])
@@ -63,3 +70,28 @@ class StageExportsTable(QTableWidget):
                 text = f".{version.software.extension}"
                 item = QTableWidgetItem(text)
                 self.setItem(row, column, item)
+
+    def set_stage(self, stage: Stage=None):
+        self.stage = stage
+
+        if stage is None:
+            return
+
+        versions = []
+        for component in stage.components:
+            versions.extend(component.versions)
+
+        self.populate(versions=versions)
+
+    def refresh(self):
+        print(f"\nREFRESH: {self.versions = }")
+
+        if not self.versions:
+            return
+        if self.stage is None:
+            return
+
+        self.blockSignals(True)
+        stage = Stage.objects.get(longname=self.stage.longname)
+        self.set_stage(stage)
+        self.blockSignals(False)

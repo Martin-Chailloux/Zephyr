@@ -52,10 +52,8 @@ class BrowserGui(QMainWindow):
         stage = self.asset_browser_panel.selected_stage
         self.selected_stage_panel.set_stage(stage=stage)
 
-    # TODO: the 2 refreshes below could refresh more than needed if they are expanded in the future
-    #  keep track of them
     def refresh_asset_stage_list(self):
-        self.asset_browser_panel.refresh()  # refresh stage list
+        self.asset_browser_panel.refresh_stage_list()
 
     def refresh_selected_stage_banner(self):
-        self.selected_stage_panel.refresh()  # refresh stage in banner
+        self.selected_stage_panel.refresh_banner()

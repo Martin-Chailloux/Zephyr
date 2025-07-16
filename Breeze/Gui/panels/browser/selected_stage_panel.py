@@ -30,11 +30,11 @@ class SelectedStagePanel(QWidget):
 
         h_layout = QHBoxLayout()
         layout.addLayout(h_layout)
+        h_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop | QtCore.Qt.AlignmentFlag.AlignLeft)
 
         # ------------------------
         # Upper banner
         # ------------------------
-
         # banner
         stage_banner_widget = StageBannerWidget()
         h_layout.addWidget(stage_banner_widget)
@@ -58,6 +58,14 @@ class SelectedStagePanel(QWidget):
             stylesheet = f"QPushButton:checked {{background-color: {color}}};"
             button.setStyleSheet(stylesheet)
 
+        h_layout.addStretch()
+
+        # ------------------------
+        # refresh
+        # ------------------------
+        refresh_button = IconButton(icon_name='fa.refresh')
+        h_layout.addWidget(refresh_button)
+
         # ------------------------
         # splitter
         # ------------------------
@@ -75,6 +83,8 @@ class SelectedStagePanel(QWidget):
         layout.setStretch(0, 0)
 
         # public vars
+        self.refresh_button = refresh_button
+
         self.stage_banner_widget = stage_banner_widget
         self.button_l = button_l
         self.button_m = button_m
@@ -91,17 +101,26 @@ class SelectedStagePanel(QWidget):
         self.stage_exports_widget.set_stage(stage=stage)
 
     def _connect_signals(self):
+        self.refresh_button.clicked.connect(self.refresh)
+
         # promote from sub-widgets
         self.stage_banner_widget.stage_list.stage_data_modified.connect(self._on_stage_data_modified)
         self.button_l.clicked.connect(self._on_splitter_button_clicked)
         self.button_m.clicked.connect(self._on_splitter_button_clicked)
         self.button_r.clicked.connect(self._on_splitter_button_clicked)
 
+        self.work_versions_widget.ask_refresh_exports.connect(self.stage_exports_widget.refresh)
+
     def _on_stage_data_modified(self):
         self.stage_data_modified.emit()
 
-    def refresh(self):
+    def refresh_banner(self):
         self.stage_banner_widget.stage_list.refresh()
+
+    def refresh(self):
+        self.refresh_banner()
+        self.work_versions_widget.refresh()
+        self.stage_exports_widget.refresh()
 
     def _on_splitter_button_clicked(self, is_checked: bool):
         """ shows or hides the matching widget """

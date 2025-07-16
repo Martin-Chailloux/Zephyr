@@ -47,7 +47,5 @@ class VersionListModel(QStandardItemModel):
 
         self.blockSignals(True)
         component = self.versions[0].component
-        # longnames = [version.longname for version in component.versions]
-        # versions = Version.objects(longname__in=longnames)
-        self.populate(component.versions)
+        self.populate(versions=component.versions)
         self.blockSignals(False)

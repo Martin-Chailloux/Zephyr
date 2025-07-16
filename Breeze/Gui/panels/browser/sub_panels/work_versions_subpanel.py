@@ -1,4 +1,5 @@
 from PySide6 import QtCore
+from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel
 
 from Api.project_documents import Stage
@@ -11,6 +12,7 @@ from Gui.components.mvd.version_mvd.version_list_view import VersionListView
 class WorkVersionsWidget(QDialog):
     h = 28
     buttons_spacing = 2
+    ask_refresh_exports = Signal()
 
     def __init__(self, stage: Stage=None):
         super().__init__()
@@ -22,12 +24,6 @@ class WorkVersionsWidget(QDialog):
         layout = QVBoxLayout()
         self.setLayout(layout)
         layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop | QtCore.Qt.AlignmentFlag.AlignLeft)
-
-        # ------------------------
-        # refresh
-        # ------------------------
-        refresh_button = IconButton(icon_name='fa.refresh')
-        layout.addWidget(refresh_button)
 
         # ------------------------
         # main layout
@@ -99,8 +95,6 @@ class WorkVersionsWidget(QDialog):
         # ------------------------
         # public vars
         # ------------------------
-        self.refresh_button = refresh_button
-
         self.new_file_button = new_file_button
         self.increment_button = increment_button
         self.turbine_button = turbine_button
@@ -108,13 +102,13 @@ class WorkVersionsWidget(QDialog):
         self.versions_list = versions_list
 
     def connect_signals(self):
-        self.refresh_button.clicked.connect(self.refresh)
         self.new_file_button.clicked.connect(self.on_new_file_button_clicked)
         self.increment_button.clicked.connect(self.on_increment_button_clicked)
         self.turbine_button.clicked.connect(self.on_turbine_button_clicked)
 
+        self.ask_refresh_exports.connect(self.refresh)
+
     def refresh(self):
-        print(f"REFRESH")
         self.versions_list.refresh()
 
     def on_new_file_button_clicked(self):
@@ -140,6 +134,7 @@ class WorkVersionsWidget(QDialog):
         if self.stage is None:
             return
         menu = ProcessSelectMenu(component=self.stage.work_component, version=self.versions_list.get_selected_version())
+        menu.process_finished.connect(self.ask_refresh_exports.emit)
         menu.process_finished.connect(self.refresh)
 
         confirm = menu.exec()

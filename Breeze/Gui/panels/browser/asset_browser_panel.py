@@ -67,5 +67,8 @@ class AssetBrowserPanel(QWidget):
     def _init_state(self):
         self._on_asset_selected()
 
-    def refresh(self):
+    def refresh_stage_list(self):
         self.stage_list_widget.stage_list.refresh()
+
+    def refresh(self):
+        self.refresh_stage_list()
