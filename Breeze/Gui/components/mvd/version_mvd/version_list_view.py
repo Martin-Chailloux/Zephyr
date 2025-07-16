@@ -1,5 +1,5 @@
 import qtawesome
-from PySide6.QtCore import Signal, Qt, QPoint
+from PySide6.QtCore import Signal, Qt, QPoint, QItemSelectionModel
 from PySide6.QtWidgets import QMenu
 
 from Api.project_documents import Component, Version
@@ -12,9 +12,9 @@ class VersionListView(AbstractListView):
     software_selected = Signal(str)
     right_clicked = Signal()
 
-    def __init__(self, collection: Component = None):
+    def __init__(self):
         super().__init__()
-        self._model = VersionListModel(collection=collection)
+        self._model = VersionListModel()
         self.setModel(self._model)
 
         self._item_delegate = VersionListItemDelegate()
@@ -23,15 +23,13 @@ class VersionListView(AbstractListView):
         self.customContextMenuRequested.connect(self.show_context_menu)
 
     def set_collection(self, collection: Component):
-        self._model.collection = collection
-        self._model.populate()
-        self.viewport().update()
+        if collection is None:
+            versions = []
+        else:
+            versions = collection.versions
 
-    def refresh(self):
-        print(f"REFRESH: {self.__class__.__name__}")
-        # re-query the collection else it might not be up to date
-        collection = Component.objects.get(longname=self._model.collection.longname)
-        self.set_collection(collection)
+        self._model.populate(versions=versions)
+        self.viewport().update()
 
     def get_selected_version(self) -> Version | None:
         items = self.get_selected_items()

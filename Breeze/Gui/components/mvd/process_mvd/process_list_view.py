@@ -55,5 +55,4 @@ class ProcessListView(AbstractListView):
 
     def on_selection_changed(self):
         process = self.get_selected_process()
-        print(f"{process = }")
         self.process_selected.emit(process)

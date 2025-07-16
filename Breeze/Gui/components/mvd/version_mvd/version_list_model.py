@@ -17,10 +17,9 @@ class VersionItemMetrics:
 
 
 class VersionListModel(QStandardItemModel):
-    def __init__(self, collection: Component):
+    def __init__(self):
         super().__init__()
-        self.collection = collection
-        self.populate()
+        self.versions: list[Version] = []
 
     def add_item(self, version: Version):
         row = self.rowCount()
@@ -33,12 +32,22 @@ class VersionListModel(QStandardItemModel):
 
         self.setItem(row, item)
 
-    def populate(self):
-        self.clear()
-        if self.collection is None:
-            return
+    def populate(self, versions: list[Version]):
+        self.versions = versions
 
-        versions: list[Version] = self.collection.versions
+        self.clear()
+
         versions = sorted(versions, key=lambda v: v.number, reverse=True)
         for version in versions:
             self.add_item(version=version)
+
+    def refresh(self):
+        if not self.versions:
+            return
+
+        self.blockSignals(True)
+        component = self.versions[0].component
+        # longnames = [version.longname for version in component.versions]
+        # versions = Version.objects(longname__in=longnames)
+        self.populate(component.versions)
+        self.blockSignals(False)

@@ -1,7 +1,8 @@
 import datetime
+from typing import Optional
 
 from PySide6 import QtCore
-from PySide6.QtCore import QPoint, QModelIndex, QRect, QRectF, QPointF
+from PySide6.QtCore import QPoint, QModelIndex, QRect, QRectF, QPointF, QItemSelectionModel
 from PySide6.QtGui import (QCursor, QStandardItem, QStandardItemModel, QPainter, QColor,
                            QBrush, QPen, QImage, QPainterPath)
 from PySide6.QtWidgets import QListView, QStyledItemDelegate, QStyleOptionViewItem, QStyle
@@ -12,11 +13,27 @@ from Api.breeze_app import BreezeApp
 alignment = QtCore.Qt.AlignmentFlag
 
 
+class AbstractListModel(QStandardItemModel):
+    def __init__(self):
+        super().__init__()
+
+    def add_item(self, **kwargs):
+        pass
+
+    @property
+    def items(self):
+        items = [self.item(row) for row in range(self.rowCount())]
+        return items
+
+    def refresh(self):
+        return
+
+
 class AbstractListView(QListView):
     def __init__(self):
         super().__init__()
         self.setMouseTracking(True)
-        self._model: QStandardItemModel = None
+        self._model: Optional[AbstractListModel] = None
 
     def _connect_signals(self):
         pass
@@ -48,21 +65,19 @@ class AbstractListView(QListView):
         index = self._model.index(row, 0)
         self.setCurrentIndex(index)
 
-
-class AbstractListModel(QStandardItemModel):
-    def __init__(self):
-        super().__init__()
-
-    def add_item(self, **kwargs):
-        pass
-
-    @property
-    def items(self):
-        items = [self.item(row) for row in range(self.rowCount())]
-        return items
-
     def refresh(self):
-        return
+        selected_indexes = self.selectionModel().selectedIndexes()
+
+        row_count = self._model.rowCount()
+        self._model.refresh()
+        row_count2 = self._model.rowCount()
+        diff = row_count2 - row_count  # select the same row if the number has changed with the refresh
+        # NOTE: this won't work if a row is inserted in the middle
+
+        if selected_indexes:
+            index = self._model.index(selected_indexes[0].row() + diff, 0)
+            self.selectionModel().setCurrentIndex(index, QItemSelectionModel.SelectionFlag.Select)
+        self.viewport().update()
 
 
 class AbstractListDelegate(QStyledItemDelegate):

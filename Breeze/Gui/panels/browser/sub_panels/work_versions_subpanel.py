@@ -3,7 +3,7 @@ from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel
 
 from Api.project_documents import Stage
 from Gui.components.popups.process_launcher import ProcessSelectMenu
-from Gui.sub_widgets.util_widgets.util_widgets import TextBox, PushButtonAutoWidth
+from Gui.sub_widgets.util_widgets.util_widgets import TextBox, PushButtonAutoWidth, IconButton
 from Gui.panels.browser.sub_panels import work_versions_api
 from Gui.components.mvd.version_mvd.version_list_view import VersionListView
 
@@ -22,6 +22,12 @@ class WorkVersionsWidget(QDialog):
         layout = QVBoxLayout()
         self.setLayout(layout)
         layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop | QtCore.Qt.AlignmentFlag.AlignLeft)
+
+        # ------------------------
+        # refresh
+        # ------------------------
+        refresh_button = IconButton(icon_name='fa.refresh')
+        layout.addWidget(refresh_button)
 
         # ------------------------
         # main layout
@@ -93,6 +99,8 @@ class WorkVersionsWidget(QDialog):
         # ------------------------
         # public vars
         # ------------------------
+        self.refresh_button = refresh_button
+
         self.new_file_button = new_file_button
         self.increment_button = increment_button
         self.turbine_button = turbine_button
@@ -100,9 +108,14 @@ class WorkVersionsWidget(QDialog):
         self.versions_list = versions_list
 
     def connect_signals(self):
+        self.refresh_button.clicked.connect(self.refresh)
         self.new_file_button.clicked.connect(self.on_new_file_button_clicked)
         self.increment_button.clicked.connect(self.on_increment_button_clicked)
         self.turbine_button.clicked.connect(self.on_turbine_button_clicked)
+
+    def refresh(self):
+        print(f"REFRESH")
+        self.versions_list.refresh()
 
     def on_new_file_button_clicked(self):
         if self.stage is None:
@@ -110,7 +123,7 @@ class WorkVersionsWidget(QDialog):
 
         work_versions_api.new_empty_version(stage=self.stage)
 
-        self.versions_list.refresh()
+        self.refresh()
         self.versions_list.select_row(0)
 
     def on_increment_button_clicked(self):
@@ -120,13 +133,15 @@ class WorkVersionsWidget(QDialog):
         old_version = self.versions_list.get_selected_version()
         work_versions_api.increment(old_version=old_version)
 
-        self.versions_list.refresh()
+        self.refresh()
         self.versions_list.select_row(0)
 
     def on_turbine_button_clicked(self):
         if self.stage is None:
             return
         menu = ProcessSelectMenu(component=self.stage.work_component, version=self.versions_list.get_selected_version())
+        menu.process_finished.connect(self.refresh)
+
         confirm = menu.exec()
         print(f"{confirm = }")
 

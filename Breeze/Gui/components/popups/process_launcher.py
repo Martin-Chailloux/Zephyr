@@ -1,6 +1,7 @@
 from typing import Optional
 
 import qtawesome
+from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QVBoxLayout, QPushButton
 
 from Api.breeze_app import BreezeApp
@@ -11,8 +12,7 @@ from Api.turbine import ProcessBase
 
 
 class ProcessSelectMenu(AbstractPopupWidget):
-    project = BreezeApp.project
-    users = project.users
+    process_finished = Signal()
 
     def __init__(self, component: Component, version: Optional[Version]):
         super().__init__(w=168, h=248, position=[0.5, 1])
@@ -52,4 +52,5 @@ class ProcessSelectMenu(AbstractPopupWidget):
         process: ProcessBase.__class__ = self.processes_list.get_selected_process()
         process = process(user=BreezeApp.user, component=self.component, version=self.version)
         process.run()
-        print(f"{process = }")
+        print(f"Launching process: {process = }")
+        self.process_finished.emit()
