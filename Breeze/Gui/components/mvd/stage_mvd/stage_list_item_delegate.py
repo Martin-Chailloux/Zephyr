@@ -9,19 +9,19 @@ from Api.project_documents import Stage, Asset
 from Gui.components.mvd.abstract_mvd import AbstractListDelegate
 from Gui.components.mvd.stage_mvd.stage_list_model import StageItemRoles
 from Gui.components.mvd.stage_mvd.stage_list_model import StageItemMetrics
-
+from Gui.components.mvd.stage_template_mvd.stage_template_list_item_delegate import StageTemplateListItemDelegate
 
 alignment = QtCore.Qt.AlignmentFlag
 
 
-class StageListItemDelegate(AbstractListDelegate):
+class StageListItemDelegate(StageTemplateListItemDelegate):
     def __init__(self):
         super().__init__()
 
     def _set_custom_data(self, option: QStyleOptionViewItem, index: QModelIndex):
         self.stage: Stage = index.data(StageItemRoles.stage)
         self.asset: Asset = self.stage.asset
-        self.stage_template: StageTemplate = self.stage.stage_template
+        self.stage_template: StageTemplate = self.stage.stage_template  # /!\ keep this name the same as in the upper class
         self.user_is_hovered = index.data(StageItemRoles.user_is_hovered)
         self.status_is_hovered = index.data(StageItemRoles.status_is_hovered)
 
@@ -47,40 +47,6 @@ class StageListItemDelegate(AbstractListDelegate):
             )
         self.paint_status(painter)
 
-        painter.restore()
-
-    def paint_logo(self, painter: QPainter):
-        x, y, w, h = self.get_item_rect()
-        margin = 3 if self.is_hovered or self.is_selected else 5
-
-        background_color = self.stage_template.color
-        icon_color = self.palette.white_text
-
-        painter.save()
-
-        painter.setOpacity(self.opacity)
-        painter.setPen(QColor(0, 0, 0, 0))
-        rect = QRectF(x, y, StageItemMetrics.logo_w, h)
-        painter.setBrush(QBrush(background_color))
-        painter.drawRect(rect)
-
-        painter.setBrush(QBrush(icon_color))
-        rect = QRect(x + margin, y + margin, StageItemMetrics.logo_w - 2 * margin, h - 2 * margin)
-        icon: QIcon = qtawesome.icon(self.stage_template.icon_name, opacity=self.opacity)
-        icon.paint(painter, rect, QtCore.Qt.AlignmentFlag.AlignRight)
-
-        painter.restore()
-
-    def paint_text(self, painter: QPainter):
-        x, y, w, h = self.get_item_rect()
-        color = QColor(self.palette.white_text)
-        padding = 12
-
-        painter.save()
-        painter.setOpacity(self.opacity)
-        painter.setPen(QPen(color))
-        rect = QRect(x + padding + StageItemMetrics.logo_w, y, w, h)
-        painter.drawText(rect, self.stage_template.label, alignment.AlignVCenter | alignment.AlignLeft)
         painter.restore()
 
     def paint_status(self, painter: QPainter):
