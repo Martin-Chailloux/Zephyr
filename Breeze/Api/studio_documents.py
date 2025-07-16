@@ -218,7 +218,6 @@ class StageTemplate(Document):
     def __repr__(self):
         return f"<Stage template>: {self.name}"
 
-
     # NOTE: no GUI for now
     @classmethod
     def create(cls, name: str, label: str, color: str = None, icon_name: str = None, **kwargs) -> Self:

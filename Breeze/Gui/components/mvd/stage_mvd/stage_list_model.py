@@ -28,9 +28,10 @@ class StageListModel(AbstractListModel):
         self.stages = []
 
     def populate(self, stages: list[Stage]):
+        self.stages = stages
+
         self.clear()
         stages = sorted(stages, key=lambda x: x.stage_template.order)
-        self.stages = stages
 
         for stage in stages:
             self.add_item(stage=stage)

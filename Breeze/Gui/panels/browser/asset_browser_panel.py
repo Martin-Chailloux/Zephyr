@@ -55,7 +55,8 @@ class AssetBrowserPanel(QWidget):
 
     def _on_asset_selected(self):
         asset = self.asset_selector_widget.asset
-        self.stage_list_widget.stage_list.set_asset(asset=asset)
+        self.stage_list_widget.set_asset(asset=asset)
+
         self.asset_selected.emit()  # promote
 
     def _on_stage_selected(self):

@@ -45,11 +45,8 @@ class StageExportsTable(QTableWidget):
             return
 
         work_component = versions[0].component.stage.work_component
-        print(f"{work_component = }")
         components: list[Component] = [v.component for v in versions]
-        print(f"{components = }")
         components: list[Component] = [c for c in components if c != work_component]
-        print(f"{components = }")
         components = list(set(components))
         self.setColumnCount(len(components))
         self.setHorizontalHeaderLabels([c.label for c in components])

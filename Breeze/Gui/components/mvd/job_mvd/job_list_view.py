@@ -38,7 +38,7 @@ class JobListView(AbstractListView):
         self.blockSignals(False)
 
     def get_selected_job(self) -> Job | None:
-        items = self.get_selected_items()
+        items = self.selected_items
         if not items:
             return None
         else:

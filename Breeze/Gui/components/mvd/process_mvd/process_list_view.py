@@ -42,7 +42,7 @@ class ProcessListView(AbstractListView):
         self._model.populate(processes=stage_template.processes)
 
     def get_selected_process(self) -> ProcessBase.__class__ | None:
-        items = self.get_selected_items()
+        items = self.selected_items
         if not items:
             return None
         else:

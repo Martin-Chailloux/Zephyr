@@ -37,9 +37,11 @@ class StageListView(AbstractListView):
     def refresh(self):
         selected_indexes = self.selectionModel().selectedIndexes()
         self._model.refresh()
+
         if selected_indexes:
             index = self._model.index(selected_indexes[0].row(), 0)
             self.selectionModel().setCurrentIndex(index, QItemSelectionModel.SelectionFlag.Select)
+
         self.set_items_hover_infos()
         self.viewport().update()
 

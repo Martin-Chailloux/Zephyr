@@ -32,7 +32,7 @@ class VersionListView(AbstractListView):
         self.viewport().update()
 
     def get_selected_version(self) -> Version | None:
-        items = self.get_selected_items()
+        items = self.selected_items
         if not items:
             return None
         version = items[0].data(VersionItemRoles.version)

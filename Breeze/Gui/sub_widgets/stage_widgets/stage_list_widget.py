@@ -7,7 +7,7 @@ from PySide6.QtCore import QSize
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QPushButton, QSizePolicy)
 
 from Api.project_documents import Asset
-from Gui.sub_widgets.stage_templates_widgets.select_stage_templates import StageTemplateSelector
+from Gui.components.popups.set_stage_templates_popup import SetStageTemplatesPopup
 from Gui.sub_widgets.stage_templates_widgets.stage_item import StageItem
 from Gui.components.mvd.stage_mvd.stage_list_view import StageListView
 
@@ -44,10 +44,19 @@ class StageListWidget(QWidget):
         self.new_button = edit_button
         self.stage_list = stage_list
 
+    def set_asset(self, asset: Asset = None):
+        self.asset = asset
+        self.stage_list.set_asset(asset)
+
     # ------------------------
     # Events
     # ------------------------
     def on_edit_stages_clicked(self):
-        popup = StageTemplateSelector(asset=self.asset)
+        selected_stage = self.stage_list.selected_stage
+
+        popup = SetStageTemplatesPopup(asset=self.asset)
         popup.exec()
-        self.stage_list.refresh()
+        self.stage_list.set_asset(self.asset)
+
+        if selected_stage is not None:
+            self.stage_list.select_stage(stage=selected_stage)

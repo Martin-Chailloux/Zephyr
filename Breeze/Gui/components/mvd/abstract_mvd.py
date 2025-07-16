@@ -2,9 +2,9 @@ import datetime
 from typing import Optional
 
 from PySide6 import QtCore
-from PySide6.QtCore import QPoint, QModelIndex, QRect, QRectF, QPointF, QItemSelectionModel
+from PySide6.QtCore import QPoint, QModelIndex, QRect, QRectF, QPointF, QItemSelectionModel, Signal
 from PySide6.QtGui import (QCursor, QStandardItem, QStandardItemModel, QPainter, QColor,
-                           QBrush, QPen, QImage, QPainterPath)
+                           QBrush, QPen, QImage, QPainterPath, QMouseEvent)
 from PySide6.QtWidgets import QListView, QStyledItemDelegate, QStyleOptionViewItem, QStyle
 
 from Api.breeze_app import BreezeApp
@@ -30,6 +30,8 @@ class AbstractListModel(QStandardItemModel):
 
 
 class AbstractListView(QListView):
+    right_clicked = Signal()
+
     def __init__(self):
         super().__init__()
         self.setMouseTracking(True)
@@ -56,14 +58,26 @@ class AbstractListView(QListView):
         hovered_item = self._model.item(hovered_index.row())
         return hovered_item
 
-    def get_selected_items(self) -> list[QStandardItem]:
+    @property
+    def selected_items(self) -> list[QStandardItem]:
         selected_indexes = self.selectionModel().selectedIndexes()
         selected_items = [self._model.item(index.row()) for index in selected_indexes]
         return selected_items
 
-    def select_row(self, row: int):
+    def select_row(self, row: int, is_selected: bool=True):
         index = self._model.index(row, 0)
         self.setCurrentIndex(index)
+        if is_selected:
+            self.selectionModel().setCurrentIndex(index, QItemSelectionModel.SelectionFlag.Select)
+        else:
+            self.selectionModel().setCurrentIndex(index, QItemSelectionModel.SelectionFlag.Deselect)
+
+    def mousePressEvent(self, event):
+        if isinstance(event, QMouseEvent):
+            if event.button() == QtCore.Qt.MouseButton.RightButton:
+                self.right_clicked.emit()  # TODO: remove from subclasses
+
+        super().mousePressEvent(event)
 
     def refresh(self):
         selected_indexes = self.selectionModel().selectedIndexes()
