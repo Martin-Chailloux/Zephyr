@@ -4,7 +4,10 @@ import traceback
 from dataclasses import dataclass
 from io import StringIO
 
+import qtawesome
+from PySide6 import QtCore
 from PySide6.QtCore import Signal, QObject
+from PySide6.QtWidgets import QTreeWidgetItem
 
 from Api.project_documents import Version, Job, JobContext, Component
 from Api.studio_documents import User, Process, Software
@@ -51,6 +54,21 @@ class StepPill(QObject):
     def set_success(self):
         self.pill = Pills.success
 
+    @classmethod
+    def from_name(cls, name: str) -> 'StepPill':
+        translator = {
+        'idle': Pills.idle,
+        'error': Pills.error,
+        'running': Pills.running,
+        'warning': Pills.warning,
+        'not_needed': Pills.not_needed,
+        'success': Pills.success,
+        }
+
+        step_pill = cls()
+        step_pill.pill = translator[name]
+        return step_pill
+
 
 class StepLogger:
     def __init__(self, name: str):
@@ -86,10 +104,6 @@ class StepLogger:
     def critical(self, msg: str):
         self.logger.critical(msg)
 
-    @property
-    def output(self) -> str:
-        return self.stream.getvalue()
-
 
 class StepBase(QObject):
     updated = Signal()
@@ -100,6 +114,7 @@ class StepBase(QObject):
 
     def __init__(self, sub_label: str = None):
         super().__init__()
+        self.comes_from_dict: bool = False
         self.sub_label = sub_label
         self.Pill = StepPill()
         self.logger = StepLogger(name=f"{self.label}__{self.sub_label}__{os.urandom(4)}")
@@ -107,9 +122,17 @@ class StepBase(QObject):
         self.steps: list[StepBase] = []
 
         self.logger.info(f"Starting step '{self.label}' ... ")
+        self.log_output = ""  # used with Self.from_dict() to recover log
 
     def set_sub_label(self, sub_label: str):
         self.sub_label = sub_label
+
+    @property
+    def log(self):
+        if self.comes_from_dict:
+            return self.log_output
+        else:
+            return self.logger.stream.getvalue()
 
     @property
     def pill(self) -> PillModel:
@@ -157,16 +180,59 @@ class StepBase(QObject):
         else:
             self.Pill.set_error()
 
+    # translators
     def to_dict(self) -> dict[str, any]:
+        return StepTranslator.to_dict(step=self)
+
+    @classmethod
+    def from_dict(cls, infos: dict[str, any]) -> 'StepBase':
+        return StepTranslator.from_dict(infos=infos)
+
+    def to_tree_item(self) -> QTreeWidgetItem:
+        return StepTranslator.to_tree_item(step=self)
+
+
+class StepTranslator:
+    @staticmethod
+    def to_dict(step: StepBase) -> dict[str, any]:
         infos = {
-            'label': self.label,
-            'sub_label': self.sub_label,
-            'tooltip': self.tooltip,
-            'pill': self.pill.name,
-            'log': self.logger.output,
-            'child_steps': [step.to_dict() for step in self.steps],
+            'label': step.label,
+            'sub_label': step.sub_label,
+            'tooltip': step.tooltip,
+            'pill': step.pill.name,
+            'log': step.log,
+            'child_steps': [step.to_dict() for step in step.steps],
         }
         return infos
+
+    @staticmethod
+    def from_dict(infos: dict[str, any]) -> StepBase:
+        step = StepBase(sub_label=infos['sub_label'])
+        step.comes_from_dict = True
+        step.label = infos['label']
+        step.tooltip = infos['tooltip']
+        step.Pill = StepPill.from_name(name=infos['pill'])
+        step.log_output = infos['log']
+
+        for child_step in infos['child_steps']:
+            child_step = StepBase.from_dict(infos=child_step)
+            step.steps.append(child_step)
+
+        return step
+
+    @staticmethod
+    def to_tree_item(step: StepBase) -> QTreeWidgetItem:
+        item = QTreeWidgetItem()
+
+        text = step.label
+        if step.sub_label is not None:
+            text += f" |  {step.sub_label}"
+        item.setText(0, text)
+
+        icon = qtawesome.icon(step.pill.icon_name, color=step.pill.color)
+        item.setIcon(0, icon)
+        item.setData(0, QtCore.Qt.ItemDataRole.UserRole, step.log)
+        return item
 
 
 class StepLabel(StepBase):

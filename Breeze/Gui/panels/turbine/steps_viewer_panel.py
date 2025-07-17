@@ -6,65 +6,46 @@ from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QTreeWidget, QTreeWidgetItem
 
 from Api.project_documents import Job
-from Api.turbine import Pills, PillModel
-
-
-@dataclass
-class Translators:
-    name_to_pill = {
-        'idle': Pills.idle,
-        'error': Pills.error,
-        'running': Pills.running,
-        'warning': Pills.warning,
-        'not_needed': Pills.not_needed,
-        'success': Pills.success,
-    }
+from Api.turbine import Pills, PillModel, StepBase
 
 
 class StepsViewer(QTreeWidget):
-    step_selected = Signal(dict)
+    step_selected = Signal()
 
     def __init__(self):
         super().__init__()
         self._connect_signals()
 
     def populate(self, job: Job):
-        # TODO: create a property in the document that returns the step with dot notation
-        #  (or instead find a field that does it)
-        #  (edit: NO) or just add a translator here, it might be enough
         self.clear()
-        main_step = job.steps
 
-        top_item = QTreeWidgetItem()
-        top_item.setText(0, main_step['label'])
+        main_step = StepBase.from_dict(infos=job.steps)
+        top_item = main_step.to_tree_item()
         self.addTopLevelItem(top_item)
 
-        for step in main_step['child_steps']:
+        for step in main_step.steps:
             self.add_step(parent=top_item, step=step)
 
         self.expandAll()
 
-    def add_step(self, parent: QTreeWidgetItem, step: dict):
-        item = QTreeWidgetItem()
-        text = step['label']
-        sub_label = step.get('sub_label', None)
-        if sub_label is not None:
-            text += f" |  {sub_label}"
-        item.setText(0, text)
-        pill: PillModel = Translators.name_to_pill[step['pill']]
-        icon = qtawesome.icon(pill.icon_name, color=pill.color)
-        item.setIcon(0, icon)
-        item.setData(0, QtCore.Qt.ItemDataRole.UserRole, step)
+    def add_step(self, parent: QTreeWidgetItem, step: StepBase):
+        item = step.to_tree_item()
         parent.addChild(item)
-        for step in step['child_steps']:
+
+        for step in step.steps:
             self.add_step(parent=item, step=step)
 
     def _connect_signals(self):
         self.selectionModel().selectionChanged.connect(self.on_selection_changed)
 
     def on_selection_changed(self):
+        self.step_selected.emit()
+
+    @property
+    def selected_step_log(self) -> str:
         items = self.selectedItems()
         if not items:
-            return
-        step = items[0].data(0, QtCore.Qt.ItemDataRole.UserRole)
-        self.step_selected.emit(step)
+            return ""
+        else:
+            log = items[0].data(0, QtCore.Qt.ItemDataRole.UserRole)
+            return log

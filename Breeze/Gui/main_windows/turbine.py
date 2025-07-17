@@ -44,7 +44,7 @@ class TurbineGui(QMainWindow):
         job = self.select_process_panel.jobs_list.get_selected_job()
         self.steps_viewer_panel.populate(job=job)
 
-    def on_step_selected(self, step: dict):
-        log: str = step.get('log', '')
+    def on_step_selected(self):
+        log = self.steps_viewer_panel.selected_step_log
         print(f"{log = }")
         self.logs_panel.set_log(log=log)
