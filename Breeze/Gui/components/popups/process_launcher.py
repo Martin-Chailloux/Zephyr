@@ -8,7 +8,7 @@ from Api.breeze_app import BreezeApp
 from Api.project_documents import Version, Component
 from Gui.components.popups.abstract_popup_widget import AbstractPopupWidget
 from Gui.components.mvd.process_mvd.process_list_view import ProcessListView
-from Api.turbine import ProcessBase
+from Api.turbine.process import ProcessBase
 
 
 class ProcessSelectMenu(AbstractPopupWidget):

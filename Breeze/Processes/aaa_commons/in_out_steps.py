@@ -1,7 +1,7 @@
 from typing import Optional
 
-from Api.project_documents import Version, Component
-from Api.turbine import StepBase
+from Api.project_documents import Version
+from Api.turbine.step import StepBase
 from abstract_io import AbstractSoftwareFile
 
 

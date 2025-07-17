@@ -1,12 +1,9 @@
-from dataclasses import dataclass
-
-import qtawesome
 from PySide6 import QtCore
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QTreeWidget, QTreeWidgetItem
 
 from Api.project_documents import Job
-from Api.turbine import Pills, PillModel, StepBase
+from Api.turbine.step import StepBase
 
 
 class StepsViewer(QTreeWidget):

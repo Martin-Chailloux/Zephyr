@@ -8,7 +8,7 @@ from Api.studio_documents import Process, StageTemplate
 from Gui.components.mvd.abstract_mvd import AbstractListView
 from Gui.components.mvd.process_mvd.process_list_item_delegate import ProcessListItemDelegate
 from Gui.components.mvd.process_mvd.process_list_model import ProcessListModel, ProcessItemRoles
-from Api.turbine import ProcessBase
+from Api.turbine.process import ProcessBase
 
 
 class ProcessListView(AbstractListView):

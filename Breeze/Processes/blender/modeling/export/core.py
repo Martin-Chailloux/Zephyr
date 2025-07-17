@@ -3,7 +3,8 @@ from typing import Optional
 import bpy
 
 from Api.project_documents import Version
-from Api.turbine import ProcessBase, StepBase, StepLabel
+from Api.turbine.step import StepBase
+from Api.turbine.process import ProcessBase
 from blender_file import BlenderFile
 
 
