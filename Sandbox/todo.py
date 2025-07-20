@@ -1,7 +1,6 @@
 
 # TODO: turbine:
-#  - refresh jobs on tab shown, don't refresh it number has not changed
-#  - ui for the process step has the same ui than others: pill + logs
+#  - refresh jobs on tab shown, don't refresh if number has not changed
 
 # TODO: users
 #  - per project information

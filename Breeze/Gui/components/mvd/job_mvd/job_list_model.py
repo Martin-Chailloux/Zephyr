@@ -14,10 +14,10 @@ class JobItemRoles:
 
 @dataclass
 class JobItemMetrics:
-    padding: int = 8
     height: int = 52
-    user_w: int = height + padding - 4
-    version_w: int = user_w + 32 + padding
+    user_w: int = height
+    label_w: int = height
+    pill_wh: int = 18
     datetime_w: int = 56
 
 
