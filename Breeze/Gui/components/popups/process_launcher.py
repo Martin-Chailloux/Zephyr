@@ -94,3 +94,4 @@ class ProcessSelectMenu(AbstractPopupWidget):
         process.run()
         print(f"Launching process: {process = }")
         self.process_finished.emit()
+        self.accept()
