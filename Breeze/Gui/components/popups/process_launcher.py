@@ -87,9 +87,7 @@ class ProcessSelectMenu(AbstractPopupWidget):
 
     def on_launch_button_clicked(self):
         process: ProcessBase.__class__ = self.processes_list.get_selected_process()
-
-        # update datetime to match the moment the process is launched
-        self.Context.update_creation_time()
+        self.Context.update_creation_time()  # update datetime to match the moment the process is launched
         process = process(context=self.Context, ui=self.ui_widget.widget(0))
         process.run()
         print(f"Launching process: {process = }")
