@@ -10,9 +10,9 @@ from Api.breeze_app import BreezeApp
 BreezeApp.set_project("JourDeVent")
 BreezeApp.set_user("Martin")
 from Api.studio_documents import StageTemplate
-from Api.project_documents import Stage, Asset, Version
+from Api.project_documents import Stage, Asset, Version, Job
 from Processes.blender.aaa_commons.build import BlenderBuild
-from Processes.blender.modeling.export.core import BlenderModelingExport
+from Processes.blender.modeling.export.process import BlenderModelingExport
 
 mongoengine.connect(host="mongodb://localhost:27017", db="JourDeVent", alias="current_project")
 
@@ -124,5 +124,9 @@ def clear_versions():
         if 'Templates' not in version.component.selected_stage.asset.category:
             version.delete()
 
+def clear_jobs():
+    for job in Job.objects():
+        job.delete()
+
 if __name__ == '__main__':
-    pass
+    clear_jobs()

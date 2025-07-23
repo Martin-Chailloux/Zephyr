@@ -1,6 +1,6 @@
 import subprocess
 import tkinter
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
 from typing import Self, Optional
@@ -286,10 +286,13 @@ class JobContext:
     user: User
     component: Component
     version: Optional[Version]
-    creation_time = datetime.now()
+    creation_time: datetime = field(default_factory=datetime.now)  # creation_time = datatime.now() would only update on first import
 
     def set_version(self, version: Version = None):
         self.version = version
+
+    def update_creation_time(self):
+        self.creation_time = datetime.now()
 
 
 class Job(Document):
@@ -299,6 +302,7 @@ class Job(Document):
     source_process: Process = ReferenceField(document_type=Process, required=True)
     source_version: Version = ReferenceField(document_type=Version, required=True)
     steps: dict = DictField(required=True)
+    inputs: list[dict] = ListField(DictField(), default=[])
 
     meta = {
         'collection': 'Jobs',
@@ -309,11 +313,11 @@ class Job(Document):
         return f"<Job>: {self.longname}"
 
     @classmethod
-    def create(cls, source_process: Process, context: JobContext, steps: dict[str, any], **kwargs) -> Self:
+    def create(cls, source_process: Process, context: JobContext, steps: dict[str, any], inputs: list[dict[str, any]], **kwargs) -> Self:
         longname = " ".join(s for s in [source_process.longname, context.version.longname, context.user.pseudo, str(context.creation_time)])
         kwargs = dict(longname=longname, creation_time=context.creation_time, user=context.user,
                       source_process=source_process, source_version=context.version,
-                      steps=steps, **kwargs)
+                      steps=steps, inputs=inputs, **kwargs)
         kwargs = {k: v for k, v in kwargs.items() if v is not None}
 
         process = cls(**kwargs)

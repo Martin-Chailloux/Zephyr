@@ -19,6 +19,7 @@ class ProcessItemMetrics:
 class ProcessListModel(QStandardItemModel):
     def __init__(self):
         super().__init__()
+        self.processes: list[Process] = []
 
     def add_item(self, process: Process):
         row = self.rowCount()
@@ -32,7 +33,9 @@ class ProcessListModel(QStandardItemModel):
         self.setItem(row, item)
 
     def populate(self, processes: list[Process]):
+        self.processes = []
         self.clear()
+
         for process in processes:
             self.add_item(process=process)
-
+            self.processes.append(process)

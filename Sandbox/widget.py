@@ -3,158 +3,52 @@ import sys
 import logging
 from io import StringIO
 
+import mongoengine
 import qdarkstyle
 from PySide6.QtWidgets import QWidget, QApplication, QVBoxLayout, QLabel, QTextEdit
 
+from Api.turbine.inputs_ui import ProcessInputsUi
 
-# class LogStream:
-#     def __init__(self):
-#         super().__init__()
-#         self.logs: list[str] = []
-#
-#     def write(self, msg: str):
-#         self.logs.append(msg)
-#
-#     def flush(self):
-#         pass
-#
-#     @property
-#     def output(self) -> str:
-#         return "".join(self.logs)
-#
-#
-# class LogHandler(logging.StreamHandler):
-#     def __init__(self):
-#         super().__init__()
-#         self.logs: list[str] = []
-#
-#     def write(self, msg: str):
-#         self.logs.append(msg)
-#
-#     @property
-#     def output(self) -> str:
-#         return "".join(self.logs)
+mongoengine.connect(host="mongodb://localhost:27017", db="Studio", alias="default")
+from Processes.blender.modeling.export.ui import BlenderModelingExportUi
 
-
-class StepLogger:
-    def __init__(self, name: str):
-        # logger.setLevel(logging.DEBUG)
-        stream = StringIO()
-        formatter = logging.Formatter('%(asctime)s - %(levelname)-8s: %(message)s', datefmt='%H:%M:%S')
-
-        handler = logging.StreamHandler()
-        handler.setStream(stream)
-        handler.setLevel(logging.DEBUG)
-        handler.setFormatter(formatter)
-
-        logger = logging.getLogger(name)
-        logger.setLevel(logging.DEBUG)
-        if logger.hasHandlers():
-            logger.handlers.clear()
-        logger.addHandler(handler)
-
-        self.logger = logger
-        self.stream = stream
-
-    def info(self, msg: str):
-        self.logger.info(msg)
-
-    def debug(self, msg: str):
-        self.logger.debug(msg)
-
-    def warning(self, msg: str):
-        self.logger.warning(msg)
-
-    def error(self, msg: str):
-        self.logger.error(msg)
-
-    def critical(self, msg: str):
-        self.logger.critical(msg)
-
-    @property
-    def output(self) -> str:
-        return self.stream.getvalue()
+mongoengine.connect(host="mongodb://localhost:27017", db="JourDeVent", alias="current_project")
 
 
 class Widget(QWidget):
     def __init__(self):
         super().__init__()
         self._init_ui()
-        self.logging_demo()
+        self._connect_signals()
+        self._init_state()
 
     def _init_ui(self):
-        # TODO: show lines number
-        #  https://nachtimwald.com/2009/08/15/qtextedit-with-line-numbers/
         layout = QVBoxLayout()
         self.setLayout(layout)
 
-        subwidget = QTextEdit()
+        subwidget = ProcessInputsUi()
         layout.addWidget(subwidget)
 
-        subwidget.setReadOnly(True)
-        subwidget.append("huezotieahjm")
-        subwidget.append("paoioeazuge")
+        allow_overwrite = subwidget.add_checkbox(name='allow_overwrite', label='Allow overwrite', value=False)
+        last_version = subwidget.add_checkbox(name='last_version', label='Last version', value=True)
 
-        subwidget.setTextColor("red")
-        subwidget.append("mmmmmmmmmm")
-        subwidget.setTextColor("orange")
-        subwidget.append("WARNING")
+        items = [f"{i:03d}" for i in range(12, 0, -1)]
+        version_number = subwidget.add_combobox(name='version_num', label='Version num', items=items, value='009')
+        version_number.setFixedWidth(64)
 
+        self.process_inputs = subwidget
+        self.allow_overwrite = allow_overwrite
+        self.last_version = last_version
+        self.version_number = version_number
 
-    def logging_demo(self):
-        logger = StepLogger(name = "test")
-        logger.debug('debug message')
-        logger.info('info message')
-        logger.warning('warn message')
-        logger.error('error message')
-        logger.critical('critical message')
-        print(f"{logger.output = }")
-        return
+    def _connect_signals(self):
+        self.last_version.clicked.connect(self.on_last_version_clicked)
 
-        # # create logger
-        # logger = logging.getLogger("Turbine")
-        # logger.setLevel(logging.DEBUG)
-        #
-        # # log_stream = LogStream()
-        # # logging.basicConfig(stream=log_stream,
-        # #                     level=logging.DEBUG,
-        # #                     format='%(asctime)s - %(levelname)-8s: %(message)s',
-        # #                     datefmt='%H:%M:%S')
-        #
-        # handler = logging.StreamHandler()
-        # # # create console handler and set level to debug
-        # # handler = logging.StreamHandler()
-        # handler.setLevel(logging.DEBUG)
-        # #
-        # # # create formatter
-        # # # formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        # # # formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
-        # # # formatter = logging.Formatter('%(asctime)s - %(levelname)-8s - %(message)s', datefmt='%I:%M:%S')
-        # # # formatter = logging.Formatter(' [%(name)s] - %(levelname)-8s - %(message)s')
-        # formatter = logging.Formatter('%(asctime)s - %(levelname)-8s: %(message)s', datefmt='%H:%M:%S')  # step logs
-        # #
-        # # # add formatter to ch
-        # handler.setFormatter(formatter)
-        # #
-        # # # add ch to logger
-        # # logger.addHandler(handler)
-        #
-        # # 'application' code
-        # logger.debug('debug message')
-        # logger.info('info message')
-        # logger.warning('warn message')
-        # logger.error('error message')
-        # logger.critical('critical message')
-        #
-        # print(f"{handler. = }")
+    def on_last_version_clicked(self, is_checked: bool):
+        self.version_number.setEnabled(not is_checked)
 
-
-def second_log():
-    logger = StepLogger(name="test2")
-    logger.debug('I am the second log')
-    logger.info('I am the second log')
-    logger.error('I am the second log')
-    print(f"{logger.output = }")
+    def _init_state(self):
+        self.on_last_version_clicked(is_checked=self.last_version.isChecked())
 
 
 if __name__ == '__main__':
@@ -163,6 +57,7 @@ if __name__ == '__main__':
 
     widget = Widget()
     widget.show()
-    second_log()
+
+    print(f"{widget.process_inputs.to_dict() = }")
 
     app.exec()

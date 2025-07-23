@@ -1,0 +1,57 @@
+
+------------------------------------------------
+
+1. Missing primary features
+
+    - Processes:
+        customisable inputs Ui that can easily be saved in db to load/launch a process with the same parameters
+
+    - Users
+        - per project information
+            - roles (sup / lead / graphist / pipe)
+            - favorite_assets
+            - recent_assets
+       --> probably a Contributor/Member/PrUser/SubUser document in project_documents, with source_user and the needed extra fields
+          it is a user with extra project-related fields
+          can be found with BreezeApp.sub_user
+
+    - switch menu for User / Project
+        - ui to create them
+
+    - Admin tab: Guis to create and manage db items
+        - Users (for the current project): add users to project / assign roles
+        - Stage Templates
+            - process assignment
+            - create, delete, icon, color, label, category_filters, assigned_users, etc
+
+    - ExportsTable:
+        - mvd
+        - context menu
+
+    - Asset groups
+
+    - Asset data / properties
+
+------------------------------------------------
+
+2. Cleans / Refactors
+
+    - LineEditPopup: inherit from AbstractPopupWidget
+    - Software classes: sub-classes for in/out, file management, etc.
+
+
+------------------------------------------------
+
+3. Qol / Upgrades to existing features
+
+    - Asset browser: favorites / recent
+    - Turbine: refresh jobs on tab shown, don't refresh if number has not changed
+    - Turbine: show processes and steps duration
+    - Turbine: relaunch process with same inputs
+    - LineEditPopup: checkbox 'Don't close'
+    - copy / paste users and status with ctrl+C/ctrl+V
+    - StageTemplateList assignment:
+        - warn if a used stage template is about to be deleted
+        - ui to omit or keep them
+    - save the gui's state between instances
+    - add error messages to steps in step viewer

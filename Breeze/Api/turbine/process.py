@@ -1,7 +1,9 @@
 import traceback
+from datetime import datetime
 
 from Api.project_documents import Component, Version, JobContext, Job
 from Api.studio_documents import User, Process
+from Api.turbine.inputs_ui import ProcessInputsUi
 from Api.turbine.step import StepBase
 
 
@@ -9,13 +11,18 @@ class ProcessBase(StepBase):
     name: str = "process_name"
     label = "process_label"
     tooltip = "process_tooltip"
+    Ui: ProcessInputsUi = None
+    ui: ProcessInputsUi  # this typing should be overridden in subclasses with the process' inputs_ui class
 
-    def __init__(self, user: User, component: Component, version: Version = None):
-        # component and version are split for build process where the component may have 0 versions
+    def __init__(self, context: JobContext, ui: ProcessInputsUi = None):
+        # NOTE: component and version are split, because a build process may use a component with 0 versions in it
         super().__init__()
-        self.Context = JobContext(user=user, component=component, version=version)
+        self.Context = context
+        # self.Context.creation_time = datetime.now()
+        self.ui = ui
         self.mg_job = self.register_mg_job()
         self.Pill.set_idle()
+        print(f"{self.Context.creation_time = }")
 
     def run(self):
         self.Pill.set_running()
@@ -67,7 +74,10 @@ class ProcessBase(StepBase):
     # ------------------------
     def register_mg_job(self) -> Job:
         """ Saves this instantiated process as a Job in the db"""
-        process = Job.create(source_process=self.get_registered_mg_process(), context=self.Context, steps=self.to_dict())
+        process = Job.create(source_process=self.get_registered_mg_process(),
+                             context=self.Context,
+                             steps=self.to_dict(),
+                             inputs=self.ui.to_dict())
         return process
 
     def update_mg_job(self):

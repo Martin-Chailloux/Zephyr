@@ -32,14 +32,15 @@ class ProcessListView(AbstractListView):
                 return
 
         super().mousePressEvent(event)
-    #     hovered_item = self.get_hovered_item()
-    #     if hovered_item is None:
-    #         return
-    #     process: MgProcess = hovered_item.data(ProcessItemRoles.process)
-    #     self.process_selected.emit(process.longname)
 
     def set_stage_template(self, stage_template: StageTemplate):
         self._model.populate(processes=stage_template.processes)
+
+    def process_to_class(self, process: Process) -> ProcessBase.__class__:
+        path = process.class_path
+        module_name, class_name = path.rsplit('.', 1)
+        module = importlib.import_module(module_name)
+        return getattr(module, class_name)
 
     def get_selected_process(self) -> ProcessBase.__class__ | None:
         items = self.selected_items
@@ -47,11 +48,7 @@ class ProcessListView(AbstractListView):
             return None
         else:
             process: Process = items[0].data(ProcessItemRoles.process)
-            path = process.class_path
-            module_name, class_name = path.rsplit('.', 1)
-            module = importlib.import_module(module_name)
-            process: ProcessBase.__class__ = getattr(module, class_name)
-            return process
+            return self.process_to_class(process=process)
 
     def on_selection_changed(self):
         process = self.get_selected_process()
