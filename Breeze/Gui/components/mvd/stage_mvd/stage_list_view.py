@@ -1,12 +1,11 @@
 from dataclasses import dataclass
 
 from PySide6.QtCore import Signal, QModelIndex, QItemSelectionModel
-from PySide6.QtWidgets import QSizePolicy
 
 from Api.project_documents import Asset, Stage
 from Gui.components.mvd.abstract_mvd import AbstractListView
-from Gui.components.mvd.stage_mvd.stage_list_item_delegate import StageListItemDelegate
-from Gui.components.mvd.stage_mvd.stage_list_model import StageListModel, StageItemRoles
+from Gui.components.mvd.stage_mvd.stage_list_item_delegate import StageListItemDelegate, StageListMinimalItemDelegate
+from Gui.components.mvd.stage_mvd.stage_list_model import StageListModel, StageItemRoles, StageListMinimalModel
 from Gui.components.mvd.stage_mvd.stage_list_model import StageItemMetrics
 from Gui.components.popups.status_select_popup import StatusSelectPopup
 from Gui.components.popups.user_select_popup import UserSelectPopup
@@ -19,20 +18,24 @@ class StageListHoverData:
     on_status: bool = False
 
 
-class StageListView(AbstractListView):
+class _StageListBaseView(AbstractListView):
     stage_selected = Signal()
-    stage_data_modified = Signal()
 
     def __init__(self):
         super().__init__()
-        self._model = StageListModel()
-        self.setModel(self._model)
-
-        self._item_delegate = StageListItemDelegate()
-        self.setItemDelegate(self._item_delegate)
+        self._set_model()
+        self._set_delegate()
 
         self.last_hover_data = StageListHoverData()
         self._connect_signals()
+
+    def _set_model(self):
+        self._model = StageListModel()
+        self.setModel(self._model)
+
+    def _set_delegate(self):
+        self._item_delegate = StageListItemDelegate()
+        self.setItemDelegate(self._item_delegate)
 
     def refresh(self):
         selected_indexes = self.selectionModel().selectedIndexes()
@@ -41,9 +44,6 @@ class StageListView(AbstractListView):
         if selected_indexes:
             index = self._model.index(selected_indexes[0].row(), 0)
             self.selectionModel().setCurrentIndex(index, QItemSelectionModel.SelectionFlag.Select)
-
-        self.set_items_hover_infos()
-        self.viewport().update()
 
     def set_asset(self, asset: Asset=None):
         if asset is None:
@@ -91,6 +91,7 @@ class StageListView(AbstractListView):
     def _on_selection_changed(self):
         self.stage_selected.emit()
 
+
     def _get_hovered_stage(self) -> Stage | None:
         hovered_item = self.get_hovered_item()
         if hovered_item is None:
@@ -98,6 +99,15 @@ class StageListView(AbstractListView):
 
         stage = hovered_item.data(StageItemRoles.stage)
         return stage
+
+
+class StageListEditableView(_StageListBaseView):
+    stage_data_modified = Signal()
+
+    def refresh(self):
+        super().refresh()
+        self.set_items_hover_infos()
+        self.viewport().update()
 
     def _get_hover_data(self) -> StageListHoverData:
         x, y, w, h = self._get_viewport_rect()
@@ -164,3 +174,13 @@ class StageListView(AbstractListView):
     def leaveEvent(self, event):
         self._model.remove_items_hover()
         super().leaveEvent(event)
+
+
+class StageListMinimalView(_StageListBaseView):
+    def _set_model(self):
+        self._model = StageListMinimalModel()
+        self.setModel(self._model)
+
+    def _set_delegate(self):
+        self._item_delegate = StageListMinimalItemDelegate()
+        self.setItemDelegate(self._item_delegate)

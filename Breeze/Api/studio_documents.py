@@ -1,3 +1,4 @@
+import importlib
 from typing import Self
 
 import mongoengine
@@ -192,6 +193,14 @@ class Process(Document):
         process.save()
         print(f"Created: {process.__repr__()}")
         return process
+
+    def to_class(self) -> 'ProcessBase'.__class__:
+        # NOTE: there is no need to import 'ProcessBase' here for it to work
+        # (it would not work anyway because of circular imports)
+        path = self.class_path
+        module_name, class_name = path.rsplit('.', 1)
+        module = importlib.import_module(module_name)
+        return getattr(module, class_name)
 
 
 class StageTemplate(Document):

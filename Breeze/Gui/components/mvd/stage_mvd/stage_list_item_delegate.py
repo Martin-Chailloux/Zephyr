@@ -81,9 +81,6 @@ class StageListItemDelegate(StageTemplateListItemDelegate):
 
 
 class StageListItemAlwaysOnDelegate(StageListItemDelegate):
-    def __init__(self):
-        super().__init__()
-
     def _set_custom_data(self, option: QStyleOptionViewItem, index: QModelIndex):
         super()._set_custom_data(option, index)
         self.opacity = 1
@@ -95,3 +92,21 @@ class StageListItemAlwaysOnDelegate(StageListItemDelegate):
 
     def paint_selected_underline(self, painter: QPainter):
         return
+
+
+class StageListMinimalItemDelegate(StageListItemDelegate):
+    def paint(self, painter: QPainter, option: QStyleOptionViewItem , index: QModelIndex):
+        self._set_data(option, index)
+
+        painter.save()
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+
+        self.paint_selected_background(painter)
+        self.paint_hover(painter)
+
+        self.paint_logo(painter)
+        self.paint_text(painter)
+
+        self.paint_selected_underline(painter)
+
+        painter.restore()

@@ -18,11 +18,14 @@ class StageItemRoles:
 @dataclass
 class StageItemMetrics:
     height: int = 42
+    height_minimal: int = 36
     logo_w: int = 48
     status_w: int = 52
 
 
 class StageListModel(AbstractListModel):
+    item_h = StageItemMetrics.height
+
     def __init__(self):
         super().__init__()
         self.stages = []
@@ -47,7 +50,7 @@ class StageListModel(AbstractListModel):
         row = self.rowCount()
 
         item = QStandardItem()
-        item.setSizeHint(QSize(0, StageItemMetrics.height))
+        item.setSizeHint(QSize(0, self.item_h))
         item.setEditable(False)
 
         item.setData(stage, StageItemRoles.stage)
@@ -60,3 +63,6 @@ class StageListModel(AbstractListModel):
         for item in self.items:
             item.setData(False, StageItemRoles.user_is_hovered)
             item.setData(False, StageItemRoles.status_is_hovered)
+
+class StageListMinimalModel(StageListModel):
+    item_h = StageItemMetrics.height_minimal

@@ -5,7 +5,7 @@ from PySide6.QtWidgets import QDialog
 
 
 class AbstractPopupWidget(QDialog):
-    def __init__(self, w: int, h: int, show_borders: bool=False,
+    def __init__(self, w: int = None, h: int = None, show_borders: bool=False,
                  position: list[float] = None):
         super().__init__()
         self.w = w
@@ -23,8 +23,8 @@ class AbstractPopupWidget(QDialog):
         x = int(QCursor.pos().x())
         y = int(QCursor.pos().y())
 
-        x -= self.w * self.position[0]
-        y -= self.h * self.position[1]
+        x -= self.sizeHint().width() * self.position[0]
+        y -= self.sizeHint().height() * self.position[1]
 
         self.move(QPoint(x, y))
 

@@ -17,9 +17,10 @@ class AssetBrowserWidget(QWidget):
     add_item_label = "New"
     asset_selected = Signal()
 
-    def __init__(self):
+    def __init__(self, show_favorite: bool=True):
         super().__init__()
-        self.cache = SelectionCache()
+        self.show_favorite = show_favorite
+        self.cache = _SelectionCache()
 
         self._init_ui()
         self.connect_signals()
@@ -58,7 +59,8 @@ class AssetBrowserWidget(QWidget):
             cb.setFixedHeight(self.h)
 
         set_bookmark_button = BookmarkIconButton()
-        grid_layout.addWidget(set_bookmark_button, 1, 4)
+        if self.show_favorite:
+            grid_layout.addWidget(set_bookmark_button, 1, 4)
 
         # ------------------------
         # public vars
@@ -211,7 +213,7 @@ class AssetFieldCombobox(QComboBox):
         self.item_created.emit(name)
 
 
-class SelectionCache:
+class _SelectionCache:
     """
     Remembers previous selections
     """

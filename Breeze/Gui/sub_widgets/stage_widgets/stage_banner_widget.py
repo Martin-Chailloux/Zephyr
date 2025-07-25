@@ -7,7 +7,7 @@ from PySide6.QtWidgets import QLabel, QWidget, QVBoxLayout, QSizePolicy
 from Api.project_documents import Stage
 from Gui.components.mvd.stage_mvd.stage_list_item_delegate import StageListItemAlwaysOnDelegate
 from Gui.components.mvd.stage_mvd.stage_list_model import StageItemMetrics
-from Gui.components.mvd.stage_mvd.stage_list_view import StageListView
+from Gui.components.mvd.stage_mvd.stage_list_view import StageListEditableView
 
 
 class StageBannerWidget(QWidget):
@@ -27,7 +27,7 @@ class StageBannerWidget(QWidget):
         asset_label.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
 
         # show stage
-        stage_list = StageListView()
+        stage_list = StageListEditableView()
         layout.addWidget(stage_list)
         stage_list.setMaximumSize(QSize(256, StageItemMetrics.height + 6))
         stage_list.setItemDelegate(StageListItemAlwaysOnDelegate())

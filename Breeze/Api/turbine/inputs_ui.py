@@ -24,7 +24,7 @@ class ProcessInputsUi(QWidget):
         sub_layout = QVBoxLayout()
         layout.addLayout(sub_layout)
         sub_layout.setContentsMargins(7, 7, 7, 7)
-        sub_layout.setSpacing(7)
+        sub_layout.setSpacing(3)
 
         self.layout = sub_layout
 
