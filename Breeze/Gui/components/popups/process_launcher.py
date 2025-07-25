@@ -1,9 +1,8 @@
-from datetime import datetime
 from typing import Optional
 
 import qtawesome
-from PySide6.QtCore import Signal, QObject
-from PySide6.QtWidgets import QVBoxLayout, QPushButton, QHBoxLayout, QStackedWidget, QWidget, QLabel
+from PySide6.QtCore import Signal
+from PySide6.QtWidgets import QVBoxLayout, QPushButton, QHBoxLayout, QStackedWidget, QWidget
 
 from Api.breeze_app import BreezeApp
 from Api.project_documents import Version, Component, JobContext
@@ -39,21 +38,14 @@ class ProcessSelectMenu(AbstractPopupWidget):
         process_list.set_stage_template(stage_template=self.Context.component.stage.stage_template)
         process_list.setFixedWidth(128)
 
-        sub_layout = QVBoxLayout()
-        h_layout.addLayout(sub_layout)
-
-        ui_title = QLabel()
-        sub_layout.addWidget(ui_title)
-
         stacked_widget = QStackedWidget()
-        sub_layout.addWidget(stacked_widget)
+        h_layout.addWidget(stacked_widget)
 
         launch_button = QPushButton("Launch")
         layout.addWidget(launch_button)
         launch_button.setIcon(qtawesome.icon('fa.rocket'))
         launch_button.setFixedHeight(32)
 
-        self.ui_title = ui_title
         self.ui_widget = stacked_widget
         self.processes_list = process_list
         self.launch_button = launch_button
@@ -76,12 +68,10 @@ class ProcessSelectMenu(AbstractPopupWidget):
 
         if process is None:
             self.set_process_ui(None)
-            self.ui_title.setText("")
             return
 
-        self.ui_title.setText(process.label)
         if process.Ui is None:
-            self.set_process_ui(ProcessInputsUi())
+            self.set_process_ui(ProcessInputsUi(label="- Inputs not found -"))
         else:
             self.set_process_ui(process.Ui(context=self.Context))
 

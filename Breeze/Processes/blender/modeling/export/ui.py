@@ -13,7 +13,7 @@ class BlenderModelingExportInputs:
 
 class BlenderModelingExportUi(ProcessInputsUi):
     def __init__(self, context: JobContext = None):
-        super().__init__(context=context)
+        super().__init__(label='Export', context=context)
         self._init_ui()
         self._connect_signals()
         self._init_state()

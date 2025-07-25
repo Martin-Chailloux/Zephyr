@@ -1,4 +1,5 @@
 from Api.turbine.process import ProcessBase
+from Processes.aaa_commons.in_out_steps import OpenStep
 from Processes.blender.modeling.export.steps import CollectStep, ExportStep
 from Processes.blender.modeling.export.ui import BlenderModelingExportUi
 
@@ -20,12 +21,15 @@ class BlenderModelingExport(ProcessBase):
 
         self.logger.warning(f"{self.ui.inputs.dont_overwrite = }")
 
-        # self.open_step = OpenStep(filepath=self.Context.version.filepath)
+        self.open_step = OpenStep()
         self.collect_step = CollectStep()
         self.export_step = ExportStep(version=self.Context.version, dont_overwrite=self.ui.inputs.dont_overwrite)
+
+        self.add_step(self.open_step)
         self.add_step(self.collect_step)
         self.add_step(self.export_step)
 
     def _inner_run(self, **kwargs):
+        self.open_step.run(version=self.Context.version)
         self.collect_step.run()
         self.export_step.run()

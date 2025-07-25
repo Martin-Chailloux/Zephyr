@@ -1,13 +1,14 @@
 from PySide6 import QtCore
-from PySide6.QtWidgets import QWidget, QVBoxLayout
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel
 
 from Api.project_documents import JobContext
 from Api.turbine.inputs_widgets import ProcessInputCheckbox, ProcessInputCombobox
 
 
 class ProcessInputsUi(QWidget):
-    def __init__(self, context: JobContext = None):
+    def __init__(self, label: str, context: JobContext = None):
         super().__init__()
+        self.label = label
         self.Context = context
         self.input_widgets = []
 
@@ -15,9 +16,17 @@ class ProcessInputsUi(QWidget):
         self.setLayout(layout)
 
         layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop | QtCore.Qt.AlignmentFlag.AlignLeft)
-        layout.setSpacing(7)
+        layout.setContentsMargins(0, 0, 0, 0)
 
-        self.layout = layout
+        title = QLabel(self.label)
+        layout.addWidget(title)
+
+        sub_layout = QVBoxLayout()
+        layout.addLayout(sub_layout)
+        sub_layout.setContentsMargins(7, 7, 7, 7)
+        sub_layout.setSpacing(7)
+
+        self.layout = sub_layout
 
     def add_checkbox(self, name: str, label: str, is_checked: bool=False) -> ProcessInputCheckbox:
         checkbox = ProcessInputCheckbox(name=name, label=label, is_checked=is_checked)
