@@ -3,7 +3,7 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout
 
 from Api.breeze_app import BreezeApp
 from Api.project_documents import Stage
-from Gui.sub_widgets.asset_widgets.asset_selector_widget import AssetSelectorWidget
+from Gui.sub_widgets.asset_widgets.asset_browser_widget import AssetBrowserWidget
 from Gui.sub_widgets.stage_widgets.stage_list_widget import StageListWidget
 
 
@@ -24,7 +24,7 @@ class AssetBrowserPanel(QWidget):
 
         project = BreezeApp.project
 
-        asset_selector_widget = AssetSelectorWidget(project)
+        asset_selector_widget = AssetBrowserWidget()
         layout.addWidget(asset_selector_widget)
 
         stage_list_widget = StageListWidget()

@@ -2,6 +2,7 @@ import qtawesome
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QWidget, QComboBox, QLabel, QGridLayout
 
+from Api.breeze_app import BreezeApp
 from Api.project_documents import Asset
 from Api.studio_documents import Project
 from Gui.components.popups.line_edit_popup import LineEditPopup
@@ -11,14 +12,13 @@ from Gui.sub_widgets.asset_widgets.bookmark_widgets import BookmarkIconButton
 # TODO: bug: if an asset without existing name or variant, the previous stage list is kept
 # TODO: strange to use project here, categories should be deduced from a query
 
-class AssetSelectorWidget(QWidget):
+class AssetBrowserWidget(QWidget):
     h = 32
     add_item_label = "New"
     asset_selected = Signal()
 
-    def __init__(self, project: Project):
+    def __init__(self):
         super().__init__()
-        self.project = project
         self.cache = SelectionCache()
 
         self._init_ui()
@@ -40,7 +40,7 @@ class AssetSelectorWidget(QWidget):
 
         category_cb = AssetFieldCombobox()
         grid_layout.addWidget(category_cb, 1, 0)
-        category_cb.set_items(self.project.categories)
+        category_cb.set_items(BreezeApp.project.categories)
 
         label = QLabel("Name")
         grid_layout.addWidget(label, 0, 1)

@@ -10,6 +10,7 @@ from Api.turbine.inputs_ui import ProcessInputsUi
 from Gui.components.popups.abstract_popup_widget import AbstractPopupWidget
 from Gui.components.mvd.process_mvd.process_list_view import ProcessListView
 from Api.turbine.process import ProcessBase
+from Gui.sub_widgets.asset_widgets.asset_browser_widget import AssetBrowserWidget
 
 
 class ProcessSelectMenu(AbstractPopupWidget):
@@ -29,6 +30,9 @@ class ProcessSelectMenu(AbstractPopupWidget):
     def _init_ui(self):
         layout = QVBoxLayout()
         self.setLayout(layout)
+
+        asset_browser = AssetBrowserWidget()
+        layout.addWidget(asset_browser)
 
         h_layout = QHBoxLayout()
         layout.addLayout(h_layout)
