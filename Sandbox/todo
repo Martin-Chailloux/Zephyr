@@ -4,7 +4,10 @@
 1. Missing primary features
 
     - Processes:
-        customisable inputs Ui that can easily be saved in db to load/launch a process with the same parameters
+        - set process_launcher's initial state from context
+        - cast process_launcher's edited state to the launched process
+        - preset the input's height + scroll area to have a fixed size window
+        - test & fix import of inputs with process relaunch in jobs_list
 
     - Users
         - per project information
