@@ -1,8 +1,8 @@
 from PySide6 import QtCore
-from PySide6.QtWidgets import QWidget, QHBoxLayout, QLabel, QVBoxLayout
+from PySide6.QtWidgets import QWidget, QVBoxLayout
 
 from Api.project_documents import JobContext
-from Api.turbine.inputs_widgets import InputCheckBox, InputComboBox
+from Api.turbine.inputs_widgets import ProcessInputCheckbox, ProcessInputCombobox
 
 
 class ProcessInputsUi(QWidget):
@@ -15,55 +15,41 @@ class ProcessInputsUi(QWidget):
         self.setLayout(layout)
 
         layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop | QtCore.Qt.AlignmentFlag.AlignLeft)
-        layout.setSpacing(0)
+        layout.setSpacing(7)
 
         self.layout = layout
 
-    def _add_widget(self, label: str, widget: QWidget) -> QWidget:
-        h_layout = QHBoxLayout()
-        self.layout.addLayout(h_layout)
-
-        label = QLabel(label)
-        label.setFixedWidth(96)
-        h_layout.addWidget(label)
-
-        h_layout.addWidget(widget)
-        # TODO: currently 'enabled_state_changed' needs to be defined in every subwidget, there must be a better way
-        #  the goal is to match the label enabled state with its associated widget
-        widget.enabled_state_changed.connect(label.setEnabled)
-
-        return widget
-
-    def add_checkbox(self, name: str, label: str, value: bool=False) -> InputCheckBox:
-        checkbox = InputCheckBox(name=name, label=label, value=value)
+    def add_checkbox(self, name: str, label: str, is_checked: bool=False) -> ProcessInputCheckbox:
+        checkbox = ProcessInputCheckbox(name=name, label=label, is_checked=is_checked)
         self.input_widgets.append(checkbox)
-        self._add_widget(label=label, widget=checkbox)
+        self.layout.addWidget(checkbox)
         return checkbox
 
-    def add_combobox(self, name: str, label: str, items: list[str], value: str='') -> InputComboBox:
-        combobox = InputComboBox(name=name, label=label, items=items, value=value)
+    def add_combobox(self, name: str, label: str, items: list[str], current_text: str='') -> ProcessInputCombobox:
+        combobox = ProcessInputCombobox(name=name, label=label, items=items, current_text=current_text)
         self.input_widgets.append(combobox)
-        self._add_widget(label=label, widget=combobox)
+        self.layout.addWidget(combobox)
         return combobox
 
     def to_dict(self) -> list[dict[str, any]]:
-        widgets = []
+        widget_infos = []
         for widget in self.input_widgets:
-            widgets.append(widget.to_dict())
-        return widgets
+            widget_infos.append(widget.to_dict())
+        return widget_infos
 
     @classmethod
     def from_dict(cls, widgets: list[dict[str, any]]):
         process_inputs = cls()
 
         for infos in widgets:
-            widget = infos['widget']
-            if widget is None:
+            widget_type = infos['widget']
+            if widget_type is None:
                 return
 
-            kwargs = dict(name=infos['name'], label=infos['label'], value=infos['value'])
+            name=infos['name']
+            label=infos['label']
 
-            if widget == 'checkbox':
-                process_inputs.add_checkbox(**kwargs)
-            elif widget == 'combobox':
-                process_inputs.add_combobox(items=infos['items'], **kwargs)
+            if widget_type == 'checkbox':
+                process_inputs.add_checkbox(name=name, label=label, is_checked=infos.get('is_checked', False))
+            elif widget_type == 'combobox':
+                process_inputs.add_combobox(name=name, label=label, items=infos.get('items', []), current_text=infos.get('current_text', ''))
