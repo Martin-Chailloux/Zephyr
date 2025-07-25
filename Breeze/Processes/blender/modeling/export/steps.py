@@ -26,28 +26,26 @@ class ExportStep(StepBase):
     label: str = "Export"
     tooltip: str = ""
 
-    def __init__(self, version: Version, allow_overwrite: bool):
+    def __init__(self, version: Version, dont_overwrite: bool):
         super().__init__()
         self.source_version = version
-        self.allow_overwrite = allow_overwrite
+        self.dont_overwrite = dont_overwrite
         self.file: Optional[BlenderFile] = None
 
     def _is_success(self) -> bool:
         return self.file is not None
 
     def _inner_run(self):
-        # create component
         self.file = self.source_version.to_file()
         self.file.open()
 
-        component = self.source_version.component.stage.create_component(name="geo", label="Geo", crash_if_exists=False)  # TODO: create should not get, split in 2
+        component = self.source_version.component.stage.create_component(name="geo", label="Geo", crash_if_exists=False)
         version = component.get_version(number=self.source_version.number)
         if version is None:
             version = component.create_version(number=self.source_version.number, software=self.source_version.software)
-        elif not self.allow_overwrite:
-            raise ValueError(f"Version {version.__repr__()} already exists. Use 'allow overwrite' to export over it.")
+        elif self.dont_overwrite:
+            raise ValueError(f"Version {version.__repr__()} already exists. Uncheck `don't overwrite` to export over it.")
         else:
-            self.logger.debug(f"Overriding an existing version: {self.allow_overwrite = }")
-
+            self.logger.debug(f"Overriding an existing version: {self.dont_overwrite = }")
 
         self.file.save_as(filepath=version.filepath)

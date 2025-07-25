@@ -6,7 +6,7 @@ from Api.turbine.inputs_ui import ProcessInputsUi
 
 @dataclass
 class BlenderModelingExportInputs:
-    allow_overwrite: bool
+    dont_overwrite: bool
     last_version: bool
     version_number: int
 
@@ -32,7 +32,7 @@ class BlenderModelingExportUi(ProcessInputsUi):
             version_number_value = f"{self.Context.version.number:03d}"
             use_last_version = False
 
-        allow_overwrite = self.add_checkbox(name='allow_overwrite', label='Allow overwrite', is_checked=False)
+        allow_overwrite = self.add_checkbox(name='allow_overwrite', label="Don't overwrite", is_checked=True)
         last_version = self.add_checkbox(name='last_version', label='Last version', is_checked=use_last_version)
         version_number = self.add_combobox(name='version_num', label='Version num', items=version_number_items, current_text=version_number_value)
         version_number.combobox.setFixedWidth(64)
@@ -53,7 +53,7 @@ class BlenderModelingExportUi(ProcessInputsUi):
     @property
     def inputs(self) -> BlenderModelingExportInputs:
          return BlenderModelingExportInputs(
-             allow_overwrite=self.allow_overwrite.checkbox.isChecked(),
+             dont_overwrite=self.allow_overwrite.checkbox.isChecked(),
              last_version=self.last_version.checkbox.isChecked(),
              version_number=int(self.version_number.combobox.currentText())
          )

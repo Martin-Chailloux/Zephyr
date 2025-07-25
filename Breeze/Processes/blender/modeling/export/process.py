@@ -18,11 +18,11 @@ class BlenderModelingExport(ProcessBase):
         #  <- versions override
         # TODO: Use the process inputs
 
-        self.logger.warning(f"{self.ui.inputs.allow_overwrite = }")
+        self.logger.warning(f"{self.ui.inputs.dont_overwrite = }")
 
         # self.open_step = OpenStep(filepath=self.Context.version.filepath)
         self.collect_step = CollectStep()
-        self.export_step = ExportStep(version=self.Context.version, allow_overwrite=self.ui.inputs.allow_overwrite)
+        self.export_step = ExportStep(version=self.Context.version, dont_overwrite=self.ui.inputs.dont_overwrite)
         self.add_step(self.collect_step)
         self.add_step(self.export_step)
 
