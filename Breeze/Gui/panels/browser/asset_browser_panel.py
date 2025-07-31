@@ -43,7 +43,7 @@ class AssetBrowserPanel(QWidget):
 
     @property
     def selected_stage(self) -> Stage | None:
-        return self.stage_list_widget.stage_list.selected_stage
+        return self.stage_list_widget.stage_list.stage
 
     def select_stage(self, stage: Stage = None):
         self.stage_list_widget.stage_list.select_stage(stage=stage)

@@ -62,7 +62,7 @@ class _StageListBaseView(AbstractListView):
             self.selectionModel().blockSignals(False)
 
     @property
-    def selected_stage(self) -> Stage | None:
+    def stage(self) -> Stage | None:
         selected_indexes = self.selectionModel().selectedIndexes()
         if not selected_indexes:
             return None

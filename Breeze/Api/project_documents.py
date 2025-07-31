@@ -288,6 +288,9 @@ class JobContext:
     version: Optional[Version]
     creation_time: datetime = field(default_factory=datetime.now)  # creation_time = datatime.now() would only update on first import
 
+    def set_component(self, component: Component):
+        self.component = component
+
     def set_version(self, version: Version = None):
         self.version = version
 

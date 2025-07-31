@@ -52,7 +52,7 @@ class StageListWidget(QWidget):
     # Events
     # ------------------------
     def on_edit_stages_clicked(self):
-        selected_stage = self.stage_list.selected_stage
+        selected_stage = self.stage_list.stage
 
         popup = SetStageTemplatesPopup(asset=self.asset)
         popup.exec()

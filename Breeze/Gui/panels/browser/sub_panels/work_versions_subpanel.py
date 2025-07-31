@@ -70,27 +70,20 @@ class WorkVersionsWidget(QWidget):
         turbine_button = PushButtonAutoWidth(
             text=" Turbine", icon_name='fa.gears',
             tooltip="Choose a process to launch in turbine",
-            fixed_width=True,
         )
         h_layout.addWidget(turbine_button)
 
-        launch_button = PushButtonAutoWidth(
-            text=" Launch", icon_name='fa5s.rocket',
-            tooltip="Open the selected file within its software",
-        )
-        h_layout.addWidget(launch_button)
-
-        # ------------------------
-        # boxes
-        # ------------------------
-        v_layout = QVBoxLayout()
-        sub_layout.addLayout(v_layout)
-
-        comment_box = TextBox(title="Comment:")
-        v_layout.addWidget(comment_box)
-
-        todo_list = TextBox(title="To do:")
-        v_layout.addWidget(todo_list)
+        # # ------------------------
+        # # boxes
+        # # ------------------------
+        # v_layout = QVBoxLayout()
+        # sub_layout.addLayout(v_layout)
+        #
+        # comment_box = TextBox(title="Comment:")
+        # v_layout.addWidget(comment_box)
+        #
+        # todo_list = TextBox(title="To do:")
+        # v_layout.addWidget(todo_list)
 
         # ------------------------
         # public vars

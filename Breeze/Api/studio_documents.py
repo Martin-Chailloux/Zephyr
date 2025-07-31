@@ -142,10 +142,6 @@ class Project(Document):
     def __repr__(self):
         return f"<Project>: {self.name}"
 
-    def add_category(self, category: str):
-        self.categories.append(category)
-        self.save()
-
     @classmethod
     def create(cls, name: str, db_name: str, root_path: str,
                categories: list[str], users: list[User],
@@ -156,6 +152,10 @@ class Project(Document):
         project.save()
         print(f"Created: {project.__repr__()}")
         return project
+
+    def add_category(self, category: str):
+        self.categories.append(category)
+        self.save()
 
     def add_user(self, user: User):
         # With a gui set_users() will probably make more sense and be enough

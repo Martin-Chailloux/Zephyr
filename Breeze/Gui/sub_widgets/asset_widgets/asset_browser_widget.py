@@ -23,8 +23,8 @@ class AssetBrowserWidget(QWidget):
         self.cache = _SelectionCache()
 
         self._init_ui()
-        self.connect_signals()
-        self.on_category_selected()
+        self._connect_signals()
+        self._on_category_selected()
 
     def _init_ui(self):
         self.setMaximumWidth(512)
@@ -39,20 +39,20 @@ class AssetBrowserWidget(QWidget):
         label = QLabel("Category")
         grid_layout.addWidget(label, 0, 0)
 
-        category_cb = AssetFieldCombobox()
+        category_cb = _AssetFieldCombobox()
         grid_layout.addWidget(category_cb, 1, 0)
         category_cb.set_items(BreezeApp.project.categories)
 
         label = QLabel("Name")
         grid_layout.addWidget(label, 0, 1)
 
-        name_cb = AssetFieldCombobox()
+        name_cb = _AssetFieldCombobox()
         grid_layout.addWidget(name_cb, 1, 1)
 
         label = QLabel("Variant")
         grid_layout.addWidget(label, 0, 3)
 
-        variant_cb = AssetFieldCombobox()
+        variant_cb = _AssetFieldCombobox()
         grid_layout.addWidget(variant_cb, 1, 3)
 
         for cb in [category_cb, name_cb, variant_cb]:
@@ -91,16 +91,29 @@ class AssetBrowserWidget(QWidget):
         else:  # this is not supposed to happen
             raise ValueError(f"Found more than 1 asset: {asset = }")
 
-    def connect_signals(self):
-        self.category_cb.currentTextChanged.connect(self.on_category_selected)
-        self.name_cb.currentTextChanged.connect(self.on_name_selected)
-        self.variant_cb.currentTextChanged.connect(self.on_variant_selected)
+    def set_asset(self, longname: str):
+        asset = Asset.objects(longname=longname)
+        if len(asset) != 1:
+            raise ValueError(f"Could not find an asset with longname: {longname}")
 
-        self.category_cb.item_created.connect(self.on_category_created)
-        self.name_cb.item_created.connect(self.on_name_created)
-        self.variant_cb.item_created.connect(self.on_variant_created)
+        parts = longname.split("_")
+        category = parts[0]
+        name = parts[1]
+        variant = parts[2]
+        self.category_cb.setCurrentText(category)
+        self.name_cb.setCurrentText(name)
+        self.variant_cb.setCurrentText(variant)
 
-    def on_category_selected(self):
+    def _connect_signals(self):
+        self.category_cb.currentTextChanged.connect(self._on_category_selected)
+        self.name_cb.currentTextChanged.connect(self._on_name_selected)
+        self.variant_cb.currentTextChanged.connect(self._on_variant_selected)
+
+        self.category_cb.item_created.connect(self._on_category_created)
+        self.name_cb.item_created.connect(self._on_name_created)
+        self.variant_cb.item_created.connect(self._on_variant_created)
+
+    def _on_category_selected(self):
         self.name_cb.blockSignals(True)  # Delay on_name_selected()
 
         assets = Asset.objects(category=self.category, variant="-")
@@ -111,11 +124,11 @@ class AssetBrowserWidget(QWidget):
         if name is not None:
             self.name_cb.setCurrentText(name)
 
-        self.on_name_selected()
+        self._on_name_selected()
 
         self.name_cb.blockSignals(False)
 
-    def on_name_selected(self):
+    def _on_name_selected(self):
         self.variant_cb.blockSignals(True)
 
         assets = Asset.objects(category=self.category, name=self.name)
@@ -126,34 +139,34 @@ class AssetBrowserWidget(QWidget):
         if variant is not None:
             self.variant_cb.setCurrentText(variant)
 
-        self.on_variant_selected()
+        self._on_variant_selected()
 
         self.variant_cb.blockSignals(False)
 
-    def on_variant_selected(self):
+    def _on_variant_selected(self):
         self.cache.set_key(self.category, self.name, self.variant)
         self.asset_selected.emit()
 
-    def on_category_created(self, category: str):
+    def _on_category_created(self, category: str):
         print(f"CATEGORY CREATED: {category}")
-        self.project.add_category(category)
-        self.category_cb.set_items(self.project.categories)
+        BreezeApp.project.add_category(category)
+        self.category_cb.set_items(BreezeApp.project.categories)
         self.category_cb.setCurrentText(category)
 
-    def on_name_created(self, name: str):
+    def _on_name_created(self, name: str):
         print(f"NAME CREATED: {name}")
         Asset.create(category=self.category, name=name)
-        self.on_category_selected()
+        self._on_category_selected()
         self.name_cb.setCurrentText(name)
 
-    def on_variant_created(self, variant: str):
+    def _on_variant_created(self, variant: str):
         print(f"VARIANT CREATED: {variant}")
         Asset.create(category=self.category, name=self.name, variant=variant)
-        self.on_name_selected()
+        self._on_name_selected()
         self.variant_cb.setCurrentText(variant)
 
 
-class AssetFieldCombobox(QComboBox):
+class _AssetFieldCombobox(QComboBox):
     add_item_label = "New"
     item_created = Signal(str)
 

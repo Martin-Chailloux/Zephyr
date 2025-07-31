@@ -27,6 +27,7 @@ class ProcessSelectMenu(AbstractPopupWidget):
         )
         self._init_ui()
         self._connect_signals()
+        self._init_state()
 
     def _init_ui(self):
         layout = QVBoxLayout()
@@ -47,7 +48,6 @@ class ProcessSelectMenu(AbstractPopupWidget):
         process_list = ProcessListView()
         h_layout.addWidget(process_list)
         process_list.setFixedHeight(h)
-        process_list.set_stage_template(stage_template=self.Context.component.stage.stage_template)
 
         stacked_widget = QStackedWidget()
         layout.addWidget(stacked_widget)
@@ -61,20 +61,34 @@ class ProcessSelectMenu(AbstractPopupWidget):
         self.stage_list = stage_list
 
         self.ui_widget = stacked_widget
-        self.processes_list = process_list
+        self.process_list = process_list
         self.launch_button = launch_button
 
     def _connect_signals(self):
         self.asset_browser.asset_selected.connect(self.on_asset_selected)
-        self.stage_list.right_clicked.connect(self.reject)
 
-        self.processes_list.process_selected.connect(self.on_process_selected)
-        self.processes_list.right_clicked.connect(self.reject)
+        self.stage_list.right_clicked.connect(self.reject)
+        self.stage_list.stage_selected.connect(self.on_stage_selected)
+
+        self.process_list.process_selected.connect(self.on_process_selected)
+        self.process_list.right_clicked.connect(self.reject)
         self.launch_button.clicked.connect(self.on_launch_button_clicked)
+
+    def _init_state(self):
+        self.asset_browser.set_asset(longname=self.Context.component.stage.asset.longname)
+        self.on_asset_selected()  # only needed if current asset is the first from the list
+        self.stage_list.select_stage(stage=self.Context.component.stage)
 
     def on_asset_selected(self):
         asset = self.asset_browser.asset
         self.stage_list.set_asset(asset)
+
+    def on_stage_selected(self):
+        stage = self.stage_list.stage
+        self.process_list.set_stage_template(stage_template=self.stage_list.stage.stage_template)
+        self.process_list.select_row(0)  # TODO: improve with a cache
+
+        self.Context.set_component(component=stage.work_component)
 
     def set_process_ui(self, widget: QWidget = None):
         current_widget = self.ui_widget.widget(0)
@@ -85,7 +99,7 @@ class ProcessSelectMenu(AbstractPopupWidget):
 
     def on_process_selected(self):
         """ displays the ui matching the selected process """
-        process: ProcessBase.__class__ = self.processes_list.get_selected_process()
+        process: ProcessBase.__class__ = self.process_list.get_selected_process()
 
         if process is None:
             self.set_process_ui(None)
@@ -97,7 +111,7 @@ class ProcessSelectMenu(AbstractPopupWidget):
             self.set_process_ui(process.Ui(context=self.Context))
 
     def on_launch_button_clicked(self):
-        process: ProcessBase.__class__ = self.processes_list.get_selected_process()
+        process: ProcessBase.__class__ = self.process_list.get_selected_process()
         self.Context.update_creation_time()  # update datetime to match the moment the process is launched
         process = process(context=self.Context, ui=self.ui_widget.widget(0))
         process.run()

@@ -121,7 +121,7 @@ def register_processes():
 
 def clear_versions():
     for version in Version.objects():
-        if 'Templates' not in version.component.selected_stage.asset.category:
+        if 'Templates' not in version.component.stage.asset.category:
             version.delete()
 
 def clear_jobs():
