@@ -20,6 +20,7 @@ class CollectStep(StepBase):
 
     def _inner_run(self):
         self.export_collection = bpy.data.collections.get('Export', None)
+        self.logger.debug(f"{self.export_collection = }")
 
 
 class ExportStep(StepBase):

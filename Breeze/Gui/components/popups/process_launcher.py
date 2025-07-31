@@ -90,7 +90,7 @@ class ProcessSelectMenu(AbstractPopupWidget):
 
         self.Context.set_component(component=stage.work_component)
 
-    def set_process_ui(self, widget: QWidget = None):
+    def set_process_ui(self, widget: ProcessInputsUi = None):
         current_widget = self.ui_widget.widget(0)
         self.ui_widget.removeWidget(current_widget)
 
@@ -99,7 +99,7 @@ class ProcessSelectMenu(AbstractPopupWidget):
 
     def on_process_selected(self):
         """ displays the ui matching the selected process """
-        process: ProcessBase.__class__ = self.process_list.get_selected_process()
+        process: ProcessBase.__class__ = self.process_list.process
 
         if process is None:
             self.set_process_ui(None)
@@ -111,9 +111,11 @@ class ProcessSelectMenu(AbstractPopupWidget):
             self.set_process_ui(process.Ui(context=self.Context))
 
     def on_launch_button_clicked(self):
-        process: ProcessBase.__class__ = self.process_list.get_selected_process()
+        process: ProcessBase.__class__ = self.process_list.process
         self.Context.update_creation_time()  # update datetime to match the moment the process is launched
+
         process = process(context=self.Context, ui=self.ui_widget.widget(0))
+
         process.run()
         print(f"Launching process: {process = }")
         self.process_finished.emit()

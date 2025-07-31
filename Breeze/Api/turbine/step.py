@@ -140,10 +140,3 @@ class StepTranslator:
         return item
 
 
-class StepLabel(StepBase):
-    def __init__(self, label: str, sub_label: str = None):
-        self.label = label
-        super().__init__(sub_label = sub_label)
-
-    def set_done(self):
-        super().run()

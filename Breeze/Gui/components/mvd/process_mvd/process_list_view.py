@@ -36,7 +36,8 @@ class ProcessListView(AbstractListView):
     def set_stage_template(self, stage_template: StageTemplate):
         self._model.populate(processes=stage_template.processes)
 
-    def get_selected_process(self) -> ProcessBase.__class__ | None:
+    @property
+    def process(self) -> ProcessBase.__class__ | None:
         items = self.selected_items
         if not items:
             return None
@@ -45,5 +46,4 @@ class ProcessListView(AbstractListView):
             return process.to_class()
 
     def on_selection_changed(self):
-        process = self.get_selected_process()
-        self.process_selected.emit(process)
+        self.process_selected.emit(self.process)

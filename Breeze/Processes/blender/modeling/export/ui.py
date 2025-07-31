@@ -1,14 +1,16 @@
 from dataclasses import dataclass
 
 from Api.project_documents import JobContext
-from Api.turbine.inputs_ui import ProcessInputsUi
+from Api.turbine.inputs_ui import ProcessInputsUi, ProcessInputs
 
 
 @dataclass
-class BlenderModelingExportInputs:
-    dont_overwrite: bool
-    last_version: bool
-    version_number: int
+class BlenderModelingExportInputs(ProcessInputs):
+    last_version: bool = False
+    version_number: int = None
+
+    dont_overwrite: bool = False
+
 
 
 class BlenderModelingExportUi(ProcessInputsUi):

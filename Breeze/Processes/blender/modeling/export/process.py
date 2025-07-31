@@ -13,14 +13,6 @@ class BlenderModelingExport(ProcessBase):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        # TODO: separator steps to organize small sub-steps with few code
-        # TODO: separate into sub-steps
-        # TODO: Export the same number thant the current versions
-        #  <- versions override
-        # TODO: Use the process inputs
-
-        self.logger.warning(f"{self.ui.inputs.dont_overwrite = }")
-
         self.open_step = OpenStep()
         self.collect_step = CollectStep()
         self.export_step = ExportStep(version=self.Context.version, dont_overwrite=self.ui.inputs.dont_overwrite)

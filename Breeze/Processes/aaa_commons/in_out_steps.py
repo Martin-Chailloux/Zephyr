@@ -5,6 +5,15 @@ from Api.turbine.step import StepBase
 from abstract_io import AbstractSoftwareFile
 
 
+class StepLabel(StepBase):
+    def __init__(self, label: str, sub_label: str = None):
+        self.label = label
+        super().__init__(sub_label = sub_label)
+
+    def set_done(self):
+        super().run()
+
+
 class OpenStep(StepBase):
     label = "Open Step"
     tooltip = "Open a file from a version"

@@ -1,5 +1,6 @@
 import traceback
 from datetime import datetime
+from typing import Optional
 
 from Api.project_documents import Component, Version, JobContext, Job
 from Api.studio_documents import User, Process
@@ -18,13 +19,31 @@ class ProcessBase(StepBase):
         # NOTE: component and version are split, because a build process may use a component with 0 versions in it
         super().__init__()
         self.Context = context
-        # self.Context.creation_time = datetime.now()
         self.ui = ui
+        self._update_context()
         self.mg_job = self.register_mg_job()
         self.Pill.set_idle()
-        print(f"{self.Context.creation_time = }")
+
+    def _update_context(self):
+        """ update the Context based on given inputs """
+        if self.ui.inputs is None:
+            return
+
+        version: Optional[Version] = None
+
+        use_last_version = self.ui.inputs.last_version
+        if use_last_version:
+            version = self.Context.component.get_last_version()
+        else:
+            version_number = self.ui.inputs.version_number
+            if version_number is not None:
+                version = self.Context.component.get_version(number=version_number)
+
+        if version is not None:
+            self.Context.set_version(version=version)
 
     def run(self):
+        self.logger.debug(f"{self.ui.inputs = }")
         self.Pill.set_running()
 
         try:

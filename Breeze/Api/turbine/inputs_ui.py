@@ -1,8 +1,16 @@
+from dataclasses import dataclass
+
 from PySide6 import QtCore
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel
 
 from Api.project_documents import JobContext
 from Api.turbine.inputs_widgets import ProcessInputCheckbox, ProcessInputCombobox
+
+
+@dataclass
+class ProcessInputs:
+    last_version: bool = False
+    version_number: int = None
 
 
 class ProcessInputsUi(QWidget):
@@ -45,6 +53,10 @@ class ProcessInputsUi(QWidget):
         for widget in self.input_widgets:
             widget_infos.append(widget.to_dict())
         return widget_infos
+
+    @property
+    def inputs(self) -> ProcessInputs:
+        return ProcessInputs()
 
     @classmethod
     def from_dict(cls, widgets: list[dict[str, any]]):
