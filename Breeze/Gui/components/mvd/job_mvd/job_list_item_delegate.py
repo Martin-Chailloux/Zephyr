@@ -101,7 +101,7 @@ class JobListItemDelegate(AbstractListDelegate):
 
         painter.setPen(QPen(BreezeApp.palette.white_text))
         rect = QRect(x, y + h/2, w, h/2)
-        text = f"{asset.category} > {asset.name} > {asset.variant}"
+        text = f"{asset.category} ⮞ {asset.name} ⮞ {asset.variant}"
         painter.drawText(rect, text, alignment.AlignLeft | alignment.AlignTop)
 
         painter.restore()

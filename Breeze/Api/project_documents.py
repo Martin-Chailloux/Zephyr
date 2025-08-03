@@ -17,7 +17,7 @@ from blender_file import BlenderFile
 class Asset(Document):
     """
     An element from the film. Contains stages.
-    category > name > variant
+    category ⮞ name ⮞ variant
     """
     longname: str = StringField(required=True, primary_key=True)
 
