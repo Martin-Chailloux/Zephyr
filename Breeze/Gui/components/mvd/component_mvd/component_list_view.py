@@ -1,4 +1,5 @@
-from PySide6.QtCore import Signal
+from PySide6.QtCore import Signal, QSortFilterProxyModel
+from PySide6.QtGui import QStandardItem
 
 from Api.project_documents import Component
 from Gui.components.mvd.abstract_mvd import AbstractListView
@@ -12,7 +13,7 @@ class ComponentListView(AbstractListView):
     def __init__(self):
         super().__init__()
         self._model = ComponentListModel()
-        self.setModel(self._model)
+        self.setModel(self._model.proxy)
 
         self._item_delegate = ComponentListItemDelegate()
         self.setItemDelegate(self._item_delegate)
@@ -31,6 +32,9 @@ class ComponentListView(AbstractListView):
         else:
             component: Component = items[0].data(ComponentItemRoles.component)
             return component
+
+    def set_text_filter(self, text: str):
+        self._model.set_text_filter(text=text)
 
     def on_selection_changed(self):
         self.component_selected.emit()

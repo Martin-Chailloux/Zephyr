@@ -4,11 +4,12 @@ import mongoengine
 import qdarkstyle
 from PySide6.QtWidgets import QWidget, QApplication, QVBoxLayout
 
+
 mongoengine.connect(host="mongodb://localhost:27017", db="Studio", alias="default")
 
 from Api.breeze_app import BreezeApp
 from Api.project_documents import Component
-from Gui.components.mvd.component_mvd.component_list_view import ComponentListView
+from Gui.components.popups.component_browser import ComponentBrowser
 
 mongoengine.connect(host="mongodb://localhost:27017", db="JourDeVent", alias="current_project")
 
@@ -16,6 +17,7 @@ mongoengine.connect(host="mongodb://localhost:27017", db="JourDeVent", alias="cu
 class Widget(QWidget):
     def __init__(self):
         super().__init__()
+        self.setWindowTitle("Dev Widget")
         self._init_ui()
         self._connect_signals()
         self._init_state()
@@ -24,11 +26,11 @@ class Widget(QWidget):
         layout = QVBoxLayout()
         self.setLayout(layout)
 
-        subwidget = ComponentListView()
+        subwidget = ComponentBrowser()
         layout.addWidget(subwidget)
 
         components = Component.objects()
-        subwidget.set_components(components=components)
+        subwidget.component_list.set_components(components=components)
 
     def _connect_signals(self):
         pass
@@ -43,7 +45,6 @@ if __name__ == '__main__':
 
     BreezeApp.set_project("JourDeVent")
     BreezeApp.set_user("Martin")
-    print(f"{BreezeApp.palette = }")
 
     widget = Widget()
     widget.show()

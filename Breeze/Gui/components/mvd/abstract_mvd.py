@@ -59,6 +59,11 @@ class AbstractListView(QListView):
         return hovered_item
 
     @property
+    def items(self) -> list[QStandardItem]:
+        items = [self._model.item(i) for i in range(self._model.rowCount())]
+        return items
+
+    @property
     def selected_items(self) -> list[QStandardItem]:
         selected_indexes = self.selectionModel().selectedIndexes()
         selected_items = [self._model.item(index.row()) for index in selected_indexes]

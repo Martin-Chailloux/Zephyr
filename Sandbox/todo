@@ -44,6 +44,7 @@
 
     - LineEditPopup: inherit from AbstractPopupWidget
     - SoftwareClasses: sub-classes for in/out, file management, etc.
+    - group searchbars into the same parent class
 
 
 ------------------------------------------------

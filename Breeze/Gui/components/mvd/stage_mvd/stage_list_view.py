@@ -91,7 +91,6 @@ class _StageListBaseView(AbstractListView):
     def _on_selection_changed(self):
         self.stage_selected.emit()
 
-
     def _get_hovered_stage(self) -> Stage | None:
         hovered_item = self.get_hovered_item()
         if hovered_item is None:

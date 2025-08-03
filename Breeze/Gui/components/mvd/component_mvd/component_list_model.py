@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from PySide6 import QtCore
-from PySide6.QtCore import QSize
+from PySide6.QtCore import QSize, QSortFilterProxyModel
 from PySide6.QtGui import QStandardItem, QStandardItemModel
 
 from Api.project_documents import Component
@@ -22,6 +22,8 @@ class ComponentListModel(QStandardItemModel):
     def __init__(self):
         super().__init__()
         self.components: list[Component] = []
+        self.proxy = QSortFilterProxyModel()
+        self.proxy.setSourceModel(self)
 
     def add_item(self, component: Component):
         row = self.rowCount()
@@ -31,6 +33,7 @@ class ComponentListModel(QStandardItemModel):
         item.setEditable(False)
 
         item.setData(component, ComponentItemRoles.component)
+        item.setData(component.longname.lower(), QtCore.Qt.ItemDataRole.DisplayRole)  # used for filtering
 
         self.setItem(row, item)
         self.components.append(component)
@@ -44,3 +47,7 @@ class ComponentListModel(QStandardItemModel):
 
     def refresh(self):
         self.populate(self.components)
+
+    def set_text_filter(self, text: str):
+        text = text.replace(' ', '*')
+        self.proxy.setFilterWildcard(text)
