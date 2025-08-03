@@ -4,9 +4,6 @@
 1. Missing primary features
 
     - Processes:
-        - set process_launcher's initial state from context
-        - cast process_launcher's edited state to the launched process
-        - preset the input's height + scroll area to have a fixed size window
         - test & fix import of inputs with process relaunch in jobs_list
 
     versions list: replace every button with a toolbar
@@ -52,15 +49,23 @@
 ------------------------------------------------
 
 3. Qol / Upgrades to existing features
-    - process_launcher: cache, remember selected processes and inputs:
-        stage: process ; process: inputs
-    - Turbine: refresh jobs on tab shown, don't refresh if number has not changed
-    - Turbine: show processes and steps duration
-    - Turbine: relaunch process with same inputs
+    - process_launcher:
+        - cache, remember selected processes and inputs: stage: process ; process: inputs
+        - preset the input's height + scroll area to have a fixed size window
+
+    - Turbine:
+        - refresh jobs on tab shown, don't refresh if number has not changed
+        - show processes and steps duration
+        - relaunch process with same inputs
+
     - LineEditPopup: checkbox 'Don't close'
+
     - copy / paste users and status with ctrl+C/ctrl+V
+
     - StageTemplateList assignment:
         - warn if a used stage template is about to be deleted
         - ui to omit or keep them
+
     - save the gui's state between instances
+
     - add error messages to steps in step viewer
