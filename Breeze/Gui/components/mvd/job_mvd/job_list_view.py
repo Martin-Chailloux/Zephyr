@@ -10,7 +10,6 @@ from Gui.components.mvd.job_mvd.job_list_model import JobItemRoles, JobListModel
 
 class JobListView(AbstractListView):
     job_selected = Signal()
-    right_clicked = Signal()
 
     def __init__(self):
         super().__init__()
@@ -21,14 +20,6 @@ class JobListView(AbstractListView):
         self.setItemDelegate(self._item_delegate)
 
         self.selectionModel().selectionChanged.connect(self.on_selection_changed)
-
-    def mousePressEvent(self, event):
-        if isinstance(event, QMouseEvent):
-            if event.button() == QtCore.Qt.MouseButton.RightButton:
-                self.right_clicked.emit()
-                return
-
-        super().mousePressEvent(event)
 
     def get_jobs(self):
         # TODO: filters: user, time, searchbar
