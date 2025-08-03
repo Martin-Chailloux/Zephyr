@@ -126,7 +126,7 @@ class AbstractListDelegate(QStyledItemDelegate):
         x, y, w, h = self.get_item_rect()
 
         painter.save()
-        color = QColor(self.palette.white_text)
+        color = QColor(BreezeApp.palette.white_text)
         color.setAlphaF(0.1)
         painter.setPen(QColor(0, 0, 0, 0))
         painter.setBrush(QBrush(color))
@@ -138,7 +138,7 @@ class AbstractListDelegate(QStyledItemDelegate):
             return
 
         x, y, w, h = self.get_item_rect()
-        color = QColor(self.palette.white_text)
+        color = QColor(BreezeApp.palette.white_text)
         color.setAlphaF(0.2)
 
         painter.save()
@@ -154,7 +154,7 @@ class AbstractListDelegate(QStyledItemDelegate):
             return
 
         x, y, w, h = self.get_item_rect()
-        color = self.palette.green
+        color = BreezeApp.palette.green
         height = 2
 
         painter.save()

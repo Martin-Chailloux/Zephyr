@@ -13,7 +13,7 @@ class IconButton(QPushButton):
         super().__init__()
 
         self.setFixedSize(QSize(width, width))
-        color = color or self.palette.white_text
+        color = color or BreezeApp.palette.white_text
         icon = qtawesome.icon(icon_name, color=color)
         self.setIcon(icon)
         self.setIconSize(QSize(icon_size, icon_size))

@@ -4,6 +4,7 @@ from PySide6.QtCore import QModelIndex, QRect, QRectF
 from PySide6.QtGui import QPainter, QBrush, QColor, QPen, QIcon
 from PySide6.QtWidgets import QStyleOptionViewItem
 
+from Api.breeze_app import BreezeApp
 from Api.studio_documents import StageTemplate
 from Gui.components.mvd.abstract_mvd import AbstractListDelegate
 from Gui.components.mvd.stage_mvd.stage_list_model import StageItemMetrics
@@ -40,7 +41,7 @@ class StageTemplateListItemDelegate(AbstractListDelegate):
         margin = 3 if self.is_hovered or self.is_selected else 5
 
         background_color = self.stage_template.color
-        icon_color = self.palette.white_text
+        icon_color = BreezeApp.palette.white_text
 
         painter.save()
 
@@ -59,7 +60,7 @@ class StageTemplateListItemDelegate(AbstractListDelegate):
 
     def paint_text(self, painter: QPainter):
         x, y, w, h = self.get_item_rect()
-        color = QColor(self.palette.white_text)
+        color = QColor(BreezeApp.palette.white_text)
         padding = 12
 
         painter.save()

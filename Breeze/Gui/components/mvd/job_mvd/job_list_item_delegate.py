@@ -4,6 +4,7 @@ from PySide6.QtCore import QModelIndex, QRect, QPoint
 from PySide6.QtGui import QPainter, QColor, QPen, QFontMetrics, QIcon
 from PySide6.QtWidgets import QStyleOptionViewItem
 
+from Api.breeze_app import BreezeApp
 from Api.project_documents import Job
 from Api.turbine.step import StepBase
 from Gui.components.mvd.abstract_mvd import AbstractListDelegate
@@ -43,7 +44,7 @@ class JobListItemDelegate(AbstractListDelegate):
         x, y, w, h = self.get_item_rect()
         x += JobItemMetrics.user_w
         y += h/2
-        color = QColor(self.palette.white_text)
+        color = QColor(BreezeApp.palette.white_text)
 
         painter.save()
 
@@ -77,10 +78,10 @@ class JobListItemDelegate(AbstractListDelegate):
         painter.save()
 
         # version num
-        painter.setPen(QPen(self.palette.white_text))
+        painter.setPen(QPen(BreezeApp.palette.white_text))
         rect = QRect(x, y, w, h/2)
         text = f"{self.job.source_version.number:03d} - "
-        painter.setPen(QPen(self.palette.white_text))
+        painter.setPen(QPen(BreezeApp.palette.white_text))
         painter.drawText(rect, text, alignment.AlignLeft | alignment.AlignBottom)
 
         # task template
@@ -98,7 +99,7 @@ class JobListItemDelegate(AbstractListDelegate):
         painter.setFont(font)
         painter.setOpacity(self.opacity)
 
-        painter.setPen(QPen(self.palette.white_text))
+        painter.setPen(QPen(BreezeApp.palette.white_text))
         rect = QRect(x, y + h/2, w, h/2)
         text = f"{asset.category} > {asset.name} > {asset.variant}"
         painter.drawText(rect, text, alignment.AlignLeft | alignment.AlignTop)
