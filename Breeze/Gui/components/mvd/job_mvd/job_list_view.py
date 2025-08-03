@@ -1,6 +1,4 @@
-from PySide6 import QtCore
 from PySide6.QtCore import Signal
-from PySide6.QtGui import QMouseEvent
 
 from Api.project_documents import Job
 from Gui.components.mvd.abstract_mvd import AbstractListView
