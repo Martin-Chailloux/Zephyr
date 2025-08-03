@@ -9,7 +9,7 @@ from Gui.components.mvd.job_mvd.job_list_model import JobItemRoles, JobListModel
 
 
 class JobListView(AbstractListView):
-    job_selected = Signal(str)
+    job_selected = Signal()
     right_clicked = Signal()
 
     def __init__(self):
@@ -46,6 +46,4 @@ class JobListView(AbstractListView):
             return job
 
     def on_selection_changed(self):
-        job = self.get_selected_job()
-        print(f"Selected: {job = }")
-        self.job_selected.emit(job)
+        self.job_selected.emit()
