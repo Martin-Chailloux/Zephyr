@@ -14,12 +14,6 @@ class StepsViewer(QTreeWidget):
         self._connect_signals()
         self.setHeaderHidden(True)
 
-        # ------------------------------
-        # TODO: use this for components' tree
-        self.setColumnCount(2)
-        self.setColumnWidth(0, 400)
-        # ------------------------------
-
     def populate(self, job: Job):
         self.clear()
 
@@ -35,14 +29,6 @@ class StepsViewer(QTreeWidget):
     def add_step(self, parent: QTreeWidgetItem, step: StepBase):
         item = step.to_tree_item()
         parent.addChild(item)
-
-        # ------------------------------
-        # TODO: use this for components' tree
-        cb = QComboBox()
-        cb.addItems(['003', '002', '001'])
-        cb.setFixedWidth(64)
-        self.setItemWidget(item, 1, cb)
-        # ------------------------------
 
         parent.addChild(item)
 

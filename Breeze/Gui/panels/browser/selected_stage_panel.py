@@ -1,13 +1,12 @@
-from multiprocessing.util import sub_debug
 from typing import Optional
 
-import qtawesome
 from PySide6 import QtCore
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QSplitter, QLabel, QHBoxLayout, QPushButton
 
 from Api.breeze_app import BreezeApp
 from Api.project_documents import Stage
+from Gui.panels.browser.sub_panels.ingredients_subpanel import IngredientsTreeWidget
 from Gui.panels.browser.sub_panels.stage_exports_subpanel import SelectedStageSubPanel
 from Gui.panels.browser.sub_panels.work_versions_subpanel import WorkVersionsWidget
 from Gui.sub_widgets.stage_widgets.stage_banner_widget import StageBannerWidget
@@ -69,14 +68,14 @@ class SelectedStagePanel(QWidget):
         # ------------------------
         # splitter
         # ------------------------
-        placeholder1 = QLabel()
+        ingredients_widget = IngredientsTreeWidget()
         work_versions_widget = WorkVersionsWidget(stage=None)
         stage_exports_widget = SelectedStageSubPanel()
 
         v_splitter = QSplitter()
         layout.addWidget(v_splitter, 1)
         v_splitter.setChildrenCollapsible(False)
-        v_splitter.addWidget(placeholder1)
+        v_splitter.addWidget(ingredients_widget)
         v_splitter.addWidget(work_versions_widget)
         v_splitter.addWidget(stage_exports_widget)
 
@@ -90,7 +89,7 @@ class SelectedStagePanel(QWidget):
         self.button_m = button_m
         self.button_r = button_r
 
-        self.placeholder1 = placeholder1
+        self.ingredients_widget = ingredients_widget
         self.work_versions_widget = work_versions_widget
         self.stage_exports_widget = stage_exports_widget
 
@@ -129,7 +128,7 @@ class SelectedStagePanel(QWidget):
         #  isolate the 3 buttons into their own widget
         button : QPushButton = self.sender()
         if button is self.button_l:
-            self.placeholder1.setVisible(is_checked)
+            self.ingredients_widget.setVisible(is_checked)
         elif button is self.button_m:
             self.work_versions_widget.setVisible(is_checked)
         elif button is self.button_r:
