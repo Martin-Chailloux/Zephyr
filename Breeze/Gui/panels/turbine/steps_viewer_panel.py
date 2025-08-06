@@ -1,6 +1,6 @@
 from PySide6 import QtCore
 from PySide6.QtCore import Signal
-from PySide6.QtWidgets import QTreeWidget, QTreeWidgetItem
+from PySide6.QtWidgets import QTreeWidget, QTreeWidgetItem, QComboBox
 
 from Api.project_documents import Job
 from Api.turbine.step import StepBase
@@ -12,6 +12,13 @@ class StepsViewer(QTreeWidget):
     def __init__(self):
         super().__init__()
         self._connect_signals()
+        self.setHeaderHidden(True)
+
+        # ------------------------------
+        # TODO: use this for components' tree
+        self.setColumnCount(2)
+        self.setColumnWidth(0, 400)
+        # ------------------------------
 
     def populate(self, job: Job):
         self.clear()
@@ -27,6 +34,16 @@ class StepsViewer(QTreeWidget):
 
     def add_step(self, parent: QTreeWidgetItem, step: StepBase):
         item = step.to_tree_item()
+        parent.addChild(item)
+
+        # ------------------------------
+        # TODO: use this for components' tree
+        cb = QComboBox()
+        cb.addItems(['003', '002', '001'])
+        cb.setFixedWidth(64)
+        self.setItemWidget(item, 1, cb)
+        # ------------------------------
+
         parent.addChild(item)
 
         for step in step.steps:
