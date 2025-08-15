@@ -1,4 +1,4 @@
-from PySide6.QtCore import Signal
+from PySide6.QtCore import Signal, QSize
 
 from Api.project_documents import Job
 from Gui.components.mvd.abstract_mvd import AbstractListView
@@ -18,6 +18,11 @@ class JobListView(AbstractListView):
         self.setItemDelegate(self._item_delegate)
 
         self.selectionModel().selectionChanged.connect(self.on_selection_changed)
+
+        self._init_state()
+
+    def _init_state(self):
+        self.resize(QSize(400, self.height()))
 
     def get_jobs(self):
         # TODO: filters: user, time, searchbar

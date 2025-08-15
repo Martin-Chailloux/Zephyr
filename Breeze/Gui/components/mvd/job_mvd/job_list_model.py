@@ -15,9 +15,10 @@ class JobItemRoles:
 @dataclass
 class JobItemMetrics:
     height: int = 52
-    user_w: int = height
+    user_w: int = height - 4
     label_w: int = height
-    pill_wh: int = 18
+    pill_icon_wh: int = 18
+    pill_w: int = 22
     datetime_w: int = 56
 
 

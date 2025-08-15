@@ -20,6 +20,10 @@ class JobListItemDelegate(AbstractListDelegate):
 
     def _set_custom_data(self, option: QStyleOptionViewItem, index: QModelIndex):
         self.job: Job = index.data(JobItemRoles.job)
+        self._set_label_length(0)
+
+    def _set_label_length(self, length: int = 0):
+        self.label_length = length
 
     def paint(self, painter: QPainter, option: QStyleOptionViewItem , index: QModelIndex):
         self._set_data(option, index)
@@ -40,10 +44,23 @@ class JobListItemDelegate(AbstractListDelegate):
 
         painter.restore()
 
+    def paint_job_pill(self, painter: QPainter):
+        x, y, w, h = self.get_item_rect()
+        x += JobItemMetrics.user_w
+        y += h / 2 - JobItemMetrics.pill_icon_wh / 2
+
+        main_step = StepBase.from_dict(infos=self.job.steps)
+        icon: QIcon = qtawesome.icon(main_step.pill.icon_name, color=main_step.pill.color)
+        pixmap = icon.pixmap(int(JobItemMetrics.pill_icon_wh))
+
+        painter.save()
+        painter.drawPixmap(QPoint(x, y), pixmap)
+        painter.restore()
+
     def paint_job_label(self, painter: QPainter):
         x, y, w, h = self.get_item_rect()
         x += JobItemMetrics.user_w
-        y += h/2
+        x += JobItemMetrics.pill_w
         color = QColor(BreezeApp.palette.white_text)
 
         painter.save()
@@ -51,26 +68,18 @@ class JobListItemDelegate(AbstractListDelegate):
         painter.setPen(QPen(color))
         rect = QRect(x, y, w, h)
         text = self.job.source_process.label
-        painter.drawText(rect, text, alignment.AlignLeft | alignment.AlignTop)
+        painter.drawText(rect, text, alignment.AlignLeft | alignment.AlignVCenter)
 
-        painter.restore()
+        font_metrics = QFontMetrics(painter.font())
+        self._set_label_length(font_metrics.horizontalAdvance(text))
 
-    def paint_job_pill(self, painter: QPainter):
-        x, y, w, h = self.get_item_rect()
-        x += JobItemMetrics.user_w
-        y += h/2 - JobItemMetrics.pill_wh
-
-        main_step = StepBase.from_dict(infos=self.job.steps)
-        icon: QIcon = qtawesome.icon(main_step.pill.icon_name, color=main_step.pill.color)
-        pixmap = icon.pixmap(int(JobItemMetrics.pill_wh))
-
-        painter.save()
-        painter.drawPixmap(QPoint(x, y), pixmap)
         painter.restore()
 
     def paint_task_context(self, painter: QPainter):
         x, y, w, h = self.get_item_rect()
-        x += + JobItemMetrics.user_w + JobItemMetrics.label_w
+        x += JobItemMetrics.user_w
+        x += JobItemMetrics.pill_w
+        x += JobItemMetrics.label_w
 
         stage = self.job.source_version.component.stage
         asset = stage.asset
