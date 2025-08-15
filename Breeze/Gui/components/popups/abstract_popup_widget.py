@@ -30,10 +30,6 @@ class AbstractPopupWidget(QDialog):
 
         return self.exec()
 
-    def exec(self):
-
-        return super().exec()
-
     def mousePressEvent(self, event):
         super().mousePressEvent(event)
         if isinstance(event, QMouseEvent):
