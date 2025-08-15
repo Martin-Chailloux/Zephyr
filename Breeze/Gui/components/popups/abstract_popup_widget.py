@@ -18,6 +18,10 @@ class AbstractPopupWidget(QDialog):
             self.setFixedHeight(h)
 
     def show_menu(self, position: list[float] = None) -> int:
+        """
+        :param position: [x, y]: range 0 -> 1, equals to [min_w -> max_w, min_h -> max_h]
+        :return: [int]: 0 == reject ; 1 == accept ; not a bool because more inputs may become useful
+        """
         # get mouse position
         x = int(QCursor.pos().x())
         y = int(QCursor.pos().y())
@@ -28,6 +32,7 @@ class AbstractPopupWidget(QDialog):
         y -= self.sizeHint().height() * position[1]
         self.move(QPoint(x, y))
 
+        # show the menu
         return self.exec()
 
     def mousePressEvent(self, event):
