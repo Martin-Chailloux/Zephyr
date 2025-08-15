@@ -20,7 +20,7 @@ class AbstractPopupWidget(QDialog):
     def show_menu(self, position: list[float] = None) -> int:
         """
         :param position: [x, y]: range 0 -> 1, equals to [min_w -> max_w, min_h -> max_h]
-        :return: [int]: 0 == reject ; 1 == accept ; not a bool because more inputs may become useful
+        :return: [int]: 0 == reject ; 1 == accept ; 2, 3, etc. == custom inputs
         """
         # get mouse position
         x = int(QCursor.pos().x())
