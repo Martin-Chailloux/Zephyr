@@ -4,14 +4,14 @@ from Gui.components.popups.software_select_menu import CommentEditMenu, Software
 
 def new_empty_version(stage: Stage):
     software_select = SoftwareSelectMenu(stage=stage)
-    confirm = software_select.exec()
+    confirm = software_select.show_menu(position=[0.5, 0.25])
     if not confirm:
         return
     elif software_select.software is None:
         return
 
     comment_box = CommentEditMenu(title="Comment: ", default_comment="New file")
-    confirm = comment_box.exec()
+    confirm = comment_box.show_menu(position=[0.5, 0.3])
     if not confirm:
         return
 
@@ -28,7 +28,7 @@ def new_empty_version(stage: Stage):
 # TODO: Version.increment()
 def increment(old_version: Version):
     comment_box = CommentEditMenu(title="Comment: ", default_comment=f"Increment from v{old_version.number:03d}")
-    confirm = comment_box.exec()
+    confirm = comment_box.show_menu(position=[0.5, 0.3])
 
     if not confirm:
         return

@@ -156,14 +156,14 @@ class StageListEditableView(_StageListBaseView):
     def mousePressEvent(self, event):
         hover_data = self._get_hover_data()
         if hover_data.on_user:
-            menu = UserSelectPopup(stage=self._get_hovered_stage())
-            result = menu.exec()
+            user_select_popup = UserSelectPopup(stage=self._get_hovered_stage())
+            result = user_select_popup.show_menu(position=[0.5, 0.25])
             if result:
                 self.stage_data_modified.emit()
                 self.refresh()
         elif hover_data.on_status:
-            menu = StatusSelectPopup(stage=self._get_hovered_stage())
-            result = menu.exec()
+            status_select_popup = StatusSelectPopup(stage=self._get_hovered_stage())
+            result = status_select_popup.show_menu(position=[0.5, 0.5])
             if result:
                 self.stage_data_modified.emit()
                 self.refresh()

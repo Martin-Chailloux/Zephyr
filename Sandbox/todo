@@ -70,3 +70,5 @@
     - save the gui's state between instances
 
     - add error messages to steps in step viewer
+
+    - Stage Templates: status and users history

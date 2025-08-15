@@ -126,6 +126,7 @@ class SelectedStagePanel(QWidget):
         # TODO: don't allow to hide everything
         #  autoresize: bool -> external setting
         #  isolate the 3 buttons into their own widget
+        #  alt + lmb to solo the selected panel
         button : QPushButton = self.sender()
         if button is self.button_l:
             self.ingredients_widget.setVisible(is_checked)

@@ -11,7 +11,7 @@ from Gui.sub_widgets.stage_templates_widgets.stage_template_presets_bar import S
 
 class SetStageTemplatesPopup(AbstractPopupWidget):
     def __init__(self, asset: Asset):
-        super().__init__(w=280, h=560, show_borders=True, position=[0.5, 1])
+        super().__init__(w=280, h=560, show_borders=True)
         self.asset = asset
 
         self.setWindowTitle("Assign stage templates")

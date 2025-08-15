@@ -12,7 +12,7 @@ class UserSelectPopup(AbstractPopupWidget):
     users = project.users
 
     def __init__(self, stage: Stage):
-        super().__init__(w=168, h=248, position=[0.5, 0.25])
+        super().__init__(w=168, h=248)
         self.stage = stage
         self._init_ui()
         self._connect_signals()

@@ -126,11 +126,11 @@ class WorkVersionsWidget(QWidget):
     def on_turbine_button_clicked(self):
         if self.stage is None:
             return
-        menu = ProcessSelectMenu(component=self.stage.work_component, version=self.versions_list.get_selected_version())
-        menu.process_finished.connect(self.ask_refresh_exports.emit)
-        menu.process_finished.connect(self.refresh)
+        process_select_menu = ProcessSelectMenu(component=self.stage.work_component, version=self.versions_list.get_selected_version())
+        process_select_menu.process_finished.connect(self.ask_refresh_exports.emit)
+        process_select_menu.process_finished.connect(self.refresh)
 
-        confirm = menu.exec()
+        confirm = process_select_menu.show_menu(position=[0.5, 1])
         print(f"{confirm = }")
 
     def set_stage(self, stage: Stage):

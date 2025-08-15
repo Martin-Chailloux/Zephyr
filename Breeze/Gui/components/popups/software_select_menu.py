@@ -1,3 +1,5 @@
+from typing import Optional
+
 import qtawesome
 from PySide6 import QtCore
 from PySide6.QtGui import QShortcut, QKeySequence
@@ -12,10 +14,10 @@ from Gui.sub_widgets.util_widgets.util_widgets import TextBox, IconButton
 
 class SoftwareSelectMenu(AbstractPopupWidget):
     def __init__(self, stage: Stage):
-        super().__init__(w=168, h=248, position=[0.5, 0.25])
+        super().__init__(w=168, h=248)
         self.stage = stage
-        self.software: Software = None  # is set when closed
-        self.comment: str = None  # is set when closed
+        self.software: Optional[Software] = None  # is set when closed
+        self.comment: Optional[str] = None  # is set when closed
         self._init_ui()
         self._connect_signals()
 
@@ -40,7 +42,7 @@ class SoftwareSelectMenu(AbstractPopupWidget):
 
 class CommentEditMenu(AbstractPopupWidget):
     def __init__(self, title: str=None, default_comment: str=None):
-        super().__init__(w=168, h=168, position=[0.5, 0.3], show_borders=False)
+        super().__init__(w=168, h=168, show_borders=False)
         self.title = title
         self.default_comment: str = default_comment
 

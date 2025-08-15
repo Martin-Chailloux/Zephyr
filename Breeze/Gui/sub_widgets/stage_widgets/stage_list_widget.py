@@ -54,8 +54,8 @@ class StageListWidget(QWidget):
     def on_edit_stages_clicked(self):
         selected_stage = self.stage_list.stage
 
-        popup = SetStageTemplatesPopup(asset=self.asset)
-        popup.exec()
+        set_stage_templates_popup = SetStageTemplatesPopup(asset=self.asset)
+        set_stage_templates_popup.show_menu(position=[0.5, 1])
         self.stage_list.set_asset(self.asset)
 
         if selected_stage is not None:

@@ -18,7 +18,7 @@ class ProcessSelectMenu(AbstractPopupWidget):
     process_finished = Signal()
 
     def __init__(self, component: Component, version: Optional[Version]):
-        super().__init__(w=280, position=[0.5, 1], show_borders=True)
+        super().__init__(w=280, show_borders=True)
         self.setWindowTitle("Select a process to launch")
         self.Context = JobContext(
             user=BreezeApp.user,
