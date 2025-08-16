@@ -9,10 +9,10 @@ from Api.breeze_app import BreezeApp
 class IconButton(QPushButton):
     palette = BreezeApp.palette
 
-    def __init__(self, icon_name: str, width: int = 28, icon_size: int=18, color: str = "white"):
+    def __init__(self, icon_name: str, wh: int = 24, icon_size: int=18, color: str = "white"):
         super().__init__()
 
-        self.setFixedSize(QSize(width, width))
+        self.setFixedSize(QSize(wh, wh))
         color = color or BreezeApp.palette.white_text
         icon = qtawesome.icon(icon_name, color=color)
         self.setIcon(icon)
@@ -26,12 +26,14 @@ class IconButton(QPushButton):
 class IconLabel(QLabel):
     def __init__(self, icon: QIcon, wh: int = 24):
         super().__init__()
-
-        icon = qtawesome.icon(icon)
-        pixmap = icon.pixmap(wh - 2)
-        self.setPixmap(pixmap)
-
+        self.wh = wh
         self.setFixedSize(QSize(wh, wh))
+
+        self.set_icon(icon=icon)
+
+    def set_icon(self, icon: QIcon):
+        pixmap = icon.pixmap(self.wh - 2)
+        self.setPixmap(pixmap)
 
 
 class TextBox(QWidget):

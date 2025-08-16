@@ -6,7 +6,8 @@ from PySide6 import QtCore
 from PySide6.QtCore import Signal, QObject
 from PySide6.QtWidgets import QTreeWidgetItem
 
-from Api.turbine.pills import PillModel, StepPill
+from Api.turbine.pills import StepPill
+from Utils.pills import PillModel
 from Api.turbine.logger import StepLogger
 
 

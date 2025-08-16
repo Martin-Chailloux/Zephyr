@@ -2,7 +2,7 @@ from typing import Optional
 
 from PySide6 import QtCore
 from PySide6.QtCore import Signal
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QSplitter, QLabel, QHBoxLayout, QPushButton
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QSplitter, QHBoxLayout, QPushButton
 
 from Api.breeze_app import BreezeApp
 from Api.project_documents import Stage
@@ -10,7 +10,7 @@ from Gui.panels.browser.sub_panels.ingredients_subpanel import IngredientsTreeWi
 from Gui.panels.browser.sub_panels.stage_exports_subpanel import SelectedStageSubPanel
 from Gui.panels.browser.sub_panels.work_versions_subpanel import WorkVersionsWidget
 from Gui.sub_widgets.stage_widgets.stage_banner_widget import StageBannerWidget
-from Gui.sub_widgets.util_widgets.util_widgets import IconButton, IconLabel
+from Utils.sub_widgets import IconButton
 
 
 class SelectedStagePanel(QWidget):

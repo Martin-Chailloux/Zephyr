@@ -1,20 +1,13 @@
 from dataclasses import dataclass
+from typing import Optional
 
 from PySide6.QtCore import QObject
 
-
-@dataclass
-class PillModel:
-    name: str
-    icon_name: str
-    color: str
-
-    def __repr__(self):
-        return f"<StepPill> {self.name}"
+from Utils.pills import PillModel, AbstractPills
 
 
 @dataclass
-class Pills:
+class StepPills(AbstractPills):
     idle =       PillModel(name="idle", icon_name="mdi.dots-horizontal", color="grey")
     not_needed = PillModel(name="not_needed", icon_name="fa.minus", color="purple")
     running =    PillModel(name="running", icon_name="fa.play", color="deepskyblue")
@@ -22,39 +15,32 @@ class Pills:
     error =      PillModel(name="error", icon_name="fa.close", color="red")
     success =    PillModel(name="success", icon_name="fa.check", color="green")
 
+    pills = [idle, not_needed, running, warning, error, success]
+
 
 class StepPill(QObject):
     def __init__(self):
         super().__init__()
-        self.pill: PillModel = Pills.idle
+        self.pill: PillModel = StepPills.idle
         self.set_idle()
 
     def set_idle(self):
-        self.pill = Pills.idle
+        self.pill = StepPills.idle
 
     def set_running(self):
-        self.pill = Pills.running
+        self.pill = StepPills.running
 
     def set_warning(self):
-        self.pill = Pills.warning
+        self.pill = StepPills.warning
 
     def set_error(self):
-        self.pill = Pills.error
+        self.pill = StepPills.error
 
     def set_success(self):
-        self.pill = Pills.success
+        self.pill = StepPills.success
 
     @classmethod
     def from_name(cls, name: str) -> 'StepPill':
-        translator = {
-        'idle': Pills.idle,
-        'error': Pills.error,
-        'running': Pills.running,
-        'warning': Pills.warning,
-        'not_needed': Pills.not_needed,
-        'success': Pills.success,
-        }
-
         step_pill = cls()
-        step_pill.pill = translator[name]
+        step_pill.pill = StepPills.from_name(name=name)
         return step_pill

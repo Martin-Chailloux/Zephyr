@@ -9,7 +9,7 @@ from Api.project_documents import Stage
 from Api.studio_documents import Software
 from Gui.components.popups.abstract_popup_widget import AbstractPopupWidget
 from Gui.components.mvd.software_mvd.software_list_view import SoftwareListView
-from Gui.sub_widgets.util_widgets.util_widgets import TextBox, IconButton
+from Utils.sub_widgets import TextBox, IconButton
 
 
 class SoftwareSelectMenu(AbstractPopupWidget):
@@ -72,7 +72,7 @@ class CommentEditMenu(AbstractPopupWidget):
         confirm_button.setIcon(qtawesome.icon("fa.check"))
         confirm_button.setFixedHeight(24)
 
-        cancel_button = IconButton(icon_name="fa.close",  width=24)
+        cancel_button = IconButton(icon_name="fa.close", wh=24)
         sub_layout.addWidget(cancel_button)
 
         self.textbox = textbox

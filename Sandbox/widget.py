@@ -10,6 +10,7 @@ mongoengine.connect(host="mongodb://localhost:27017", db="Studio", alias="defaul
 from Api.breeze_app import BreezeApp
 from Api.project_documents import Component
 from Gui.components.popups.component_browser import ComponentBrowser
+from Gui.components.popups.line_edit_popup import TextInputPopup
 
 mongoengine.connect(host="mongodb://localhost:27017", db="JourDeVent", alias="current_project")
 
@@ -46,7 +47,7 @@ if __name__ == '__main__':
     BreezeApp.set_project("JourDeVent")
     BreezeApp.set_user("Martin")
 
-    widget = Widget()
+    widget = TextInputPopup()
     widget.show()
 
     app.exec()

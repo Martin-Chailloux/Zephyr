@@ -2,7 +2,7 @@ from PySide6.QtCore import QSize
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QComboBox, QTextEdit, QHBoxLayout, \
     QSizePolicy
 
-from Gui.sub_widgets.util_widgets.util_widgets import IconButton
+from Utils.sub_widgets import IconButton
 from Gui.components.mvd.job_mvd.job_list_view import JobListView
 
 

@@ -1,10 +1,10 @@
 from PySide6 import QtCore
 from PySide6.QtCore import Signal
-from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QWidget
+from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel, QWidget
 
 from Api.project_documents import Stage
 from Gui.components.popups.process_launcher import ProcessSelectMenu
-from Gui.sub_widgets.util_widgets.util_widgets import TextBox, PushButtonAutoWidth, IconButton
+from Utils.sub_widgets import PushButtonAutoWidth
 from Gui.panels.browser.sub_panels import work_versions_api
 from Gui.components.mvd.version_mvd.version_list_view import VersionListView
 
