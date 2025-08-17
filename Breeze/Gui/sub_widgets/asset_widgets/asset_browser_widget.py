@@ -4,8 +4,7 @@ from PySide6.QtWidgets import QWidget, QComboBox, QLabel, QGridLayout
 
 from Api.breeze_app import BreezeApp
 from Api.project_documents import Asset
-from Api.studio_documents import Project
-from Gui.components.popups.line_edit_popup import LineEditPopup
+from Gui.components.popups.text_input_popup import TextInputPopup
 from Gui.sub_widgets.asset_widgets.bookmark_widgets import BookmarkIconButton
 
 
@@ -39,20 +38,20 @@ class AssetBrowserWidget(QWidget):
         label = QLabel("Category")
         grid_layout.addWidget(label, 0, 0)
 
-        category_cb = _AssetFieldCombobox()
+        category_cb = _AssetFieldCombobox(name="category")
         grid_layout.addWidget(category_cb, 1, 0)
         category_cb.set_items(BreezeApp.project.categories)
 
         label = QLabel("Name")
         grid_layout.addWidget(label, 0, 1)
 
-        name_cb = _AssetFieldCombobox()
+        name_cb = _AssetFieldCombobox(name="name")
         grid_layout.addWidget(name_cb, 1, 1)
 
         label = QLabel("Variant")
         grid_layout.addWidget(label, 0, 3)
 
-        variant_cb = _AssetFieldCombobox()
+        variant_cb = _AssetFieldCombobox(name="variant")
         grid_layout.addWidget(variant_cb, 1, 3)
 
         for cb in [category_cb, name_cb, variant_cb]:
@@ -170,8 +169,9 @@ class _AssetFieldCombobox(QComboBox):
     add_item_label = "New"
     item_created = Signal(str)
 
-    def __init__(self):
+    def __init__(self, name: str):
         super().__init__()
+        self.name = name
         self.is_scrolling: bool = False
         self.previous_index: int = 0
         self.currentIndexChanged.connect(self.on_index_changed)
@@ -213,10 +213,13 @@ class _AssetFieldCombobox(QComboBox):
         if not self.is_scrolling:
             if self.currentText() == self.add_item_label:
                 invalid_names = self.items
-                popup = LineEditPopup(title="New", invalid_entries=invalid_names)
-                popup.create_clicked.connect(self.on_new_selected)
-
-                item_added = popup.exec()
+                popup = TextInputPopup(
+                    title=f"New {self.name}",
+                    placeholder=f"new {self.name}",
+                    forbidden_inputs = invalid_names,
+                )
+                popup.input_accepted.connect(self.on_new_selected)
+                item_added = popup.show_menu(position=[0.5, 0.5])
                 if not item_added:
                     self.setCurrentIndex(self.previous_index)
 

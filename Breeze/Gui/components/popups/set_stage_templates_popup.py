@@ -5,7 +5,7 @@ from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QPushButton
 from Api.project_documents import Asset, Stage
 from Gui.components.mvd.stage_template_mvd.stage_template_list_view import StageTemplateListView
 from Gui.components.popups.abstract_popup_widget import AbstractPopupWidget
-from Gui.components.popups.line_edit_popup import LineEditPopup
+from Gui.components.popups.text_input_popup import TextInputPopup
 from Gui.sub_widgets.stage_templates_widgets.stage_template_presets_bar import StageTemplatesPresetsBar
 
 
@@ -101,11 +101,13 @@ class SetStageTemplatesPopup(AbstractPopupWidget):
             self.presets_bar.combobox.setCurrentText(preset)
 
     def on_preset_saved_as(self):
-        popup = LineEditPopup(title="New preset",
-                              invalid_entries=self.presets,
-                              close_on_confirm=True)
-        popup.create_clicked.connect(self.create_preset)
-        popup.exec()
+        popup = TextInputPopup(
+            title="New preset",
+            placeholder="preset name",
+            forbidden_inputs = self.presets,
+        )
+        popup.input_accepted.connect(self.create_preset)
+        popup.show_menu(position=[0.5, 0.5])
 
     def create_preset(self, preset: str):
         self.presets_bar.combobox.blockSignals(True)
