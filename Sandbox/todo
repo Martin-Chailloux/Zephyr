@@ -5,6 +5,7 @@
 
     - Processes:
         - test & fix import of inputs with process relaunch in jobs_list
+        - filters
 
     versions list: replace every button with a toolbar
         - new file ( + icon)
@@ -36,13 +37,10 @@
 
     - Asset groups
     - Asset data / properties
-    - Asset browser: favorites / recent
 
 ------------------------------------------------
 
 2. Cleans / Refactors
-
-    - LineEditPopup: inherit from AbstractPopupWidget
     - SoftwareClasses: sub-classes for in/out, file management, etc.
     - group searchbars into the same parent class
 
@@ -59,8 +57,6 @@
         - show processes and steps duration
         - relaunch process with same inputs
 
-    - LineEditPopup: checkbox 'Don't close'
-
     - copy / paste users and status with ctrl+C/ctrl+V
 
     - StageTemplateList assignment:
@@ -72,3 +68,5 @@
     - add error messages to steps in step viewer
 
     - Stage Templates: status and users history
+
+    - Asset browser: favorites / recent
