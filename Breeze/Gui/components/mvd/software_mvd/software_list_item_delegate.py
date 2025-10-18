@@ -5,13 +5,13 @@ from PySide6.QtWidgets import QStyleOptionViewItem
 
 from Api.breeze_app import BreezeApp
 from Api.studio_documents import Software
-from Gui.components.mvd.abstract_mvd import AbstractListDelegate
+from Gui.components.mvd.abstract_mvd import AbstractItemDelegate
 from Gui.components.mvd.software_mvd.software_list_model import SoftwareItemRoles
 
 alignment = QtCore.Qt.AlignmentFlag
 
 
-class SoftwareListItemDelegate(AbstractListDelegate):
+class SoftwareListItemDelegate(AbstractItemDelegate):
     def __init__(self):
         super().__init__()
 

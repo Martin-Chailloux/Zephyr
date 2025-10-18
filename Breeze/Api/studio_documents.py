@@ -1,8 +1,14 @@
 import importlib
-from typing import Self
+from typing import Self, Any
 
 import mongoengine
 from mongoengine import *
+
+from typing import TYPE_CHECKING
+
+
+if TYPE_CHECKING:
+    from Api.turbine.process import ProcessBase
 
 
 class Palette(Document):
@@ -195,8 +201,6 @@ class Process(Document):
         return process
 
     def to_class(self) -> 'ProcessBase'.__class__:
-        # NOTE: there is no need to import 'ProcessBase' here for it to work
-        # (it would not work anyway because of circular imports)
         path = self.class_path
         module_name, class_name = path.rsplit('.', 1)
         module = importlib.import_module(module_name)
@@ -205,7 +209,7 @@ class Process(Document):
 
 class StageTemplate(Document):
     """
-    Infos about a specific kind of stage: \n
+    Generic infos about a stage, that are common to all its instances:
     name, label, description, color, icon
     """
     name: str = StringField(required=True, primary_key=True)
@@ -216,8 +220,10 @@ class StageTemplate(Document):
     icon_name: str = StringField(default="fa5s.question")
 
     software: list[Software] = SortedListField(ReferenceField(document_type=Software), default=[])
-    presets: list[str] = ListField(StringField(), default=[])  # TODO: a db to register presets would be easier to edit
+    presets: list[str] = ListField(StringField(), default=[])  # TODO: an api to register presets would be easier to edit without using the ui
+
     processes: list[Process] = SortedListField(ReferenceField(document_type=Process, default=[]))
+    recipe: list[dict[str, Any]] = ListField(DictField(), default=[])  # a list of Api.recipes.IngredientSlot.to_database()
 
     meta = {
         'collection': 'Stage templates',

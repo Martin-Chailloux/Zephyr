@@ -5,7 +5,7 @@ from PySide6.QtCore import QSize
 from PySide6.QtGui import QStandardItem
 
 from Api.project_documents import Stage
-from Gui.components.mvd.abstract_mvd import AbstractListModel
+from Gui.components.mvd.abstract_mvd import AbstractItemModel
 
 
 @dataclass
@@ -23,7 +23,7 @@ class StageItemMetrics:
     status_w: int = 52
 
 
-class StageListModel(AbstractListModel):
+class StageListModel(AbstractItemModel):
     item_h = StageItemMetrics.height
 
     def __init__(self):

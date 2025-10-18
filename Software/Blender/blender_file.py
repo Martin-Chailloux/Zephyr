@@ -70,7 +70,7 @@ if __name__ == "__main__":
 
     # test: create collection
     collection = bpy.data.components.new("MyTestCollection")
-    bpy.context.scene.component.children.link(collection)
+    bpy.context.scene.version.children.link(collection)
     # ------------------------
 
     blender_file.save()

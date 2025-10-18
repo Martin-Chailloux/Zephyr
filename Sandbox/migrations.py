@@ -13,6 +13,7 @@ from Api.studio_documents import StageTemplate
 from Api.project_documents import Stage, Asset, Version, Job
 from Processes.blender.aaa_commons.build import BlenderBuild
 from Processes.blender.modeling.export.process import BlenderModelingExport
+from Api.recipes import Recipe, IngredientSlot, ComponentFilterStage
 
 mongoengine.connect(host="mongodb://localhost:27017", db="JourDeVent", alias="current_project")
 
@@ -79,7 +80,9 @@ def create_default_users():
 
 
 def remove_field():
-    StageTemplate.objects.update(unset__tooltip=True)
+    # StageTemplate.objects.update(unset__tooltip=True)
+    Stage.objects.update(unset__recipe_ingredients=True)
+    Stage.objects.update(unset__free_ingredients=True)
 
 def reload_stage_templates_software():
     stage_templates: list[StageTemplate] = StageTemplate.objects
@@ -121,12 +124,27 @@ def register_processes():
 
 def clear_versions():
     for version in Version.objects():
-        if 'Templates' not in version.component.stage.asset.category:
+        if 'Templates' not in version.version.stage.asset.category:
             version.delete()
 
 def clear_jobs():
     for job in Job.objects():
         job.delete()
 
+def set_recipe():
+    rigging: StageTemplate = StageTemplate.objects.get(name='rigging')
+    rigging.recipe = []
+    rigging.save()
+
+    ingredients = [
+        IngredientSlot(name='geo', multiple=False, filters=[ComponentFilterStage(items=['modeling'])]),
+        IngredientSlot(name='extra', multiple=True, filters=[]),
+    ]
+    # rigging.add_ingredient(ingredient=ingredient)
+    for ingredient in ingredients:
+        ingredient.add_to_stage_template(stage_template=rigging)
+    print("set_recipe(): SUCCESS")
+
 if __name__ == '__main__':
-    clear_jobs()
+    # remove_field()
+    set_recipe()

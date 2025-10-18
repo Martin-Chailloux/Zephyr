@@ -2,10 +2,11 @@ from dataclasses import dataclass
 
 from PySide6 import QtCore
 from PySide6.QtCore import QSize
-from PySide6.QtGui import QStandardItem, QStandardItemModel
+from PySide6.QtGui import QStandardItem
 
 from Api.project_documents import Stage
 from Api.studio_documents import Software
+from Gui.components.mvd.abstract_mvd import AbstractItemModel
 
 
 @dataclass
@@ -17,7 +18,7 @@ class SoftwareItemMetrics:
     height: int = 32
 
 
-class SoftwareListModel(QStandardItemModel):
+class SoftwareListModel(AbstractItemModel):
     def __init__(self, stage: Stage = Stage):
         super().__init__()
         self.stage = stage

@@ -51,7 +51,7 @@ class ProcessInputsUi(QWidget):
     def to_dict(self) -> list[dict[str, any]]:
         widget_infos = []
         for widget in self.input_widgets:
-            widget_infos.append(widget.to_dict())
+            widget_infos.append(widget.to_database())
         return widget_infos
 
     @property

@@ -2,9 +2,10 @@ from dataclasses import dataclass
 
 from PySide6 import QtCore
 from PySide6.QtCore import QSize
-from PySide6.QtGui import QStandardItem, QStandardItemModel
+from PySide6.QtGui import QStandardItem
 
 from Api.project_documents import Job
+from Gui.components.mvd.abstract_mvd import AbstractItemModel
 
 
 @dataclass
@@ -22,7 +23,7 @@ class JobItemMetrics:
     datetime_w: int = 56
 
 
-class JobListModel(QStandardItemModel):
+class JobListModel(AbstractItemModel):
     def __init__(self):
         super().__init__()
         self.jobs: list[Job] = []

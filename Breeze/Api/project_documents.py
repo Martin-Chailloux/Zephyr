@@ -3,7 +3,7 @@ import tkinter
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Self, Optional
+from typing import Self, Optional, Any
 
 import mongoengine
 from mongoengine import *
@@ -66,11 +66,12 @@ class Stage(Document):
     components: list['Component'] = ListField(ReferenceField(document_type='Component'), default=[])
     work_component: 'Component' = ReferenceField(document_type='Component')
 
-    ingredients: list['Version'] = ListField(ReferenceField(document_type='Version'), default=[])
     status: Status = ReferenceField(document_type=Status, default=Status.objects.get(label='WAIT'))
     # TODO: User unknown, with a question mark icon
     #  it should appear first in lists, add User.order to have some special users at -1
     user: User = ReferenceField(document_type=User, default=User.objects.get(pseudo="Martin"))
+
+    ingredients: dict[str, list['Version']] = DictField()  # {name: list[Versions]}
 
     meta = {
         'collection': 'Stages',
@@ -79,6 +80,9 @@ class Stage(Document):
 
     def __repr__(self):
         return f"<Stage>: {self.longname}'"
+
+    def __str__(self):
+        return self.__repr__()  # TODO: add everywhere
 
     def create_component(self, name: str, label: str, crash_if_exists: bool = True) -> 'Component':
         component = Component.objects(name=name, label=label, stage=self)
@@ -107,6 +111,29 @@ class Stage(Document):
         print(f"Created: {stage.__repr__()}")
 
         return stage
+
+    def add_ingredient(self, name: str, version: 'Version'):
+        # TODO: sorting
+        if name not in self.ingredients.keys():
+            self.ingredients[name] = []
+        self.ingredients[name].append(version)
+        self.save()
+        print(f"{version} was added to the '{name}' ingredients of {self}")
+
+    def replace_ingredient(self, name: str, old_version: 'Version', new_version: 'Version'):
+        # TODO: sorting
+        if name not in self.ingredients.keys():
+            raise ValueError(f"Existing ingredients with name {name} not found in {self}")
+
+        versions = self.ingredients[name]
+        if old_version not in versions:
+            raise ValueError(f"Did not find {old_version} in the ingredients {name} of {self}")
+        versions.remove(old_version)
+        versions.append(new_version)
+
+        self.ingredients[name] = versions
+        self.save()
+        print(f"{new_version} replaced {old_version} in the '{name}' ingredients of {self}")
 
 
 class Component(Document):

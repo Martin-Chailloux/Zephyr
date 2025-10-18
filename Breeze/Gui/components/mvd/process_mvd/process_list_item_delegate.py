@@ -5,13 +5,13 @@ from PySide6.QtWidgets import QStyleOptionViewItem
 
 from Api.breeze_app import BreezeApp
 from Api.studio_documents import Process
-from Gui.components.mvd.abstract_mvd import AbstractListDelegate
+from Gui.components.mvd.abstract_mvd import AbstractItemDelegate
 from Gui.components.mvd.process_mvd.process_list_model import ProcessItemRoles
 
 alignment = QtCore.Qt.AlignmentFlag
 
 
-class ProcessListItemDelegate(AbstractListDelegate):
+class ProcessListItemDelegate(AbstractItemDelegate):
     def __init__(self):
         super().__init__()
 

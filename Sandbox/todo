@@ -41,9 +41,12 @@
 ------------------------------------------------
 
 2. Cleans / Refactors
+    - move document models to Api/document_models/project, Api/document_models/studio
+
     - SoftwareClasses: sub-classes for in/out, file management, etc.
     - group searchbars into the same parent class
-
+    - list of possible component name, to be referenced in recipes and used in export processes
+            it will be easier to update all the names at once for a given component
 
 ------------------------------------------------
 
@@ -62,6 +65,7 @@
     - StageTemplateList assignment:
         - warn if a used stage template is about to be deleted
         - ui to omit or keep them
+        - gui to edit recipes
 
     - save the gui's state between instances
 
@@ -70,3 +74,6 @@
     - Stage Templates: status and users history
 
     - Asset browser: favorites / recent
+    - Asset browser: god-mode with 'new' buttons under each part
+
+    - Ingredient Slots: components history

@@ -22,8 +22,6 @@ class AssetBrowserPanel(QWidget):
         layout = QVBoxLayout()
         self.setLayout(layout)
 
-        project = BreezeApp.project
-
         asset_selector_widget = AssetBrowserWidget()
         layout.addWidget(asset_selector_widget)
 

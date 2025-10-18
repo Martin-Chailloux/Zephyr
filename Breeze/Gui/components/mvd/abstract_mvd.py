@@ -4,21 +4,18 @@ from typing import Optional
 from PySide6 import QtCore
 from PySide6.QtCore import QPoint, QModelIndex, QRect, QRectF, QPointF, QItemSelectionModel, Signal
 from PySide6.QtGui import (QCursor, QStandardItem, QStandardItemModel, QPainter, QColor,
-                           QBrush, QPen, QImage, QPainterPath, QMouseEvent)
-from PySide6.QtWidgets import QListView, QStyledItemDelegate, QStyleOptionViewItem, QStyle
+                           QBrush, QPen, QImage, QPainterPath, QMouseEvent, QFontMetrics)
+from PySide6.QtWidgets import QListView, QStyledItemDelegate, QStyleOptionViewItem, QStyle, QWidget
 
 from Api.breeze_app import BreezeApp
-
+from Api.project_documents import Component
 
 alignment = QtCore.Qt.AlignmentFlag
 
 
-class AbstractListModel(QStandardItemModel):
+class AbstractItemModel(QStandardItemModel):
     def __init__(self):
         super().__init__()
-
-    def add_item(self, **kwargs):
-        pass
 
     @property
     def items(self):
@@ -35,7 +32,7 @@ class AbstractListView(QListView):
     def __init__(self):
         super().__init__()
         self.setMouseTracking(True)
-        self._model: Optional[AbstractListModel] = None
+        self._model: Optional[AbstractItemModel] = None
 
     def _connect_signals(self):
         pass
@@ -59,11 +56,6 @@ class AbstractListView(QListView):
         return hovered_item
 
     @property
-    def items(self) -> list[QStandardItem]:
-        items = [self._model.item(i) for i in range(self._model.rowCount())]
-        return items
-
-    @property
     def selected_items(self) -> list[QStandardItem]:
         selected_indexes = self.selectionModel().selectedIndexes()
         selected_items = [self._model.item(index.row()) for index in selected_indexes]
@@ -81,7 +73,6 @@ class AbstractListView(QListView):
         if isinstance(event, QMouseEvent):
             if event.button() == QtCore.Qt.MouseButton.RightButton:
                 self.right_clicked.emit()  # TODO: remove from subclasses
-
         super().mousePressEvent(event)
 
     def refresh(self):
@@ -99,15 +90,17 @@ class AbstractListView(QListView):
         self.viewport().update()
 
 
-class AbstractListDelegate(QStyledItemDelegate):
+class AbstractItemDelegate(QStyledItemDelegate):
     small_font_size: int = 7
     medium_font_size: int = 8
     palette = BreezeApp.palette
+    is_tree: bool = False
 
     def __init__(self):
         super().__init__()
 
     def _set_common_data(self, option: QStyleOptionViewItem, index: QModelIndex):
+        self.widget: QWidget = option.widget
         self.is_hovered = bool(option.state & QStyle.StateFlag.State_MouseOver)
         self.is_selected = bool(option.state & QStyle.StateFlag.State_Selected)
         self.item_rect: QRect = option.rect
@@ -129,6 +122,9 @@ class AbstractListDelegate(QStyledItemDelegate):
             return
 
         x, y, w, h = self.get_item_rect()
+        if self.is_tree:
+            x = self.widget.x()
+            w = self.widget.width()
 
         painter.save()
         color = QColor(BreezeApp.palette.white_text)
@@ -143,6 +139,10 @@ class AbstractListDelegate(QStyledItemDelegate):
             return
 
         x, y, w, h = self.get_item_rect()
+        if self.is_tree:
+            x = self.widget.x()
+            w = self.widget.width()
+
         color = QColor(BreezeApp.palette.white_text)
         color.setAlphaF(0.2)
 
@@ -159,6 +159,10 @@ class AbstractListDelegate(QStyledItemDelegate):
             return
 
         x, y, w, h = self.get_item_rect()
+        if self.is_tree:
+            x = self.widget.x()
+            w = self.widget.width()
+
         color = BreezeApp.palette.green
         height = 2
 
@@ -218,4 +222,36 @@ class AbstractListDelegate(QStyledItemDelegate):
         # paint date
         rect = QRect(x, y + h/2, w, h/2)
         painter.drawText(rect, date_text, alignment.AlignHCenter | alignment.AlignTop)
+        painter.restore()
+
+    def paint_component(self, painter: QPainter, component: Component):
+        x, y, w, h = self.get_item_rect()
+
+        painter.save()
+
+        font_metrics = QFontMetrics(painter.font())
+
+        # component
+        painter.setPen(QPen(BreezeApp.palette.white_text))
+        text = f" {component.label} - "
+        rect = QRect(x, y, w, h)
+        painter.drawText(rect, text, alignment.AlignLeft | alignment.AlignVCenter)
+
+        # stage
+        x += font_metrics.horizontalAdvance(text)
+        stage = component.stage
+        painter.setPen(QPen(stage.stage_template.color))
+        text = f"{stage.stage_template.label}"
+        rect = QRect(x, y, w, h)
+        painter.drawText(rect, text, alignment.AlignLeft | alignment.AlignVCenter)
+
+        # asset
+        painter.setOpacity(0.7)
+        x += font_metrics.horizontalAdvance(text)
+        painter.setPen(QPen(BreezeApp.palette.white_text))
+        asset = component.stage.asset
+        text = f"    {asset.category} ⮞ {asset.name} ⮞ {asset.variant}"
+        rect = QRect(x, y, w, h)
+        painter.drawText(rect, text, alignment.AlignLeft | alignment.AlignVCenter)
+
         painter.restore()

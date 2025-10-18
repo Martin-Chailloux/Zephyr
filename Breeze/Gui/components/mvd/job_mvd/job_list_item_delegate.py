@@ -7,14 +7,14 @@ from PySide6.QtWidgets import QStyleOptionViewItem
 from Api.breeze_app import BreezeApp
 from Api.project_documents import Job
 from Api.turbine.step import StepBase
-from Gui.components.mvd.abstract_mvd import AbstractListDelegate
+from Gui.components.mvd.abstract_mvd import AbstractItemDelegate
 from Gui.components.mvd.job_mvd.job_list_model import JobItemRoles, JobItemMetrics
 
 
 alignment = QtCore.Qt.AlignmentFlag
 
 
-class JobListItemDelegate(AbstractListDelegate):
+class JobListItemDelegate(AbstractItemDelegate):
     def __init__(self):
         super().__init__()
 

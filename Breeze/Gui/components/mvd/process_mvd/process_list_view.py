@@ -25,14 +25,6 @@ class ProcessListView(AbstractListView):
 
         self.selectionModel().selectionChanged.connect(self.on_selection_changed)
 
-    def mousePressEvent(self, event):
-        if isinstance(event, QMouseEvent):
-            if event.button() == QtCore.Qt.MouseButton.RightButton:
-                self.right_clicked.emit()
-                return
-
-        super().mousePressEvent(event)
-
     def set_stage_template(self, stage_template: StageTemplate):
         self._model.populate(processes=stage_template.processes)
 

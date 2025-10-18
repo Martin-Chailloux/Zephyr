@@ -2,9 +2,10 @@ from dataclasses import dataclass
 
 from PySide6 import QtCore
 from PySide6.QtCore import QSize
-from PySide6.QtGui import QStandardItem, QStandardItemModel
+from PySide6.QtGui import QStandardItem
 
-from Api.project_documents import Component, Version
+from Api.project_documents import Version
+from Gui.components.mvd.abstract_mvd import AbstractItemModel
 
 
 @dataclass
@@ -16,7 +17,7 @@ class VersionItemMetrics:
     height: int = 36
 
 
-class VersionListModel(QStandardItemModel):
+class VersionListModel(AbstractItemModel):
     def __init__(self):
         super().__init__()
         self.versions: list[Version] = []

@@ -8,7 +8,6 @@ from PySide6.QtWidgets import (QWidget, QVBoxLayout, QPushButton, QSizePolicy)
 
 from Api.project_documents import Asset
 from Gui.components.popups.set_stage_templates_popup import SetStageTemplatesPopup
-from Gui.sub_widgets.stage_templates_widgets.stage_item import StageItem
 from Gui.components.mvd.stage_mvd.stage_list_view import StageListEditableView
 
 
@@ -17,7 +16,6 @@ class StageListWidget(QWidget):
     def __init__(self):
         super().__init__()
         self.asset: Optional[Asset] = None
-        self.stage_items: list[StageItem] = []
         self._init_ui()
 
     def _init_ui(self):

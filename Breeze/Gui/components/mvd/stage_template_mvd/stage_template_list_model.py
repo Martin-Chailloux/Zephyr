@@ -5,7 +5,7 @@ from PySide6.QtCore import QSize
 from PySide6.QtGui import QStandardItem
 
 from Api.studio_documents import StageTemplate
-from Gui.components.mvd.abstract_mvd import AbstractListModel
+from Gui.components.mvd.abstract_mvd import AbstractItemModel
 
 
 @dataclass
@@ -17,7 +17,7 @@ class StageItemMetrics:
     height: int = 42
     logo_w: int = 48
 
-class StageTemplateListModel(AbstractListModel):
+class StageTemplateListModel(AbstractItemModel):
     def __init__(self):
         super().__init__()
         self.stage_templates = []

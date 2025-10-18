@@ -5,14 +5,14 @@ from PySide6.QtWidgets import QStyleOptionViewItem
 
 from Api.breeze_app import BreezeApp
 from Api.studio_documents import User
-from Gui.components.mvd.abstract_mvd import AbstractListDelegate
+from Gui.components.mvd.abstract_mvd import AbstractItemDelegate
 from Gui.components.mvd.user_mvd.user_list_model import UserItemRoles
 
 
 alignment = QtCore.Qt.AlignmentFlag
 
 
-class UserListItemDelegate(AbstractListDelegate):
+class UserListItemDelegate(AbstractItemDelegate):
     def __init__(self):
         super().__init__()
 

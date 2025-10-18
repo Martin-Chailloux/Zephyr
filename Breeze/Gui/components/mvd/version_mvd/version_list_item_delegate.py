@@ -4,13 +4,13 @@ from PySide6.QtGui import QPainter
 from PySide6.QtWidgets import QStyleOptionViewItem
 
 from Api.project_documents import Version
-from Gui.components.mvd.abstract_mvd import AbstractListDelegate
+from Gui.components.mvd.abstract_mvd import AbstractItemDelegate
 from Gui.components.mvd.version_mvd.version_list_model import VersionItemRoles
 
 alignment = QtCore.Qt.AlignmentFlag
 
 
-class VersionListItemDelegate(AbstractListDelegate):
+class VersionListItemDelegate(AbstractItemDelegate):
     datetime_width: int = 56
     num_width: int = 32
 

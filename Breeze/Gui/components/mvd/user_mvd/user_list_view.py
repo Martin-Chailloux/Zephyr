@@ -28,11 +28,6 @@ class UserListView(AbstractListView):
                 return
 
     def mousePressEvent(self, event):
-        if isinstance(event, QMouseEvent):
-            if event.button() == QtCore.Qt.MouseButton.RightButton:
-                self.right_clicked.emit()
-                return
-
         super().mousePressEvent(event)
         hovered_item = self.get_hovered_item()
         if hovered_item is None:

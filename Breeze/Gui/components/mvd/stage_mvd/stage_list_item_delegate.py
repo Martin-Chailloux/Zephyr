@@ -6,7 +6,7 @@ from PySide6.QtWidgets import QStyleOptionViewItem
 
 from Api.studio_documents import StageTemplate
 from Api.project_documents import Stage, Asset
-from Gui.components.mvd.abstract_mvd import AbstractListDelegate
+from Gui.components.mvd.abstract_mvd import AbstractItemDelegate
 from Gui.components.mvd.stage_mvd.stage_list_model import StageItemRoles
 from Gui.components.mvd.stage_mvd.stage_list_model import StageItemMetrics
 from Gui.components.mvd.stage_template_mvd.stage_template_list_item_delegate import StageTemplateListItemDelegate

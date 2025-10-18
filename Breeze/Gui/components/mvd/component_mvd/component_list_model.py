@@ -5,6 +5,7 @@ from PySide6.QtCore import QSize, QSortFilterProxyModel
 from PySide6.QtGui import QStandardItem, QStandardItemModel
 
 from Api.project_documents import Component
+from Gui.components.mvd.abstract_mvd import AbstractItemModel
 
 
 @dataclass
@@ -18,7 +19,7 @@ class ComponentItemMetrics:
     stage_w = 64
 
 
-class ComponentListModel(QStandardItemModel):
+class ComponentListModel(AbstractItemModel):
     def __init__(self):
         super().__init__()
         self.components: list[Component] = []
@@ -42,8 +43,8 @@ class ComponentListModel(QStandardItemModel):
         self.clear()
         self.components = []
 
-        for job in components:
-            self.add_item(component=job)
+        for component in components:
+            self.add_item(component=component)
 
     def refresh(self):
         self.populate(self.components)

@@ -6,14 +6,14 @@ from PySide6.QtWidgets import QStyleOptionViewItem
 
 from Api.breeze_app import BreezeApp
 from Api.studio_documents import StageTemplate
-from Gui.components.mvd.abstract_mvd import AbstractListDelegate
+from Gui.components.mvd.abstract_mvd import AbstractItemDelegate
 from Gui.components.mvd.stage_mvd.stage_list_model import StageItemMetrics
 from Gui.components.mvd.stage_template_mvd.stage_template_list_model import StageTemplateItemRoles
 
 alignment = QtCore.Qt.AlignmentFlag
 
 
-class StageTemplateListItemDelegate(AbstractListDelegate):
+class StageTemplateListItemDelegate(AbstractItemDelegate):
     def __init__(self):
         super().__init__()
 
