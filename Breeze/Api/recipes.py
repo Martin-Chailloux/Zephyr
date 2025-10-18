@@ -1,9 +1,9 @@
 from dataclasses import dataclass
-from typing import Optional, Any
+from typing import Any
 
-from Api.project_documents import Component, Version, Stage
+from Api.project_documents import Component, Version
 from Api.studio_documents import StageTemplate
-from Gui.components.popups.component_browser import ComponentBrowser
+from Gui.popups.component_browser import ComponentBrowser
 
 
 
@@ -105,7 +105,7 @@ class IngredientSlot:
         recipe = Recipe.from_database(recipe_infos=stage_template.recipe)
         recipe.add_ingredient(ingredient=self)
         stage_template.recipe = recipe.to_database()
-        stage_template.save()  # TODO: stage_template.update(recipe=...) was not working here, explore
+        stage_template.save()
         print(f"Added ingredient slot to {stage_template}: {self.to_database()}")
 
 

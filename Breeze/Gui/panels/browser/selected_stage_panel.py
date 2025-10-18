@@ -7,7 +7,6 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QSplitter, QHBoxLayout, QPus
 
 from Api.breeze_app import BreezeApp
 from Api.project_documents import Stage
-from Gui.components.mvd.component_mvd.component_tree_view import ComponentTreeView
 from Gui.panels.browser.sub_panels.ingredients_subpanel import IngredientTreeWidget
 from Gui.panels.browser.sub_panels.stage_exports_subpanel import SelectedStageSubPanel
 from Gui.panels.browser.sub_panels.work_versions_subpanel import WorkVersionsWidget

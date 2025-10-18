@@ -1,5 +1,5 @@
 from Api.project_documents import Version, Stage
-from Gui.components.popups.software_select_menu import CommentEditMenu, SoftwareSelectMenu
+from Gui.popups.software_select_menu import CommentEditMenu, SoftwareSelectMenu
 
 
 def new_empty_version(stage: Stage):

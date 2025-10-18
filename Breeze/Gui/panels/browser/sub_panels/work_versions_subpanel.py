@@ -3,10 +3,10 @@ from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel, QWidget
 
 from Api.project_documents import Stage
-from Gui.components.popups.process_launcher import ProcessSelectMenu
+from Gui.popups.process_launcher import ProcessSelectMenu
 from Utils.sub_widgets import PushButtonAutoWidth
 from Gui.panels.browser.sub_panels import work_versions_api
-from Gui.components.mvd.version_mvd.version_list_view import VersionListView
+from Gui.mvd.version_mvd.version_list_view import VersionListView
 
 
 class WorkVersionsWidget(QWidget):

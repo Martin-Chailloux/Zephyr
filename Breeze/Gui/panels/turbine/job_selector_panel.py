@@ -3,7 +3,7 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QComboBox, QTextEdit
     QSizePolicy
 
 from Utils.sub_widgets import IconButton
-from Gui.components.mvd.job_mvd.job_list_view import JobListView
+from Gui.mvd.job_mvd.job_list_view import JobListView
 
 
 class SelectProcessPanel(QWidget):

@@ -7,8 +7,8 @@ from PySide6.QtCore import QSize
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QPushButton, QSizePolicy)
 
 from Api.project_documents import Asset
-from Gui.components.popups.set_stage_templates_popup import SetStageTemplatesPopup
-from Gui.components.mvd.stage_mvd.stage_list_view import StageListEditableView
+from Gui.popups.set_stage_templates_popup import SetStageTemplatesPopup
+from Gui.mvd.stage_mvd.stage_list_view import StageListEditableView
 
 
 class StageListWidget(QWidget):

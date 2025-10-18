@@ -244,6 +244,8 @@ class StageTemplate(Document):
         return stage_template
 
 
+
+
 # Delete rules
 User.register_delete_rule(Project, 'users', mongoengine.PULL)
 
