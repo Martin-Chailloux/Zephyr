@@ -1,13 +1,13 @@
 from typing import Any
 
 from Api.project_documents import Component, Version
-from Api.recipes.component_filters import (ComponentFilterBase, ComponentFilters, ComponentFilterCategory,
-                                           ComponentFilterStage)
+from Api.recipes.component_filters import ComponentFilterBase, ComponentFilters
 
 
 class IngredientSlot:
     def __init__(self, name: str, multiple: bool = False, filters: list[ComponentFilterBase] = None):
         """
+        A template to receive ingredients, inside a Recipe.
         :param name: name of the slot
         :param multiple: can receive multiple ingredients
         :param filters: pre-filters the available components
@@ -40,10 +40,7 @@ class IngredientSlot:
         # get filters
         filters: list[ComponentFilterBase] = []
         for filter_name, filter_infos in slot_infos['filters'].items():
-            if filter_name == ComponentFilters.category:
-                filters.append(ComponentFilterCategory.from_database(infos=filter_infos))
-            elif filter_name == ComponentFilters.stage:
-                filters.append(ComponentFilterStage.from_database(infos=filter_infos))
+            filters.append(ComponentFilters.from_name(name=filter_name).from_database(infos=filter_infos))
 
         ingredient_slot = cls(name=slot_name, multiple=multiple, filters=filters)
         return ingredient_slot
@@ -52,6 +49,7 @@ class IngredientSlot:
 class Ingredients:
     def __init__(self, name: str, versions: list[Version]):
         """
+        List of the ingredients of a recipe, grouped by their name.
         :param name: name of the ingredient
         :param versions: versions imported under this name
         """

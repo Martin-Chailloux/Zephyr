@@ -55,3 +55,11 @@ class ComponentFilterStage(ComponentFilterBase):
 class ComponentFilters:
     category = ComponentFilterCategory
     stage = ComponentFilterStage
+
+    @classmethod
+    def from_name(cls, name: str) -> ComponentFilterBase.__class__:
+        for component_filter in [cls.category, cls.stage]:
+            if name == component_filter.name:
+                return component_filter
+        else:
+            raise ValueError(f"Did not find a ComponentFilter with name {name}")
