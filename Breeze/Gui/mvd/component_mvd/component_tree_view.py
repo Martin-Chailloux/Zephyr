@@ -34,17 +34,3 @@ class ComponentTreeView(QTreeView):
         index = self.indexAt(event.pos())
         if index.data(ComponentTreeItemRoles.version)  is None:
             self.edit(index)
-
-
-    # def set_components(self, components: list[Component]):
-    #     self.blockSignals(True)
-    #     self._model.populate(components=components)
-    #     self.blockSignals(False)
-
-    # def get_selected_component(self) -> Component | None:
-    #     items = self.selected_items
-    #     if not items:
-    #         return None
-    #     else:
-    #         component: Component = items[0].data(ComponentTreeItemRoles.component)
-    #         return component

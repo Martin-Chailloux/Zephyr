@@ -6,7 +6,9 @@ from PySide6.QtCore import QSize
 from PySide6.QtGui import QStandardItem
 
 from Api.project_documents import Stage, Version
-from Api.recipes import Ingredients, Recipe, IngredientSlot
+from Api.recipes.recipe import Recipe
+from Api.recipes.ingredients import Ingredients
+from Api.recipes.ingredients import IngredientSlot
 from Gui.mvd.abstract_mvd import AbstractItemModel
 
 
@@ -28,39 +30,12 @@ class ComponentTreeModel(AbstractItemModel):
         super().__init__()
         self.stage: Optional[Stage] = None
         self.ingredients = []
-        # self.components: list[Component] = []
-        #
-        # top_item_recipe = self.add_top_item(label="Recipe")
-        # top_item_extra = self.add_top_item(label="Extra")
-        #
-        #
-        # # [DEV] all components for now
-        # components: list[Component] = Component.objects
-        # stage_templates: dict[StageTemplate, list[Component]] = {}
-        #
-        # # sort by stage template
-        # for component in components:
-        #     stage_template = component.stage.stage_template
-        #     if stage_template not in stage_templates.keys():
-        #         stage_templates[stage_template] = []
-        #     stage_templates[stage_template].append(component)
-        #
-        # # add items
-        # self.add_create_item(parent=top_item_extra)
-        # for stage_template, components in stage_templates.items():
-        #     stage_template_item = self.add_stage_template_item(parent=top_item_extra, stage_template=stage_template)
-        #     components = sorted(components, key=lambda c: c.longname)
-        #     for component in components:
-        #         self.add_component_item(parent=stage_template_item, component=component)
 
     def populate(self, stage: Stage = None):
-        print("POPULATE")
         self.stage = stage
 
         self.clear()
         self.ingredients = []
-        # self.setColumnCount(1)
-        # self.setHorizontalHeaderLabels(['Name'])
 
         if stage is None:
             return
@@ -69,13 +44,9 @@ class ComponentTreeModel(AbstractItemModel):
             self.ingredients.append(Ingredients(name=name, versions=versions))
 
         # add top items
-        recipe = Recipe.from_database(recipe_infos=stage.stage_template.recipe)
+        recipe = Recipe.from_database(infos=stage.stage_template.recipe)
         for ingredient_slot in recipe.ingredients_slots:
             self.add_top_item(ingredient_slot=ingredient_slot)
-        # self.add_top_item(ingredient_slot=IngredientSlot(name="Extra"))  # Permanent extra slot
-
-        # for ingredient_infos in stage.recipe_ingredients:
-        #     ingredient = Ingredient.from_database(ingredient_infos=ingredient_infos)
 
     def add_top_item(self, ingredient_slot: IngredientSlot) -> QStandardItem:
         item = QStandardItem()

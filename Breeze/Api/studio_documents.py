@@ -223,7 +223,7 @@ class StageTemplate(Document):
     presets: list[str] = ListField(StringField(), default=[])  # TODO: an api to register presets would be easier to edit without using the ui
 
     processes: list[Process] = SortedListField(ReferenceField(document_type=Process, default=[]))
-    recipe: list[dict[str, Any]] = ListField(DictField(), default=[])  # a list of Api.recipes.IngredientSlot.to_database()
+    recipe: dict[str, Any] = DictField()  # dict[name, infos], contains IngredientSlots
 
     meta = {
         'collection': 'Stage templates',
@@ -243,8 +243,22 @@ class StageTemplate(Document):
         print(f"Created: {stage_template.__repr__()}")
         return stage_template
 
+    def set_recipe(self, recipe: dict[str, Any]):
+        self.recipe = recipe
+        self.save()
+        print(f"{self}'s recipe was set to: {recipe}")
 
+    def set_ingredient_slot(self, slot_name: str, slot_infos: dict[str, Any], crash_if_exists: bool=True):
+        slot_exists = slot_name in self.recipe.keys()
 
+        if slot_exists and crash_if_exists:
+            raise ValueError(f"{self}'s recipe already has an ingredient slot with name {slot_name}")
+        self.recipe[slot_name] = slot_infos
+
+        if slot_exists:
+            print(f"Ingredient {slot_name} was overridden in {self}'s recipe: from {self.recipe[slot_name]} to {slot_infos}")
+        else:
+            print(f"Ingredient {slot_name} was added to {self}'s recipe: {slot_infos}")
 
 # Delete rules
 User.register_delete_rule(Project, 'users', mongoengine.PULL)

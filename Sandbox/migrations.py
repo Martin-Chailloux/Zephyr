@@ -13,7 +13,9 @@ from Api.studio_documents import StageTemplate
 from Api.project_documents import Stage, Asset, Version, Job
 from Processes.blender.aaa_commons.build import BlenderBuild
 from Processes.blender.modeling.export.process import BlenderModelingExport
-from Api.recipes import Recipe, IngredientSlot, ComponentFilterStage
+from Api.recipes.recipe import Recipe
+from Api.recipes.ingredients import IngredientSlot
+from Api.recipes.component_filters import ComponentFilterStage
 
 mongoengine.connect(host="mongodb://localhost:27017", db="JourDeVent", alias="current_project")
 
@@ -133,16 +135,16 @@ def clear_jobs():
 
 def set_recipe():
     rigging: StageTemplate = StageTemplate.objects.get(name='rigging')
-    rigging.recipe = []
+    rigging.recipe = {}
     rigging.save()
 
-    ingredients = [
+    recipe = Recipe(ingredient_slots=[
         IngredientSlot(name='geo', multiple=False, filters=[ComponentFilterStage(items=['modeling'])]),
         IngredientSlot(name='extra', multiple=True, filters=[]),
-    ]
-    # rigging.add_ingredient(ingredient=ingredient)
-    for ingredient in ingredients:
-        ingredient.add_to_stage_template(stage_template=rigging)
+    ])
+
+    rigging.set_recipe(recipe=recipe.to_database())
+
     print("set_recipe(): SUCCESS")
 
 if __name__ == '__main__':

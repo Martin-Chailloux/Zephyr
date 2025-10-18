@@ -50,7 +50,6 @@ class ComponentBrowser(AbstractPopupWidget):
 
     def on_component_selected(self):
         component = self.component_list.get_selected_component()
-        print(f"1, {component = }")
         self.close()
 
     def _init_state(self):
