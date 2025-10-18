@@ -38,6 +38,9 @@ class Palette(Document):
     def __repr__(self):
         return f"<Palette>: {self.name}"
 
+    def __str__(self):
+        return self.__repr__()
+
     @classmethod
     def create(cls, name: str,
                        white_text: str, black_text: str,
@@ -53,7 +56,7 @@ class Palette(Document):
         kwargs = {k: v for k, v in kwargs.items() if v is not None}
         palette = cls(**kwargs)
         palette.save()
-        print(f"Created: {palette.__repr__()}")
+        print(f"Created: {palette}")
         return palette
 
 
@@ -70,13 +73,16 @@ class Status(Document):
     def __repr__(self):
         return f"<Status>: {self.label}"
 
+    def __str__(self):
+        return self.__repr__()
+
     @classmethod
     def create(cls, label: str, color: str, order: int, **kwargs) -> Self:
         kwargs = dict(label=label, color=color, order=order, **kwargs)
         kwargs = {k: v for k, v in kwargs.items() if v is not None}
         status = cls(**kwargs)
         status.save()
-        print(f"Created: {status.__repr__()}")
+        print(f"Created: {status}")
         return status
 
 
@@ -98,6 +104,9 @@ class User(Document):
     def __repr__(self):
         return f"<User>: {self.pseudo}"
 
+    def __str__(self):
+        return self.__repr__()
+
     @classmethod
     def create(cls, pseudo: str, fullname: str, icon_path: str, password: str = None, mail: str = None,
                     **kwargs) -> Self:
@@ -105,7 +114,7 @@ class User(Document):
         kwargs = {k: v for k, v in kwargs.items() if v is not None}
         user = cls(**kwargs)
         user.save()
-        print(f"Created: {user.__repr__()}")
+        print(f"Created: {user}")
         return user
 
 
@@ -124,13 +133,16 @@ class Software(Document):
     def __repr__(self):
         return f"<Software>: {self.label}"
 
+    def __str__(self):
+        return self.__repr__()
+
     @classmethod
     def create(cls, label: str, icon_path: str, exe_path: str, **kwargs) -> Self:
         kwargs = dict(label=label, icon_path=icon_path, exe_path=exe_path, **kwargs)
         kwargs = {k: v for k, v in kwargs.items() if v is not None}
         software = cls(**kwargs)
         software.save()
-        print(f"Created: {software.__repr__()}")
+        print(f"Created: {software}")
         return software
 
 
@@ -148,6 +160,9 @@ class Project(Document):
     def __repr__(self):
         return f"<Project>: {self.name}"
 
+    def __str__(self):
+        return self.__repr__()
+
     @classmethod
     def create(cls, name: str, db_name: str, root_path: str,
                categories: list[str], users: list[User],
@@ -156,7 +171,7 @@ class Project(Document):
         kwargs = {k: v for k, v in kwargs.items() if v is not None}
         project = cls(**kwargs)
         project.save()
-        print(f"Created: {project.__repr__()}")
+        print(f"Created: {project}")
         return project
 
     def add_category(self, category: str):
@@ -164,7 +179,6 @@ class Project(Document):
         self.save()
 
     def add_user(self, user: User):
-        # With a gui set_users() will probably make more sense and be enough
         self.users.append(user)
         self.save()
 
@@ -174,10 +188,6 @@ class Project(Document):
 
 
 class Process(Document):
-    # TODO: cast stage templates in this (reciprocal field)
-    #  Process.{set/add}_stage_templates(stage_template: list[StageTemplates])
-    #  or StageTemplates.{set/add}_processes(processes: list[Process])
-
     longname: str = StringField(required=True, primary_key=True)
     label: str = StringField(required=True)
     tooltip: str = StringField(required=True)
@@ -191,13 +201,16 @@ class Process(Document):
     def __repr__(self):
         return f"<Process>: {self.longname}"
 
+    def __str__(self):
+        return self.__repr__()
+
     @classmethod
     def create(cls, longname: str, label: str, tooltip: str, class_path: str, **kwargs) -> Self:
         kwargs = dict(longname=longname, label=label, tooltip=tooltip, class_path=class_path, **kwargs)
         kwargs = {k: v for k, v in kwargs.items() if v is not None}
         process = cls(**kwargs)
         process.save()
-        print(f"Created: {process.__repr__()}")
+        print(f"Created: {process}")
         return process
 
     def to_class(self) -> 'ProcessBase'.__class__:
@@ -212,6 +225,9 @@ class StageTemplate(Document):
     Generic infos about a stage, that are common to all its instances:
     name, label, description, color, icon
     """
+
+    # TODO: add process
+
     name: str = StringField(required=True, primary_key=True)
     label: str = StringField(required=True, unique=True)
 
@@ -233,14 +249,17 @@ class StageTemplate(Document):
     def __repr__(self):
         return f"<Stage template>: {self.name}"
 
-    # NOTE: no GUI for now
+    def __str__(self):
+        return self.__repr__()
+
+    # NOTE: GUI does not exist yet
     @classmethod
     def create(cls, name: str, label: str, color: str = None, icon_name: str = None, **kwargs) -> Self:
         kwargs = dict(name=name, label=label, color=color, icon_name=icon_name, **kwargs)
         kwargs = {k: v for k, v in kwargs.items() if v is not None}
         stage_template = cls(**kwargs)
         stage_template.save()
-        print(f"Created: {stage_template.__repr__()}")
+        print(f"Created: {stage_template}")
         return stage_template
 
     def set_recipe(self, recipe: dict[str, Any]):
@@ -260,7 +279,12 @@ class StageTemplate(Document):
         else:
             print(f"Ingredient {slot_name} was added to {self}'s recipe: {slot_infos}")
 
+
+# ------------------------
 # Delete rules
+# ------------------------
+# TODO: cascade deletions in unconnected project databases
+
 User.register_delete_rule(Project, 'users', mongoengine.PULL)
 
 Palette.register_delete_rule(User, 'palette', mongoengine.DENY)

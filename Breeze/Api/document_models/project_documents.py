@@ -35,6 +35,9 @@ class Asset(Document):
     def __repr__(self):
         return f"<Asset>: {self.longname}"
 
+    def __str__(self):
+        return self.__repr__()
+
     @classmethod
     def create(cls, category: str, name : str, variant: str = None, **kwargs) -> Self:
         v = variant or "-"  # pre-compute the longname using the default variant value if it is None
@@ -43,12 +46,12 @@ class Asset(Document):
         kwargs = {k: v for k, v in kwargs.items() if v is not None}
         asset = cls(**kwargs)
         asset.save()
-        print(f"Created: {asset.__repr__()}")
+        print(f"Created: {asset}")
         return asset
 
     def add_stage(self, stage: 'Stage'):
         if stage in self.stages:
-            raise ValueError(f"{stage.__repr__()} is already a stage of {self.__repr__()}")
+            raise ValueError(f"{stage} is already a stage of {self}")
         self.stages.append(stage)
         self.save()
 
@@ -82,13 +85,13 @@ class Stage(Document):
         return f"<Stage>: {self.longname}'"
 
     def __str__(self):
-        return self.__repr__()  # TODO: add everywhere
+        return self.__repr__()
 
     def create_component(self, name: str, label: str, crash_if_exists: bool = True) -> 'Component':
         component = Component.objects(name=name, label=label, stage=self)
         if len(component) == 1:
             if crash_if_exists:
-                raise ValueError(f"{component.__repr__()} is already a component of {self.__repr__()}")
+                raise ValueError(f"{component} is already a component of {self}")
             else:
                 return component[0]
 
@@ -108,7 +111,7 @@ class Stage(Document):
 
         asset.add_stage(stage=stage)
 
-        print(f"Created: {stage.__repr__()}")
+        print(f"Created: {stage}")
 
         return stage
 
@@ -160,6 +163,9 @@ class Component(Document):
     def __repr__(self):
         return f"<Component>: {self.longname}"
 
+    def __str__(self):
+        return self.__repr__()
+
     @classmethod
     def create(cls, name: str, label: str, stage: Stage, **kwargs):
         longname = "_".join(s for s in [stage.longname, name])
@@ -168,17 +174,17 @@ class Component(Document):
 
         existing_component = Component.objects(longname=longname)
         if existing_component:
-            raise FileExistsError(f"{existing_component[0].__repr__()}")
+            raise FileExistsError(f"{existing_component[0]}")
 
         component = cls(**kwargs)
         component.save()
-        print(f"Created: {component.__repr__()}")
+        print(f"Created: {component}")
 
         return component
 
     def add_version(self, version: 'Version'):
         if version in self.versions:
-            raise ValueError(f"{version.__repr__()} is already a version of {self.__repr__()}")
+            raise ValueError(f"{version} is already a version of {self}")
         self.versions.append(version)
         self.save()
 
@@ -252,6 +258,8 @@ class Version(Document):
     def __repr__(self):
         return f"<Version>: {self.longname}"
 
+    def __str__(self):
+        return self.__repr__()
 
     @classmethod
     def create(cls, component: Component, number: int, software: Software, **kwargs):
@@ -260,7 +268,7 @@ class Version(Document):
         longname = f"{component.longname}_{number:03d}.{extension}"
         existing_version = Version.objects(longname=longname)
         if existing_version:
-            raise InvalidDocumentError(f"Version already exists: {existing_version[0].__repr__()}")
+            raise InvalidDocumentError(f"Version already exists: {existing_version[0]}")
 
         creation_user = BreezeApp.user
         last_user = creation_user
@@ -283,7 +291,7 @@ class Version(Document):
         # add to component
         component.add_version(version)
 
-        print(f"Created: {version.__repr__()}")
+        print(f"Created: {version}")
         return version
 
     def open_folder(self):
@@ -305,7 +313,7 @@ class Version(Document):
         if self.software.label == 'Blender':
             return BlenderFile(filepath=self.filepath)
         else:
-            raise NotImplementedError(f"File instance for: {self.software.__repr__()}")
+            raise NotImplementedError(f"File instance for: {self.software}")
 
 
 @dataclass
@@ -342,6 +350,9 @@ class Job(Document):
     def __repr__(self):
         return f"<Job>: {self.longname}"
 
+    def __str__(self):
+        return self.__repr__()
+
     @classmethod
     def create(cls, source_process: Process, context: JobContext, steps: dict[str, any], inputs: list[dict[str, any]], **kwargs) -> Self:
         longname = " ".join(s for s in [source_process.longname, context.version.longname, context.user.pseudo, str(context.creation_time)])
@@ -352,12 +363,14 @@ class Job(Document):
 
         process = cls(**kwargs)
         process.save()
-        print(f"Created: {process.__repr__()}")
+        print(f"Created: {process}")
 
         return process
 
 
-# delete rules
+# ------------------------
+# Delete rules
+# ------------------------
 
 # Asset
 Stage.register_delete_rule(Asset, 'stages', mongoengine.PULL)
