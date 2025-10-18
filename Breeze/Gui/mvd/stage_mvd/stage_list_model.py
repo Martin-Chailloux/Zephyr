@@ -4,7 +4,7 @@ from PySide6 import QtCore
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QStandardItem
 
-from Api.project_documents import Stage
+from Api.document_models.project_documents import Stage
 from Gui.mvd.abstract_mvd import AbstractItemModel
 
 

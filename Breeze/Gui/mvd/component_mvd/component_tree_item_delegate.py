@@ -6,7 +6,7 @@ from PySide6.QtCore import QModelIndex, QRect, QTimer
 from PySide6.QtGui import QPainter, QStandardItemModel
 from PySide6.QtWidgets import QStyleOptionViewItem, QComboBox, QStyle, QWidget
 
-from Api.project_documents import Component, Version, Stage
+from Api.document_models.project_documents import Component, Version, Stage
 from Api.recipes.ingredients import IngredientSlot
 from Gui.mvd.abstract_mvd import AbstractItemDelegate
 from Gui.mvd.component_mvd.component_tree_model import ComponentTreeItemRoles, ComponentTreeModel

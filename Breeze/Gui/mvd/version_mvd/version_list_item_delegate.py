@@ -3,7 +3,7 @@ from PySide6.QtCore import QModelIndex, QRect
 from PySide6.QtGui import QPainter
 from PySide6.QtWidgets import QStyleOptionViewItem
 
-from Api.project_documents import Version
+from Api.document_models.project_documents import Version
 from Gui.mvd.abstract_mvd import AbstractItemDelegate
 from Gui.mvd.version_mvd.version_list_model import VersionItemRoles
 

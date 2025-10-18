@@ -5,12 +5,12 @@ import mongoengine
 
 mongoengine.connect(host="mongodb://localhost:27017", db="Studio", alias="default")
 
-from Api.studio_documents import User, Palette, Project, Process
+from Api.document_models.studio_documents import User, Palette, Project, Process
 from Api.breeze_app import BreezeApp
 BreezeApp.set_project("JourDeVent")
 BreezeApp.set_user("Martin")
-from Api.studio_documents import StageTemplate
-from Api.project_documents import Stage, Asset, Version, Job
+from Api.document_models.studio_documents import StageTemplate
+from Api.document_models.project_documents import Stage, Asset, Version, Job
 from Processes.blender.aaa_commons.build import BlenderBuild
 from Processes.blender.modeling.export.process import BlenderModelingExport
 from Api.recipes.recipe import Recipe

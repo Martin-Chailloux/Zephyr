@@ -8,7 +8,7 @@ from PySide6.QtGui import (QCursor, QStandardItem, QStandardItemModel, QPainter,
 from PySide6.QtWidgets import QListView, QStyledItemDelegate, QStyleOptionViewItem, QStyle, QWidget
 
 from Api.breeze_app import BreezeApp
-from Api.project_documents import Component
+from Api.document_models.project_documents import Component
 
 alignment = QtCore.Qt.AlignmentFlag
 

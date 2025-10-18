@@ -1,6 +1,6 @@
 from PySide6.QtCore import Signal
 
-from Api.project_documents import Stage
+from Api.document_models.project_documents import Stage
 from Gui.mvd.abstract_mvd import AbstractListView
 from Gui.mvd.software_mvd.software_list_item_delegate import SoftwareListItemDelegate
 from Gui.mvd.software_mvd.software_list_model import SoftwareListModel, SoftwareItemRoles

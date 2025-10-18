@@ -5,7 +5,7 @@ from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QVBoxLayout, QPushButton, QHBoxLayout, QStackedWidget
 
 from Api.breeze_app import BreezeApp
-from Api.project_documents import Version, Component, JobContext
+from Api.document_models.project_documents import Version, Component, JobContext
 from Api.turbine.inputs_ui import ProcessInputsUi
 from Gui.mvd.stage_mvd.stage_list_view import StageListMinimalView
 from Gui.popups.abstract_popup_widget import AbstractPopupWidget

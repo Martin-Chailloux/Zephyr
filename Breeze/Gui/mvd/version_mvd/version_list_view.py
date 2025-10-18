@@ -2,7 +2,7 @@ import qtawesome
 from PySide6.QtCore import Signal, Qt, QPoint
 from PySide6.QtWidgets import QMenu
 
-from Api.project_documents import Component, Version
+from Api.document_models.project_documents import Component, Version
 from Gui.mvd.abstract_mvd import AbstractListView
 from Gui.mvd.version_mvd.version_list_item_delegate import VersionListItemDelegate
 from Gui.mvd.version_mvd.version_list_model import VersionListModel, VersionItemRoles

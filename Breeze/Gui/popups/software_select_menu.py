@@ -5,8 +5,8 @@ from PySide6 import QtCore
 from PySide6.QtGui import QShortcut, QKeySequence
 from PySide6.QtWidgets import QVBoxLayout, QPushButton, QHBoxLayout
 
-from Api.project_documents import Stage
-from Api.studio_documents import Software
+from Api.document_models.project_documents import Stage
+from Api.document_models.studio_documents import Software
 from Gui.popups.abstract_popup_widget import AbstractPopupWidget
 from Gui.mvd.software_mvd.software_list_view import SoftwareListView
 from Utils.sub_widgets import TextBox, IconButton

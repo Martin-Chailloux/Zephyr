@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Any
 
-from Api.project_documents import Component
+from Api.document_models.project_documents import Component
 
 
 class ComponentFilterBase:

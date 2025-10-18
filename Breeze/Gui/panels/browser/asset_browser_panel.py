@@ -1,8 +1,7 @@
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QWidget, QVBoxLayout
 
-from Api.breeze_app import BreezeApp
-from Api.project_documents import Stage
+from Api.document_models.project_documents import Stage
 from Gui.sub_widgets.asset_widgets.asset_browser_widget import AssetBrowserWidget
 from Gui.sub_widgets.stage_widgets.stage_list_widget import StageListWidget
 

@@ -4,7 +4,7 @@ from PySide6 import QtCore
 from PySide6.QtCore import QSize
 from PySide6.QtWidgets import QLabel, QWidget, QVBoxLayout, QSizePolicy
 
-from Api.project_documents import Stage
+from Api.document_models.project_documents import Stage
 from Gui.mvd.stage_mvd.stage_list_item_delegate import StageListItemAlwaysOnDelegate
 from Gui.mvd.stage_mvd.stage_list_model import StageItemMetrics
 from Gui.mvd.stage_mvd.stage_list_view import StageListEditableView

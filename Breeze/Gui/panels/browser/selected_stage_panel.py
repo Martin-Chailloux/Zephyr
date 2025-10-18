@@ -6,7 +6,7 @@ from PySide6.QtCore import Signal, QSize
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QSplitter, QHBoxLayout, QPushButton
 
 from Api.breeze_app import BreezeApp
-from Api.project_documents import Stage
+from Api.document_models.project_documents import Stage
 from Gui.panels.browser.sub_panels.ingredients_subpanel import IngredientTreeWidget
 from Gui.panels.browser.sub_panels.stage_exports_subpanel import SelectedStageSubPanel
 from Gui.panels.browser.sub_panels.work_versions_subpanel import WorkVersionsWidget

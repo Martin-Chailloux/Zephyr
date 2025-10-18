@@ -1,4 +1,4 @@
-from Api.studio_documents import Project, User, Palette
+from Api.document_models.studio_documents import Project, User, Palette
 
 
 class BreezeApp:

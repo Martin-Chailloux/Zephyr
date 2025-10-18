@@ -3,13 +3,13 @@ import tkinter
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Self, Optional, Any
+from typing import Self, Optional
 
 import mongoengine
 from mongoengine import *
 
 from Api.breeze_app import BreezeApp
-from Api.studio_documents import Status, User, Software, Process, StageTemplate
+from Api.document_models.studio_documents import Status, User, Software, Process, StageTemplate
 from abstract_io import AbstractSoftwareFile
 from blender_file import BlenderFile
 

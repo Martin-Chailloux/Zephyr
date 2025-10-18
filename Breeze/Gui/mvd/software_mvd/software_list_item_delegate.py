@@ -4,7 +4,7 @@ from PySide6.QtGui import QPainter, QColor, QPen
 from PySide6.QtWidgets import QStyleOptionViewItem
 
 from Api.breeze_app import BreezeApp
-from Api.studio_documents import Software
+from Api.document_models.studio_documents import Software
 from Gui.mvd.abstract_mvd import AbstractItemDelegate
 from Gui.mvd.software_mvd.software_list_model import SoftwareItemRoles
 

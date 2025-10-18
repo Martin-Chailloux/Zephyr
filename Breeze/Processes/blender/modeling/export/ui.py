@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Api.project_documents import JobContext
+from Api.document_models.project_documents import JobContext
 from Api.turbine.inputs_ui import ProcessInputsUi, ProcessInputs
 
 

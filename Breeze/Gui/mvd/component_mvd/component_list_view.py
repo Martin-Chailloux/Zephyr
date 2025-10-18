@@ -1,6 +1,6 @@
 from PySide6.QtCore import Signal
 
-from Api.project_documents import Component
+from Api.document_models.project_documents import Component
 from Gui.mvd.abstract_mvd import AbstractListView
 from Gui.mvd.component_mvd.component_list_item_delegate import ComponentListItemDelegate
 from Gui.mvd.component_mvd.component_list_model import ComponentItemRoles, ComponentListModel

@@ -2,7 +2,7 @@ import json
 import socket
 import threading
 
-from Api.studio_documents import StageTemplate
+from Api.document_models.studio_documents import StageTemplate
 from blender_file import BlenderFile
 
 ports = [

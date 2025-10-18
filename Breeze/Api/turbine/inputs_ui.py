@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from PySide6 import QtCore
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel
 
-from Api.project_documents import JobContext
+from Api.document_models.project_documents import JobContext
 from Api.turbine.inputs_widgets import ProcessInputCheckbox, ProcessInputCombobox
 
 

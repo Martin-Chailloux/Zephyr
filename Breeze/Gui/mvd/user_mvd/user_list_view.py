@@ -1,6 +1,6 @@
 from PySide6.QtCore import Signal, QItemSelectionModel
 
-from Api.studio_documents import User
+from Api.document_models.studio_documents import User
 from Gui.mvd.abstract_mvd import AbstractListView
 from Gui.mvd.user_mvd.user_list_item_delegate import UserListItemDelegate
 from Gui.mvd.user_mvd.user_list_model import UserListModel, UserItemRoles

@@ -5,7 +5,7 @@ from PySide6 import QtCore
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QStandardItem
 
-from Api.project_documents import Stage, Version
+from Api.document_models.project_documents import Stage, Version
 from Api.recipes.recipe import Recipe
 from Api.recipes.ingredients import Ingredients
 from Api.recipes.ingredients import IngredientSlot

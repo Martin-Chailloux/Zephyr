@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QTreeView, QAbstractItemView
 
-from Api.project_documents import Stage
+from Api.document_models.project_documents import Stage
 from Gui.mvd.component_mvd.component_tree_item_delegate import ComponentTreeItemDelegate, ComponentVersionTreeItemDelegate
 from Gui.mvd.component_mvd.component_tree_model import ComponentTreeModel, ComponentTreeItemRoles
 

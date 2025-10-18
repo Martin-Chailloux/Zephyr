@@ -1,6 +1,6 @@
 from typing import Any
 
-from Api.project_documents import Component, Version
+from Api.document_models.project_documents import Component, Version
 from Api.recipes.component_filters import ComponentFilterBase, ComponentFilters
 
 

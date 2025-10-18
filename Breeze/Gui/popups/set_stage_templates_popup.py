@@ -2,7 +2,7 @@ import qtawesome
 from PySide6 import QtCore
 from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QPushButton
 
-from Api.project_documents import Asset, Stage
+from Api.document_models.project_documents import Asset, Stage
 from Gui.mvd.stage_template_mvd.stage_template_list_view import StageTemplateListView
 from Gui.popups.abstract_popup_widget import AbstractPopupWidget
 from Gui.popups.text_input_popup import TextInputPopup

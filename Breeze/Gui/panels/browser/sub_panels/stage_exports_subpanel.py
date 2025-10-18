@@ -2,7 +2,7 @@ from typing import Optional
 
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem, QLabel
 
-from Api.project_documents import Stage, Component, Version
+from Api.document_models.project_documents import Stage, Component, Version
 
 
 class SelectedStageSubPanel(QWidget):

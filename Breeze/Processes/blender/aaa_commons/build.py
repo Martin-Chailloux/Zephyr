@@ -1,7 +1,7 @@
 from typing import Optional
 
-from Api.project_documents import Component, Version
-from Api.studio_documents import Software
+from Api.document_models.project_documents import Component, Version
+from Api.document_models.studio_documents import Software
 from Processes.aaa_commons.in_out_steps import SaveStep, OpenStep, SaveAsStep, StepLabel
 from Processes.blender.aaa_commons.common_steps import CreateCollectionStep
 from Api.turbine.step import StepBase

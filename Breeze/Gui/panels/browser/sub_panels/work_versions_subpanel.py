@@ -2,7 +2,7 @@ from PySide6 import QtCore
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel, QWidget
 
-from Api.project_documents import Stage
+from Api.document_models.project_documents import Stage
 from Gui.popups.process_launcher import ProcessSelectMenu
 from Utils.sub_widgets import PushButtonAutoWidth
 from Gui.panels.browser.sub_panels import work_versions_api

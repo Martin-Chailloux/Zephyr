@@ -3,7 +3,7 @@ from typing import Optional
 import qtawesome
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton
 
-from Api.project_documents import Stage
+from Api.document_models.project_documents import Stage
 from Gui.mvd.component_mvd.component_tree_view import ComponentTreeView
 from Api.recipes.ingredients import IngredientSlot
 from Api.recipes.component_filters import ComponentFilters

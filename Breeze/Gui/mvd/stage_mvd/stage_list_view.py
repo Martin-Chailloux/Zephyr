@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from PySide6.QtCore import Signal, QModelIndex, QItemSelectionModel
 
-from Api.project_documents import Asset, Stage
+from Api.document_models.project_documents import Asset, Stage
 from Gui.mvd.abstract_mvd import AbstractListView
 from Gui.mvd.stage_mvd.stage_list_item_delegate import StageListItemDelegate, StageListMinimalItemDelegate
 from Gui.mvd.stage_mvd.stage_list_model import StageListModel, StageItemRoles, StageListMinimalModel

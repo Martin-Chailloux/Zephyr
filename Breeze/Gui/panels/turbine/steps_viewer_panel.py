@@ -1,8 +1,8 @@
 from PySide6 import QtCore
 from PySide6.QtCore import Signal
-from PySide6.QtWidgets import QTreeWidget, QTreeWidgetItem, QComboBox
+from PySide6.QtWidgets import QTreeWidget, QTreeWidgetItem
 
-from Api.project_documents import Job
+from Api.document_models.project_documents import Job
 from Api.turbine.step import StepBase
 
 

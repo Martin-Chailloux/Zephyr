@@ -1,4 +1,4 @@
-from Api.project_documents import Version, Stage
+from Api.document_models.project_documents import Version, Stage
 from Gui.popups.software_select_menu import CommentEditMenu, SoftwareSelectMenu
 
 

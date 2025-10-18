@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QVBoxLayout, QTextEdit, QCheckBox
 
-from Api.project_documents import Component
+from Api.document_models.project_documents import Component
 from Gui.mvd.component_mvd.component_list_view import ComponentListView
 from Gui.popups.abstract_popup_widget import AbstractPopupWidget
 

@@ -3,7 +3,7 @@ from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QWidget, QComboBox, QLabel, QGridLayout
 
 from Api.breeze_app import BreezeApp
-from Api.project_documents import Asset
+from Api.document_models.project_documents import Asset
 from Gui.popups.text_input_popup import TextInputPopup
 from Gui.sub_widgets.asset_widgets.bookmark_widgets import BookmarkIconButton
 

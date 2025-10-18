@@ -4,7 +4,7 @@ from PySide6 import QtCore
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QStandardItem, QStandardItemModel
 
-from Api.studio_documents import Process
+from Api.document_models.studio_documents import Process
 
 
 @dataclass
