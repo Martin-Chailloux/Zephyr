@@ -113,14 +113,8 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
             self.stage.replace_ingredient(name=ingredient_slot.name,
                                           old_version=current_version,
                                           new_version=new_version)
-
-        # update the model
-        model.setData(index, new_version, ComponentTreeItemRoles.version)
-        model.itemFromIndex(index).setSelectable(True)  # the item now has a version, so it should be selectable
-
-        if ingredient_slot.is_multiple:
-            # add an empty item to add more ingredients
-            model.add_sub_item(parent=model.itemFromIndex(index.parent()), ingredient_slot=ingredient_slot, version=None)
+        # refresh
+        model.refresh()
 
 
 class ComponentVersionTreeItemDelegate(AbstractItemDelegate):
