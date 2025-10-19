@@ -15,6 +15,15 @@ from Gui.popups.component_browser import ComponentBrowser
 alignment = QtCore.Qt.AlignmentFlag
 
 
+# TODO:
+#   - search with filters
+#   - add extra slot only if it does not exist yet (hard refresh should solve this)
+#   - version pill
+#   - is_multiple pill
+#   - delete ingredients
+#   - select version
+
+
 class ComponentTreeItemDelegate(AbstractItemDelegate):
     is_tree = True
 
@@ -76,7 +85,6 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
             super().createEditor(parent, option, index)
             return
 
-        # TODO: with filters
         components = Component.objects
         browser = ComponentBrowser(components=components)
         browser.setWindowFlags(QtCore.Qt.WindowType.Tool)
@@ -113,13 +121,6 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
         if ingredient_slot.is_multiple:
             # add an empty item to add more ingredients
             model.add_sub_item(parent=model.itemFromIndex(index.parent()), ingredient_slot=ingredient_slot, version=None)
-
-
-
-        # TODO:
-        #   - version pill
-        #   - is_multiple pill
-        #   - delete ingredients
 
 
 class ComponentVersionTreeItemDelegate(AbstractItemDelegate):

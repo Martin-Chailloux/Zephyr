@@ -1,5 +1,16 @@
 
 ------------------------------------------------
+0. Priority
+    - Recipes: finish required features
+        - delete selected ingredients
+        - auto-sort ingredients
+        - use filters
+
+    - Extensions:
+        - move from version to components
+        (reason: geo.abc, geo.blend, geo.ma, etc., should stay separated)
+        - migration + refactors + update export table and ingredients uis
+
 
 1. Missing primary features
 
@@ -41,8 +52,6 @@
 ------------------------------------------------
 
 2. Cleans / Refactors
-    - move document models to Api/document_models/project, Api/document_models/studio
-
     - SoftwareClasses: sub-classes for in/out, file management, etc.
     - group searchbars into the same parent class
     - list of possible component name, to be referenced in recipes and used in export processes
