@@ -56,6 +56,8 @@ class ComponentTreeModel(AbstractItemModel):
 
         label = ingredient_slot.name.title()
         item.setData(label, ComponentTreeItemRoles.label)
+        item.setData(ingredient_slot, ComponentTreeItemRoles.ingredient_slot)
+
         item.setSelectable(False)
         item.setEditable(False)
 

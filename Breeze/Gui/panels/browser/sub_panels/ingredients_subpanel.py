@@ -134,7 +134,7 @@ class ToolBar(QWidget):
 class IngredientsToolBar(ToolBar):
     def _init_ui(self):
         self.refresh_button = self.add_button(icon_name='fa.refresh', tooltip='Refresh')
-        self.autofill_button = self.add_button(icon_name='fa5s.check-circle', tooltip='Autofill')
+        self.autofill_button = self.add_button(icon_name='fa5s.sign-in-alt', tooltip='Autofill')
         self.add_divider()
         self.group_button = self.add_button(icon_name='fa5s.folder-plus', tooltip='Create group')
         self.copy_button = self.add_button(icon_name='fa5s.copy', tooltip='Copy')

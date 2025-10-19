@@ -3,7 +3,7 @@ from typing import Optional
 import qtawesome
 from PySide6 import QtCore
 from PySide6.QtCore import QModelIndex, QRect, QTimer
-from PySide6.QtGui import QPainter, QStandardItemModel
+from PySide6.QtGui import QPainter, QStandardItemModel, QBrush, QIcon, QFontMetrics
 from PySide6.QtWidgets import QStyleOptionViewItem, QComboBox, QStyle, QWidget
 
 from Api.document_models.project_documents import Component, Version, Stage
@@ -33,6 +33,7 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
 
     def _set_custom_data(self, option: QStyleOptionViewItem, index: QModelIndex):
         self.is_title: bool = index.data(ComponentTreeItemRoles.is_title)
+        self.ingredient_slot: IngredientSlot = index.data(ComponentTreeItemRoles.ingredient_slot)
 
         if self.is_title:
             self.label: str = index.data(ComponentTreeItemRoles.label)
@@ -44,6 +45,8 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
 
     def paint(self, painter: QPainter, option: QStyleOptionViewItem , index: QModelIndex):
         self._set_data(option, index)
+        x, y, w, h = self.get_item_rect()
+
         painter.save()
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
 
@@ -56,17 +59,25 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
         elif self.version is None:
             self.paint_create(painter)
         else:
-            self.paint_component(painter, component=self.version.component)
+            version_width = 42
+            self.paint_component(painter, component=self.version.component, width=w-version_width)
+            self.paint_version_number(painter, number=self.version.number, x_offset=w-version_width, width=version_width, opacity=1)
 
         painter.restore()
 
     def paint_title(self, painter: QPainter):
         x, y, w, h = self.get_item_rect()
+        font_metrics = QFontMetrics(painter.font())
 
         painter.save()
+
+        # paint text
         text = f" {self.label}"
+        if not self.ingredient_slot.is_multiple:
+            text += " (1)"
         rect = QRect(x, y, w, h)
         painter.drawText(rect, text, alignment.AlignLeft | alignment.AlignVCenter)
+
         painter.restore()
 
     def paint_create(self, painter: QPainter):
@@ -74,12 +85,14 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
         margin = 4 if self.is_hovered or self.is_selected else 5
 
         painter.save()
-
         icon = qtawesome.icon('fa.plus-circle')
         rect = QRect(x, y+margin, h, h-2*margin)
         icon.paint(painter, rect, QtCore.Qt.AlignmentFlag.AlignCenter)
         painter.restore()
 
+    # ------------------------
+    # Editor
+    # ------------------------
     def createEditor(self, parent: QWidget, option: QStyleOptionViewItem, index: QModelIndex):
         if index.data(ComponentTreeItemRoles.is_title):
             super().createEditor(parent, option, index)
@@ -105,7 +118,8 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
             return
 
         # update the stage
-        ingredient_slot: IngredientSlot = index.data(ComponentTreeItemRoles.ingredient_slot)
+        # note: can't use self.ingredient_slot because it changes while the popup is opened
+        ingredient_slot = index.data(ComponentTreeItemRoles.ingredient_slot)
         current_version: Version = index.data(ComponentTreeItemRoles.version)
         if current_version is None:
             self.stage.add_ingredient(name=ingredient_slot.name, version=new_version)

@@ -109,13 +109,21 @@ class AbstractItemDelegate(QStyledItemDelegate):
     def _set_custom_data(self, option: QStyleOptionViewItem, index: QModelIndex):
         pass
 
+    def _set_opacity(self, opacity: float):
+        self.opacity = opacity
+
     def _set_data(self, option: QStyleOptionViewItem, index: QModelIndex):
         self._set_common_data(option, index)
         self._set_custom_data(option, index)
 
     def get_item_rect(self) -> (int, int, int, int):
         item_rect = self.item_rect
-        return item_rect.x(), item_rect.y()+1, item_rect.width(), item_rect.height()-2
+        x = item_rect.x()
+        y = item_rect.y() + 1
+        w = item_rect.width()
+        h = item_rect.height() - 2
+
+        return x, y, w, h
 
     def paint_hover(self, painter: QPainter):
         if not self.is_hovered:
@@ -123,8 +131,8 @@ class AbstractItemDelegate(QStyledItemDelegate):
 
         x, y, w, h = self.get_item_rect()
         if self.is_tree:
-            x = self.widget.x()
-            w = self.widget.width()
+            x -= self.widget.x()
+            w += self.widget.width()
 
         painter.save()
         color = QColor(BreezeApp.palette.white_text)
@@ -140,8 +148,8 @@ class AbstractItemDelegate(QStyledItemDelegate):
 
         x, y, w, h = self.get_item_rect()
         if self.is_tree:
-            x = self.widget.x()
-            w = self.widget.width()
+            x -= self.widget.x()
+            w += self.widget.width()
 
         color = QColor(BreezeApp.palette.white_text)
         color.setAlphaF(0.2)
@@ -160,8 +168,8 @@ class AbstractItemDelegate(QStyledItemDelegate):
 
         x, y, w, h = self.get_item_rect()
         if self.is_tree:
-            x = self.widget.x()
-            w = self.widget.width()
+            x -= self.widget.x()
+            w += self.widget.width()
 
         color = BreezeApp.palette.green
         height = 2
@@ -224,8 +232,10 @@ class AbstractItemDelegate(QStyledItemDelegate):
         painter.drawText(rect, date_text, alignment.AlignHCenter | alignment.AlignTop)
         painter.restore()
 
-    def paint_component(self, painter: QPainter, component: Component):
+    def paint_component(self, painter: QPainter, component: Component, width: int = None):
         x, y, w, h = self.get_item_rect()
+        if width is not None:
+            w = width
 
         painter.save()
 
@@ -239,6 +249,7 @@ class AbstractItemDelegate(QStyledItemDelegate):
 
         # stage
         x += font_metrics.horizontalAdvance(text)
+        w -= font_metrics.horizontalAdvance(text)
         stage = component.stage
         painter.setPen(QPen(stage.stage_template.color))
         text = f"{stage.stage_template.label}"
@@ -248,10 +259,26 @@ class AbstractItemDelegate(QStyledItemDelegate):
         # asset
         painter.setOpacity(0.7)
         x += font_metrics.horizontalAdvance(text)
+        w -= font_metrics.horizontalAdvance(text)
         painter.setPen(QPen(BreezeApp.palette.white_text))
         asset = component.stage.asset
         text = f"    {asset.category} ⮞ {asset.name} ⮞ {asset.variant}"
         rect = QRect(x, y, w, h)
         painter.drawText(rect, text, alignment.AlignLeft | alignment.AlignVCenter)
+
+        painter.restore()
+
+    def paint_version_number(self, painter: QPainter, number: int, x_offset: int, width: int = 32, opacity: float=None):
+        x, y, w, h = self.get_item_rect()
+        text = f"{number:03d}"
+
+        painter.save()
+
+        painter.setOpacity(opacity or self.opacity)
+        font = painter.font()
+        font.setBold(True)
+        painter.setFont(font)
+        rect = QRect(x + x_offset, y, width, h)
+        painter.drawText(rect, text, alignment.AlignHCenter | alignment.AlignVCenter)
 
         painter.restore()

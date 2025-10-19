@@ -22,6 +22,7 @@ class VersionListItemDelegate(AbstractItemDelegate):
 
     def paint(self, painter: QPainter, option: QStyleOptionViewItem , index: QModelIndex):
         self._set_data(option, index)
+        x, y, w, h = self.get_item_rect()
 
         painter.save()
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
@@ -32,13 +33,12 @@ class VersionListItemDelegate(AbstractItemDelegate):
 
         # left
         self.paint_user(painter)
-        self.paint_version_num(painter)
+        self.paint_version_number(painter, number=self.version.number, x_offset=h, width=self.num_width)
 
         # middle
         self.paint_comment(painter)
 
         # right
-        x, y, w, h = self.get_item_rect()
         self.paint_time(painter, time=self.version.timestamp, rect=QRect(w - h - self.datetime_width, y, self.datetime_width, h))
         self.paint_software(painter)
 
@@ -49,21 +49,6 @@ class VersionListItemDelegate(AbstractItemDelegate):
             painter,
             icon_path=self.version.last_user.icon_path,
         )
-
-    def paint_version_num(self, painter: QPainter):
-        x, y, w, h = self.get_item_rect()
-        text = f"{self.version.number:03d}"
-
-        painter.save()
-
-        painter.setOpacity(self.opacity)
-        font = painter.font()
-        font.setBold(True)
-        painter.setFont(font)
-        rect = QRect(x + h, y, self.num_width, h)
-        painter.drawText(rect, text, alignment.AlignHCenter | alignment.AlignVCenter)
-
-        painter.restore()
 
     def paint_software(self, painter: QPainter):
         x, y, w, h = self.get_item_rect()
