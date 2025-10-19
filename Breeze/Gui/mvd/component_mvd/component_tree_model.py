@@ -7,8 +7,7 @@ from PySide6.QtGui import QStandardItem
 
 from Api.document_models.project_documents import Stage, Version
 from Api.recipes.recipe import Recipe
-from Api.recipes.ingredients import Ingredients
-from Api.recipes.ingredients import IngredientSlot
+from Api.recipes.ingredient_slot import IngredientSlot
 from Gui.mvd.abstract_mvd import AbstractItemModel
 
 
@@ -19,10 +18,14 @@ class ComponentTreeItemRoles:
     version = QtCore.Qt.ItemDataRole.UserRole + 2
     ingredient_slot = QtCore.Qt.ItemDataRole.UserRole + 3
 
+    can_edit_version_number = QtCore.Qt.ItemDataRole.UserRole + 4
+
 
 @dataclass
 class ComponentTreeItemMetrics:
     height: int = 28
+    version_width: int = 42
+    edit_width: int = 16
 
 
 class ComponentTreeModel(AbstractItemModel):

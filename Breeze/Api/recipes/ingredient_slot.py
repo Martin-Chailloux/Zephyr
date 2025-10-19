@@ -44,24 +44,3 @@ class IngredientSlot:
 
         ingredient_slot = cls(name=slot_name, multiple=multiple, filters=filters)
         return ingredient_slot
-
-
-class Ingredients:
-    def __init__(self, name: str, versions: list[Version]):
-        """
-        List of the ingredients of a recipe, grouped by their name.
-        :param name: name of the ingredient
-        :param versions: versions imported under this name
-        """
-        self.name = name
-        self.versions = versions
-
-    def to_database(self) -> dict[str, Any]:
-        result = {'name': self.name, 'versions': self.versions}
-        return result
-
-    @classmethod
-    def from_database(cls, ingredient_infos: dict[str, Any]):
-        name = ingredient_infos['name']
-        versions = ingredient_infos['versions']
-        return cls(name=name, versions=versions)

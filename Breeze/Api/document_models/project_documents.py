@@ -116,15 +116,14 @@ class Stage(Document):
         return stage
 
     def add_ingredient(self, name: str, version: 'Version'):
-        # TODO: sorting
         if name not in self.ingredients.keys():
             self.ingredients[name] = []
         self.ingredients[name].append(version)
         self.save()
+        self.sort_ingredients()
         print(f"{version} was added to the '{name}' ingredients of {self}")
 
     def replace_ingredient(self, name: str, old_version: 'Version', new_version: 'Version'):
-        # TODO: sorting
         if name not in self.ingredients.keys():
             raise ValueError(f"Existing ingredients with name {name} not found in {self}")
 
@@ -136,7 +135,32 @@ class Stage(Document):
 
         self.ingredients[name] = versions
         self.save()
+        self.sort_ingredients()
         print(f"{new_version} replaced {old_version} in the '{name}' ingredients of {self}")
+
+    def sort_ingredients(self):
+        sorted_ingredients: dict[str, list[Version]] = {}
+
+        # sort names
+        names = [name for name in self.ingredients.keys()]
+        names.sort()
+        if 'extra' in names:
+            names.remove('extra')
+            names.append('extra')
+
+        # sort versions
+        for name in names:
+            versions = self.ingredients[name]
+            versions = sorted(versions, key=lambda version: (
+                version.component.stage.stage_template.name,
+                version.longname,
+                version.number,
+            ))
+            sorted_ingredients[name] = versions
+
+        # update
+        self.ingredients = sorted_ingredients
+        self.save()
 
 
 class Component(Document):

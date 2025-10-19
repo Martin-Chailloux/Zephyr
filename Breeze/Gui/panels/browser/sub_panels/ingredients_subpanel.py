@@ -5,7 +5,7 @@ from PySide6 import QtCore
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QLabel, QHBoxLayout, QFrame, QSizePolicy
 
 from Api.document_models.project_documents import Stage
-from Api.recipes.ingredients import Ingredients, IngredientSlot
+from Api.recipes.ingredient_slot import IngredientSlot
 from Gui.mvd.component_mvd.component_tree_model import ComponentTreeItemRoles
 from Gui.mvd.component_mvd.component_tree_view import ComponentTreeView
 from Utils.sub_widgets import IconButton

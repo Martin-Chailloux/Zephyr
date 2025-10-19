@@ -1,16 +1,15 @@
 from PySide6.QtWidgets import QTreeView, QAbstractItemView
 
-from Api.document_models.project_documents import Stage
-from Gui.mvd.component_mvd.component_tree_item_delegate import ComponentTreeItemDelegate, ComponentVersionTreeItemDelegate
-from Gui.mvd.component_mvd.component_tree_model import ComponentTreeModel, ComponentTreeItemRoles
+from Api.document_models.project_documents import Stage, Version
+from Gui.mvd.abstract_mvd import AbstractTreeView
+from Gui.mvd.component_mvd.component_tree_item_delegate import (ComponentTreeItemDelegate,
+                                                                ComponentVersionTreeItemDelegate)
+from Gui.mvd.component_mvd.component_tree_model import (ComponentTreeModel, ComponentTreeItemRoles,
+                                                        ComponentTreeItemMetrics)
 
 
-# class AbstractTreeView(QTreeView):
-#     @property
-#     def selectedIndexes(self, /):
 
-
-class ComponentTreeView(QTreeView):
+class ComponentTreeView(AbstractTreeView):
     def __init__(self):
         super().__init__()
         self.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
@@ -38,10 +37,43 @@ class ComponentTreeView(QTreeView):
         self._item_delegate.set_stage(stage=stage)
         self.expandAll()
 
+    def _set_hover_data(self):
+        index = self._get_hovered_index()
+        item = self._model.itemFromIndex(index)
+
+        if index is None or item is None:
+            return
+
+        is_title: bool = index.data(ComponentTreeItemRoles.is_title)
+        version: Version = index.data(ComponentTreeItemRoles.version)
+        if is_title or version is None:
+            item.setData(False, ComponentTreeItemRoles.can_edit_version_number)
+            return
+
+        mouse_position = self._get_mouse_pos()
+        x, y, w, h = self._get_viewport_rect()
+        is_over_version_number = mouse_position.x() > w - ComponentTreeItemMetrics.version_width - ComponentTreeItemMetrics.edit_width
+
+        item.setData(is_over_version_number, ComponentTreeItemRoles.can_edit_version_number)
+
+    def leaveEvent(self, event):
+        super().leaveEvent(event)
+        self._set_hover_data()
+
+    def mouseMoveEvent(self, event):
+        super().mouseMoveEvent(event)
+        self._set_hover_data()
+
     def mousePressEvent(self, event):
         super().mousePressEvent(event)
-        index = self.indexAt(event.pos())
-        if index.data(ComponentTreeItemRoles.version)  is None:
+
+        self._set_hover_data()
+
+        # edit after a single click
+        index = self._get_hovered_index()
+        if index.data(ComponentTreeItemRoles.version) is None:
+            self.edit(index)
+        elif index.data(ComponentTreeItemRoles.can_edit_version_number):
             self.edit(index)
 
     def _connect_signals(self):

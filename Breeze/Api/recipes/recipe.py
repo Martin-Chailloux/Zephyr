@@ -1,6 +1,6 @@
 from typing import Any
 
-from Api.recipes.ingredients import IngredientSlot
+from Api.recipes.ingredient_slot import IngredientSlot
 
 
 class Recipe:

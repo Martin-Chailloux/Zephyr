@@ -5,7 +5,8 @@ from PySide6 import QtCore
 from PySide6.QtCore import QPoint, QModelIndex, QRect, QRectF, QPointF, QItemSelectionModel, Signal
 from PySide6.QtGui import (QCursor, QStandardItem, QStandardItemModel, QPainter, QColor,
                            QBrush, QPen, QImage, QPainterPath, QMouseEvent, QFontMetrics)
-from PySide6.QtWidgets import QListView, QStyledItemDelegate, QStyleOptionViewItem, QStyle, QWidget
+from PySide6.QtWidgets import QListView, QStyledItemDelegate, QStyleOptionViewItem, QStyle, QWidget, QAbstractItemView, \
+    QTreeView
 
 from Api.breeze_app import BreezeApp
 from Api.document_models.project_documents import Component
@@ -24,6 +25,56 @@ class AbstractItemModel(QStandardItemModel):
 
     def refresh(self):
         return
+
+
+class AbstractTreeView(QTreeView):
+    right_clicked = Signal()
+
+    def __init__(self):
+        super().__init__()
+        self.setMouseTracking(True)
+        self._model: Optional[AbstractItemModel] = None
+
+    def _connect_signals(self):
+        pass
+
+    def _get_viewport_rect(self) -> (int, int, int, int):
+        rect = self.viewport().rect()
+        return rect.x(), rect.y(), rect.width(), rect.height()
+
+    def _get_mouse_pos(self) -> QPoint:
+        position: QPoint = self.mapFromGlobal(QCursor.pos())
+        return position
+
+    def _get_hovered_index(self) -> QModelIndex:
+        mouse_pos = self._get_mouse_pos()
+        index = self.indexAt(mouse_pos)
+        return index
+
+    def get_hovered_item(self) -> QStandardItem:
+        hovered_index = self._get_hovered_index()
+        hovered_item = self._model.item(hovered_index.row())
+        return hovered_item
+
+    @property
+    def selected_items(self) -> list[QStandardItem]:
+        selected_indexes = self.selectionModel().selectedIndexes()
+        selected_items = [self._model.item(index.row()) for index in selected_indexes]
+        return selected_items
+
+    def select_row(self, row: int, is_selected: bool=True):
+        index = self._model.index(row, 0)
+        self.setCurrentIndex(index)
+        if is_selected:
+            self.selectionModel().setCurrentIndex(index, QItemSelectionModel.SelectionFlag.Select)
+        else:
+            self.selectionModel().setCurrentIndex(index, QItemSelectionModel.SelectionFlag.Deselect)
+
+    def mousePressEvent(self, event):
+        if isinstance(event, QMouseEvent):
+            if event.button() == QtCore.Qt.MouseButton.RightButton:
+                self.right_clicked.emit()
+        super().mousePressEvent(event)
 
 
 class AbstractListView(QListView):
@@ -72,7 +123,7 @@ class AbstractListView(QListView):
     def mousePressEvent(self, event):
         if isinstance(event, QMouseEvent):
             if event.button() == QtCore.Qt.MouseButton.RightButton:
-                self.right_clicked.emit()  # TODO: remove from subclasses
+                self.right_clicked.emit()
         super().mousePressEvent(event)
 
     def refresh(self):

@@ -3,13 +3,14 @@ from typing import Optional
 import qtawesome
 from PySide6 import QtCore
 from PySide6.QtCore import QModelIndex, QRect, QTimer
-from PySide6.QtGui import QPainter, QStandardItemModel, QBrush, QIcon, QFontMetrics
+from PySide6.QtGui import QPainter, QStandardItemModel
 from PySide6.QtWidgets import QStyleOptionViewItem, QComboBox, QStyle, QWidget
 
 from Api.document_models.project_documents import Component, Version, Stage
-from Api.recipes.ingredients import IngredientSlot
+from Api.recipes.ingredient_slot import IngredientSlot
 from Gui.mvd.abstract_mvd import AbstractItemDelegate
-from Gui.mvd.component_mvd.component_tree_model import ComponentTreeItemRoles, ComponentTreeModel
+from Gui.mvd.component_mvd.component_tree_model import ComponentTreeItemRoles, ComponentTreeModel, \
+    ComponentTreeItemMetrics
 from Gui.popups.component_browser import ComponentBrowser
 
 alignment = QtCore.Qt.AlignmentFlag
@@ -17,10 +18,6 @@ alignment = QtCore.Qt.AlignmentFlag
 
 # TODO:
 #   - search with filters
-#   - add extra slot only if it does not exist yet (hard refresh should solve this)
-#   - version pill
-#   - is_multiple pill
-#   - delete ingredients
 #   - select version
 
 
@@ -34,6 +31,7 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
     def _set_custom_data(self, option: QStyleOptionViewItem, index: QModelIndex):
         self.is_title: bool = index.data(ComponentTreeItemRoles.is_title)
         self.ingredient_slot: IngredientSlot = index.data(ComponentTreeItemRoles.ingredient_slot)
+        self.can_edit_version_number: bool = index.data(ComponentTreeItemRoles.can_edit_version_number)
 
         if self.is_title:
             self.label: str = index.data(ComponentTreeItemRoles.label)
@@ -59,15 +57,21 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
         elif self.version is None:
             self.paint_create(painter)
         else:
-            version_width = 42
-            self.paint_component(painter, component=self.version.component, width=w-version_width)
-            self.paint_version_number(painter, number=self.version.number, x_offset=w-version_width, width=version_width, opacity=1)
+            version_width = ComponentTreeItemMetrics.version_width
+            edit_width = ComponentTreeItemMetrics.edit_width
+            component_width = w-version_width
+            if self.is_hovered and self.can_edit_version_number:
+                component_width -= edit_width / 2
+
+            self.paint_component(painter, component=self.version.component, width=component_width)
+            if self.is_hovered and self.can_edit_version_number:
+                self.paint_edit_version(painter, width=edit_width)
+            self.paint_version_number(painter, number=self.version.number, x_offset=component_width, width=version_width, opacity=1)
 
         painter.restore()
 
     def paint_title(self, painter: QPainter):
         x, y, w, h = self.get_item_rect()
-        font_metrics = QFontMetrics(painter.font())
 
         painter.save()
 
@@ -87,17 +91,26 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
         painter.save()
         icon = qtawesome.icon('fa.plus-circle')
         rect = QRect(x, y+margin, h, h-2*margin)
-        icon.paint(painter, rect, QtCore.Qt.AlignmentFlag.AlignCenter)
+        icon.paint(painter, rect, alignment.AlignCenter)
+        painter.restore()
+
+    def paint_edit_version(self, painter: QPainter, width: int):
+        x, y, w, h = self.get_item_rect()
+        margin = 6
+
+        painter.save()
+
+        icon = qtawesome.icon('fa5s.edit')
+        rect = QRect(x+w-width, y+margin, width, h-2*margin)
+        icon.paint(painter, rect)
+
         painter.restore()
 
     # ------------------------
     # Editor
     # ------------------------
-    def createEditor(self, parent: QWidget, option: QStyleOptionViewItem, index: QModelIndex):
-        if index.data(ComponentTreeItemRoles.is_title):
-            super().createEditor(parent, option, index)
-            return
 
+    def create_component_editor(self, parent: QWidget, option: QStyleOptionViewItem):
         components = Component.objects
         browser = ComponentBrowser(components=components)
         browser.setWindowFlags(QtCore.Qt.WindowType.Tool)
@@ -108,7 +121,22 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
         browser.setFocus()
         return browser
 
-    def setModelData(self, editor: ComponentBrowser, model: ComponentTreeModel, index: QModelIndex):
+
+    def createEditor(self, parent: QWidget, option: QStyleOptionViewItem, index: QModelIndex):
+        is_title = index.data(ComponentTreeItemRoles.is_title)
+        if is_title:
+            super().createEditor(parent, option, index)
+            return
+
+        can_edit_version_number = index.data(ComponentTreeItemRoles.can_edit_version_number)
+        if can_edit_version_number:
+            print(f"EDIT VERSION")
+            editor = None
+        else:
+            editor = self.create_component_editor(parent=parent, option=option)
+        return editor
+
+    def set_component_data(self, editor: ComponentBrowser, model: ComponentTreeModel, index: QModelIndex):
         component = editor.component_list.get_selected_component()
         if component is None:
             return
@@ -127,6 +155,19 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
             self.stage.replace_ingredient(name=ingredient_slot.name,
                                           old_version=current_version,
                                           new_version=new_version)
+
+    def setModelData(self, editor: ComponentBrowser, model: ComponentTreeModel, index: QModelIndex):
+        is_title = index.data(ComponentTreeItemRoles.is_title)
+        if is_title:
+            super().setModelData(editor, model, index)
+            return
+
+        can_edit_version_number = index.data(ComponentTreeItemRoles.can_edit_version_number)
+        if can_edit_version_number:
+            print(f"EDIT VERSION")
+        else:
+            self.set_component_data(editor=editor, model=model, index=index)
+
         # refresh
         model.refresh()
 

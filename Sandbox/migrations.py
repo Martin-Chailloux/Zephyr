@@ -14,7 +14,7 @@ from Api.document_models.project_documents import Stage, Asset, Version, Job
 from Processes.blender.aaa_commons.build import BlenderBuild
 from Processes.blender.modeling.export.process import BlenderModelingExport
 from Api.recipes.recipe import Recipe
-from Api.recipes.ingredients import IngredientSlot
+from Api.recipes.ingredient_slot import IngredientSlot
 from Api.recipes.component_filters import ComponentFilterStage
 
 mongoengine.connect(host="mongodb://localhost:27017", db="JourDeVent", alias="current_project")
