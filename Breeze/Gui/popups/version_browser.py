@@ -7,6 +7,8 @@ from Gui.popups.abstract_popup_widget import AbstractPopupWidget
 
 
 class VersionBrowser(AbstractPopupWidget):
+    # TODO: shortcut to select the last/head version
+
     def __init__(self, versions: list[Version]):
         super().__init__(w=280, show_borders=True)
         self.versions = versions

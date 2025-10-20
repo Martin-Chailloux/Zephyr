@@ -111,7 +111,7 @@ class AbstractListView(QListView):
         indexes = self.selectedIndexes()
         if not indexes:
             return None
-        elif len(indexes) > 0:
+        elif len(indexes) > 1:
             raise ValueError("More than 1 indexes are selected")
         return indexes[0]
 

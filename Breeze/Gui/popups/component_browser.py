@@ -14,7 +14,6 @@ class ComponentBrowser(AbstractPopupWidget):
         self.setWindowTitle("Select a component")
         self._init_ui()
         self._connect_signals()
-        self._init_state()
 
     def _init_ui(self):
         layout = QVBoxLayout()
@@ -42,15 +41,7 @@ class ComponentBrowser(AbstractPopupWidget):
     def _connect_signals(self):
         self.search_bar.textChanged.connect(self.on_searchbar_edited)
         self.component_list.right_clicked.connect(self.reject)
-        self.component_list.component_selected.connect(self.on_component_selected)
 
     def on_searchbar_edited(self):
         text = self.search_bar.toPlainText().lower()
         self.component_list.set_text_filter(text=text)
-
-    def on_component_selected(self):
-        component = self.component_list.get_selected_component()
-        self.close()
-
-    def _init_state(self):
-        pass

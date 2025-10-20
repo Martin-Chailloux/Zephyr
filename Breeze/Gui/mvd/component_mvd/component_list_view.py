@@ -7,8 +7,6 @@ from Gui.mvd.component_mvd.component_list_model import ComponentItemRoles, Compo
 
 
 class ComponentListView(AbstractListView):
-    component_selected = Signal()
-
     def __init__(self):
         super().__init__()
         self._model = ComponentListModel()
@@ -16,8 +14,6 @@ class ComponentListView(AbstractListView):
 
         self._item_delegate = ComponentListItemDelegate()
         self.setItemDelegate(self._item_delegate)
-
-        self.selectionModel().selectionChanged.connect(self.on_selection_changed)
 
     def set_components(self, components: list[Component]):
         self.blockSignals(True)
@@ -34,6 +30,3 @@ class ComponentListView(AbstractListView):
 
     def set_text_filter(self, text: str):
         self._model.set_text_filter(text=text)
-
-    def on_selection_changed(self):
-        self.component_selected.emit()

@@ -122,9 +122,10 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
 
     def create_component_editor(self, parent: QWidget, option: QStyleOptionViewItem):
         components = Component.objects
-        browser = ComponentBrowser(components=components)
-        self._setup_editor(editor=browser, parent=parent, option=option)
-        return browser
+        components_browser = ComponentBrowser(components=components)
+        self._setup_editor(editor=components_browser, parent=parent, option=option)
+        components_browser.component_list.selectionModel().selectionChanged.connect(components_browser.close)  # setModelData is called when the editor closes
+        return components_browser
 
     def create_version_number_editor(self, parent: QWidget, option: QStyleOptionViewItem, index: QModelIndex):
         # get available versions from work component, to have infos from the source versions
@@ -136,6 +137,7 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
 
         version_browser = VersionBrowser(versions=versions)
         self._setup_editor(editor=version_browser, parent=parent, option=option)
+        version_browser.versions_list.selectionModel().selectionChanged.connect(version_browser.close)  # setModelData is called when the editor closes
         return version_browser
 
     def createEditor(self, parent: QWidget, option: QStyleOptionViewItem, index: QModelIndex):
@@ -154,12 +156,25 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
     # ------------------------
     # Set editor's data
     # ------------------------
+    def set_version_number_data(self, editor: VersionBrowser, model: ComponentTreeModel, index: QModelIndex):
+        selected_version = editor.versions_list.get_selected_version()
+        if selected_version is None:
+            return
+
+        # get new version
+        current_version: Version = index.data(ComponentTreeItemRoles.version)
+        new_version = current_version.component.get_version(number=selected_version.number)
+
+        ingredient_slot: IngredientSlot = index.data(ComponentTreeItemRoles.ingredient_slot)
+        self.stage.replace_ingredient(name=ingredient_slot.name,
+                                      old_version=current_version,
+                                      new_version=new_version)
+
     def set_component_data(self, editor: ComponentBrowser, model: ComponentTreeModel, index: QModelIndex):
         component = editor.component_list.get_selected_component()
         if component is None:
             return
 
-        print(f"{component = }")
         new_version = component.get_last_version()
         if new_version is None:
             return
@@ -174,7 +189,7 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
                                           old_version=current_version,
                                           new_version=new_version)
 
-    def setModelData(self, editor: ComponentBrowser, model: ComponentTreeModel, index: QModelIndex):
+    def setModelData(self, editor: VersionBrowser | ComponentBrowser, model: ComponentTreeModel, index: QModelIndex):
         is_title = index.data(ComponentTreeItemRoles.is_title)
         if is_title:
             super().setModelData(editor, model, index)
@@ -182,7 +197,7 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
 
         can_edit_version_number = index.data(ComponentTreeItemRoles.can_edit_version_number)
         if can_edit_version_number:
-            print(f"EDIT VERSION")
+            self.set_version_number_data(editor=editor, model=model, index=index)
         else:
             self.set_component_data(editor=editor, model=model, index=index)
 
