@@ -79,6 +79,7 @@ class AbstractTreeView(QTreeView):
 
 class AbstractListView(QListView):
     right_clicked = Signal()
+    double_clicked = Signal()
 
     def __init__(self):
         super().__init__()
@@ -106,6 +107,14 @@ class AbstractListView(QListView):
         hovered_item = self._model.item(hovered_index.row())
         return hovered_item
 
+    def get_selected_index(self) -> QModelIndex | None:
+        indexes = self.selectedIndexes()
+        if not indexes:
+            return None
+        elif len(indexes) > 0:
+            raise ValueError("More than 1 indexes are selected")
+        return indexes[0]
+
     @property
     def selected_items(self) -> list[QStandardItem]:
         selected_indexes = self.selectionModel().selectedIndexes()
@@ -125,6 +134,10 @@ class AbstractListView(QListView):
             if event.button() == QtCore.Qt.MouseButton.RightButton:
                 self.right_clicked.emit()
         super().mousePressEvent(event)
+
+    def mouseDoubleClickEvent(self, event):
+        super().mouseDoubleClickEvent(event)
+        self.double_clicked.emit()
 
     def refresh(self):
         selected_indexes = self.selectionModel().selectedIndexes()

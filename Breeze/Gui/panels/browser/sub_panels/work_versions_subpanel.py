@@ -1,6 +1,7 @@
+import qtawesome
 from PySide6 import QtCore
-from PySide6.QtCore import Signal
-from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel, QWidget
+from PySide6.QtCore import Signal, QPoint
+from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel, QWidget, QMenu
 
 from Api.document_models.project_documents import Stage
 from Gui.popups.process_launcher import ProcessSelectMenu
@@ -60,6 +61,7 @@ class WorkVersionsWidget(QWidget):
 
         # versions list
         versions_list = VersionListView()
+        versions_list.setContextMenuPolicy(QtCore.Qt.ContextMenuPolicy.CustomContextMenu)
         v_layout.addWidget(versions_list)
 
         # buttons
@@ -98,11 +100,45 @@ class WorkVersionsWidget(QWidget):
         self.new_file_button.clicked.connect(self.on_new_file_button_clicked)
         self.increment_button.clicked.connect(self.on_increment_button_clicked)
         self.turbine_button.clicked.connect(self.on_turbine_button_clicked)
+        self.versions_list.double_clicked.connect(self.on_version_list_double_clicked)
+        self.versions_list.customContextMenuRequested.connect(self.show_context_menu)
 
         self.ask_refresh_exports.connect(self.refresh)
 
     def refresh(self):
         self.versions_list.refresh()
+
+    def on_version_list_double_clicked(self):
+        version = self.versions_list.get_hovered_version()
+        file = version.to_file()
+        file.open_interactive()
+        print(f"Opening {version.software.label} file: {version.filepath}")
+
+    def show_context_menu(self, position: QPoint):
+        # TODO: rmb -> exit, remove close button if done
+        version = self.versions_list.get_hovered_version()
+
+        # create menu
+        menu = QMenu()
+        close_action = menu.addAction("Close")
+        close_action.setIcon(qtawesome.icon('fa.close'))
+        menu.addSeparator()
+        copy_path_action = menu.addAction("Copy filepath")
+        copy_path_action.setIcon(qtawesome.icon('fa5s.copy'))
+        open_folder_action = menu.addAction("Open folder")
+        open_folder_action.setIcon(qtawesome.icon('fa5s.folder-open'))
+
+        # open menu
+        requested_action = menu.exec_(self.mapToGlobal(position))
+
+        # result
+        if requested_action is copy_path_action:
+            version.copy_filepath()
+        elif requested_action is open_folder_action:
+            version.open_folder()
+
+        else:
+            return
 
     def on_new_file_button_clicked(self):
         if self.stage is None:
