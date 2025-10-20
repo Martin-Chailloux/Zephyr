@@ -66,7 +66,6 @@ class ComponentListProxyModel(QSortFilterProxyModel):
         self.filtered_components: list[Component] = []
 
     def filterAcceptsRow(self, source_row: int, source_parent: QModelIndex):
-        print(f"{source_row = }")
         if not self.only_show_filtered_components:
             return super().filterAcceptsRow(source_row, source_parent)
 
