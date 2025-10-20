@@ -13,6 +13,7 @@ from Gui.mvd.component_mvd.component_tree_model import ComponentTreeItemRoles, C
     ComponentTreeItemMetrics
 from Gui.mvd.version_mvd.version_list_view import VersionListView
 from Gui.popups.component_browser import ComponentBrowser
+from Gui.popups.version_browser import VersionBrowser
 
 alignment = QtCore.Qt.AlignmentFlag
 
@@ -128,18 +129,14 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
     def create_version_number_editor(self, parent: QWidget, option: QStyleOptionViewItem, index: QModelIndex):
         # get available versions from work component, to have infos from the source versions
         version: Version = index.data(ComponentTreeItemRoles.version)
-        print(f"{version = }")
         work_component = version.component.stage.work_component
         available_versions = version.component.versions
         available_versions_numbers = [v.number for v in available_versions]
-        print(f"{version = }")
-        print(f"{available_versions_numbers = }")
         versions = [v for v in work_component.versions if v.number in available_versions_numbers]
 
-        version_list = VersionListView()
-        version_list.set_versions(versions=versions)
-        self._setup_editor(editor=version_list, parent=parent, option=option)
-        return version_list
+        version_browser = VersionBrowser(versions=versions)
+        self._setup_editor(editor=version_browser, parent=parent, option=option)
+        return version_browser
 
     def createEditor(self, parent: QWidget, option: QStyleOptionViewItem, index: QModelIndex):
         is_title = index.data(ComponentTreeItemRoles.is_title)

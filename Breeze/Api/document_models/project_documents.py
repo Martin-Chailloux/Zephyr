@@ -339,6 +339,22 @@ class Version(Document):
         else:
             raise NotImplementedError(f"File instance for: {self.software}")
 
+    def get_filter_keys(self) -> str:
+        """ returns a string of keys used with search bars to filter a list of versions """
+        # TODO: it does not work with users
+        #  convert date to something that makes sense to write (actual format: 2025-07-13 19:03:53.368000)
+        keys = [
+            f"{self.number:03d}",
+            self.creation_user.pseudo,
+            self.creation_user.fullname,
+            self.last_user.pseudo,
+            self.last_user.fullname,
+            self.software.extension,
+            str(self.timestamp),
+        ]
+        result = " ".join(s for s in keys)
+        return result
+
 
 @dataclass
 class JobContext:

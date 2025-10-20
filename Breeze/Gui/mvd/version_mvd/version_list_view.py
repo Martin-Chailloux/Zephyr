@@ -14,7 +14,7 @@ class VersionListView(AbstractListView):
     def __init__(self):
         super().__init__()
         self._model = VersionListModel()
-        self.setModel(self._model)
+        self.setModel(self._model.proxy)
 
         self._item_delegate = None
         self.set_item_delegate()
@@ -51,3 +51,6 @@ class VersionListView(AbstractListView):
             return None
         version = index.data(VersionItemRoles.version)
         return version
+
+    def set_text_filter(self, text: str):
+        self._model.set_text_filter(text=text)
