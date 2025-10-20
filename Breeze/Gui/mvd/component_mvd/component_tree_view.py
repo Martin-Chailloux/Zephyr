@@ -1,12 +1,10 @@
-from PySide6.QtWidgets import QTreeView, QAbstractItemView
+from PySide6.QtWidgets import QAbstractItemView
 
 from Api.document_models.project_documents import Stage, Version
 from Gui.mvd.abstract_mvd import AbstractTreeView
-from Gui.mvd.component_mvd.component_tree_item_delegate import (ComponentTreeItemDelegate,
-                                                                ComponentVersionTreeItemDelegate)
+from Gui.mvd.component_mvd.component_tree_item_delegate import ComponentTreeItemDelegate
 from Gui.mvd.component_mvd.component_tree_model import (ComponentTreeModel, ComponentTreeItemRoles,
                                                         ComponentTreeItemMetrics)
-
 
 
 class ComponentTreeView(AbstractTreeView):
@@ -20,9 +18,6 @@ class ComponentTreeView(AbstractTreeView):
 
         self._item_delegate = ComponentTreeItemDelegate()
         self.setItemDelegateForColumn(0, self._item_delegate)
-
-        self._version_item_delegate = ComponentVersionTreeItemDelegate()
-        self.setItemDelegateForColumn(1, self._version_item_delegate)
 
         self.header().hide()
         self.expandAll()

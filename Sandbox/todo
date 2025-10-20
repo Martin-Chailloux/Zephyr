@@ -2,8 +2,7 @@
 ------------------------------------------------
 0. Priority
     - Recipes: finish required features
-        - use filters
-        - select other version number
+        - FIX: editors set values after a right click
 
     - Extensions:
         - move from version to components
@@ -51,6 +50,7 @@
 ------------------------------------------------
 
 2. Cleans / Refactors
+    - mvd: confo and simplify from new knowledge, update stages' mouse events from component tree's code
     - SoftwareClasses: sub-classes for in/out, file management, etc.
     - group searchbars into the same parent class
     - list of possible component name, to be referenced in recipes and used in export processes

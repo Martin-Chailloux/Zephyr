@@ -15,9 +15,9 @@ class ComponentListView(AbstractListView):
         self._item_delegate = ComponentListItemDelegate()
         self.setItemDelegate(self._item_delegate)
 
-    def set_components(self, components: list[Component]):
+    def set_components(self, components: list[Component], filtered_components: list[Component] = None):
         self.blockSignals(True)
-        self._model.populate(components=components)
+        self._model.populate(components=components, filtered_components=filtered_components or [])
         self.blockSignals(False)
 
     def get_selected_component(self) -> Component | None:
@@ -30,3 +30,6 @@ class ComponentListView(AbstractListView):
 
     def set_text_filter(self, text: str):
         self._model.set_text_filter(text=text)
+
+    def set_only_show_filtered_components(self, show: bool):
+        self._model.proxy.set_only_show_filtered_components(show=show)

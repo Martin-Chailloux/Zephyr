@@ -39,7 +39,6 @@ class VersionListModel(AbstractItemModel):
 
     def set_text_filter(self, text: str):
         text = text.replace(' ', '*')
-        print(f"{text = }")
         self.proxy.setFilterWildcard(text)
 
     def populate(self, versions: list[Version]):

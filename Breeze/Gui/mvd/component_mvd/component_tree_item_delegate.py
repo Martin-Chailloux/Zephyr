@@ -20,7 +20,6 @@ alignment = QtCore.Qt.AlignmentFlag
 
 # TODO:
 #   - search with filters
-#   - select version
 
 
 class ComponentTreeItemDelegate(AbstractItemDelegate):
@@ -114,27 +113,33 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
     # Create editor
     # ------------------------
     def _setup_editor(self, editor: QWidget, parent: QWidget, option: QStyleOptionViewItem):
+        """ moves the editor and give it the tool look"""
         editor.setWindowFlags(QtCore.Qt.WindowType.Tool)
         QTimer.singleShot(0, lambda: editor.move(parent.mapToGlobal(option.rect.topLeft())))
         QTimer.singleShot(0, lambda: editor.setMinimumSize(0, 0))
         QTimer.singleShot(0, lambda: editor.setMaximumSize(500, 500))
         QTimer.singleShot(0, lambda: editor.resize(280, 280))
 
-    def create_component_editor(self, parent: QWidget, option: QStyleOptionViewItem):
-        components = Component.objects
-        components_browser = ComponentBrowser(components=components)
+    def create_component_editor(self, parent: QWidget, option: QStyleOptionViewItem, index: QModelIndex):
+        # filter allowed components
+        ingredient_slot: IngredientSlot = index.data(ComponentTreeItemRoles.ingredient_slot)
+        components = ingredient_slot.get_allowed_components()
+
+        # create editor
+        components_browser = ComponentBrowser(components=components, stage=self.stage)
         self._setup_editor(editor=components_browser, parent=parent, option=option)
         components_browser.component_list.selectionModel().selectionChanged.connect(components_browser.close)  # setModelData is called when the editor closes
         return components_browser
 
     def create_version_number_editor(self, parent: QWidget, option: QStyleOptionViewItem, index: QModelIndex):
-        # get available versions from work component, to have infos from the source versions
+        # get work versions with same number as available component's versions
         version: Version = index.data(ComponentTreeItemRoles.version)
         work_component = version.component.stage.work_component
         available_versions = version.component.versions
         available_versions_numbers = [v.number for v in available_versions]
         versions = [v for v in work_component.versions if v.number in available_versions_numbers]
 
+        # create editor
         version_browser = VersionBrowser(versions=versions)
         self._setup_editor(editor=version_browser, parent=parent, option=option)
         version_browser.versions_list.selectionModel().selectionChanged.connect(version_browser.close)  # setModelData is called when the editor closes
@@ -150,7 +155,7 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
         if can_edit_version_number:
             editor = self.create_version_number_editor(parent=parent, option=option, index=index)
         else:
-            editor = self.create_component_editor(parent=parent, option=option)
+            editor = self.create_component_editor(parent=parent, option=option, index=index)
         return editor
 
     # ------------------------
@@ -171,6 +176,8 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
                                       new_version=new_version)
 
     def set_component_data(self, editor: ComponentBrowser, model: ComponentTreeModel, index: QModelIndex):
+        # TODO: it changes on right click
+
         component = editor.component_list.get_selected_component()
         if component is None:
             return
@@ -203,42 +210,3 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
 
         # refresh
         model.refresh()
-
-
-class ComponentVersionTreeItemDelegate(AbstractItemDelegate):
-    def paint(self, painter: QPainter, option: QStyleOptionViewItem , index: QModelIndex):
-        if index.data(ComponentTreeItemRoles.is_combobox):
-            self.paint_combobox(painter, option, index)
-
-    def _create_combobox(self, parent: QWidget):
-        combobox = QComboBox(parent)
-        combobox.addItems(['003', '002', '001'])  # TODO: cast items from model's infos, = show current text data
-        return combobox
-
-    def paint_combobox(self, painter: QPainter, option: QStyleOptionViewItem , index: QModelIndex):
-        painter.save()
-        combobox = self._create_combobox(parent=None)
-        if option.state & QStyle.State_MouseOver:
-            pass
-            # TODO: add this to the stylesheet
-            #  combobox.setProperty("hovered", True)  # Simulate hover
-        combobox.resize(option.rect.size())
-        pixmap = combobox.grab()
-        painter.drawPixmap(option.rect.topLeft(), pixmap)
-        painter.restore()
-
-    def createEditor(self, parent: QWidget, option: QStyleOptionViewItem, index: QModelIndex):
-        if not index.data(ComponentTreeItemRoles.is_combobox):
-            return
-        combobox = self._create_combobox(parent)
-        QTimer.singleShot(0, combobox.showPopup)
-        return combobox
-
-    def setEditorData(self, editor: QComboBox, index: QModelIndex):
-        value = index.data()
-        i = editor.findText(value)
-        if i >= 0:
-            editor.setCurrentIndex(i)
-
-    def setModelData(self, editor:QComboBox, model: QStandardItemModel, index: QModelIndex):
-        model.setData(index, editor.currentText())
