@@ -138,5 +138,5 @@ class WorkVersionsWidget(QWidget):
         if stage is None:
             return
 
-        self.versions_list.set_collection(stage.work_component)
+        self.versions_list.set_component(stage.work_component)
         self.versions_list.select_row(0)

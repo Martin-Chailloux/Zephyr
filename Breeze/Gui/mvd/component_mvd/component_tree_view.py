@@ -71,9 +71,9 @@ class ComponentTreeView(AbstractTreeView):
 
         # edit after a single click
         index = self._get_hovered_index()
-        if index.data(ComponentTreeItemRoles.version) is None:
-            self.edit(index)
-        elif index.data(ComponentTreeItemRoles.can_edit_version_number):
+        version = index.data(ComponentTreeItemRoles.version)
+        can_edit_version_number = index.data(ComponentTreeItemRoles.can_edit_version_number)
+        if version is None or can_edit_version_number:
             self.edit(index)
 
     def _connect_signals(self):

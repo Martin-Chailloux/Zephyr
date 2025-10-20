@@ -2,9 +2,8 @@
 ------------------------------------------------
 0. Priority
     - Recipes: finish required features
-        - delete selected ingredients
-        - auto-sort ingredients
         - use filters
+        - select other version number
 
     - Extensions:
         - move from version to components

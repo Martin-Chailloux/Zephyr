@@ -25,12 +25,12 @@ class ComponentListView(AbstractListView):
         self.blockSignals(False)
 
     def get_selected_component(self) -> Component | None:
-        items = self.selected_items
-        if not items:
+        index = self._get_hovered_index()
+        if index is None:
             return None
-        else:
-            component: Component = items[0].data(ComponentItemRoles.component)
-            return component
+
+        component: Component = index.data(ComponentItemRoles.component)
+        return component
 
     def set_text_filter(self, text: str):
         self._model.set_text_filter(text=text)

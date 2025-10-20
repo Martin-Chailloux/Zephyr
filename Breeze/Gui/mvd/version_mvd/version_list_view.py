@@ -22,12 +22,16 @@ class VersionListView(AbstractListView):
         self.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.customContextMenuRequested.connect(self.show_context_menu)
 
-    def set_collection(self, collection: Component):
+    def set_component(self, collection: Component):
         if collection is None:
             versions = []
         else:
             versions = collection.versions
 
+        self._model.populate(versions=versions)
+        self.viewport().update()
+
+    def set_versions(self, versions: list[Version]):
         self._model.populate(versions=versions)
         self.viewport().update()
 
@@ -39,8 +43,8 @@ class VersionListView(AbstractListView):
         return version
 
     def get_hovered_version(self) -> Version:
-        item = self.get_hovered_item()
-        version = item.data(VersionItemRoles.version)
+        index = self._get_hovered_index()
+        version = index.data(VersionItemRoles.version)
         return version
 
     def mouseDoubleClickEvent(self, event):
