@@ -9,15 +9,16 @@ from Api.document_models.studio_documents import User, Palette, Project, Process
 from Api.breeze_app import BreezeApp
 BreezeApp.set_project("JourDeVent")
 BreezeApp.set_user("Martin")
+mongoengine.connect(host="mongodb://localhost:27017", db=BreezeApp.project.name, alias="current_project")
+
 from Api.document_models.studio_documents import StageTemplate
 from Api.document_models.project_documents import Stage, Asset, Version, Job
 from Processes.blender.aaa_commons.build import BlenderBuild
 from Processes.blender.modeling.export.process import BlenderModelingExport
 from Api.recipes.recipe import Recipe
 from Api.recipes.ingredient_slot import IngredientSlot
-from Api.recipes.component_filters import ComponentFilterStage
+from Api.recipes.component_filters import ComponentFilterStage, ComponentFilters
 
-mongoengine.connect(host="mongodb://localhost:27017", db="JourDeVent", alias="current_project")
 
 
 def update_stages_longname():
@@ -126,7 +127,8 @@ def register_processes():
 
 def clear_versions():
     for version in Version.objects():
-        if 'Templates' not in version.version.stage.asset.category:
+        version: Version = version
+        if 'Templates' not in version.component.stage.asset.category:
             version.delete()
 
 def clear_jobs():
@@ -139,7 +141,7 @@ def set_recipe():
     rigging.save()
 
     recipe = Recipe(ingredient_slots=[
-        IngredientSlot(name='geo', multiple=False, filters=[ComponentFilterStage(items=['modeling'])]),
+        IngredientSlot(name='geo', multiple=False, filters=[ComponentFilters.Stage(items=['modeling'])]),
         IngredientSlot(name='extra', multiple=True, filters=[]),
     ])
 

@@ -47,18 +47,26 @@ class ComponentFilterCategory(ComponentFilterBase):
 class ComponentFilterStage(ComponentFilterBase):
     name = 'stage'
     def get_filtered_components(self, components: list[Component]) -> list[Component]:
-        components = [c for c in components if c.stage.stage_template.label.lower() in self.items]
+        components = [c for c in components if c.stage.stage_template.name in self.items]
+        return components
+
+
+class ComponentFilterComponent(ComponentFilterBase):
+    name = 'component'
+    def get_filtered_components(self, components: list[Component]) -> list[Component]:
+        components = [c for c in components if c.name in self.items]
         return components
 
 
 @dataclass
 class ComponentFilters:
-    category = ComponentFilterCategory
-    stage = ComponentFilterStage
+    Category = ComponentFilterCategory
+    Stage = ComponentFilterStage
+    Component = ComponentFilterComponent
 
     @classmethod
     def from_name(cls, name: str) -> ComponentFilterBase.__class__:
-        for component_filter in [cls.category, cls.stage]:
+        for component_filter in [cls.Category, cls.Stage, cls.Component]:
             if name == component_filter.name:
                 return component_filter
         else:

@@ -2,8 +2,8 @@
 ------------------------------------------------
 
 0. Priority
+
     - Recipes: finish required features
-        - recipes for every current StageTemplate
         - ComponentBrowser: remove work components (wait for more exports, for debug purposes)
 
     - Extensions:
@@ -69,9 +69,6 @@
     - mvd: confo and simplify from new knowledge, update stages' mouse events from component tree's code
 
     - SoftwareClasses: sub-classes for in/out, file management, etc.
-
-    - list of possible component name, to be referenced in recipes and used in export processes
-            it will be easier to update all the names at once for a given component
 
 ------------------------------------------------
 
