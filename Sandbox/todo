@@ -1,16 +1,21 @@
 
 ------------------------------------------------
+
 0. Priority
     - Recipes: finish required features
-        - FIX: editors set values after a right click
+        - recipes for every current StageTemplate
+        - ComponentBrowser: remove work components (wait for more exports, for debug purposes)
 
     - Extensions:
         - move from version to components
         (reason: geo.abc, geo.blend, geo.ma, etc., should stay separated)
         - migration + refactors + update export table and ingredients uis
 
+------------------------------------------------
 
 1. Missing primary features
+    - Recipes:
+        - toolbar buttons: refresh, autofill, copy, paste, ingredient groups
 
     - Processes:
         - test & fix import of inputs with process relaunch in jobs_list
@@ -47,18 +52,31 @@
     - Asset groups
     - Asset data / properties
 
+    - User roles and permissions
+
 ------------------------------------------------
 
 2. Cleans / Refactors
+    - popups:
+        - transform all into browsers with toolbar style
+
+    - rework subwidgets hierarchy, move them under Gui/..., utils can probably be removed entirely:
+        - chronometer to Api/utils
+        - external toolbar
+        - searchbar
+        - groups all icon stuff in a single file
+
     - mvd: confo and simplify from new knowledge, update stages' mouse events from component tree's code
+
     - SoftwareClasses: sub-classes for in/out, file management, etc.
-    - group searchbars into the same parent class
+
     - list of possible component name, to be referenced in recipes and used in export processes
             it will be easier to update all the names at once for a given component
 
 ------------------------------------------------
 
 3. Qol / Upgrades to existing features
+
     - process_launcher:
         - cache, remember selected processes and inputs: stage: process ; process: inputs
         - preset the input's height + scroll area to have a fixed size window
@@ -77,11 +95,11 @@
 
     - save the gui's state between instances
 
-    - add error messages to steps in step viewer
+    - add error messages to steps in step viewer's tree
 
     - Stage Templates: status and users history
 
-    - Asset browser: favorites / recent
-    - Asset browser: god-mode with 'new' buttons under each part
+    - Asset browser:
+        - favorites / recent
 
     - Ingredient Slots: components history

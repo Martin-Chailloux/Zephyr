@@ -128,7 +128,6 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
         # create editor
         components_browser = ComponentBrowser(components=components, stage=self.stage)
         self._setup_editor(editor=components_browser, parent=parent, option=option)
-        components_browser.component_list.selectionModel().selectionChanged.connect(components_browser.close)  # setModelData is called when the editor closes
         return components_browser
 
     def create_version_number_editor(self, parent: QWidget, option: QStyleOptionViewItem, index: QModelIndex):
@@ -142,7 +141,6 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
         # create editor
         version_browser = VersionBrowser(versions=versions)
         self._setup_editor(editor=version_browser, parent=parent, option=option)
-        version_browser.versions_list.selectionModel().selectionChanged.connect(version_browser.close)  # setModelData is called when the editor closes
         return version_browser
 
     def createEditor(self, parent: QWidget, option: QStyleOptionViewItem, index: QModelIndex):
@@ -176,8 +174,6 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
                                       new_version=new_version)
 
     def set_component_data(self, editor: ComponentBrowser, model: ComponentTreeModel, index: QModelIndex):
-        # TODO: it changes on right click
-
         component = editor.component_list.get_selected_component()
         if component is None:
             return
@@ -200,6 +196,10 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
         is_title = index.data(ComponentTreeItemRoles.is_title)
         if is_title:
             super().setModelData(editor, model, index)
+            return
+
+        accepted: bool = bool(editor.result())
+        if not accepted:
             return
 
         can_edit_version_number = index.data(ComponentTreeItemRoles.can_edit_version_number)

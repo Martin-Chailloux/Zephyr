@@ -39,6 +39,7 @@ class VersionBrowser(AbstractPopupWidget):
     def _connect_signals(self):
         self.search_bar.textChanged.connect(self.on_searchbar_edited)
         self.versions_list.right_clicked.connect(self.reject)
+        self.versions_list.selectionModel().selectionChanged.connect(self.accept)
 
     def on_searchbar_edited(self):
         text = self.search_bar.toPlainText().lower()

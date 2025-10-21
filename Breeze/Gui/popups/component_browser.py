@@ -47,6 +47,7 @@ class ComponentBrowser(AbstractPopupWidget):
         self.search_bar.textChanged.connect(self.on_searchbar_edited)
         self.show_all_stages_checkbox.clicked.connect(self.on_show_all_stages_checkbox_clicked)
         self.component_list.right_clicked.connect(self.reject)
+        self.component_list.selectionModel().selectionChanged.connect(self.accept)
 
     def _init_state(self):
         self.component_list.set_text_filter(text=self.text_filter)
