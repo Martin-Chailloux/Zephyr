@@ -328,6 +328,12 @@ class Version(Document):
         print(f"Created: {version}")
         return version
 
+    def increment(self, comment: str = "") -> Self:
+        print(f"Incrementing {self} ... ")
+        new_version = self.component.create_last_version(software=self.software)
+        new_version.update(comment=comment)
+        return new_version
+
     def open_folder(self):
         print(f"Opening in explorer ... '{self.filepath}'")
         subprocess.Popen(f'explorer /select,{self.filepath}')

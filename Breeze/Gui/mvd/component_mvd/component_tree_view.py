@@ -24,9 +24,6 @@ class ComponentTreeView(AbstractTreeView):
 
         self._connect_signals()
 
-    def refresh(self):
-        self._model.refresh()  # activates expandAll() through a signal from the model
-
     def set_stage(self, stage: Stage):
         self._model.populate(stage=stage)
         self._item_delegate.set_stage(stage=stage)

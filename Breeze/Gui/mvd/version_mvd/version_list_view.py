@@ -1,5 +1,5 @@
 import qtawesome
-from PySide6.QtCore import Signal, Qt, QPoint
+from PySide6.QtCore import Signal, Qt, QPoint, QItemSelectionModel
 from PySide6.QtWidgets import QMenu
 
 from Api.document_models.project_documents import Component, Version
@@ -24,11 +24,13 @@ class VersionListView(AbstractListView):
         self.setItemDelegate(self._item_delegate)
 
     # setters
-    def set_component(self, collection: Component):
-        if collection is None:
+    def set_component(self, component: Component, clear_cache: bool=False):
+        if clear_cache:
+            component.reload()
+        if component is None:
             versions = []
         else:
-            versions = collection.versions
+            versions = component.versions
 
         self._model.populate(versions=versions)
         self.viewport().update()

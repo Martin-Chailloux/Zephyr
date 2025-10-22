@@ -38,6 +38,11 @@ class AbstractTreeView(QTreeView):
     def _connect_signals(self):
         pass
 
+    def refresh(self):
+        self._model.refresh()
+        # if expandAll() is needed: use a signal from the model (see ComponentsTree mvd)
+        # because the delegate can refresh the model, but it does not know about the view
+
     def _get_viewport_rect(self) -> (int, int, int, int):
         rect = self.viewport().rect()
         return rect.x(), rect.y(), rect.width(), rect.height()
@@ -109,10 +114,12 @@ class AbstractListView(QListView):
 
     def get_selected_index(self) -> QModelIndex | None:
         indexes = self.selectedIndexes()
+
         if not indexes:
             return None
         elif len(indexes) > 1:
-            raise ValueError("More than 1 indexes are selected")
+            raise ValueError(f"More than 1 indexes are selected: {indexes = }")
+
         return indexes[0]
 
     @property
@@ -125,9 +132,10 @@ class AbstractListView(QListView):
         index = self._model.index(row, 0)
         self.setCurrentIndex(index)
         if is_selected:
-            self.selectionModel().setCurrentIndex(index, QItemSelectionModel.SelectionFlag.Select)
+            selection_flag = QItemSelectionModel.SelectionFlag.Select
         else:
-            self.selectionModel().setCurrentIndex(index, QItemSelectionModel.SelectionFlag.Deselect)
+            selection_flag = QItemSelectionModel.SelectionFlag.Deselect
+        self.selectionModel().setCurrentIndex(index, selection_flag)
 
     def mousePressEvent(self, event):
         if isinstance(event, QMouseEvent):
@@ -141,16 +149,12 @@ class AbstractListView(QListView):
 
     def refresh(self):
         selected_indexes = self.selectionModel().selectedIndexes()
-
-        row_count = self._model.rowCount()
         self._model.refresh()
-        row_count2 = self._model.rowCount()
-        diff = row_count2 - row_count  # select the same row if the number has changed with the refresh
-        # NOTE: this won't work if a row is inserted in the middle
 
         if selected_indexes:
-            index = self._model.index(selected_indexes[0].row() + diff, 0)
+            index = self._model.index(selected_indexes[0].row(), 0)
             self.selectionModel().setCurrentIndex(index, QItemSelectionModel.SelectionFlag.Select)
+
         self.viewport().update()
 
 

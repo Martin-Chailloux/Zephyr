@@ -52,6 +52,7 @@ class VersionListModel(AbstractItemModel):
 
     def refresh(self):
         if not self.versions:
+            print(f"WARNING: VersionListModel has no version, cant fetch new versions based on component")
             return
 
         self.blockSignals(True)

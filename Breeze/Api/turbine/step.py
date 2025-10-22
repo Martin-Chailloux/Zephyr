@@ -1,5 +1,6 @@
 import os
 import traceback
+from typing import TypeVar
 
 import qtawesome
 from PySide6 import QtCore
@@ -10,6 +11,8 @@ from Api.turbine.pills import StepPill
 from Utils.pills import PillModel
 from Api.turbine.logger import StepLogger
 
+
+TypeStepBase = TypeVar("TypeStepBase")
 
 class StepBase(QObject):
     updated = Signal()
@@ -44,7 +47,7 @@ class StepBase(QObject):
     def pill(self) -> PillModel:
         return self.Pill.pill
 
-    def add_step(self, step: 'StepBase') -> 'StepBase':
+    def add_step(self, step: TypeStepBase) -> TypeStepBase:
         self.steps.append(step)
         step.updated.connect(self.on_sub_step_updated)
         return step

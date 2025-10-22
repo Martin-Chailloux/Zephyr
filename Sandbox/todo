@@ -2,21 +2,19 @@
 ------------------------------------------------
 
 0. Priority
-    - WorkVersionsBrowser: fix + improve:
-        - toolbar
-        - refresh with New Version is broken
-        - Increment is broken
+    - WorkVersionsBrowser:
         - edit comment
         - copy longname
 
     - Recipes: finish required features
         - ComponentBrowser: remove work components (wait for more exports, for debug purposes)
 
-    - Clean/Refactor: Processes: move JobContext outside of project_documents
+    - Processes:
+        - clean (+ refactor, probably): move JobContext outside of project_documents
+        - write down the goal of each process
+        - Create basic processes for modeling -> rigging -> shot
+            Think about pipeline details later
 
-    - write down the goal of each process
-    - Create basic processes for modeling -> rigging -> shot
-        Think about pipeline details later
 
 ------------------------------------------------
 

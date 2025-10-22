@@ -21,6 +21,11 @@ class BlenderModelingExport(ProcessBase):
         self.add_step(self.collect_step)
         self.add_step(self.export_step)
 
+        # TODO: why not ?
+        self.open_step = self.add_step(OpenStep())
+        self.collect_step = self.add_step(CollectStep())
+        self.export_step = self.add_step(ExportStep(version=self.Context.version, dont_overwrite=self.ui.inputs.dont_overwrite))
+
     def _inner_run(self, **kwargs):
         self.open_step.run(version=self.Context.version)
         self.collect_step.run()
