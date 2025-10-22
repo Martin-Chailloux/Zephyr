@@ -9,7 +9,14 @@
     - Extensions:
         - move from version to components
         (reason: geo.abc, geo.blend, geo.ma, etc., should stay separated)
+        - all current components and versions become wrong because id of components has changed: restart project from there
         - migration + refactors + update export table and ingredients uis
+
+    - Clean/Refactor: Processes: move JobContext outside of project_documents
+
+    - write down the goal of each process
+    - Create basic processes for modeling -> rigging -> shot
+        Think about pipeline details later
 
 ------------------------------------------------
 

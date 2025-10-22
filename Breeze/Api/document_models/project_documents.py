@@ -172,9 +172,10 @@ class Component(Document):
     """
     longname: str = StringField(required=True, primary_key=True)  # category_name_variant_stage_component
 
-    name: str = StringField(required=True, unique_with='stage')  # unique_with seems to not be working as intended
+    name: str = StringField(required=True)
     label: str = StringField(required=True)
     stage: Stage = ReferenceField(document_type=Stage, required=True)
+    extension: str = StringField(required=True)
 
     versions: list['Version'] = SortedListField(ReferenceField(document_type='Version'), default=[])
     recommended_version: 'Version' = ReferenceField(document_type='Version', default=None)
@@ -191,9 +192,9 @@ class Component(Document):
         return self.__repr__()
 
     @classmethod
-    def create(cls, name: str, label: str, stage: Stage, **kwargs):
-        longname = "_".join(s for s in [stage.longname, name])
-        kwargs = dict(longname=longname, name=name, label=label, stage=stage, **kwargs)
+    def create(cls, name: str, label: str, stage: Stage, extension: str, **kwargs):
+        longname = "_".join(s for s in [stage.longname, name, extension])
+        kwargs = dict(longname=longname, name=name, label=label, stage=stage, extension=extension, **kwargs)
         kwargs = {k: v for k, v in kwargs.items() if v is not None}
 
         existing_component = Component.objects(longname=longname)
@@ -255,7 +256,7 @@ class Version(Document):
 
     component: Component = ReferenceField(document_type=Component, required=True)
     number: int = IntField(required=True)  # -1 is head
-    software: Software = ReferenceField(document_type=Software, required=True)
+    software: Software = ReferenceField(document_type=Software, required=True)  # strange to have in exports
 
     # deduced from upper documents
     filepath: str = StringField(required=True)
@@ -287,9 +288,8 @@ class Version(Document):
 
     @classmethod
     def create(cls, component: Component, number: int, software: Software, **kwargs):
-        extension = software.extension
 
-        longname = f"{component.longname}_{number:03d}.{extension}"
+        longname = f"{component.longname}_{number:03d}"
         existing_version = Version.objects(longname=longname)
         if existing_version:
             raise InvalidDocumentError(f"Version already exists: {existing_version[0]}")
@@ -298,8 +298,10 @@ class Version(Document):
         last_user = creation_user
 
         # get filepath
+        root = BreezeApp.project.root_path
         subfolders = component.longname.split("_")
-        filepath = Path(BreezeApp.project.root_path).joinpath(*subfolders).joinpath(longname)
+        filename = f"{longname}.{component.extension}"
+        filepath = Path(root).joinpath(*subfolders).joinpath(filename)
 
         # create dirs
         Path(filepath).parent.mkdir(parents=True, exist_ok=True)
@@ -349,7 +351,7 @@ class Version(Document):
             self.creation_user.fullname,
             self.last_user.pseudo,
             self.last_user.fullname,
-            self.software.extension,
+            self.component.extension,
             str(self.timestamp),
         ]
         result = " ".join(s for s in keys)

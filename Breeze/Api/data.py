@@ -1,4 +1,3 @@
-from dataclasses import dataclass
 
 
 class _DataNamesBase:
@@ -52,9 +51,9 @@ class Components(_DataNamesBase):
 
 
 class SoftwareExtensions(_DataNamesBase):
-    jpg = ".jpg"
-    png = ".png"
-    exr = ".exr"
+    jpg = "jpg"
+    png = "png"
+    exr = "exr"
 
-    blend = ".blend"
-    ma = ".ma"
+    blend = "blend"
+    ma = "ma"
