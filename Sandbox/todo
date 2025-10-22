@@ -2,15 +2,15 @@
 ------------------------------------------------
 
 0. Priority
+    - WorkVersionsBrowser: fix + improve:
+        - toolbar
+        - refresh with New Version is broken
+        - Increment is broken
+        - edit comment
+        - copy longname
 
     - Recipes: finish required features
         - ComponentBrowser: remove work components (wait for more exports, for debug purposes)
-
-    - Extensions:
-        - move from version to components
-        (reason: geo.abc, geo.blend, geo.ma, etc., should stay separated)
-        - all current components and versions become wrong because id of components has changed: restart project from there
-        - migration + refactors + update export table and ingredients uis
 
     - Clean/Refactor: Processes: move JobContext outside of project_documents
 
@@ -80,6 +80,7 @@
 ------------------------------------------------
 
 3. Qol / Upgrades to existing features
+    - work versions: disable when no stages are selected (or a version cannot be created)
 
     - process_launcher:
         - cache, remember selected processes and inputs: stage: process ; process: inputs

@@ -12,7 +12,7 @@ BreezeApp.set_user("Martin")
 mongoengine.connect(host="mongodb://localhost:27017", db=BreezeApp.project.name, alias="current_project")
 
 from Api.document_models.studio_documents import StageTemplate
-from Api.document_models.project_documents import Stage, Asset, Version, Job
+from Api.document_models.project_documents import Stage, Asset, Version, Job, Component
 from Processes.blender.aaa_commons.build import BlenderBuild
 from Processes.blender.modeling.export.process import BlenderModelingExport
 from Api.recipes.recipe import Recipe
@@ -131,6 +131,14 @@ def clear_versions():
         if 'Templates' not in version.component.stage.asset.category:
             version.delete()
 
+def clear_components():
+    for component in Component.objects():
+        print(f"{component = }")
+        component.delete()
+    # for stage in Stage.objects():
+    #     stage: Stage = stage
+    #     stage.create_work_component()
+
 def clear_jobs():
     for job in Job.objects():
         job.delete()
@@ -150,5 +158,4 @@ def set_recipe():
     print("set_recipe(): SUCCESS")
 
 if __name__ == '__main__':
-    # remove_field()
-    set_recipe()
+    clear_components()

@@ -37,6 +37,7 @@ class StageTemplates(_DataNamesBase):
 
 
 class Components(_DataNamesBase):
+    work = "work"
     geo = "geo"
     rig = "rig"
     cam_rig = "camRig"

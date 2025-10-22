@@ -8,6 +8,7 @@ from typing import Self, Optional
 import mongoengine
 from mongoengine import *
 
+from Api import data
 from Api.breeze_app import BreezeApp
 from Api.document_models.studio_documents import Status, User, Software, Process, StageTemplate
 from abstract_io import AbstractSoftwareFile
@@ -40,8 +41,7 @@ class Asset(Document):
 
     @classmethod
     def create(cls, category: str, name : str, variant: str = None, **kwargs) -> Self:
-        v = variant or "-"  # pre-compute the longname using the default variant value if it is None
-        longname = "_".join(s for s in [category, name, v])
+        longname = "_".join(s for s in [category, name, variant or "-"])
         kwargs = dict(name=name, category=category, variant=variant, longname=longname, **kwargs)
         kwargs = {k: v for k, v in kwargs.items() if v is not None}
         asset = cls(**kwargs)
@@ -87,18 +87,23 @@ class Stage(Document):
     def __str__(self):
         return self.__repr__()
 
-    def create_component(self, name: str, label: str, crash_if_exists: bool = True) -> 'Component':
-        component = Component.objects(name=name, label=label, stage=self)
+    def create_component(self, name: str, label: str, extension: str, crash_if_exists: bool = True) -> 'Component':
+        component = Component.objects(name=name, label=label, extension=extension, stage=self)
         if len(component) == 1:
             if crash_if_exists:
                 raise ValueError(f"{component} is already a component of {self}")
             else:
                 return component[0]
 
-        component = Component.create(name=name, label=label, stage=self)
+        component = Component.create(name=name, label=label, stage=self, extension=extension)
         self.components.append(component)
         self.save()
         return component
+
+    def create_work_component(self, extension: str) -> 'Component':
+        work_component = self.create_component(name=data.Components.work, label=data.Components.work.title(), extension=extension)
+        self.update(work_component=work_component)
+        return work_component
 
     @classmethod
     def create(cls, asset: Asset, stage_template: StageTemplate, status: Status=None, **kwargs) -> Self:
@@ -106,8 +111,6 @@ class Stage(Document):
         kwargs = dict(longname=longname, asset=asset, stage_template=stage_template, status=status, **kwargs)
         kwargs = {k: v for k, v in kwargs.items() if v is not None}
         stage = cls(**kwargs)
-
-        stage.update(work_component=stage.create_component(name="work", label="Work"))
 
         asset.add_stage(stage=stage)
 
@@ -175,7 +178,7 @@ class Component(Document):
     name: str = StringField(required=True)
     label: str = StringField(required=True)
     stage: Stage = ReferenceField(document_type=Stage, required=True)
-    extension: str = StringField(required=True)
+    extension: str = StringField()  # in work components, get extension from version.software.extension instead
 
     versions: list['Version'] = SortedListField(ReferenceField(document_type='Version'), default=[])
     recommended_version: 'Version' = ReferenceField(document_type='Version', default=None)
@@ -206,6 +209,13 @@ class Component(Document):
         print(f"Created: {component}")
 
         return component
+
+    def to_folders(self) -> list[str]:
+        """ returns a folder's hierarchy based on its fields """
+        folders = self.longname.split("_")  # [character, baby, -, modeling, work, blend]
+        del folders[-1]  # [character, baby, -, modeling, work]
+        folders[-1] = f"{folders[-1]}_{self.extension}"  # [character, baby, -, modeling, work_blend]
+        return folders
 
     def add_version(self, version: 'Version'):
         if version in self.versions:
@@ -288,7 +298,6 @@ class Version(Document):
 
     @classmethod
     def create(cls, component: Component, number: int, software: Software, **kwargs):
-
         longname = f"{component.longname}_{number:03d}"
         existing_version = Version.objects(longname=longname)
         if existing_version:
@@ -299,9 +308,8 @@ class Version(Document):
 
         # get filepath
         root = BreezeApp.project.root_path
-        subfolders = component.longname.split("_")
         filename = f"{longname}.{component.extension}"
-        filepath = Path(root).joinpath(*subfolders).joinpath(filename)
+        filepath = Path(root).joinpath(*component.to_folders()).joinpath(filename)
 
         # create dirs
         Path(filepath).parent.mkdir(parents=True, exist_ok=True)
@@ -351,7 +359,7 @@ class Version(Document):
             self.creation_user.fullname,
             self.last_user.pseudo,
             self.last_user.fullname,
-            self.component.extension,
+            self.component.extension or '-',
             str(self.timestamp),
         ]
         result = " ".join(s for s in keys)
@@ -424,8 +432,8 @@ Software.register_delete_rule(StageTemplate, 'software', mongoengine.DENY)
 Asset.register_delete_rule(Stage, 'asset', mongoengine.CASCADE)
 StageTemplate.register_delete_rule(Stage, 'stage_template', mongoengine.DENY)
 Component.register_delete_rule(Stage, 'components', mongoengine.PULL)
-Component.register_delete_rule(Stage, 'work_component', mongoengine.DENY)
-Version.register_delete_rule(Stage, 'ingredients', mongoengine.DENY)
+Component.register_delete_rule(Stage, 'work_component', mongoengine.NULLIFY)
+Version.register_delete_rule(Stage, 'ingredients', mongoengine.DENY)  # might not be working, because there Versions are dict values
 Status.register_delete_rule(Stage, 'status', mongoengine.DENY)
 User.register_delete_rule(Stage, 'user', mongoengine.DENY)
 

@@ -1,14 +1,16 @@
 from Api.document_models.project_documents import Version, Stage
-from Gui.popups.software_select_menu import CommentEditMenu, SoftwareSelectMenu
+from Gui.popups.software_browser import CommentEditMenu, SoftwareBrowser
 
 
 def new_empty_version(stage: Stage):
-    software_select = SoftwareSelectMenu(stage=stage)
-    confirm = software_select.show_menu(position=[0.5, 0.25])
+    software_browser = SoftwareBrowser(stage=stage)
+    confirm = software_browser.show_menu(position=[0.5, 0.25])
     if not confirm:
         return
-    elif software_select.software is None:
+    elif software_browser.software is None:
         return
+
+    software = software_browser.software
 
     comment_box = CommentEditMenu(title="Comment: ", default_comment="New file")
     confirm = comment_box.show_menu(position=[0.5, 0.3])
@@ -16,7 +18,10 @@ def new_empty_version(stage: Stage):
         return
 
     # reserve version
-    version = stage.work_component.create_last_version(software=software_select.software)
+    if stage.work_component is None:
+        stage.create_work_component(extension=software.extension)
+        stage.reload()
+    version = stage.work_component.create_last_version(software=software)
     version.update(comment=comment_box.comment)
 
     # create file

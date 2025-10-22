@@ -12,7 +12,7 @@ from Gui.mvd.software_mvd.software_list_view import SoftwareListView
 from Utils.sub_widgets import TextBox, IconButton
 
 
-class SoftwareSelectMenu(AbstractPopupWidget):
+class SoftwareBrowser(AbstractPopupWidget):
     def __init__(self, stage: Stage):
         super().__init__(w=168, h=248)
         self.stage = stage
