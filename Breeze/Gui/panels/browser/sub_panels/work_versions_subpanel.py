@@ -49,11 +49,20 @@ class WorkVersionsWidget(QWidget):
         self.toolbar = toolbar
         self.versions_list = versions_list
 
+    def set_stage(self, stage: Stage):
+        self.stage = stage
+        if stage is None:
+            return
+
+        self.versions_list.set_component(component=stage.work_component)
+        self.versions_list.select_row(row=0, is_selected=True)
+
     def _connect_signals(self):
         self.toolbar.refresh_button.clicked.connect(self.refresh)
-        self.toolbar.new_version_button.clicked.connect(self._create_empty_version)
-        self.toolbar.increment_button.clicked.connect(self._increment_selected_version)
-        self.toolbar.turbine_button.clicked.connect(self.on_turbine_button_clicked)
+        self.toolbar.new_version_button.clicked.connect(self.create_empty_version)
+        self.toolbar.increment_button.clicked.connect(self.increment_selected_version)
+        self.toolbar.edit_comment_button.clicked.connect(self.edit_comment)
+        self.toolbar.turbine_button.clicked.connect(self.launch_turbine_browser)
 
         self.versions_list.selectionModel().selectionChanged.connect(self.on_selection_changed)
         self.versions_list.double_clicked.connect(self.open_selected_version)
@@ -67,18 +76,21 @@ class WorkVersionsWidget(QWidget):
         for button in [self.toolbar.increment_button, self.toolbar.turbine_button, self.toolbar.edit_comment_button]:
             button.setEnabled(len(selected_indexes) > 0)
 
-    def refresh(self, select_last_version: bool=False):
+    def refresh(self, select_last_version: bool=False, reselect_row: bool=False):
         if self.stage.work_component is not None:
+            current_row = self.versions_list.get_selected_index().row()
             self.versions_list.set_component(component=self.stage.work_component, clear_cache=True)
             if select_last_version:
                 self.versions_list.select_row(row=0, is_selected=True)
+            if reselect_row:
+                self.versions_list.select_row(current_row, is_selected=True)
 
-    def _create_empty_version(self):
+
+    def create_empty_version(self):
         if self.stage is None:
             return
 
         confirm = work_versions_api.create_empty_version(stage=self.stage)
-
         if not confirm:
             return
 
@@ -95,7 +107,7 @@ class WorkVersionsWidget(QWidget):
         menu = VersionsBrowserContextMenu(version=version)
         menu.show(position=self.mapToGlobal(position))
 
-    def _increment_selected_version(self):
+    def increment_selected_version(self):
         if self.stage is None:
             return
 
@@ -109,7 +121,16 @@ class WorkVersionsWidget(QWidget):
 
         self.refresh(select_last_version=True)
 
-    def on_turbine_button_clicked(self):
+    def edit_comment(self):
+        if self.stage is None:
+            return
+
+        version = self.versions_list.get_selected_version()
+        work_versions_api.edit_comment(version=version)
+
+        self.refresh(reselect_row=True)
+
+    def launch_turbine_browser(self):
         if self.stage is None:
             return
         process_select_menu = ProcessSelectMenu(component=self.stage.work_component, version=self.versions_list.get_selected_version())
@@ -117,14 +138,6 @@ class WorkVersionsWidget(QWidget):
         process_select_menu.process_finished.connect(self.refresh)
 
         process_select_menu.show_menu(position=[0.5, 1])
-
-    def set_stage(self, stage: Stage):
-        self.stage = stage
-        if stage is None:
-            return
-
-        self.versions_list.set_component(component=stage.work_component)
-        self.versions_list.select_row(row=0, is_selected=True)
 
 
 class VersionsBrowserToolBar(ToolBar):
@@ -148,6 +161,8 @@ class VersionsBrowserContextMenu(ContextMenu):
         self.open_folder_action = self.add_action(label="Open folder", icon_name='fa5s.folder-open')
 
     def resolve(self, action: QAction):
+        if action is self.copy_id_action:
+            self.version.copy_longname()
         if action is self.copy_filepath_action:
             self.version.copy_filepath()
         elif action is self.open_folder_action:

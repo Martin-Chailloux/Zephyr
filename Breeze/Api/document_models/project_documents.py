@@ -1,5 +1,4 @@
 import subprocess
-import tkinter
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
@@ -8,7 +7,7 @@ from typing import Self, Optional
 import mongoengine
 from mongoengine import *
 
-from Api import data
+from Api import data, utils
 from Api.breeze_app import BreezeApp
 from Api.document_models.studio_documents import Status, User, Software, Process, StageTemplate
 from abstract_io import AbstractSoftwareFile
@@ -338,16 +337,11 @@ class Version(Document):
         print(f"Opening in explorer ... '{self.filepath}'")
         subprocess.Popen(f'explorer /select,{self.filepath}')
 
-    def copy_filepath(self):
-        """source: https://stackoverflow.com/questions/579687/how-do-i-copy-a-string-to-the-clipboard"""
+    def copy_longname(self):
+        utils.copy_to_clipboard(text=self.longname)
 
-        print(f"Copying to clipboard ... '{self.filepath}'")
-        r = tkinter.Tk()
-        r.withdraw()
-        r.clipboard_clear()
-        r.clipboard_append(self.filepath)
-        r.update()  # now it stays on the clipboard after the window is closed
-        r.destroy()
+    def copy_filepath(self):
+        utils.copy_to_clipboard(text=self.filepath)
 
     def to_file(self) -> AbstractSoftwareFile:
         if self.software.label == 'Blender':

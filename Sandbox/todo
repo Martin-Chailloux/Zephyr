@@ -2,10 +2,6 @@
 ------------------------------------------------
 
 0. Priority
-    - WorkVersionsBrowser:
-        - edit comment
-        - copy longname
-
     - Recipes: finish required features
         - ComponentBrowser: remove work components (wait for more exports, for debug purposes)
 

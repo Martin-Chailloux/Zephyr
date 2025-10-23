@@ -43,3 +43,14 @@ def increment(old_version: Version) -> bool:
     file = old_version.to_file()
     file.save_as(filepath=new_version.filepath)
     return True
+
+
+def edit_comment(version: Version) -> bool:
+    comment_box = CommentEditMenu(title="Comment: ", default_comment=version.comment)
+    confirm = comment_box.show_menu(position=[0.5, 0.3])
+    if not confirm:
+        return False
+
+    version.update(comment=comment_box.comment)
+
+    return True

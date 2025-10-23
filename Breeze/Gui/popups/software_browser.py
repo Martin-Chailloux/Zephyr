@@ -52,8 +52,6 @@ class CommentEditMenu(AbstractPopupWidget):
         self._set_initial_state()
 
         self.setShortcutEnabled(True)
-        # It is canceled by default and does nothing on close
-        # When confirmed, it switches to not canceled
 
     def _init_ui(self):
         layout = QVBoxLayout()
@@ -105,7 +103,6 @@ class CommentEditMenu(AbstractPopupWidget):
         self.confirm_button.setEnabled(is_valid)
 
     def on_confirm(self):
-        print(f"CONFIRM")
         if not self.confirm_button.isEnabled():
             return
         self.accept()
