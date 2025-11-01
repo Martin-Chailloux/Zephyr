@@ -21,6 +21,10 @@ class ProcessListItemDelegate(AbstractItemDelegate):
     def paint(self, painter: QPainter, option: QStyleOptionViewItem , index: QModelIndex):
         self._set_data(option, index)
         # TODO: paint icon
+        if self.process is None:
+            return
+
+        # TODO: process not found
 
         painter.save()
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)

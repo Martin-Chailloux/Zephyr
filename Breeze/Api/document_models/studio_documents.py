@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from Api.turbine.process import ProcessBase
+    from Api.turbine.engine import TurbineEngine
 
 
 class Palette(Document):
@@ -189,9 +189,11 @@ class Project(Document):
 
 class Process(Document):
     longname: str = StringField(required=True, primary_key=True)
+    class_path: str = StringField(required=True)
     label: str = StringField(required=True)
     tooltip: str = StringField(required=True)
-    class_path: str = StringField(required=True)
+
+    # NOTE: label and tooltip are there to be displayed in delegates
 
     meta = {
         'collection': 'Processes',
@@ -205,19 +207,13 @@ class Process(Document):
         return self.__repr__()
 
     @classmethod
-    def create(cls, longname: str, label: str, tooltip: str, class_path: str, **kwargs) -> Self:
-        kwargs = dict(longname=longname, label=label, tooltip=tooltip, class_path=class_path, **kwargs)
+    def create(cls, longname: str, class_path: str, label: str, tooltip: str, **kwargs) -> Self:
+        kwargs = dict(longname=longname, class_path=class_path, label=label, tooltip=tooltip, **kwargs)
         kwargs = {k: v for k, v in kwargs.items() if v is not None}
         process = cls(**kwargs)
         process.save()
         print(f"Created: {process}")
         return process
-
-    def to_class(self) -> 'ProcessBase'.__class__:
-        path = self.class_path
-        module_name, class_name = path.rsplit('.', 1)
-        module = importlib.import_module(module_name)
-        return getattr(module, class_name)
 
 
 class StageTemplate(Document):
@@ -261,6 +257,10 @@ class StageTemplate(Document):
         stage_template.save()
         print(f"Created: {stage_template}")
         return stage_template
+
+    def add_process(self, process: Process):
+        self.processes.append(process)
+        self.save()
 
     def set_recipe(self, recipe: dict[str, Any]):
         self.recipe = recipe

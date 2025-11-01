@@ -31,6 +31,7 @@ class StageListModel(AbstractItemModel):
         self.stages = []
 
     def populate(self, stages: list[Stage]):
+        print(f"{stages = }")
         self.stages = stages
 
         self.clear()

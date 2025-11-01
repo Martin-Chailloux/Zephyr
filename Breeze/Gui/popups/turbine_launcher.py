@@ -1,26 +1,29 @@
-from typing import Optional
+from typing import Optional, Type
 
 import qtawesome
+from PySide6 import QtCore
 from PySide6.QtCore import Signal
-from PySide6.QtWidgets import QVBoxLayout, QPushButton, QHBoxLayout, QStackedWidget
+from PySide6.QtWidgets import QVBoxLayout, QPushButton, QHBoxLayout, QStackedWidget, QLabel
 
 from Api.breeze_app import BreezeApp
-from Api.document_models.project_documents import Version, Component, JobContext
-from Api.turbine.inputs_ui import ProcessInputsUi
+from Api.document_models.project_documents import Version, Component
+from Api.document_models.studio_documents import Process
+from Api.turbine.inputs_gui import TurbineGui
 from Gui.mvd.stage_mvd.stage_list_view import StageListMinimalView
 from Gui.popups.abstract_popup_widget import AbstractPopupWidget
 from Gui.mvd.process_mvd.process_list_view import ProcessListView
-from Api.turbine.process import ProcessBase
+from Api.turbine.engine import TurbineEngine
+from Api.turbine.utils import JobContext
 from Gui.sub_widgets.asset_widgets.asset_browser_widget import AssetBrowserWidget
 
 
-class ProcessSelectMenu(AbstractPopupWidget):
+class TurbineLauncher(AbstractPopupWidget):
     process_finished = Signal()
 
     def __init__(self, component: Component, version: Optional[Version]):
         super().__init__(w=280, show_borders=True)
-        self.setWindowTitle("Select a process to launch")
-        self.Context = JobContext(
+        self.setWindowTitle("Select a process to launch with turbine")
+        self.job_context = JobContext(
             user=BreezeApp.user,
             component=component,
             version=version,
@@ -32,26 +35,41 @@ class ProcessSelectMenu(AbstractPopupWidget):
     def _init_ui(self):
         layout = QVBoxLayout()
         self.setLayout(layout)
+        layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop)
 
+        # asset browser
         asset_browser = AssetBrowserWidget(show_favorite=False)
         layout.addWidget(asset_browser)
 
+        # stage list
         h_layout = QHBoxLayout()
         layout.addLayout(h_layout)
-        h = 148
 
+        h = 148
         stage_list = StageListMinimalView()
         h_layout.addWidget(stage_list)
         stage_list.setFixedWidth(160)
         stage_list.setFixedHeight(h)
 
+        # process list
         process_list = ProcessListView()
         h_layout.addWidget(process_list)
         process_list.setFixedHeight(h)
 
-        stacked_widget = QStackedWidget()
-        layout.addWidget(stacked_widget)
+        # selected process inputs
+        inputs_title = QLabel("Inputs:")
+        layout.addWidget(inputs_title)
 
+        layout.addStretch()
+
+        sub_layout = QVBoxLayout()
+        layout.addLayout(sub_layout)
+        sub_layout.setContentsMargins(7, 7, 7, 7)
+
+        stacked_widget = QStackedWidget()
+        sub_layout.addWidget(stacked_widget)
+
+        # launch button
         launch_button = QPushButton("Launch")
         layout.addWidget(launch_button)
         launch_button.setIcon(qtawesome.icon('fa.rocket'))
@@ -60,7 +78,7 @@ class ProcessSelectMenu(AbstractPopupWidget):
         self.asset_browser = asset_browser
         self.stage_list = stage_list
 
-        self.ui_widget = stacked_widget
+        self.inputs_widget = stacked_widget
         self.process_list = process_list
         self.launch_button = launch_button
 
@@ -70,53 +88,55 @@ class ProcessSelectMenu(AbstractPopupWidget):
         self.stage_list.right_clicked.connect(self.reject)
         self.stage_list.stage_selected.connect(self.on_stage_selected)
 
-        self.process_list.process_selected.connect(self.on_process_selected)
+        self.process_list.selectionModel().selectionChanged.connect(self.on_process_selected)
         self.process_list.right_clicked.connect(self.reject)
         self.launch_button.clicked.connect(self.on_launch_button_clicked)
 
     def _init_state(self):
-        self.asset_browser.set_asset(longname=self.Context.component.stage.asset.longname)
+        self.asset_browser.set_asset(longname=self.job_context.component.stage.asset.longname)
         self.on_asset_selected()  # only needed if current asset is the first from the list
-        self.stage_list.select_stage(stage=self.Context.component.stage)
+        self.stage_list.select_stage(stage=self.job_context.component.stage)
 
+    # update context
     def on_asset_selected(self):
         asset = self.asset_browser.asset
         self.stage_list.set_asset(asset)
 
     def on_stage_selected(self):
         stage = self.stage_list.stage
+        self.job_context.set_component(component=stage.work_component)
+        self.process_list.selectionModel().blockSignals(True)
         self.process_list.set_stage_template(stage_template=self.stage_list.stage.stage_template)
-        self.process_list.select_row(0)  # TODO: improve with a cache
-
-        self.Context.set_component(component=stage.work_component)
-
-    def set_process_ui(self, widget: ProcessInputsUi = None):
-        current_widget = self.ui_widget.widget(0)
-        self.ui_widget.removeWidget(current_widget)
-
-        if widget is not None:
-            self.ui_widget.insertWidget(0, widget)
+        self.process_list.selectionModel().blockSignals(False)
+        self.process_list.select_row(0)  # TODO: remember rows with a cache
 
     def on_process_selected(self):
         """ displays the ui matching the selected process """
-        process: ProcessBase.__class__ = self.process_list.process
-
+        process: Process = self.process_list.get_selected_process()
         if process is None:
-            self.set_process_ui(None)
-            return
-
-        if process.Ui is None:
-            self.set_process_ui(ProcessInputsUi(label="- Inputs not found -"))
+            self.set_engine_gui(None)
         else:
-            self.set_process_ui(process.Ui(context=self.Context))
+            engine = TurbineEngine.from_database(process=process, context=self.job_context)
+            self.set_engine_gui(gui=engine.gui)
+
+    def get_current_engine_gui(self) -> TurbineGui:
+        gui = self.inputs_widget.widget(0)
+        return gui
+
+    def set_engine_gui(self, gui: TurbineGui = None):
+        current_widget = self.get_current_engine_gui()
+        self.inputs_widget.removeWidget(current_widget)
+
+        if gui is not None:
+            self.inputs_widget.insertWidget(0, gui)
 
     def on_launch_button_clicked(self):
-        process: ProcessBase.__class__ = self.process_list.process
-        self.Context.update_creation_time()  # update datetime to match the moment the process is launched
+        self.job_context.update_creation_time()  # update datetime to match the moment the process is launched
 
-        process = process(context=self.Context, ui=self.ui_widget.widget(0))
-
-        process.run()
+        process: Process = self.process_list.get_selected_process()
         print(f"Launching process: {process = }")
+        engine = TurbineEngine.from_database(process=process, context=self.job_context)
+        engine.run()
+
         self.process_finished.emit()
         self.accept()

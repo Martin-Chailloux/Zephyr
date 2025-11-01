@@ -6,7 +6,7 @@ from PySide6.QtWidgets import QStyleOptionViewItem
 
 from Api.breeze_app import BreezeApp
 from Api.document_models.project_documents import Job
-from Api.turbine.step import StepBase
+from Api.turbine.step import TurbineStep
 from Gui.mvd.abstract_mvd import AbstractItemDelegate
 from Gui.mvd.job_mvd.job_list_model import JobItemRoles, JobItemMetrics
 
@@ -49,7 +49,7 @@ class JobListItemDelegate(AbstractItemDelegate):
         x += JobItemMetrics.user_w
         y += h / 2 - JobItemMetrics.pill_icon_wh / 2
 
-        main_step = StepBase.from_dict(infos=self.job.steps)
+        main_step = TurbineStep.from_dict(infos=self.job.steps)
         icon: QIcon = qtawesome.icon(main_step.pill.icon_name, color=main_step.pill.color)
         pixmap = icon.pixmap(int(JobItemMetrics.pill_icon_wh))
 

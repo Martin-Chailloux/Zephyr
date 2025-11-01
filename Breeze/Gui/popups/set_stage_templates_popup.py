@@ -59,7 +59,7 @@ class SetStageTemplatesPopup(AbstractPopupWidget):
         self.presets_bar.save_button.clicked.connect(self.on_preset_saved)
         self.presets_bar.save_as_button.clicked.connect(self.on_preset_saved_as)
 
-        self.cancel_button.clicked.connect(self.close)
+        self.cancel_button.clicked.connect(self.reject)
         self.confirm_button.clicked.connect(self.on_confirm)
 
         self.stage_templates_list.right_clicked.connect(self.reject)
@@ -118,6 +118,7 @@ class SetStageTemplatesPopup(AbstractPopupWidget):
 
     def on_confirm(self):
         stage_templates = self.stage_templates_list.selected_stage_templates
+        print(f"{stage_templates = }")
         existing_stage_templates = [stage.stage_template for stage in self.asset.stages]
 
         for stage_template in stage_templates:

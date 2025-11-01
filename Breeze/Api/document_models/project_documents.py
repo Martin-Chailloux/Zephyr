@@ -1,8 +1,7 @@
 import subprocess
-from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Self, Optional
+from typing import Self, Optional, Any
 
 import mongoengine
 from mongoengine import *
@@ -53,6 +52,12 @@ class Asset(Document):
             raise ValueError(f"{stage} is already a stage of {self}")
         self.stages.append(stage)
         self.save()
+
+    def get_stage(self, name: str) -> 'Stage':
+        stage = [stage for stage in self.stages if stage.stage_template.name == name]
+        if not stage:
+            raise ValueError(f"Stage '{name}' not found in the stages of {self}: {self.stages = }")
+        return stage[0]
 
 
 class Stage(Document):
@@ -110,10 +115,10 @@ class Stage(Document):
         kwargs = dict(longname=longname, asset=asset, stage_template=stage_template, status=status, **kwargs)
         kwargs = {k: v for k, v in kwargs.items() if v is not None}
         stage = cls(**kwargs)
+        stage.save()
+        print(f"Created: {stage}")
 
         asset.add_stage(stage=stage)
-
-        print(f"Created: {stage}")
 
         return stage
 
@@ -327,6 +332,11 @@ class Version(Document):
         print(f"Created: {version}")
         return version
 
+    def set_comment(self, text: str):
+        old_comment = self.comment
+        self.update(comment=text)
+        print(f"{self}'s comment changed from '{old_comment}' to '{text}'")
+
     def increment(self, comment: str = "") -> Self:
         print(f"Incrementing {self} ... ")
         new_version = self.component.create_last_version(software=self.software)
@@ -344,6 +354,7 @@ class Version(Document):
         utils.copy_to_clipboard(text=self.filepath)
 
     def to_file(self) -> AbstractSoftwareFile:
+        # TODO: replace with File.from_version(version: Version)
         if self.software.label == 'Blender':
             return BlenderFile(filepath=self.filepath)
         else:
@@ -366,23 +377,6 @@ class Version(Document):
         return result
 
 
-@dataclass
-class JobContext:
-    user: User
-    component: Component
-    version: Optional[Version]
-    creation_time: datetime = field(default_factory=datetime.now)  # creation_time = datatime.now() would only update on first import
-
-    def set_component(self, component: Component):
-        self.component = component
-
-    def set_version(self, version: Version = None):
-        self.version = version
-
-    def update_creation_time(self):
-        self.creation_time = datetime.now()
-
-
 class Job(Document):
     longname: str = StringField(required=True, primary_key=True) # name + date
     user: User = ReferenceField(document_type=User, required=True)
@@ -390,7 +384,7 @@ class Job(Document):
     source_process: Process = ReferenceField(document_type=Process, required=True)
     source_version: Version = ReferenceField(document_type=Version, required=True)
     steps: dict = DictField(required=True)
-    inputs: list[dict] = ListField(DictField(), default=[])
+    inputs: dict[str, Any] = DictField()  # dict[name: widget_infos]
 
     meta = {
         'collection': 'Jobs',
@@ -404,10 +398,12 @@ class Job(Document):
         return self.__repr__()
 
     @classmethod
-    def create(cls, source_process: Process, context: JobContext, steps: dict[str, any], inputs: list[dict[str, any]], **kwargs) -> Self:
-        longname = " ".join(s for s in [source_process.longname, context.version.longname, context.user.pseudo, str(context.creation_time)])
-        kwargs = dict(longname=longname, creation_time=context.creation_time, user=context.user,
-                      source_process=source_process, source_version=context.version,
+    def create(cls, source_process: Process, steps: dict[str, any], inputs: dict[str, any],
+               user: User, version: Version, creation_time: datetime,
+               **kwargs) -> Self:
+        longname = " ".join(s for s in [source_process.longname, version.longname, user.pseudo, str(creation_time)])
+        kwargs = dict(longname=longname, creation_time=creation_time, user=user,
+                      source_process=source_process, source_version=version,
                       steps=steps, inputs=inputs, **kwargs)
         kwargs = {k: v for k, v in kwargs.items() if v is not None}
 

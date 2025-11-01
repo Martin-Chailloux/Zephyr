@@ -1,7 +1,11 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from datetime import datetime
 from typing import Optional
 
 from PySide6.QtCore import QObject
+
+from Api.document_models.project_documents import Component, Version
+from Api.document_models.studio_documents import User
 
 from Utils.pills import PillModel, AbstractPills
 
@@ -44,3 +48,27 @@ class StepPill(QObject):
         step_pill = cls()
         step_pill.pill = StepPills.from_name(name=name)
         return step_pill
+
+
+@dataclass
+class JobContext:
+    # NOTE: component and version are split, because a build process may use a component with 0 versions in it
+    user: User
+    component: Component
+    version: Optional[Version]
+    creation_time: datetime = field(default_factory=datetime.now)  # creation_time = datatime.now() would only update on first import
+
+    def set_component(self, component: Component = None):
+        self.component = component
+
+    def set_version(self, version: Version = None):
+        self.version = version
+
+    def update_creation_time(self):
+        self.creation_time = datetime.now()
+
+
+@dataclass
+class TurbineInputs:
+    use_last_version: bool = True
+    version_number: int = None

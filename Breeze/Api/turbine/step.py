@@ -1,22 +1,22 @@
 import os
 import traceback
-from typing import TypeVar
+from typing import TypeVar, Self
 
 import qtawesome
 from PySide6 import QtCore
 from PySide6.QtCore import Signal, QObject
 from PySide6.QtWidgets import QTreeWidgetItem
 
-from Api.turbine.pills import StepPill
+from Api.turbine.utils import StepPill
 from Utils.pills import PillModel
 from Api.turbine.logger import StepLogger
 
 
 TypeStepBase = TypeVar("TypeStepBase")
 
-class StepBase(QObject):
-    updated = Signal()
 
+class TurbineStep(QObject):
+    updated = Signal()
     label: str = "step_label"
     sub_label: str = None
     tooltip: str = "step_tooltip"
@@ -28,7 +28,7 @@ class StepBase(QObject):
         self.Pill = StepPill()
         self.logger = StepLogger(name=f"{self.label}__{self.sub_label}__{os.urandom(4)}")
 
-        self.steps: list[StepBase] = []
+        self.steps: list[TurbineStep] = []
 
         self.logger.info(f"Starting step '{self.label}' ... ")
         self.log_output = ""  # used with Self.from_dict() to recover log
@@ -52,9 +52,9 @@ class StepBase(QObject):
         step.updated.connect(self.on_sub_step_updated)
         return step
 
-    def add_steps(self, steps: list['StepBase']):
-        for step in steps:
-            self.add_step(step=step)
+    def add_group(self, label: str, sub_label: str = None) -> 'StepGroup':
+        step_group = self.add_step(StepGroup(label=label, sub_label=sub_label))
+        return step_group
 
     def on_sub_step_updated(self):
         self.updated.emit()
@@ -65,45 +65,47 @@ class StepBase(QObject):
         self.Pill.set_running()
         try:
             self._inner_run(**kwargs)
-            self._resolve()
-            self.updated.emit()
-            self.logger.info(msg=f"... step '{self.label}': SUCCESS \n")
+            self.set_success()
 
         except Exception as e:
-            self.logger.error(msg=traceback.format_exc())
-            self.Pill.set_error()
-            self.updated.emit()
-            raise RuntimeError(traceback.format_exc(chain=False))
+            self.set_failed()
 
     def _inner_run(self, **kwargs):
         # override with actions
         pass
 
-    @property
-    def _is_success(self) -> bool:
-        return True
+    def set_success(self):
+        self.updated.emit()
+        self.logger.info(msg=f"... step '{self.label}': SUCCESS \n")
+        self.Pill.set_success()
 
-    def _resolve(self):
-        if self._is_success:
-            self.Pill.set_success()
-        else:
-            self.Pill.set_error()
+    def set_failed(self):
+        self.logger.error(msg=traceback.format_exc())
+        self.Pill.set_error()
+        self.updated.emit()
+        raise RuntimeError(traceback.format_exc(chain=False))
 
     # translators
     def to_dict(self) -> dict[str, any]:
         return StepTranslator.to_dict(step=self)
 
     @classmethod
-    def from_dict(cls, infos: dict[str, any]) -> 'StepBase':
+    def from_dict(cls, infos: dict[str, any]) -> 'TurbineStep':
         return StepTranslator.from_dict(infos=infos)
 
     def to_tree_item(self) -> QTreeWidgetItem:
         return StepTranslator.to_tree_item(step=self)
 
 
+class StepGroup(TurbineStep):
+    def __init__(self, label: str, sub_label: str = None):
+        self.label = label
+        super().__init__(sub_label = sub_label)
+
+
 class StepTranslator:
     @staticmethod
-    def to_dict(step: StepBase) -> dict[str, any]:
+    def to_dict(step: TurbineStep) -> dict[str, any]:
         infos = {
             'label': step.label,
             'sub_label': step.sub_label,
@@ -115,8 +117,8 @@ class StepTranslator:
         return infos
 
     @staticmethod
-    def from_dict(infos: dict[str, any]) -> StepBase:
-        step = StepBase(sub_label=infos['sub_label'])
+    def from_dict(infos: dict[str, any]) -> TurbineStep:
+        step = TurbineStep(sub_label=infos['sub_label'])
         step.comes_from_dict = True
         step.label = infos['label']
         step.tooltip = infos['tooltip']
@@ -124,13 +126,13 @@ class StepTranslator:
         step.log_output = infos['log']
 
         for child_step in infos['child_steps']:
-            child_step = StepBase.from_dict(infos=child_step)
+            child_step = TurbineStep.from_dict(infos=child_step)
             step.steps.append(child_step)
 
         return step
 
     @staticmethod
-    def to_tree_item(step: StepBase) -> QTreeWidgetItem:
+    def to_tree_item(step: TurbineStep) -> QTreeWidgetItem:
         item = QTreeWidgetItem()
 
         text = step.label
@@ -142,5 +144,3 @@ class StepTranslator:
         item.setIcon(0, icon)
         item.setData(0, QtCore.Qt.ItemDataRole.UserRole, step.log)
         return item
-
-

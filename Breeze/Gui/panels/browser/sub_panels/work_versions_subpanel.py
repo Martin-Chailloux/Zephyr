@@ -5,7 +5,7 @@ from PySide6.QtGui import QAction
 from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel, QWidget, QMenu
 
 from Api.document_models.project_documents import Stage, Version
-from Gui.popups.process_launcher import ProcessSelectMenu
+from Gui.popups.turbine_launcher import TurbineLauncher
 from Gui.sub_widgets.context_menu import ContextMenu
 from Gui.sub_widgets.toolbar import ToolBar
 from Gui.panels.browser.sub_panels import work_versions_api
@@ -15,7 +15,7 @@ from Gui.mvd.version_mvd.version_list_view import VersionListView
 class WorkVersionsWidget(QWidget):
     h = 28
     buttons_spacing = 2
-    ask_refresh_exports = Signal()
+    ask_refresh_exports = Signal()  # TODO: clean out
 
     def __init__(self, stage: Stage=None):
         super().__init__()
@@ -77,14 +77,18 @@ class WorkVersionsWidget(QWidget):
             button.setEnabled(len(selected_indexes) > 0)
 
     def refresh(self, select_last_version: bool=False, reselect_row: bool=False):
+        # TODO: args are confusing to use
         if self.stage.work_component is not None:
-            current_row = self.versions_list.get_selected_index().row()
+            selected_index = self.versions_list.get_selected_index()
+            if selected_index is None:
+                current_row = 0
+            else:
+                current_row = selected_index.row()
             self.versions_list.set_component(component=self.stage.work_component, clear_cache=True)
             if select_last_version:
                 self.versions_list.select_row(row=0, is_selected=True)
-            if reselect_row:
+            elif reselect_row:
                 self.versions_list.select_row(current_row, is_selected=True)
-
 
     def create_empty_version(self):
         if self.stage is None:
@@ -133,11 +137,11 @@ class WorkVersionsWidget(QWidget):
     def launch_turbine_browser(self):
         if self.stage is None:
             return
-        process_select_menu = ProcessSelectMenu(component=self.stage.work_component, version=self.versions_list.get_selected_version())
-        process_select_menu.process_finished.connect(self.ask_refresh_exports.emit)
-        process_select_menu.process_finished.connect(self.refresh)
-
-        process_select_menu.show_menu(position=[0.5, 1])
+        process_select_menu = TurbineLauncher(component=self.stage.work_component, version=self.versions_list.get_selected_version())
+        # process_select_menu.process_finished.connect(self.ask_refresh_exports.emit)
+        result = process_select_menu.show_menu(position=[0.5, 1])
+        if result:
+            self.refresh(reselect_row=True)
 
 
 class VersionsBrowserToolBar(ToolBar):

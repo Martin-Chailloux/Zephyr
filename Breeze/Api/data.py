@@ -51,6 +51,16 @@ class Components(_DataNamesBase):
         return [cls.geo, cls.rig, cls.review]
 
 
+class Softwares(_DataNamesBase):
+    blender = "blender"
+
+
+class Templates(_DataNamesBase):
+    build = "build"
+    export = "export"
+    review = "review"
+
+
 class SoftwareExtensions(_DataNamesBase):
     jpg = "jpg"
     png = "png"

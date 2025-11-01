@@ -3,11 +3,11 @@ from typing import Optional
 import bpy
 
 from Api.document_models.project_documents import Version
-from Api.turbine.step import StepBase
+from Api.turbine.step import TurbineStep
 from blender_file import BlenderFile
 
 
-class CollectStep(StepBase):
+class CollectStep(TurbineStep):
     label: str = "Collect"
     tooltip: str = ""
 
@@ -15,15 +15,12 @@ class CollectStep(StepBase):
         super().__init__()
         self.export_collection = None
 
-    def _is_success(self) -> bool:
-        return self.export_collection is not None
-
     def _inner_run(self):
         self.export_collection = bpy.data.collections.get('Export', None)
         self.logger.debug(f"{self.export_collection = }")
 
 
-class ExportStep(StepBase):
+class ExportStep(TurbineStep):
     label: str = "Export"
     tooltip: str = ""
 
@@ -32,9 +29,6 @@ class ExportStep(StepBase):
         self.source_version = version
         self.dont_overwrite = dont_overwrite
         self.file: Optional[BlenderFile] = None
-
-    def _is_success(self) -> bool:
-        return self.file is not None
 
     def _inner_run(self):
         self.file = self.source_version.to_file()

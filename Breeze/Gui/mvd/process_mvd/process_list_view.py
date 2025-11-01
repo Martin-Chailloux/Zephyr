@@ -4,13 +4,10 @@ from Api.document_models.studio_documents import Process, StageTemplate
 from Gui.mvd.abstract_mvd import AbstractListView
 from Gui.mvd.process_mvd.process_list_item_delegate import ProcessListItemDelegate
 from Gui.mvd.process_mvd.process_list_model import ProcessListModel, ProcessItemRoles
-from Api.turbine.process import ProcessBase
+from Api.turbine.engine import TurbineEngine
 
 
 class ProcessListView(AbstractListView):
-    process_selected = Signal(str)
-    right_clicked = Signal()
-
     def __init__(self):
         super().__init__()
         self._model = ProcessListModel()
@@ -19,19 +16,14 @@ class ProcessListView(AbstractListView):
         self._item_delegate = ProcessListItemDelegate()
         self.setItemDelegate(self._item_delegate)
 
-        self.selectionModel().selectionChanged.connect(self.on_selection_changed)
-
     def set_stage_template(self, stage_template: StageTemplate):
         self._model.populate(processes=stage_template.processes)
 
-    @property
-    def process(self) -> ProcessBase.__class__ | None:
-        items = self.selected_items
-        if not items:
+    def get_selected_process(self) -> Process | None:
+        index = self.get_selected_index()
+        if index is None:
             return None
-        else:
-            process: Process = items[0].data(ProcessItemRoles.process)
-            return process.to_class()
+        process: Process = index.data(ProcessItemRoles.process)
 
-    def on_selection_changed(self):
-        self.process_selected.emit(self.process)
+        return process
+

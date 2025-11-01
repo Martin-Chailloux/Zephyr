@@ -3,7 +3,7 @@ from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QTreeWidget, QTreeWidgetItem
 
 from Api.document_models.project_documents import Job
-from Api.turbine.step import StepBase
+from Api.turbine.step import TurbineStep
 
 
 class StepsViewer(QTreeWidget):
@@ -17,7 +17,7 @@ class StepsViewer(QTreeWidget):
     def populate(self, job: Job):
         self.clear()
 
-        main_step = StepBase.from_dict(infos=job.steps)
+        main_step = TurbineStep.from_dict(infos=job.steps)
         top_item = main_step.to_tree_item()
         self.addTopLevelItem(top_item)
 
@@ -26,7 +26,7 @@ class StepsViewer(QTreeWidget):
 
         self.expandAll()
 
-    def add_step(self, parent: QTreeWidgetItem, step: StepBase):
+    def add_step(self, parent: QTreeWidgetItem, step: TurbineStep):
         item = step.to_tree_item()
         parent.addChild(item)
 

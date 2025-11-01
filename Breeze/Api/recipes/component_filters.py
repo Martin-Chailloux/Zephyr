@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Type
 
 from Api.document_models.project_documents import Component
 
@@ -65,7 +65,7 @@ class ComponentFilters:
     Component = ComponentFilterComponent
 
     @classmethod
-    def from_name(cls, name: str) -> ComponentFilterBase.__class__:
+    def from_name(cls, name: str) -> Type[ComponentFilterBase]:
         for component_filter in [cls.Category, cls.Stage, cls.Component]:
             if name == component_filter.name:
                 return component_filter

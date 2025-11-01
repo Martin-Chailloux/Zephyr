@@ -2,14 +2,13 @@
 ------------------------------------------------
 
 0. Priority
-    - Recipes: finish required features
-        - ComponentBrowser: remove work components (wait for more exports, for debug purposes)
-
     - Processes:
         - clean (+ refactor, probably): move JobContext outside of project_documents
-        - write down the goal of each process
         - Create basic processes for modeling -> rigging -> shot
             Think about pipeline details later
+
+    - Recipes: finish required features
+        - ComponentBrowser: remove work components (wait for more exports, for debug purposes)
 
 
 ------------------------------------------------

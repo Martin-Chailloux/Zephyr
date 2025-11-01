@@ -2,6 +2,7 @@ from pathlib import Path
 
 import mongoengine
 
+from Api import data
 
 mongoengine.connect(host="mongodb://localhost:27017", db="Studio", alias="default")
 
@@ -11,10 +12,12 @@ BreezeApp.set_project("JourDeVent")
 BreezeApp.set_user("Martin")
 mongoengine.connect(host="mongodb://localhost:27017", db=BreezeApp.project.name, alias="current_project")
 
+from TurbineEngines.blender.modeling.build.engine import BlenderModelingBuildEngine
+
 from Api.document_models.studio_documents import StageTemplate
 from Api.document_models.project_documents import Stage, Asset, Version, Job, Component
-from Processes.blender.aaa_commons.build import BlenderBuild
-from Processes.blender.modeling.export.process import BlenderModelingExport
+from TurbineEngines.blender.aaa_commons.build import BlenderBuild
+from TurbineEngines.blender.modeling.export.engine import BlenderModelingExportEngine
 from Api.recipes.recipe import Recipe
 from Api.recipes.ingredient_slot import IngredientSlot
 from Api.recipes.component_filters import ComponentFilterStage, ComponentFilters
@@ -119,8 +122,8 @@ def register_processes():
     for process in Process.objects():
         process.delete()
 
-    BlenderBuild.register_mg_process()
-    BlenderModelingExport.register_mg_process()
+    BlenderBuild.register()
+    BlenderModelingExportEngine.register()
     processes = Process.objects()
     for obj in StageTemplate.objects():
         obj.update(processes=processes)
@@ -157,5 +160,33 @@ def set_recipe():
 
     print("set_recipe(): SUCCESS")
 
+def reset_templates():
+    templates = [a for a in Asset.objects() if a.category == data.Categories.templates]
+    print(f"{templates = }")
+    for t in templates:
+        t.delete()
+
+def clear_processes():
+    for process in Process.objects():
+        process.delete()
+
+    for stage_template in StageTemplate.objects():
+        stage_template.processes = []
+        stage_template.save()
+
+def register_engine():
+    BlenderModelingBuildEngine.register()
+    BlenderModelingExportEngine.register()
+
+def set_default_processes():
+    modeling: StageTemplate = StageTemplate.objects.get(name=data.StageTemplates.modeling)
+
+    modeling.processes = [
+        BlenderModelingBuildEngine.get_related_process(),
+        BlenderModelingExportEngine.get_related_process(),
+    ]
+    modeling.save()
+
 if __name__ == '__main__':
-    clear_components()
+    register_engine()
+    set_default_processes()
