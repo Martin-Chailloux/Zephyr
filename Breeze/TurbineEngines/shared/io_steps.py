@@ -6,7 +6,7 @@ from abstract_io import AbstractSoftwareFile
 
 
 class OpenStep(TurbineStep):
-    label = "Open Step"
+    label = "Open"
     tooltip = "Open a file from a version"
 
     def __init__(self):

@@ -8,7 +8,6 @@ class ReserveVersionStep(TurbineStep):
     def __init__(self, component: Component):
         super().__init__()
         self._component = component
-
         self.version: Version
 
     def _inner_run(self):
