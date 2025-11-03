@@ -27,13 +27,11 @@ class BlenderModelingExportGui(TurbineGui):
         # get default inputs
         if self.context.version is None:
             selected_version_number: str = ''
-            use_last_version: bool = True
         else:
             selected_version_number: str = f"{self.context.version.number:03d}"
-            use_last_version: bool = False
 
         self.allow_overwrite = self.add_checkbox(name='allow_overwrite', label="Don't overwrite", is_checked=True)
-        self.last_version = self.add_checkbox(name='last_version', label='Last version', is_checked=use_last_version)
+        self.last_version = self.add_checkbox(name='last_version', label='Last version', is_checked=True)
         self.version_number = self.add_combobox(name='version_num', label='Version num', items=version_number_items, current_text=selected_version_number)
         self.version_number.combobox.setFixedWidth(64)
 

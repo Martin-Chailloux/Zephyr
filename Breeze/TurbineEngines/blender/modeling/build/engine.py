@@ -3,8 +3,8 @@ from Api.turbine.engine import TurbineEngine
 from Api.turbine.utils import JobContext
 from TurbineEngines.blender.modeling.build.inputs import BlenderModelingBuildGui
 from TurbineEngines.blender.modeling.build.steps import ReserveVersionStep
-from TurbineEngines.shared.collect_steps import GetTemplateSceneStep
-from TurbineEngines.shared.io_steps import OpenStep, SaveAsStep, SaveStep
+from TurbineEngines.shared_steps.collect_steps import GetTemplateSceneStep
+from TurbineEngines.shared_steps.io_steps import OpenStep, SaveAsStep, SaveStep
 
 
 class BlenderModelingBuildEngine(TurbineEngine):
@@ -13,8 +13,7 @@ class BlenderModelingBuildEngine(TurbineEngine):
     tooltip = "Builds a scene for modeling"
     Gui = BlenderModelingBuildGui
 
-    def __init__(self, context: JobContext):
-        super().__init__(context=context)
+    def _add_steps(self):
         self.get_template_step = self.add_step(step=GetTemplateSceneStep(
             category=data.Categories.templates,
             name=data.Softwares.blender,

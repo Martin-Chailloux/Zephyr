@@ -40,7 +40,8 @@ class Components(_DataNamesBase):
     work = "work"
     geo = "geo"
     rig = "rig"
-    cam_rig = "camRig"
+    cam_rig = "camrig"
+    light_rig = "lightrig"
     shd = "shd"
     cam = "cam"
     anim = "anim"
@@ -61,7 +62,7 @@ class Templates(_DataNamesBase):
     review = "review"
 
 
-class SoftwareExtensions(_DataNamesBase):
+class Extensions(_DataNamesBase):
     jpg = "jpg"
     png = "png"
     exr = "exr"

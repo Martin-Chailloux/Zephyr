@@ -114,17 +114,17 @@ class TurbineLauncher(AbstractPopupWidget):
         """ displays the ui matching the selected process """
         process: Process = self.process_list.get_selected_process()
         if process is None:
-            self.set_engine_gui(None)
+            self.set_gui(None)
         else:
             engine = TurbineEngine.from_database(process=process, context=self.job_context)
-            self.set_engine_gui(gui=engine.gui)
+            self.set_gui(gui=engine.gui)
 
-    def get_current_engine_gui(self) -> TurbineGui:
+    def get_gui(self) -> TurbineGui:
         gui = self.inputs_widget.widget(0)
         return gui
 
-    def set_engine_gui(self, gui: TurbineGui = None):
-        current_widget = self.get_current_engine_gui()
+    def set_gui(self, gui: TurbineGui = None):
+        current_widget = self.get_gui()
         self.inputs_widget.removeWidget(current_widget)
 
         if gui is not None:
@@ -136,6 +136,7 @@ class TurbineLauncher(AbstractPopupWidget):
         process: Process = self.process_list.get_selected_process()
         print(f"Launching process: {process = }")
         engine = TurbineEngine.from_database(process=process, context=self.job_context)
+        engine.set_gui(gui=self.get_gui())
         engine.run()
 
         self.process_finished.emit()

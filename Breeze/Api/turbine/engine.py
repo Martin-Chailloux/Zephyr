@@ -66,7 +66,15 @@ class TurbineEngine(TurbineStep):
 
         self.context.set_version(version=version)
 
+    def set_gui(self, gui: TurbineGui):
+        self.gui = gui
+
+    def _add_steps(self):
+        """ Add steps here rather than during init so that inputs can be updated in-between """
+        pass
+
     def run(self):
+        self._add_steps()
         self.job = self.create_job()
         self.Pill.set_idle()
 

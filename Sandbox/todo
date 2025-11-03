@@ -2,8 +2,9 @@
 ------------------------------------------------
 
 0. Priority
-    - Processes:
-        - clean (+ refactor, probably): move JobContext outside of project_documents
+    - Turbine:
+        - modeling build: version num + dont overwrite to build over an existing version
+        - modeling export: clean !export collections, rename items with asset namespace
         - Create basic processes for modeling -> rigging -> shot
             Think about pipeline details later
 
