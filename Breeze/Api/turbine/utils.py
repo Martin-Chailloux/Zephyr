@@ -63,10 +63,10 @@ class JobContext:
 
     def set_version(self, version: Version = None):
         self.version = version
+        self.component = version.component
 
     def update_creation_time(self):
         self.creation_time = datetime.now()
-
 
 @dataclass
 class TurbineInputs:

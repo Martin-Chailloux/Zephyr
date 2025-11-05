@@ -137,6 +137,7 @@ class TurbineLauncher(AbstractPopupWidget):
         print(f"Launching process: {process = }")
         engine = TurbineEngine.from_database(process=process, context=self.job_context)
         engine.set_gui(gui=self.get_gui())
+        engine.update_context()
         engine.run()
 
         self.process_finished.emit()

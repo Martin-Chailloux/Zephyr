@@ -48,11 +48,11 @@ class TurbineEngine(TurbineStep):
         super().__init__(sub_label=None)
         self.context = context
         self.gui = self.Gui(context=context)
-        self._update_context()
+        self.update_context()
         self.job: Optional[Job] = None
 
-    def _update_context(self):
-        """ update the Context based on given inputs """
+    def update_context(self):
+        """ update the Context based on the given inputs """
         inputs = self.gui.inputs
         if inputs is None:
             return
@@ -60,7 +60,7 @@ class TurbineEngine(TurbineStep):
         if inputs.use_last_version:
             version = self.context.component.get_last_version()
         elif inputs.version_number is not None:
-                version = self.context.component.get_version(number=inputs.version_number)
+            version = self.context.component.get_version(number=inputs.version_number)
         else:
             version = None
 

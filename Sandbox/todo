@@ -4,9 +4,14 @@
 0. Priority
     - Turbine:
         - modeling build: version num + dont overwrite to build over an existing version
-        - modeling export: clean !export collections, rename items with asset namespace
+        - export modeling: use version num input
+
         - Create basic processes for modeling -> rigging -> shot
             Think about pipeline details later
+
+    - Export components: pretty gui
+
+    - rigging: build from geo and extra ingredients
 
     - Recipes: finish required features
         - ComponentBrowser: remove work components (wait for more exports, for debug purposes)

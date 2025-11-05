@@ -2,6 +2,7 @@ from typing import Optional
 
 import bpy
 
+import bl_utils
 from Api.document_models.project_documents import Version
 from Api.turbine.step import TurbineStep
 from Api.turbine.utils import JobContext
@@ -33,7 +34,6 @@ class GetExportCollectionStep(TurbineStep):
 
     def _inner_run(self):
         # TODO: search for the name that matches the current export. Example: 'Export geo', and not 'Export'
-        # TODO: generic method get_collection(name:str), to use here
         export_collection = bpy.data.collections.get('Export', None)
         self.logger.debug(f"{export_collection = }")
         if export_collection is None:
@@ -49,14 +49,6 @@ class CleanExportedSceneStep(TurbineStep):
         super().__init__()
         self.export_collection = None
 
-    @staticmethod  # TODO: move elsewhere
-    def get_collection_parent(collection: bpy.types.Collection) -> Optional[bpy.types.Collection]:
-        for parent in bpy.data.collections:
-            for name, child in parent.children.items():
-                if name == collection.name:
-                    return parent
-        else:
-            return None
 
     def run(self, export_collection: bpy.types.Collection, target_version: Version):
         super().run(export_collection=export_collection, target_version=target_version)
@@ -67,7 +59,7 @@ class CleanExportedSceneStep(TurbineStep):
         root_collection: bpy.types.Collection = bpy.context.scene.collection
 
         self.logger.info("Parenting the export collection to the root collection ... ")
-        parent = self.get_collection_parent(export_collection)
+        parent = bl_utils.get_collection_parent(export_collection)
         if parent is not None:
             parent.children.unlink(export_collection)
             root_collection.children.link(export_collection)

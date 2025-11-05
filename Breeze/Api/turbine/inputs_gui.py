@@ -9,6 +9,10 @@ from Api.turbine.inputs_widgets import TurbineWidgets, TurbineWidgetBase
 
 class TurbineGui(QWidget):
     def __init__(self, context: JobContext):
+        """
+        Creates the inputs layout
+        :param context: context of the gui's creation ; used to preset the inputs
+        """
         super().__init__()
         self.context = context
         self.widgets: list[TurbineWidgetBase] = []
