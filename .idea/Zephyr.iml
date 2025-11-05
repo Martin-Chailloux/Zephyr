@@ -6,6 +6,7 @@
       <sourceFolder url="file://$MODULE_DIR$/Software/Blender" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Software/Abstract" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/.venv" />
+      <excludeFolder url="file://$MODULE_DIR$/Documentation/site" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.11 (zephyr311)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

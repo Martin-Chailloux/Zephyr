@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
 
 site_name: Breeze
-site_url: https://mydomain.org/breeze.doc
+site_url: https://martin-chailloux.github.io/Zephyr
 theme:
   name: material
