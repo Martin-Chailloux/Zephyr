@@ -1,1 +1,109 @@
 # Roadmap
+
+
+### Priority
+- Turbine:
+    - modeling build: version num + dont overwrite to build over an existing version
+    - export modeling: use version num input
+
+    - Create basic processes for modeling -> rigging -> shot
+        Think about pipeline details later
+
+- Export components: pretty gui
+
+- rigging: build from geo and extra ingredients
+
+- Recipes: finish required features
+    - ComponentBrowser: remove work components (wait for more exports, for debug purposes)
+
+
+---
+
+### Primary features
+- Recipes:
+    - toolbar buttons: refresh, autofill, copy, paste, ingredient groups
+
+- Processes:
+    - test & fix import of inputs with process relaunch in jobs_list
+    - filters
+
+versions list: replace every button with a toolbar
+    - new file ( + icon)
+    - increment (arrow-up icon)
+    - edit comment
+    - 1 additional button for each available process: build / export / review
+
+- Users
+    - per project information
+        - roles (sup / lead / graphist / pipe)
+        - favorite_assets
+        - recent_assets
+   --> probably a Contributor/Member/PrUser/SubUser document in project_documents, with source_user and the needed extra fields
+      it is a user with extra project-related fields
+      can be found with BreezeApp.sub_user
+
+- switch menu for User / Project
+    - ui to create them
+
+- Admin tab: Guis to create and manage db items
+    - Users (for the current project): add users to project / assign roles
+    - Stage Templates
+        - process assignment
+        - create, delete, icon, color, label, category_filters, assigned_users, etc
+
+- ExportsTable:
+    - mvd
+    - context menu
+
+- Asset groups
+- Asset data / properties
+
+- User roles and permissions
+
+---
+
+### Cleans / Refactors
+- popups:
+    - transform all into browsers with toolbar style
+
+- rework subwidgets hierarchy, move them under Gui/..., utils can probably be removed entirely:
+    - chronometer to Api/utils
+    - external toolbar
+    - searchbar
+    - groups all icon stuff in a single file
+
+- mvd: confo and simplify from new knowledge, update stages' mouse events from component tree's code
+
+- SoftwareClasses: sub-classes for in/out, file management, etc.
+
+---
+
+### Qol / Upgrades to existing and working features
+- work versions: disable when no stages are selected (or a version cannot be created)
+
+- process_launcher:
+    - cache, remember selected processes and inputs: stage: process ; process: inputs
+    - preset the input's height + scroll area to have a fixed size window
+
+- Turbine:
+    - refresh jobs on tab shown, don't refresh if number has not changed
+    - show processes and steps duration
+    - relaunch process with same inputs
+
+- copy / paste users and status with ctrl+C/ctrl+V
+
+- StageTemplateList assignment:
+    - warn if a used stage template is about to be deleted
+    - ui to omit or keep them
+    - gui to edit recipes
+
+- save the gui's state between instances
+
+- add error messages to steps in step viewer's tree
+
+- Stage Templates: status and users history
+
+- Asset browser:
+    - favorites / recent
+
+- Ingredient Slots: components history

@@ -2,5 +2,48 @@
 
 site_name: Breeze
 site_url: https://martin-chailloux.github.io/Zephyr
+repo_url: https://github.com/Martin-Chailloux/Zephyr
+nav:
+  - Overview: index.md
+  - Philosophy: philosophy.md
+  - Features:
+      - features/index.md
+      - Browser: features/browser.md
+      - Turbine: features/turbine.md
+  - How-to: how_to.md
+  - Reference: reference.md
+  - Roadmap: roadmap.md
+
 theme:
   name: material
+  icon:
+    logo: fontawesome/solid/wind
+  features:
+    - navigation.indexes
+    - navigation.instant
+    - navigation.instant.prefetch
+    - navigation.instant.progress
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.path
+    - navigation.top
+    - toc.integrate
+
+  palette:
+    # Palette toggle for light mode
+    - scheme: default
+      primary: green
+      accent: teal
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - scheme: slate
+      primary: green
+      accent: teal
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode
