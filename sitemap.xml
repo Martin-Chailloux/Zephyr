@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-         <loc>https://martin-chailloux.github.io/Zephyr/explanation/</loc>
-         <lastmod>2025-11-06</lastmod>
-    </url>
-    <url>
-         <loc>https://martin-chailloux.github.io/Zephyr/features/</loc>
+         <loc>https://martin-chailloux.github.io/Zephyr/</loc>
          <lastmod>2025-11-06</lastmod>
     </url>
     <url>
@@ -13,7 +9,7 @@
          <lastmod>2025-11-06</lastmod>
     </url>
     <url>
-         <loc>https://martin-chailloux.github.io/Zephyr/overview/</loc>
+         <loc>https://martin-chailloux.github.io/Zephyr/philosophy/</loc>
          <lastmod>2025-11-06</lastmod>
     </url>
     <url>
@@ -22,6 +18,18 @@
     </url>
     <url>
          <loc>https://martin-chailloux.github.io/Zephyr/roadmap/</loc>
+         <lastmod>2025-11-06</lastmod>
+    </url>
+    <url>
+         <loc>https://martin-chailloux.github.io/Zephyr/features/</loc>
+         <lastmod>2025-11-06</lastmod>
+    </url>
+    <url>
+         <loc>https://martin-chailloux.github.io/Zephyr/features/browser/</loc>
+         <lastmod>2025-11-06</lastmod>
+    </url>
+    <url>
+         <loc>https://martin-chailloux.github.io/Zephyr/features/turbine/</loc>
          <lastmod>2025-11-06</lastmod>
     </url>
 </urlset>
