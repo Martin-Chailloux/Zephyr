@@ -2,34 +2,46 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://martin-chailloux.github.io/Zephyr/</loc>
-         <lastmod>2025-11-06</lastmod>
+         <lastmod>2025-11-09</lastmod>
     </url>
     <url>
          <loc>https://martin-chailloux.github.io/Zephyr/how_to/</loc>
-         <lastmod>2025-11-06</lastmod>
-    </url>
-    <url>
-         <loc>https://martin-chailloux.github.io/Zephyr/philosophy/</loc>
-         <lastmod>2025-11-06</lastmod>
-    </url>
-    <url>
-         <loc>https://martin-chailloux.github.io/Zephyr/reference/</loc>
-         <lastmod>2025-11-06</lastmod>
+         <lastmod>2025-11-09</lastmod>
     </url>
     <url>
          <loc>https://martin-chailloux.github.io/Zephyr/roadmap/</loc>
-         <lastmod>2025-11-06</lastmod>
+         <lastmod>2025-11-09</lastmod>
     </url>
     <url>
          <loc>https://martin-chailloux.github.io/Zephyr/features/</loc>
-         <lastmod>2025-11-06</lastmod>
+         <lastmod>2025-11-09</lastmod>
+    </url>
+    <url>
+         <loc>https://martin-chailloux.github.io/Zephyr/features/admin/</loc>
+         <lastmod>2025-11-09</lastmod>
     </url>
     <url>
          <loc>https://martin-chailloux.github.io/Zephyr/features/browser/</loc>
-         <lastmod>2025-11-06</lastmod>
+         <lastmod>2025-11-09</lastmod>
     </url>
     <url>
          <loc>https://martin-chailloux.github.io/Zephyr/features/turbine/</loc>
-         <lastmod>2025-11-06</lastmod>
+         <lastmod>2025-11-09</lastmod>
+    </url>
+    <url>
+         <loc>https://martin-chailloux.github.io/Zephyr/reference/</loc>
+         <lastmod>2025-11-09</lastmod>
+    </url>
+    <url>
+         <loc>https://martin-chailloux.github.io/Zephyr/reference/assets_structure/</loc>
+         <lastmod>2025-11-09</lastmod>
+    </url>
+    <url>
+         <loc>https://martin-chailloux.github.io/Zephyr/reference/recipes/</loc>
+         <lastmod>2025-11-09</lastmod>
+    </url>
+    <url>
+         <loc>https://martin-chailloux.github.io/Zephyr/reference/turbine/</loc>
+         <lastmod>2025-11-09</lastmod>
     </url>
 </urlset>
