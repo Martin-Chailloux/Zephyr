@@ -4,12 +4,6 @@ from typing import Self, Any
 import mongoengine
 from mongoengine import *
 
-from typing import TYPE_CHECKING
-
-
-if TYPE_CHECKING:
-    from Api.turbine.engine import TurbineEngine
-
 
 class Palette(Document):
     name: str = StringField(required=True, primary_key=True)
@@ -221,9 +215,6 @@ class StageTemplate(Document):
     Generic infos about a stage, that are common to all its instances:
     name, label, description, color, icon
     """
-
-    # TODO: add process
-
     name: str = StringField(required=True, primary_key=True)
     label: str = StringField(required=True, unique=True)
 

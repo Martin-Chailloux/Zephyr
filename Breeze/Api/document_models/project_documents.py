@@ -15,8 +15,12 @@ from blender_file import BlenderFile
 
 class Asset(Document):
     """
-    An element from the film. Contains stages.
-    category ⮞ name ⮞ variant
+    Base element of a project. An asset is made of a category, a name and variant.
+    For every combination of category + name, there is always a default variant `-` .
+
+    - category (str) : `character`, `set`, `sequence`, `library`, `sandbox`, etc...
+    - name (str): `Gabin`, `Playground`, `sq0020`, `lightrigs`, `rdVfx`, etc...
+    - variant (str): `-`, `withBoots`, `broken`, `sh0180`, `master`, `A`, `B`, `C`, etc ...
     """
     longname: str = StringField(required=True, primary_key=True)
 
@@ -91,6 +95,19 @@ class Stage(Document):
     def __str__(self):
         return self.__repr__()
 
+    @classmethod
+    def create(cls, asset: Asset, stage_template: StageTemplate, status: Status=None, **kwargs) -> Self:
+        longname = "_".join(s for s in [asset.longname, stage_template.name])
+        kwargs = dict(longname=longname, asset=asset, stage_template=stage_template, status=status, **kwargs)
+        kwargs = {k: v for k, v in kwargs.items() if v is not None}
+        stage = cls(**kwargs)
+        stage.save()
+        print(f"Created: {stage}")
+
+        asset.add_stage(stage=stage)
+
+        return stage
+
     def create_component(self, name: str, label: str, extension: str, crash_if_exists: bool = True) -> 'Component':
         component = Component.objects(name=name, label=label, extension=extension, stage=self)
         if len(component) == 1:
@@ -109,25 +126,12 @@ class Stage(Document):
         self.update(work_component=work_component)
         return work_component
 
-    @classmethod
-    def create(cls, asset: Asset, stage_template: StageTemplate, status: Status=None, **kwargs) -> Self:
-        longname = "_".join(s for s in [asset.longname, stage_template.name])
-        kwargs = dict(longname=longname, asset=asset, stage_template=stage_template, status=status, **kwargs)
-        kwargs = {k: v for k, v in kwargs.items() if v is not None}
-        stage = cls(**kwargs)
-        stage.save()
-        print(f"Created: {stage}")
-
-        asset.add_stage(stage=stage)
-
-        return stage
-
     def add_ingredient(self, name: str, version: 'Version'):
         if name not in self.ingredients.keys():
             self.ingredients[name] = []
         self.ingredients[name].append(version)
         self.save()
-        self.sort_ingredients()
+        self._sort_ingredients()
         print(f"{version} was added to the '{name}' ingredients of {self}")
 
     def replace_ingredient(self, name: str, old_version: 'Version', new_version: 'Version'):
@@ -142,10 +146,10 @@ class Stage(Document):
 
         self.ingredients[name] = versions
         self.save()
-        self.sort_ingredients()
+        self._sort_ingredients()
         print(f"{new_version} replaced {old_version} in the '{name}' ingredients of {self}")
 
-    def sort_ingredients(self):
+    def _sort_ingredients(self):
         sorted_ingredients: dict[str, list[Version]] = {}
 
         # sort names
@@ -186,6 +190,8 @@ class Component(Document):
 
     versions: list['Version'] = SortedListField(ReferenceField(document_type='Version'), default=[])
     recommended_version: 'Version' = ReferenceField(document_type='Version', default=None)
+
+    # TODO: destinations: list[Stage], reciprocal with Stage.components
 
     meta = {
         'collection': 'Components',
@@ -239,7 +245,7 @@ class Component(Document):
         version = Version.create(component=self, number=number, software=software)
         return version
 
-    def create_version(self, number: int, software: Software):
+    def create_version(self, number: int, software: Software) -> 'Version':
         version = Version.create(component=self, number=number, software=software)
         return version
 
@@ -277,8 +283,6 @@ class Version(Document):
 
     creation_user: User = ReferenceField(document_type=User, required=True)
     last_user: User = ReferenceField(document_type=User, required=True)
-
-    destinations: list[Stage] = SortedListField(ReferenceField(document_type=Stage, default=[]))
 
     # user editable
     comment: str = StringField(default="")

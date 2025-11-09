@@ -3,16 +3,80 @@
 site_name: Breeze
 site_url: https://martin-chailloux.github.io/Zephyr
 repo_url: https://github.com/Martin-Chailloux/Zephyr
+
 nav:
   - Overview: index.md
-  - Philosophy: philosophy.md
   - Features:
       - features/index.md
       - Browser: features/browser.md
       - Turbine: features/turbine.md
+      - Admin: features/admin.md
   - How-to: how_to.md
-  - Reference: reference.md
+  - Reference:
+      - reference/index.md
+      - Assets structure: reference/assets_structure.md
+      - Recipes: reference/recipes.md
+      - Turbine: reference/turbine.md
   - Roadmap: roadmap.md
+
+markdown_extensions:
+  - toc:
+      permalink: true
+      toc_depth: 2-4
+  - admonition
+  - attr_list
+  - md_in_html
+  - pymdownx.blocks.caption
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.blocks.caption
+
+plugins:
+  - search
+  - glightbox:
+      touchNavigation: true
+      loop: false
+      effect: zoom
+      slide_effect: slide
+      width: 100%
+      height: auto
+      zoomable: true
+      draggable: true
+      skip_classes:
+        - custom-skip-class-name
+      auto_themed: false
+      auto_caption: false
+      caption_position: bottom
+      background: white
+      shadow: true
+      manual: false
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [ ".." ]   # go up one parent folder
+          options:
+            docstring_style: google
+            show_bases: false
+            show_source: true
+            show_root_heading: true
+            heading_level: 3
+            show_root_full_path: false
+            show_root_toc_entry: false
+            members: no
+
 
 theme:
   name: material
@@ -23,13 +87,13 @@ theme:
     - navigation.instant
     - navigation.instant.prefetch
     - navigation.instant.progress
-    - navigation.tabs
-    - navigation.tabs.sticky
-    - navigation.sections
+#    - navigation.tabs
+#    - navigation.tabs.sticky
+#    - navigation.sections
     - navigation.expand
     - navigation.path
     - navigation.top
-    - toc.integrate
+#    - toc.integrate
 
   palette:
     # Palette toggle for light mode

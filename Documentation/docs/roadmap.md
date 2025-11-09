@@ -9,31 +9,26 @@
     - Create basic processes for modeling -> rigging -> shot
         Think about pipeline details later
 
-- Export components: pretty gui
+- ExportsTable:
+    - mvd
+    - context menu
 
 - rigging: build from geo and extra ingredients
 
 - Recipes: finish required features
     - ComponentBrowser: remove work components (wait for more exports, for debug purposes)
 
-
 ---
 
-### Primary features
+### Missing features
 - Recipes:
     - toolbar buttons: refresh, autofill, copy, paste, ingredient groups
 
-- Processes:
-    - test & fix import of inputs with process relaunch in jobs_list
-    - filters
+- Turbine:
+    - Jobs list filters
+    - relaunch a process from the jobs list
 
-versions list: replace every button with a toolbar
-    - new file ( + icon)
-    - increment (arrow-up icon)
-    - edit comment
-    - 1 additional button for each available process: build / export / review
-
-- Users
+- Users:
     - per project information
         - roles (sup / lead / graphist / pipe)
         - favorite_assets
@@ -42,7 +37,7 @@ versions list: replace every button with a toolbar
       it is a user with extra project-related fields
       can be found with BreezeApp.sub_user
 
-- switch menu for User / Project
+- switch User and Projects
     - ui to create them
 
 - Admin tab: Guis to create and manage db items
@@ -51,20 +46,17 @@ versions list: replace every button with a toolbar
         - process assignment
         - create, delete, icon, color, label, category_filters, assigned_users, etc
 
-- ExportsTable:
-    - mvd
-    - context menu
-
 - Asset groups
+
 - Asset data / properties
 
 - User roles and permissions
 
 ---
 
-### Cleans / Refactors
+### Cleans & Refactors
 - popups:
-    - transform all into browsers with toolbar style
+    - transform every popup into browsers with a toolbar style
 
 - rework subwidgets hierarchy, move them under Gui/..., utils can probably be removed entirely:
     - chronometer to Api/utils
@@ -72,25 +64,25 @@ versions list: replace every button with a toolbar
     - searchbar
     - groups all icon stuff in a single file
 
-- mvd: confo and simplify from new knowledge, update stages' mouse events from component tree's code
+- mvd: confo and simplify from new knowledge, update stages' mouse events using component tree's code
 
 - SoftwareClasses: sub-classes for in/out, file management, etc.
 
 ---
 
-### Qol / Upgrades to existing and working features
-- work versions: disable when no stages are selected (or a version cannot be created)
+### Qol & Upgrades to existing and working features
+- work versions panel: disable when no stages are selected (or a version cannot be created)
 
 - process_launcher:
-    - cache, remember selected processes and inputs: stage: process ; process: inputs
-    - preset the input's height + scroll area to have a fixed size window
+    - cache, remember selected processes and inputs for each context: stage: process ; process: inputs
+    - preset the input's height and use scroll area to have a fixed size window
 
 - Turbine:
-    - refresh jobs on tab shown, don't refresh if number has not changed
+    - refresh jobs on tab shown
     - show processes and steps duration
-    - relaunch process with same inputs
+    - relaunch from the jobs list
 
-- copy / paste users and status with ctrl+C/ctrl+V
+- copy/paste users and statuses with ctrl+C/ctrl+V
 
 - StageTemplateList assignment:
     - warn if a used stage template is about to be deleted
