@@ -2,6 +2,9 @@
 
 
 ### Priority
+
+-  rmb in Users List does not cancel it
+
 - Turbine:
     - modeling build: version num + dont overwrite to build over an existing version
     - export modeling: use version num input

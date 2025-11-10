@@ -19,7 +19,7 @@ from Api.document_models.project_documents import Stage, Asset, Version, Job, Co
 from TurbineEngines.blender.modeling.export.engine import BlenderModelingExportEngine
 from Api.recipes.recipe import Recipe
 from Api.recipes.ingredient_slot import IngredientSlot
-from Api.recipes.component_filters import ComponentFilterStage, ComponentFilters
+from Api.recipes.component_filters import ComponentFilters
 
 
 
@@ -86,8 +86,7 @@ def create_default_users():
 
 def remove_field():
     # StageTemplate.objects.update(unset__tooltip=True)
-    Stage.objects.update(unset__recipe_ingredients=True)
-    Stage.objects.update(unset__free_ingredients=True)
+    Version.objects.update(unset__destinations=True)
 
 def reload_stage_templates_software():
     stage_templates: list[StageTemplate] = StageTemplate.objects
@@ -116,16 +115,6 @@ def set_root_paths():
     p = Path.home().joinpath("OneDrive", "Documents", "__work", "_dev", "zephyr_projects")
     for project in Project.objects:
         project.update(root_path=str(p.joinpath(project.name)))
-
-def register_processes():
-    for process in Process.objects():
-        process.delete()
-
-    BlenderBuild.register()
-    BlenderModelingExportEngine.register()
-    processes = Process.objects()
-    for obj in StageTemplate.objects():
-        obj.update(processes=processes)
 
 def clear_versions():
     for version in Version.objects():
@@ -173,7 +162,7 @@ def clear_processes():
         stage_template.processes = []
         stage_template.save()
 
-def register_engine():
+def register_engines():
     BlenderModelingBuildEngine.register()
     BlenderModelingExportEngine.register()
 
@@ -187,5 +176,6 @@ def set_default_processes():
     modeling.save()
 
 if __name__ == '__main__':
-    register_engine()
-    set_default_processes()
+    remove_field()
+    # register_engines()
+    # set_default_processes()

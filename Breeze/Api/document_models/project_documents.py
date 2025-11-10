@@ -287,6 +287,7 @@ class Version(Document):
 
     creation_time = DateTimeField(default=datetime.now)
     timestamp = DateTimeField(default=datetime.now)
+    destinations: list[Stage] = SortedListField(ReferenceField(document_type=Stage, default=[]))
 
     # todo_list = ReferenceField(document_type='Task', default=[])
     # thumbnail_path = StringField()
