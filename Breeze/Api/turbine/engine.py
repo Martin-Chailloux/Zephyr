@@ -99,7 +99,7 @@ class TurbineEngine(TurbineStep):
     # ------------------------
 
     @classmethod
-    def get_class_path(cls):
+    def get_class_path(cls) -> str:
         path = f"{cls.__module__}.{cls.__qualname__}"
         return str(path)
 

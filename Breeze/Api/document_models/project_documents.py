@@ -15,12 +15,11 @@ from blender_file import BlenderFile
 
 class Asset(Document):
     """
-    Base element of a project. An asset is made of a category, a name and variant.
+    Encapsulates an element from a project. An Asset is made of a category, a name and variant.
     For every combination of category + name, there is always a default variant `-` .
 
-    - category (str) : `character`, `set`, `sequence`, `library`, `sandbox`, etc...
-    - name (str): `Gabin`, `Playground`, `sq0020`, `lightrigs`, `rdVfx`, etc...
-    - variant (str): `-`, `withBoots`, `broken`, `sh0180`, `master`, `A`, `B`, `C`, etc ...
+    Examples: `character_Gabin_-`, `set_Playground_broken`, `element_tree_B`, `element_tree_C`,
+    `sequence_sq0020_sh0180`, `library_lightrigs_master`, `sandbox_vfx_boom`
     """
     longname: str = StringField(required=True, primary_key=True)
 
@@ -66,9 +65,9 @@ class Asset(Document):
 
 class Stage(Document):
     """
-    Step in the creation of an asset, based on a StageTemplate
-    (ex: modeling, rigging, animation, lighting, etc.) \n
-    Contains a single Component 'Work', and multiple export Components.
+    A working step during the creation of an Asset.
+    Uses input components as ingredients and generate output components.
+    Always has a `work` Component that contains its working files.
     """
     longname: str = StringField(required=True, primary_key=True)
     asset: Asset = ReferenceField(document_type=Asset)
@@ -176,10 +175,10 @@ class Stage(Document):
 
 class Component(Document):
     """
-    Belongs to a Stage. Contains Versions. \n
-    Work Component: contains the working versions of a Stage. \n
-    Export Component: contains the versions of an exported item. \n
-    Ingredient: Version of a component that is used inside a Stage.
+    Represents an independent building component of the project.
+    Contains the iterated Versions from a same file.
+
+    Examples: `geo`, `rig`, `anim`, etc...
     """
     longname: str = StringField(required=True, primary_key=True)  # category_name_variant_stage_component
 
@@ -269,8 +268,7 @@ class Component(Document):
 
 class Version(Document):
     """
-    Belongs to a Component. Has an increment number and a filepath. \n
-    Ingredient: Version that is used inside a Stage.
+    An iteration of a file we manipulate.
     """
     longname = StringField(required=True, primary_key=True)
 
@@ -387,7 +385,7 @@ class Job(Document):
     creation_time = DateTimeField(default=datetime.now)
     source_process: Process = ReferenceField(document_type=Process, required=True)
     source_version: Version = ReferenceField(document_type=Version, required=True)
-    steps: dict = DictField(required=True)
+    steps: dict[str, any] = DictField(required=True)
     inputs: dict[str, Any] = DictField()  # dict[name: widget_infos]
 
     meta = {

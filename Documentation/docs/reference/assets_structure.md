@@ -1,13 +1,39 @@
 # Assets Structure
 
+This is the base structure of documents used to register files in the database.
+
+
+## Classes
+
+
+::: Breeze.Api.document_models.project_documents.Version
+
+
+::: Breeze.Api.document_models.project_documents.Component
+
+
+::: Breeze.Api.document_models.project_documents.Stage
+
+
+::: Breeze.Api.document_models.studio_documents.StageTemplate
+
+
+::: Breeze.Api.document_models.project_documents.Asset
+
+
+___
+
+
 ## Diagram
 
 ``` mermaid
 classDiagram
-    Asset --|> Stage
-    StageTemplate --|> Stage
-    Stage --|> Component
-    Component --|> Version
+    direction BT
+    
+    Asset --o Stage
+    StageTemplate --o Stage
+    Stage --o Component
+    Component --o Version
 
     class Asset["Asset (Document)"]{
         + longname: str
@@ -83,8 +109,8 @@ classDiagram
         + creation_user: User
         + last_user: User
         + comment: str
-        + creation_time: DateTimeField
-        + timestamp: DateTimeField
+        + creation_time: datetime
+        + timestamp: datetime
         
         + create() Version
         + set_comment()
@@ -96,21 +122,3 @@ classDiagram
         + get_filter_keys()
     }
 ```
-
-___
-
-## Classes
-
-::: Breeze.Api.document_models.project_documents.Asset
-
-
-::: Breeze.Api.document_models.studio_documents.StageTemplate
-
-
-::: Breeze.Api.document_models.project_documents.Stage
-
-
-::: Breeze.Api.document_models.project_documents.Component
-
-
-::: Breeze.Api.document_models.project_documents.Version

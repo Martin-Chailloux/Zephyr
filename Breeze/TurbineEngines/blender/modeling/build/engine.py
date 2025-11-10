@@ -1,6 +1,5 @@
 from Api import data
 from Api.turbine.engine import TurbineEngine
-from Api.turbine.utils import JobContext
 from TurbineEngines.blender.modeling.build.inputs import BlenderModelingBuildGui
 from TurbineEngines.blender.modeling.build.steps import ReserveVersionStep
 from TurbineEngines.shared_steps.collect_steps import GetTemplateSceneStep

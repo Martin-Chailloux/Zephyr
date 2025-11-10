@@ -1,6 +1,6 @@
 import os
 import traceback
-from typing import TypeVar, Self
+from typing import TypeVar
 
 import qtawesome
 from PySide6 import QtCore
@@ -12,7 +12,7 @@ from Utils.pills import PillModel
 from Api.turbine.logger import StepLogger
 
 
-TypeStepBase = TypeVar("TypeStepBase")
+TypeTurbineStep = TypeVar("TypeTurbineStep")
 
 
 class TurbineStep(QObject):
@@ -24,9 +24,9 @@ class TurbineStep(QObject):
     def __init__(self, sub_label: str = None):
         super().__init__()
         self.comes_from_dict: bool = False
-        self.sub_label = sub_label
-        self.Pill = StepPill()
-        self.logger = StepLogger(name=f"{self.label}__{self.sub_label}__{os.urandom(4)}")
+        self.sub_label: str = sub_label
+        self.Pill: StepPill = StepPill()
+        self.logger: StepLogger = StepLogger(name=f"{self.label}__{self.sub_label}__{os.urandom(4)}")
 
         self.steps: list[TurbineStep] = []
 
@@ -36,8 +36,7 @@ class TurbineStep(QObject):
     def set_sub_label(self, sub_label: str):
         self.sub_label = sub_label
 
-    @property
-    def log(self):
+    def get_log(self) -> str:
         if self.comes_from_dict:
             return self.log_output
         else:
@@ -47,7 +46,7 @@ class TurbineStep(QObject):
     def pill(self) -> PillModel:
         return self.Pill.pill
 
-    def add_step(self, step: TypeStepBase) -> TypeStepBase:
+    def add_step(self, step: TypeTurbineStep) -> TypeTurbineStep:
         self.steps.append(step)
         step.updated.connect(self.on_sub_step_updated)
         return step
@@ -111,7 +110,7 @@ class StepTranslator:
             'sub_label': step.sub_label,
             'tooltip': step.tooltip,
             'pill': step.pill.name,
-            'log': step.log,
+            'log': step.get_log(),
             'child_steps': [step.to_dict() for step in step.steps],
         }
         return infos
@@ -142,5 +141,5 @@ class StepTranslator:
 
         icon = qtawesome.icon(step.pill.icon_name, color=step.pill.color)
         item.setIcon(0, icon)
-        item.setData(0, QtCore.Qt.ItemDataRole.UserRole, step.log)
+        item.setData(0, QtCore.Qt.ItemDataRole.UserRole, step.get_log())
         return item

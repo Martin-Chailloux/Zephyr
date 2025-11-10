@@ -16,7 +16,6 @@ from TurbineEngines.blender.modeling.build.engine import BlenderModelingBuildEng
 
 from Api.document_models.studio_documents import StageTemplate
 from Api.document_models.project_documents import Stage, Asset, Version, Job, Component
-from TurbineEngines.blender.aaa_commons.build import BlenderBuild
 from TurbineEngines.blender.modeling.export.engine import BlenderModelingExportEngine
 from Api.recipes.recipe import Recipe
 from Api.recipes.ingredient_slot import IngredientSlot

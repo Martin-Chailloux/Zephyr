@@ -28,6 +28,12 @@ class StepPill(QObject):
         self.pill: PillModel = StepPills.idle
         self.set_idle()
 
+    @classmethod
+    def from_name(cls, name: str) -> 'StepPill':
+        step_pill = cls()
+        step_pill.pill = StepPills.from_name(name=name)
+        return step_pill
+
     def set_idle(self):
         self.pill = StepPills.idle
 
@@ -42,12 +48,6 @@ class StepPill(QObject):
 
     def set_success(self):
         self.pill = StepPills.success
-
-    @classmethod
-    def from_name(cls, name: str) -> 'StepPill':
-        step_pill = cls()
-        step_pill.pill = StepPills.from_name(name=name)
-        return step_pill
 
 
 @dataclass

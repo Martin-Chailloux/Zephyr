@@ -1,4 +1,3 @@
-import importlib
 from typing import Self, Any
 
 import mongoengine
@@ -212,8 +211,9 @@ class Process(Document):
 
 class StageTemplate(Document):
     """
-    Generic infos about a stage, that are common to all its instances:
-    name, label, description, color, icon
+    Represents a type of Stage, with expected ingredients and associated processes.
+
+    Examples: `modeling`, `rigging`, `shading`, `animation`, `lighting`, etc...
     """
     name: str = StringField(required=True, primary_key=True)
     label: str = StringField(required=True, unique=True)

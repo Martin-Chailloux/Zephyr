@@ -61,20 +61,3 @@ class TurbineGui(QWidget):
     def to_database(self) -> dict[str, Any]:
         infos = {widget.name: widget.export_infos() for widget in self.widgets}
         return infos
-
-    # @classmethod
-    # def from_dict(cls, widgets: list[dict[str, any]]):
-    #     process_inputs = cls()
-    #
-    #     for infos in widgets:
-    #         widget_type = infos['widget']
-    #         if widget_type is None:
-    #             return
-    #
-    #         name=infos['name']
-    #         label=infos['label']
-    #
-    #         if widget_type == 'checkbox':
-    #             process_inputs.add_checkbox(name=name, label=label, is_checked=infos.get('is_checked', False))
-    #         elif widget_type == 'combobox':
-    #             process_inputs.add_combobox(name=name, label=label, items=infos.get('items', []), current_text=infos.get('current_text', ''))

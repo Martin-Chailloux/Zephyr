@@ -1,11 +1,8 @@
-from typing import Optional
-
 import bpy
 
 import bl_utils
 from Api.document_models.project_documents import Version
 from Api.turbine.step import TurbineStep
-from Api.turbine.utils import JobContext
 
 
 class CreateCollectionStep(TurbineStep):
