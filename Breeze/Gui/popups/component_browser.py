@@ -11,7 +11,7 @@ class ComponentBrowser(AbstractPopupWidget):
         components = [x for x in components if x.get_last_version() is not None]  # dont add components without version
         self.components = components
         self.stage = stage
-        self.stage_components = [c for c in components if c.stage == self.stage]
+        self.asset_components = [c for c in components if c.stage.asset == self.stage.asset]
 
         self.text_filter: str = ""  # needed to refresh after all stages checkbox has been clicked
 
@@ -32,20 +32,20 @@ class ComponentBrowser(AbstractPopupWidget):
 
         layout.addSpacing(12)
 
-        show_all_stages_checkbox = QCheckBox("Show all stages")
-        layout.addWidget(show_all_stages_checkbox)
+        show_all_assets_checkbox = QCheckBox("Show other assets")
+        layout.addWidget(show_all_assets_checkbox)
 
         component_list = ComponentListView()
         layout.addWidget(component_list)
-        component_list.set_components(components=self.components, filtered_components=self.stage_components)
+        component_list.set_components(components=self.components, filtered_components=self.asset_components)
 
         self.search_bar = search_bar
-        self.show_all_stages_checkbox = show_all_stages_checkbox
+        self.show_all_assets_checkbox = show_all_assets_checkbox
         self.component_list = component_list
 
     def _connect_signals(self):
         self.search_bar.textChanged.connect(self.on_searchbar_edited)
-        self.show_all_stages_checkbox.clicked.connect(self.on_show_all_stages_checkbox_clicked)
+        self.show_all_assets_checkbox.clicked.connect(self.on_show_all_assets_checkbox_clicked)
         self.component_list.right_clicked.connect(self.reject)
         self.component_list.selectionModel().selectionChanged.connect(self.accept)
 
@@ -57,6 +57,6 @@ class ComponentBrowser(AbstractPopupWidget):
         self.component_list.set_text_filter(text=text)
         self.text_filter = text
 
-    def on_show_all_stages_checkbox_clicked(self, is_checked: bool):
+    def on_show_all_assets_checkbox_clicked(self, is_checked: bool):
         self.component_list.set_only_show_filtered_components(show=not is_checked)
         self.component_list.set_text_filter(text=self.text_filter)
