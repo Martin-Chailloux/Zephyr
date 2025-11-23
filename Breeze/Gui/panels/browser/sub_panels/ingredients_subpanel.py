@@ -84,18 +84,6 @@ class IngredientsSubPanel(QWidget):
         # refresh the model
         self.ingredients_list.refresh()
 
-        # selected_versions = [index for index in self.ingredients_view.selectedIndexes()]
-        # ingredients_name = index
-        #
-        # current_versions = self
-        # for name, versions in self.stage.ingredients:
-        #     ingredients = Ingredients.from_database(ingredient_infos=infos)
-        #
-        # for index in self.ingredients_view.selectedIndexes():
-        #     version =
-        #     print(f"{index.row() = }")
-        #     self.ingredients_view.model().removeRow(index.row(), index.parent())
-
 
 class IngredientsToolBar(ToolBar):
     def _init_ui(self):
