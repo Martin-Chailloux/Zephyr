@@ -1,4 +1,4 @@
-# Recipes
+# Recipes (Reference)
 
 To use external components in our working files, we use an ingredient-recipes system.
 

@@ -32,6 +32,7 @@ class GetExportCollectionStep(TurbineStep):
     def _inner_run(self):
         # TODO: search for the name that matches the current export. Example: 'Export geo', and not 'Export'
         export_collection = bpy.data.collections.get('Export', None)
+        # export_collection = bpy.data.collections.get('Export - geo', None)  # hack for doc, until smarter engine
         self.logger.debug(f"{export_collection = }")
         if export_collection is None:
             raise RuntimeError("Could not find the collection 'Export'")

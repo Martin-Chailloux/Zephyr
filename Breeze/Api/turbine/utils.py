@@ -61,7 +61,7 @@ class JobContext:
     def set_component(self, component: Component = None):
         self.component = component
 
-    def set_version(self, version: Version = None):
+    def set_version(self, version: Version):
         self.version = version
         self.component = version.component
 

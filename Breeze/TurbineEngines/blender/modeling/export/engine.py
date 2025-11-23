@@ -15,9 +15,6 @@ class BlenderModelingExportEngine(TurbineEngine):
         super().__init__(**kwargs)
 
     def _add_steps(self):
-        if self.gui.inputs.use_last_version:
-            self.context.set_version()
-
         # TODO: loop over multiple exports
         self.reserve_version_step = self.add_step(ReserveExportedVersionStep(source_version=self.context.version, dont_overwrite=self.gui.inputs.dont_overwrite,
                                                                              name=data.Components.geo, label=data.Components.geo.title(), extension=data.Extensions.blend))

@@ -8,15 +8,15 @@ nav:
   - Overview: index.md
   - Features:
       - features/index.md
-      - Browser: features/browser.md
-      - Turbine: features/turbine.md
-      - Admin: features/admin.md
+      -  Browser (Features): features/browser.md
+      - Turbine (Features): features/turbine.md
+      - Admin (Features): features/admin.md
   - How-to: how_to.md
   - Reference:
       - reference/index.md
-      - Assets structure: reference/assets_structure.md
-      - Recipes: reference/recipes.md
-      - Turbine: reference/turbine.md
+      - Assets structure (Reference): reference/assets_structure.md
+      - Recipes (Reference): reference/recipes.md
+      - Turbine (Reference): reference/turbine.md
   - Roadmap: roadmap.md
 
 markdown_extensions:

@@ -19,7 +19,7 @@
     
     
       
-        <title>Turbine - Breeze</title>
+        <title>Turbine (Reference) - Breeze</title>
       
     
     
@@ -83,7 +83,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#classes" class="md-skip">
+        <a href="#relation-with-components" class="md-skip">
           Skip to content
         </a>
       
@@ -119,7 +119,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Turbine
+              Turbine (Reference)
             
           </span>
         </div>
@@ -353,7 +353,7 @@
   
   
   <span class="md-ellipsis">
-    Browser
+    Browser (Features)
     
   </span>
   
@@ -376,7 +376,7 @@
   
   
   <span class="md-ellipsis">
-    Turbine
+    Turbine (Features)
     
   </span>
   
@@ -399,7 +399,7 @@
   
   
   <span class="md-ellipsis">
-    Admin
+    Admin (Features)
     
   </span>
   
@@ -512,7 +512,7 @@
   
   
   <span class="md-ellipsis">
-    Assets structure
+    Assets structure (Reference)
     
   </span>
   
@@ -535,7 +535,7 @@
   
   
   <span class="md-ellipsis">
-    Recipes
+    Recipes (Reference)
     
   </span>
   
@@ -565,7 +565,7 @@
   
   
   <span class="md-ellipsis">
-    Turbine
+    Turbine (Reference)
     
   </span>
   
@@ -578,7 +578,7 @@
   
   
   <span class="md-ellipsis">
-    Turbine
+    Turbine (Reference)
     
   </span>
   
@@ -597,6 +597,24 @@
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#relation-with-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      Relation with Components
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Inputs
+    </span>
+  </a>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#classes" class="md-nav__link">
@@ -730,6 +748,24 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#relation-with-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      Relation with Components
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Inputs
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#classes" class="md-nav__link">
     <span class="md-ellipsis">
       Classes
@@ -817,13 +853,15 @@
   
 
 
-<h1 id="turbine">Turbine<a class="headerlink" href="#turbine" title="Permanent link">¶</a></h1>
+<h1 id="turbine-reference">Turbine (Reference)<a class="headerlink" href="#turbine-reference" title="Permanent link">¶</a></h1>
 <p>Turbine is used to build, update, export and review scenes.
 A series of Steps are assembled into an Engine, then they are executed after each other.</p>
 <p>An Engine is always run from a Version.
 The existing Engines are stored in its Stage's StageTemplate.</p>
+<h3 id="relation-with-components">Relation with Components<a class="headerlink" href="#relation-with-components" title="Permanent link">¶</a></h3>
 <p>A Build Engine will use and import the ingredient-Components that are cast in the Version's Stage.
 An Export Engine will create new out-Components for the Version's Stage.</p>
+<h3 id="inputs">Inputs<a class="headerlink" href="#inputs" title="Permanent link">¶</a></h3>
 <p>Using the Engine's Gui, a user can define a set of specific inputs before executing the steps.</p>
 <div class="admonition example">
 <p class="admonition-title">Example</p>

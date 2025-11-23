@@ -1,5 +1,7 @@
+# Browser (Features)
 
-![Home](../images/home.png){width=700}
+
+![Home](../source/home.png){width=700}
 /// caption
 Browser
 ///

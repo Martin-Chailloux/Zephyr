@@ -1,4 +1,4 @@
-# Assets Structure
+# Assets Structure (Reference)
 
 This is the base structure of documents used to register files in the database.
 
