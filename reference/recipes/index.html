@@ -82,6 +82,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#classes" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -532,6 +537,19 @@
       
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Recipes
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -543,6 +561,101 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Classes
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Classes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#recipe" class="md-nav__link">
+    <span class="md-ellipsis">
+      Recipe
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ingredientslot" class="md-nav__link">
+    <span class="md-ellipsis">
+      IngredientSlot
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#componentfilterbase" class="md-nav__link">
+    <span class="md-ellipsis">
+      ComponentFilterBase
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#componentfiltercategorycomponentfilterbase" class="md-nav__link">
+    <span class="md-ellipsis">
+      ComponentFilterCategory(ComponentFilterBase)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#componentfilterstagecomponentfilterbase" class="md-nav__link">
+    <span class="md-ellipsis">
+      ComponentFilterStage(ComponentFilterBase)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#componentfiltercomponentcomponentfilterbase" class="md-nav__link">
+    <span class="md-ellipsis">
+      ComponentFilterComponent(ComponentFilterBase)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#diagram" class="md-nav__link">
+    <span class="md-ellipsis">
+      Diagram
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -619,6 +732,92 @@
   
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Classes
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Classes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#recipe" class="md-nav__link">
+    <span class="md-ellipsis">
+      Recipe
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ingredientslot" class="md-nav__link">
+    <span class="md-ellipsis">
+      IngredientSlot
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#componentfilterbase" class="md-nav__link">
+    <span class="md-ellipsis">
+      ComponentFilterBase
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#componentfiltercategorycomponentfilterbase" class="md-nav__link">
+    <span class="md-ellipsis">
+      ComponentFilterCategory(ComponentFilterBase)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#componentfilterstagecomponentfilterbase" class="md-nav__link">
+    <span class="md-ellipsis">
+      ComponentFilterStage(ComponentFilterBase)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#componentfiltercomponentcomponentfilterbase" class="md-nav__link">
+    <span class="md-ellipsis">
+      ComponentFilterComponent(ComponentFilterBase)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#diagram" class="md-nav__link">
+    <span class="md-ellipsis">
+      Diagram
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -636,9 +835,587 @@
   
 
 
-  <h1>Recipes</h1>
+<h1 id="recipes">Recipes<a class="headerlink" href="#recipes" title="Permanent link">¶</a></h1>
+<p>To use external components in our working files, we use an ingredient-recipes system.</p>
+<p class="annotate">We cast expected ingredients in a <a href="../assets_structure/#stage">Stage</a>,
+based on the recipe (1) from its <a href="../assets_structure/#stagetemplate">StageTemplate</a>.
+These ingredients are the output <a href="../assets_structure/#component">Components</a> of another Stage.</p>
+<ol>
+<li>We can also cast ingredients that are not part of the recipe, if needed.</li>
+</ol>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>In a <code>rigging</code> stage, we cast a geometry <code>geo</code> from the <code>modeling</code> and a material <code>shd</code> from the <code>shading</code>.</p>
+</div>
+<h2 id="classes">Classes<a class="headerlink" href="#classes" title="Permanent link">¶</a></h2>
+<h3 id="recipe"><code>Recipe</code><a class="headerlink" href="#recipe" title="Permanent link">¶</a></h3>
 
 
+<div class="doc doc-object doc-class">
+
+
+
+
+    <div class="doc doc-contents first">
+
+
+        <p>List of the IngredientSlots of a StageTemplate.</p>
+
+
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>Breeze\Api\recipes\recipe.py</code></summary>
+                <div class="language-python highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-0-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-0-10">10</a></span>
+<span class="normal"><a href="#__codelineno-0-11">11</a></span>
+<span class="normal"><a href="#__codelineno-0-12">12</a></span>
+<span class="normal"><a href="#__codelineno-0-13">13</a></span>
+<span class="normal"><a href="#__codelineno-0-14">14</a></span>
+<span class="normal"><a href="#__codelineno-0-15">15</a></span>
+<span class="normal"><a href="#__codelineno-0-16">16</a></span>
+<span class="normal"><a href="#__codelineno-0-17">17</a></span>
+<span class="normal"><a href="#__codelineno-0-18">18</a></span>
+<span class="normal"><a href="#__codelineno-0-19">19</a></span>
+<span class="normal"><a href="#__codelineno-0-20">20</a></span>
+<span class="normal"><a href="#__codelineno-0-21">21</a></span>
+<span class="normal"><a href="#__codelineno-0-22">22</a></span>
+<span class="normal"><a href="#__codelineno-0-23">23</a></span>
+<span class="normal"><a href="#__codelineno-0-24">24</a></span>
+<span class="normal"><a href="#__codelineno-0-25">25</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="k">class</span><span class="w"> </span><span class="nc">Recipe</span><span class="p">:</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">    </span><span class="sd">"""</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="sd">    List of the IngredientSlots of a StageTemplate.</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="sd">    """</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10"></a>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ingredient_slots</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">IngredientSlot</span><span class="p">]):</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">ingredients_slots</span> <span class="o">=</span> <span class="n">ingredient_slots</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13"></a>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">to_database</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15"></a>        <span class="n">infos</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16"></a>        <span class="k">for</span> <span class="n">ingredient_slot</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ingredients_slots</span><span class="p">:</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17"></a>            <span class="n">infos</span><span class="p">[</span><span class="n">ingredient_slot</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">ingredient_slot</span><span class="o">.</span><span class="n">to_database</span><span class="p">()</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18"></a>        <span class="k">return</span> <span class="n">infos</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19"></a>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20"></a>    <span class="nd">@classmethod</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">from_database</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">infos</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]):</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22"></a>        <span class="n">ingredient_slots</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">IngredientSlot</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23"></a>        <span class="k">for</span> <span class="n">slot_name</span><span class="p">,</span> <span class="n">slot_infos</span> <span class="ow">in</span> <span class="n">infos</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24"></a>            <span class="n">ingredient_slots</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">IngredientSlot</span><span class="o">.</span><span class="n">from_database</span><span class="p">(</span><span class="n">slot_name</span><span class="o">=</span><span class="n">slot_name</span><span class="p">,</span> <span class="n">slot_infos</span><span class="o">=</span><span class="n">slot_infos</span><span class="p">))</span>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25"></a>        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">ingredient_slots</span><span class="o">=</span><span class="n">ingredient_slots</span><span class="p">)</span>
+</span></code></pre></div></td></tr></tbody></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div><h3 id="ingredientslot"><code>IngredientSlot</code><a class="headerlink" href="#ingredientslot" title="Permanent link">¶</a></h3>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+
+    <div class="doc doc-contents first">
+
+
+        <p>A slot in a Recipe, with associated ComponentFilters.
+It can receive one or more ingredients.</p>
+
+
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>Breeze\Api\recipes\ingredient_slot.py</code></summary>
+                <div class="language-python highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-0-10">10</a></span>
+<span class="normal"><a href="#__codelineno-0-11">11</a></span>
+<span class="normal"><a href="#__codelineno-0-12">12</a></span>
+<span class="normal"><a href="#__codelineno-0-13">13</a></span>
+<span class="normal"><a href="#__codelineno-0-14">14</a></span>
+<span class="normal"><a href="#__codelineno-0-15">15</a></span>
+<span class="normal"><a href="#__codelineno-0-16">16</a></span>
+<span class="normal"><a href="#__codelineno-0-17">17</a></span>
+<span class="normal"><a href="#__codelineno-0-18">18</a></span>
+<span class="normal"><a href="#__codelineno-0-19">19</a></span>
+<span class="normal"><a href="#__codelineno-0-20">20</a></span>
+<span class="normal"><a href="#__codelineno-0-21">21</a></span>
+<span class="normal"><a href="#__codelineno-0-22">22</a></span>
+<span class="normal"><a href="#__codelineno-0-23">23</a></span>
+<span class="normal"><a href="#__codelineno-0-24">24</a></span>
+<span class="normal"><a href="#__codelineno-0-25">25</a></span>
+<span class="normal"><a href="#__codelineno-0-26">26</a></span>
+<span class="normal"><a href="#__codelineno-0-27">27</a></span>
+<span class="normal"><a href="#__codelineno-0-28">28</a></span>
+<span class="normal"><a href="#__codelineno-0-29">29</a></span>
+<span class="normal"><a href="#__codelineno-0-30">30</a></span>
+<span class="normal"><a href="#__codelineno-0-31">31</a></span>
+<span class="normal"><a href="#__codelineno-0-32">32</a></span>
+<span class="normal"><a href="#__codelineno-0-33">33</a></span>
+<span class="normal"><a href="#__codelineno-0-34">34</a></span>
+<span class="normal"><a href="#__codelineno-0-35">35</a></span>
+<span class="normal"><a href="#__codelineno-0-36">36</a></span>
+<span class="normal"><a href="#__codelineno-0-37">37</a></span>
+<span class="normal"><a href="#__codelineno-0-38">38</a></span>
+<span class="normal"><a href="#__codelineno-0-39">39</a></span>
+<span class="normal"><a href="#__codelineno-0-40">40</a></span>
+<span class="normal"><a href="#__codelineno-0-41">41</a></span>
+<span class="normal"><a href="#__codelineno-0-42">42</a></span>
+<span class="normal"><a href="#__codelineno-0-43">43</a></span>
+<span class="normal"><a href="#__codelineno-0-44">44</a></span>
+<span class="normal"><a href="#__codelineno-0-45">45</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="k">class</span><span class="w"> </span><span class="nc">IngredientSlot</span><span class="p">:</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">    </span><span class="sd">"""</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="sd">    A slot in a Recipe, with associated ComponentFilters.</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="sd">    It can receive one or more ingredients.</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="sd">    """</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12"></a>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">multiple</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">filters</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ComponentFilterBase</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">is_multiple</span> <span class="o">=</span> <span class="n">multiple</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ComponentFilterBase</span><span class="p">]</span> <span class="o">=</span> <span class="n">filters</span> <span class="ow">or</span> <span class="p">[]</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17"></a>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">allowed_components</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_allowed_components</span><span class="p">()</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19"></a>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_get_allowed_components</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Component</span><span class="p">]:</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21"></a>        <span class="n">components</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Component</span><span class="p">]</span> <span class="o">=</span> <span class="n">Component</span><span class="o">.</span><span class="n">objects</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22"></a>        <span class="k">for</span> <span class="n">component_filter</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">:</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23"></a>            <span class="n">components</span> <span class="o">=</span> <span class="n">component_filter</span><span class="o">.</span><span class="n">get_filtered_components</span><span class="p">(</span><span class="n">components</span><span class="o">=</span><span class="n">components</span><span class="p">)</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24"></a>        <span class="k">return</span> <span class="n">components</span>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25"></a>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">to_database</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27"></a>        <span class="n">infos</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28"></a>            <span class="s2">"multiple"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_multiple</span><span class="p">,</span>
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29"></a>            <span class="s2">"filters"</span><span class="p">:</span> <span class="p">{},</span>  <span class="c1"># dict[name, ComponentFilterBase.to_dict()]</span>
+</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30"></a>        <span class="p">}</span>
+</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31"></a>        <span class="k">for</span> <span class="n">component_filter</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">:</span>
+</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32"></a>            <span class="n">infos</span><span class="p">[</span><span class="s1">'filters'</span><span class="p">][</span><span class="n">component_filter</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">component_filter</span><span class="o">.</span><span class="n">to_database</span><span class="p">()</span>
+</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33"></a>        <span class="k">return</span> <span class="n">infos</span>
+</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34"></a>
+</span><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35"></a>    <span class="nd">@classmethod</span>
+</span><span id="__span-0-36"><a id="__codelineno-0-36" name="__codelineno-0-36"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">from_database</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">slot_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">slot_infos</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]):</span>
+</span><span id="__span-0-37"><a id="__codelineno-0-37" name="__codelineno-0-37"></a>        <span class="n">multiple</span> <span class="o">=</span> <span class="n">slot_infos</span><span class="p">[</span><span class="s1">'multiple'</span><span class="p">]</span>
+</span><span id="__span-0-38"><a id="__codelineno-0-38" name="__codelineno-0-38"></a>
+</span><span id="__span-0-39"><a id="__codelineno-0-39" name="__codelineno-0-39"></a>        <span class="c1"># get filters</span>
+</span><span id="__span-0-40"><a id="__codelineno-0-40" name="__codelineno-0-40"></a>        <span class="n">filters</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ComponentFilterBase</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="__span-0-41"><a id="__codelineno-0-41" name="__codelineno-0-41"></a>        <span class="k">for</span> <span class="n">filter_name</span><span class="p">,</span> <span class="n">filter_infos</span> <span class="ow">in</span> <span class="n">slot_infos</span><span class="p">[</span><span class="s1">'filters'</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span><span id="__span-0-42"><a id="__codelineno-0-42" name="__codelineno-0-42"></a>            <span class="n">filters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ComponentFilters</span><span class="o">.</span><span class="n">from_name</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">filter_name</span><span class="p">)</span><span class="o">.</span><span class="n">from_database</span><span class="p">(</span><span class="n">infos</span><span class="o">=</span><span class="n">filter_infos</span><span class="p">))</span>
+</span><span id="__span-0-43"><a id="__codelineno-0-43" name="__codelineno-0-43"></a>
+</span><span id="__span-0-44"><a id="__codelineno-0-44" name="__codelineno-0-44"></a>        <span class="n">ingredient_slot</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">slot_name</span><span class="p">,</span> <span class="n">multiple</span><span class="o">=</span><span class="n">multiple</span><span class="p">,</span> <span class="n">filters</span><span class="o">=</span><span class="n">filters</span><span class="p">)</span>
+</span><span id="__span-0-45"><a id="__codelineno-0-45" name="__codelineno-0-45"></a>        <span class="k">return</span> <span class="n">ingredient_slot</span>
+</span></code></pre></div></td></tr></tbody></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div><h3 id="componentfilterbase"><code>ComponentFilterBase</code><a class="headerlink" href="#componentfilterbase" title="Permanent link">¶</a></h3>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+
+    <div class="doc doc-contents first">
+
+
+        <p>Defines which Components can or cannot be added to an IngredientSlot, in a Recipe.</p>
+
+
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>Breeze\Api\recipes\component_filters.py</code></summary>
+                <div class="language-python highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-0-10">10</a></span>
+<span class="normal"><a href="#__codelineno-0-11">11</a></span>
+<span class="normal"><a href="#__codelineno-0-12">12</a></span>
+<span class="normal"><a href="#__codelineno-0-13">13</a></span>
+<span class="normal"><a href="#__codelineno-0-14">14</a></span>
+<span class="normal"><a href="#__codelineno-0-15">15</a></span>
+<span class="normal"><a href="#__codelineno-0-16">16</a></span>
+<span class="normal"><a href="#__codelineno-0-17">17</a></span>
+<span class="normal"><a href="#__codelineno-0-18">18</a></span>
+<span class="normal"><a href="#__codelineno-0-19">19</a></span>
+<span class="normal"><a href="#__codelineno-0-20">20</a></span>
+<span class="normal"><a href="#__codelineno-0-21">21</a></span>
+<span class="normal"><a href="#__codelineno-0-22">22</a></span>
+<span class="normal"><a href="#__codelineno-0-23">23</a></span>
+<span class="normal"><a href="#__codelineno-0-24">24</a></span>
+<span class="normal"><a href="#__codelineno-0-25">25</a></span>
+<span class="normal"><a href="#__codelineno-0-26">26</a></span>
+<span class="normal"><a href="#__codelineno-0-27">27</a></span>
+<span class="normal"><a href="#__codelineno-0-28">28</a></span>
+<span class="normal"><a href="#__codelineno-0-29">29</a></span>
+<span class="normal"><a href="#__codelineno-0-30">30</a></span>
+<span class="normal"><a href="#__codelineno-0-31">31</a></span>
+<span class="normal"><a href="#__codelineno-0-32">32</a></span>
+<span class="normal"><a href="#__codelineno-0-33">33</a></span>
+<span class="normal"><a href="#__codelineno-0-34">34</a></span>
+<span class="normal"><a href="#__codelineno-0-35">35</a></span>
+<span class="normal"><a href="#__codelineno-0-36">36</a></span>
+<span class="normal"><a href="#__codelineno-0-37">37</a></span>
+<span class="normal"><a href="#__codelineno-0-38">38</a></span>
+<span class="normal"><a href="#__codelineno-0-39">39</a></span>
+<span class="normal"><a href="#__codelineno-0-40">40</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="k">class</span><span class="w"> </span><span class="nc">ComponentFilterBase</span><span class="p">:</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">    </span><span class="sd">"""</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="sd">    Defines which Components can or cannot be added to an IngredientSlot, in a Recipe.</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="sd">    """</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11"></a>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12"></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13"></a>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">blacklist</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="w">        </span><span class="sd">"""</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="sd">        :param items: list of items to include</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="sd">        :param blacklist: if True, parm items becomes a list of items to avoid</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="sd">        """</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">items</span><span class="p">]</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">blacklist</span> <span class="o">=</span> <span class="n">blacklist</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21"></a>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_filtered_components</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">components</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Component</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Component</span><span class="p">]:</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23"></a>        <span class="n">input_components</span> <span class="o">=</span> <span class="n">components</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24"></a>        <span class="n">components</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_components</span><span class="p">(</span><span class="n">components</span><span class="o">=</span><span class="n">components</span><span class="p">)</span>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25"></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">blacklist</span><span class="p">:</span>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26"></a>            <span class="n">components</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">input_components</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">components</span><span class="p">]</span>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27"></a>        <span class="k">return</span> <span class="n">components</span>
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28"></a>
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">filter_components</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">components</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Component</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Component</span><span class="p">]:</span>
+</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30"></a>        <span class="k">return</span> <span class="n">components</span>
+</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31"></a>
+</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">to_database</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33"></a>        <span class="n">result</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'items'</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">,</span> <span class="s1">'blacklist'</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">blacklist</span><span class="p">}</span>
+</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34"></a>        <span class="k">return</span> <span class="n">result</span>
+</span><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35"></a>
+</span><span id="__span-0-36"><a id="__codelineno-0-36" name="__codelineno-0-36"></a>    <span class="nd">@classmethod</span>
+</span><span id="__span-0-37"><a id="__codelineno-0-37" name="__codelineno-0-37"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">from_database</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">infos</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]):</span>
+</span><span id="__span-0-38"><a id="__codelineno-0-38" name="__codelineno-0-38"></a>        <span class="n">items</span> <span class="o">=</span> <span class="n">infos</span><span class="p">[</span><span class="s1">'items'</span><span class="p">]</span>
+</span><span id="__span-0-39"><a id="__codelineno-0-39" name="__codelineno-0-39"></a>        <span class="n">blacklist</span> <span class="o">=</span> <span class="n">infos</span><span class="p">[</span><span class="s1">'blacklist'</span><span class="p">]</span>
+</span><span id="__span-0-40"><a id="__codelineno-0-40" name="__codelineno-0-40"></a>        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">items</span><span class="o">=</span><span class="n">items</span><span class="p">,</span> <span class="n">blacklist</span><span class="o">=</span><span class="n">blacklist</span><span class="p">)</span>
+</span></code></pre></div></td></tr></tbody></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div><h3 id="componentfiltercategorycomponentfilterbase"><code>ComponentFilterCategory(ComponentFilterBase)</code><a class="headerlink" href="#componentfiltercategorycomponentfilterbase" title="Permanent link">¶</a></h3>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+
+    <div class="doc doc-contents first">
+
+
+        <p>Filter components based on their Asset's category.</p>
+
+
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>Breeze\Api\recipes\component_filters.py</code></summary>
+                <div class="language-python highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-43">43</a></span>
+<span class="normal"><a href="#__codelineno-0-44">44</a></span>
+<span class="normal"><a href="#__codelineno-0-45">45</a></span>
+<span class="normal"><a href="#__codelineno-0-46">46</a></span>
+<span class="normal"><a href="#__codelineno-0-47">47</a></span>
+<span class="normal"><a href="#__codelineno-0-48">48</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-43"><a id="__codelineno-0-43" name="__codelineno-0-43"></a><span class="k">class</span><span class="w"> </span><span class="nc">ComponentFilterCategory</span><span class="p">(</span><span class="n">ComponentFilterBase</span><span class="p">):</span>
+</span><span id="__span-0-44"><a id="__codelineno-0-44" name="__codelineno-0-44"></a><span class="w">    </span><span class="sd">""" Filter components based on their Asset's category. """</span>
+</span><span id="__span-0-45"><a id="__codelineno-0-45" name="__codelineno-0-45"></a>    <span class="n">name</span> <span class="o">=</span> <span class="s1">'category'</span>
+</span><span id="__span-0-46"><a id="__codelineno-0-46" name="__codelineno-0-46"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">filter_components</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">components</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Component</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Component</span><span class="p">]:</span>
+</span><span id="__span-0-47"><a id="__codelineno-0-47" name="__codelineno-0-47"></a>        <span class="n">components</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">components</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">stage</span><span class="o">.</span><span class="n">asset</span><span class="o">.</span><span class="n">category</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">]</span>
+</span><span id="__span-0-48"><a id="__codelineno-0-48" name="__codelineno-0-48"></a>        <span class="k">return</span> <span class="n">components</span>
+</span></code></pre></div></td></tr></tbody></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div><h3 id="componentfilterstagecomponentfilterbase"><code>ComponentFilterStage(ComponentFilterBase)</code><a class="headerlink" href="#componentfilterstagecomponentfilterbase" title="Permanent link">¶</a></h3>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+
+    <div class="doc doc-contents first">
+
+
+        <p>Filter components based on their StageTemplate's name.</p>
+
+
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>Breeze\Api\recipes\component_filters.py</code></summary>
+                <div class="language-python highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-51">51</a></span>
+<span class="normal"><a href="#__codelineno-0-52">52</a></span>
+<span class="normal"><a href="#__codelineno-0-53">53</a></span>
+<span class="normal"><a href="#__codelineno-0-54">54</a></span>
+<span class="normal"><a href="#__codelineno-0-55">55</a></span>
+<span class="normal"><a href="#__codelineno-0-56">56</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-51"><a id="__codelineno-0-51" name="__codelineno-0-51"></a><span class="k">class</span><span class="w"> </span><span class="nc">ComponentFilterStage</span><span class="p">(</span><span class="n">ComponentFilterBase</span><span class="p">):</span>
+</span><span id="__span-0-52"><a id="__codelineno-0-52" name="__codelineno-0-52"></a><span class="w">    </span><span class="sd">""" Filter components based on their StageTemplate's name. """</span>
+</span><span id="__span-0-53"><a id="__codelineno-0-53" name="__codelineno-0-53"></a>    <span class="n">name</span> <span class="o">=</span> <span class="s1">'stage'</span>
+</span><span id="__span-0-54"><a id="__codelineno-0-54" name="__codelineno-0-54"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">filter_components</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">components</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Component</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Component</span><span class="p">]:</span>
+</span><span id="__span-0-55"><a id="__codelineno-0-55" name="__codelineno-0-55"></a>        <span class="n">components</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">components</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">stage</span><span class="o">.</span><span class="n">stage_template</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">]</span>
+</span><span id="__span-0-56"><a id="__codelineno-0-56" name="__codelineno-0-56"></a>        <span class="k">return</span> <span class="n">components</span>
+</span></code></pre></div></td></tr></tbody></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div><h3 id="componentfiltercomponentcomponentfilterbase"><code>ComponentFilterComponent(ComponentFilterBase)</code><a class="headerlink" href="#componentfiltercomponentcomponentfilterbase" title="Permanent link">¶</a></h3>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+
+    <div class="doc doc-contents first">
+
+
+        <p>Filter components based on their name.</p>
+
+
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>Breeze\Api\recipes\component_filters.py</code></summary>
+                <div class="language-python highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-59">59</a></span>
+<span class="normal"><a href="#__codelineno-0-60">60</a></span>
+<span class="normal"><a href="#__codelineno-0-61">61</a></span>
+<span class="normal"><a href="#__codelineno-0-62">62</a></span>
+<span class="normal"><a href="#__codelineno-0-63">63</a></span>
+<span class="normal"><a href="#__codelineno-0-64">64</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-59"><a id="__codelineno-0-59" name="__codelineno-0-59"></a><span class="k">class</span><span class="w"> </span><span class="nc">ComponentFilterComponent</span><span class="p">(</span><span class="n">ComponentFilterBase</span><span class="p">):</span>
+</span><span id="__span-0-60"><a id="__codelineno-0-60" name="__codelineno-0-60"></a><span class="w">    </span><span class="sd">""" Filter components based on their name. """</span>
+</span><span id="__span-0-61"><a id="__codelineno-0-61" name="__codelineno-0-61"></a>    <span class="n">name</span> <span class="o">=</span> <span class="s1">'component'</span>
+</span><span id="__span-0-62"><a id="__codelineno-0-62" name="__codelineno-0-62"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">filter_components</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">components</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Component</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Component</span><span class="p">]:</span>
+</span><span id="__span-0-63"><a id="__codelineno-0-63" name="__codelineno-0-63"></a>        <span class="n">components</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">components</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">]</span>
+</span><span id="__span-0-64"><a id="__codelineno-0-64" name="__codelineno-0-64"></a>        <span class="k">return</span> <span class="n">components</span>
+</span></code></pre></div></td></tr></tbody></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div><h2 id="diagram">Diagram<a class="headerlink" href="#diagram" title="Permanent link">¶</a></h2>
+<pre class="mermaid"><code>classDiagram
+    direction BT
+
+    ComponentFilterBase --|&gt; ComponentFilterCategory
+    ComponentFilterBase --|&gt; ComponentFilterStage
+    ComponentFilterBase --|&gt; ComponentFilterComponent
+    ComponentFilterCategory --&gt; ComponentFilters
+    ComponentFilterStage --&gt; ComponentFilters
+    ComponentFilterComponent --&gt; ComponentFilters
+
+    ComponentFilters --&gt; IngredientSlot
+    IngredientSlot --o Recipe
+    Recipe --&gt; StageTemplate
+
+    StageTemplate --* Stage
+    IngredientSlot &lt;..&gt; Version
+    Component --o Version
+    Version --&gt; Stage: Ingredient
+
+    class ComponentFilterBase{
+        items: list[str]
+        blacklist: bool
+
+        get_filtered_components(components: list[Component]) list[Component]
+        filter_components(components: list[Component]) list[Component]
+        to_database() dict[str, Any]
+        @cls from_database(infos: dict[str, Any])
+    }
+
+    class ComponentFilterCategory{
+        name
+        filter_components()
+    }
+    class ComponentFilterStage{
+        name
+        filter_components()
+    }
+    class ComponentFilterComponent{
+        name
+        filter_components()
+    }
+
+    class ComponentFilters {
+        Category: ComponentFilterCategory
+        Stage: ComponentFilterStage
+        Component: ComponentFilterComponent
+        @cls from_name(name: str) Type[ComponentFilterBase]
+    }
+    &lt;&lt;enumeration&gt;&gt; ComponentFilters 
+
+    class IngredientSlot {
+        name: str
+        is_multiple: bool
+        filters: list[ComponentFilterBase]
+        allowed_components: list[Components]
+        _get_allowed_components() list[Component]
+        to_database() dict[str, Any]
+        @cls from_database(infos: dict[str, Any])
+    }
+
+    class Recipe {
+        ingredient_slots: list[IngredientSlot]
+        to_database() dict[str, Any]
+        @cls from_database(infos: dict[str, Any])
+    }
+
+    class Stage {
+        stage_template: StageTemplate
+        ingredients: dict[str, list[Version]]
+
+        add_ingredient(name: str, version: Version)
+        replace_ingredient(name: str, old_version: Version, new_version: Version)
+        _sort_ingredients()
+    }
+    class Component {
+    }
+    class Version {
+        component: Component
+    }
+
+    class StageTemplate{
+        recipe: dict[str, Any]
+        set_recipe(recipe: dict[str, Any])
+        set_ingredient_slot(slot_name: str, slot_infos: dict[str, Any], crash_if_exists: bool=True)
+    }
+</code></pre>
 
 
 
