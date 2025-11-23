@@ -82,6 +82,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#stage-panel" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -350,6 +355,19 @@
       
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Browser (Features)
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -361,6 +379,59 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#stage-panel" class="md-nav__link">
+    <span class="md-ellipsis">
+      Stage panel
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ingredients-panel" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ingredients panel
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#work-versions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Work versions
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exports" class="md-nav__link">
+    <span class="md-ellipsis">
+      Exports
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -619,6 +690,50 @@
   
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#stage-panel" class="md-nav__link">
+    <span class="md-ellipsis">
+      Stage panel
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ingredients-panel" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ingredients panel
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#work-versions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Work versions
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exports" class="md-nav__link">
+    <span class="md-ellipsis">
+      Exports
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -637,12 +752,59 @@
 
 
 <h1 id="browser-features">Browser (Features)<a class="headerlink" href="#browser-features" title="Permanent link">¶</a></h1>
-<figure>
-<p><a class="glightbox" data-type="image" data-width="100%" data-height="auto" href="../../source/home.png" data-desc-position="bottom"><img alt="Home" src="../../source/home.png" width="700"></a></p>
-<figcaption>
-<p>Browser</p>
-</figcaption>
-</figure>
+<p>The Browser is Breeze's main working window.
+It is divided into multiple panels.</p>
+<p><a class="glightbox" data-type="image" data-width="100%" data-height="auto" href="../../source/browser.png" data-desc-position="bottom"><img alt="browser.png" src="../../source/browser.png" width="700"></a></p>
+<hr>
+<h2 id="stage-panel">Stage panel<a class="headerlink" href="#stage-panel" title="Permanent link">¶</a></h2>
+<p>A list of Stages to choose from, associated with the selected Asset.</p>
+<p><a class="glightbox" data-type="image" data-width="100%" data-height="auto" href="../../source/stage_panel.png" data-desc-position="bottom"><img align="left" alt="stage_panel.png" src="../../source/stage_panel.png" width="200,"></a></p>
+<ul>
+<li><a href="../../how_to/#create-assets">Create Assets and add Stages to them</a></li>
+<li>Select a Stage to work on</li>
+<li><a href="../../how_to/#assign-users-and-status-to-a-stage">Assign Users and Statuses to a Stage</a></li>
+<li>Quick access to your recent and favourites Assets (todo)</li>
+</ul>
+<p><br>
+<br>
+<br>
+<br>
+<br>
+<br></p>
+<hr>
+<h2 id="ingredients-panel">Ingredients panel<a class="headerlink" href="#ingredients-panel" title="Permanent link">¶</a></h2>
+<p>List of ingredients expected by a Stage, grouped by name.</p>
+<p><a class="glightbox" data-type="image" data-width="100%" data-height="auto" href="../../source/ingredients.png" data-desc-position="bottom"><img align="left" alt="ingredients.png" src="../../source/ingredients.png" width="200,"></a></p>
+<ul>
+<li><a href="../../how_to/#cast-ingredients-in-a-stage">Cast ingredients in the selected Stage</a></li>
+<li>Swap the version number of an ingredient</li>
+<li>Autocast ingredients expected from the selected Stage (todo)</li>
+<li>Copy-paste ingredients between different Stages (todo)</li>
+<li>Group ingredients into folders to use them together somewhere else (examples: a character with its props, a shot's content, etc.) (todo)</li>
+</ul>
+<hr>
+<h2 id="work-versions">Work versions<a class="headerlink" href="#work-versions" title="Permanent link">¶</a></h2>
+<p>List of all the work versions for the selected Stage</p>
+<p><a class="glightbox" data-type="image" data-width="100%" data-height="auto" href="../../source/work_versions.png" data-desc-position="bottom"><img align="left" alt="work_versions.png" src="../../source/work_versions.png" width="200,"></a></p>
+<ul>
+<li><a href="../../how_to/#select-and-open-a-version">Open a working file</a></li>
+<li>See infos about the Stage's working Versions (user, comment, date, software, etc.)</li>
+<li>Create new Versions with en empty file</li>
+<li>Increment existing Versions</li>
+<li>Edit version comments</li>
+<li><a href="../../how_to/#build-and-export-a-scene">Execute Build, Update, Export and Reviews of a Version</a></li>
+</ul>
+<p><br>
+<br>
+<br></p>
+<hr>
+<h2 id="exports">Exports<a class="headerlink" href="#exports" title="Permanent link">¶</a></h2>
+<p>Table of the Components that were exported from the selected Stage.</p>
+<p><a class="glightbox" data-type="image" data-width="100%" data-height="auto" href="../../source/exports.png" data-desc-position="bottom"><img align="left" alt="exports.png" src="../../source/exports.png" width="200,"></a></p>
+<ul>
+<li>The columns are the Component's names, and the rows are the Version numbers.</li>
+<li>For each possible Components, see if it was exported, and who exported it.</li>
+</ul>
 
 
 
