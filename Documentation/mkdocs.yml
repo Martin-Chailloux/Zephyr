@@ -71,7 +71,7 @@ plugins:
             docstring_style: google
             show_bases: false
             show_source: true
-            show_root_heading: true
+#            show_root_heading: true
             heading_level: 3
             show_root_full_path: false
             show_root_toc_entry: false

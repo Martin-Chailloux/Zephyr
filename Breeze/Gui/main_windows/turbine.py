@@ -7,6 +7,7 @@ from Gui.panels.turbine.steps_viewer_panel import StepsViewer
 
 
 class TurbineGui(QMainWindow):
+    """ Used to define inputs before running an engine """
     def __init__(self):
         super().__init__()
         self._init_ui()

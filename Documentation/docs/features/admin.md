@@ -1,6 +1,8 @@
-# Admin
+# Admin (TODO)
 
-(todo)
+
+A global access and manager to settings, template and rules.
 
 - Create stage templates and recipes
 - Assign processes to stage templates
+- etc.

@@ -4,6 +4,10 @@ from Api.recipes.ingredient_slot import IngredientSlot
 
 
 class Recipe:
+    """
+    List of the IngredientSlots of a StageTemplate.
+    """
+
     def __init__(self, ingredient_slots: list[IngredientSlot]):
         self.ingredients_slots = ingredient_slots
 

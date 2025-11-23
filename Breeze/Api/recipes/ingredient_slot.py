@@ -5,20 +5,19 @@ from Api.recipes.component_filters import ComponentFilterBase, ComponentFilters
 
 
 class IngredientSlot:
+    """
+    A slot in a Recipe, with associated ComponentFilters.
+    It can receive one or more ingredients.
+    """
+
     def __init__(self, name: str, multiple: bool = False, filters: list[ComponentFilterBase] = None):
-        """
-        A template to receive ingredients, inside a Recipe.
-        :param name: name of the slot
-        :param multiple: can receive multiple ingredients
-        :param filters: pre-filters the available components
-        """
         self.name = name
         self.is_multiple = multiple
         self.filters: list[ComponentFilterBase] = filters or []
 
-        self.allowed_components = self.get_allowed_components()
+        self.allowed_components = self._get_allowed_components()
 
-    def get_allowed_components(self) -> list[Component]:
+    def _get_allowed_components(self) -> list[Component]:
         components: list[Component] = Component.objects
         for component_filter in self.filters:
             components = component_filter.get_filtered_components(components=components)

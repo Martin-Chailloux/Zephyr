@@ -123,7 +123,7 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
     def create_component_editor(self, parent: QWidget, option: QStyleOptionViewItem, index: QModelIndex):
         # filter allowed components
         ingredient_slot: IngredientSlot = index.data(ComponentTreeItemRoles.ingredient_slot)
-        components = ingredient_slot.get_allowed_components()
+        components = ingredient_slot.allowed_components()
 
         # create editor
         components_browser = ComponentBrowser(components=components, stage=self.stage)

@@ -102,9 +102,7 @@ class WorkVersionsWidget(QWidget):
 
     def open_selected_version(self):
         version = self.versions_list.get_hovered_version()
-        file = version.to_file()
-        file.open_interactive()
-        print(f"Opening {version.software.label} file: {version.filepath}")
+        version.open_interactive()
 
     def show_context_menu(self, position: QPoint):
         version = self.versions_list.get_hovered_version()

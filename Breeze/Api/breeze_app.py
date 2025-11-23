@@ -1,3 +1,8 @@
+"""
+A singleton that keeps track of the current Project, User and Palette.
+It is meant to be freely modified.
+"""
+
 from Api.document_models.studio_documents import Project, User, Palette
 
 

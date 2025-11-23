@@ -3,23 +3,21 @@
 
 ### Priority
 
--  rmb in Users List does not cancel it
+- remove Software field from versions, find it using the component's extension with: Component.get_software() -> Optional[Software]
+- FIX: rmb in Users List does not cancel it
 
 - Turbine:
     - modeling build: version num + dont overwrite to build over an existing version
     - export modeling: use version num input
 
-    - Create basic processes for modeling -> rigging -> shot
-        Think about pipeline details later
+    - Create processes to be able to do: modeling -> rigging -> shot
+    - rigging: build from geo and extra ingredients
 
-- ExportsTable:
+- better ExportsTable:
     - mvd
     - context menu
 
-- rigging: build from geo and extra ingredients
-
-- Recipes: finish required features
-    - ComponentBrowser: remove work components (wait for more exports, for debug purposes)
+- ComponentBrowser: remove work components (wait for more exports, for debug purposes)
 
 ---
 

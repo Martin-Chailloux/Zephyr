@@ -5,6 +5,10 @@ from Api.document_models.project_documents import Component
 
 
 class ComponentFilterBase:
+    """
+    Defines which Components can or cannot be added to an IngredientSlot, in a Recipe.
+    """
+
     name: str
 
     def __init__(self, items: list[str], blacklist: bool=False):
@@ -37,6 +41,7 @@ class ComponentFilterBase:
 
 
 class ComponentFilterCategory(ComponentFilterBase):
+    """ Filter components based on their Asset's category. """
     name = 'category'
     def filter_components(self, components: list[Component]) -> list[Component]:
         components = [c for c in components if c.stage.asset.category.lower() in self.items]
@@ -44,6 +49,7 @@ class ComponentFilterCategory(ComponentFilterBase):
 
 
 class ComponentFilterStage(ComponentFilterBase):
+    """ Filter components based on their StageTemplate's name. """
     name = 'stage'
     def filter_components(self, components: list[Component]) -> list[Component]:
         components = [c for c in components if c.stage.stage_template.name in self.items]
@@ -51,6 +57,7 @@ class ComponentFilterStage(ComponentFilterBase):
 
 
 class ComponentFilterComponent(ComponentFilterBase):
+    """ Filter components based on their name. """
     name = 'component'
     def filter_components(self, components: list[Component]) -> list[Component]:
         components = [c for c in components if c.name in self.items]

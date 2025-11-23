@@ -15,8 +15,8 @@ from blender_file import BlenderFile
 
 class Asset(Document):
     """
-    Encapsulates an element from a project. An Asset is made of a category, a name and variant.
-    For every combination of category + name, there is always a default variant `-` .
+    An element from a project. It is made of a category, a name and variant.
+    For every combination of _category + name_, there is always a default variant `-` .
 
     Examples: `character_Gabin_-`, `set_Playground_broken`, `element_tree_B`, `element_tree_C`,
     `sequence_sq0020_sh0180`, `library_lightrigs_master`, `sandbox_vfx_boom`
@@ -65,9 +65,9 @@ class Asset(Document):
 
 class Stage(Document):
     """
-    A working step during the creation of an Asset.
-    Uses input components as ingredients and generate output components.
-    Always has a `work` Component that contains its working files.
+    A step during the creation of an Asset.
+    Uses Components as ingredients, and exports other Components.
+    It always has a `work` Component that contains work software files.
     """
     longname: str = StringField(required=True, primary_key=True)
     asset: Asset = ReferenceField(document_type=Asset)
@@ -175,8 +175,9 @@ class Stage(Document):
 
 class Component(Document):
     """
-    Represents an independent building component of the project.
-    Contains the iterated Versions from a same file.
+    An independent building component of the project.
+    It contains multiple Versions.
+    It is exported from a Stage and becomes the ingredient of another Stage.
 
     Examples: `geo`, `rig`, `anim`, etc...
     """
@@ -268,12 +269,14 @@ class Component(Document):
 
 class Version(Document):
     """
-    An iteration of a file we manipulate.
+    An iteration of a file.
     """
     longname = StringField(required=True, primary_key=True)
 
     component: Component = ReferenceField(document_type=Component, required=True)
     number: int = IntField(required=True)  # -1 is head
+
+    # TODO: remove and replace with Component.get_software() -> Optional[Software], that uses Component.extension
     software: Software = ReferenceField(document_type=Software, required=True)  # strange to have in exports
 
     # deduced from upper documents
@@ -363,6 +366,18 @@ class Version(Document):
         else:
             raise NotImplementedError(f"File instance for: {self.software}")
 
+    def open_interactive(self)-> AbstractSoftwareFile:
+        file = self.to_file()
+        file.open_interactive()
+        print(f"Opening an interactive {self.software.label} file: {self.filepath}")
+        return file
+
+    def open_background(self)-> AbstractSoftwareFile:
+        file = self.to_file()
+        file.open()
+        print(f"Opening a background {self.software.label} file: {self.filepath}")
+        return file
+
     def get_filter_keys(self) -> str:
         """ returns a string of keys used with search bars to filter a list of versions """
         # TODO: it does not work with users
@@ -381,6 +396,7 @@ class Version(Document):
 
 
 class Job(Document):
+    """ An Engine's instance """
     longname: str = StringField(required=True, primary_key=True) # name + date
     user: User = ReferenceField(document_type=User, required=True)
     creation_time = DateTimeField(default=datetime.now)

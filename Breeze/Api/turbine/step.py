@@ -16,6 +16,10 @@ TypeTurbineStep = TypeVar("TypeTurbineStep")
 
 
 class TurbineStep(QObject):
+    """
+    Multiple steps are assembled inside a TurbineEngine and ran after each other.
+    """
+
     updated = Signal()
     label: str = "step_label"
     sub_label: str = None

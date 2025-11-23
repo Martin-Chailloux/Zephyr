@@ -181,6 +181,10 @@ class Project(Document):
 
 
 class Process(Document):
+    """
+    The database document that registers an Engine
+    """
+
     longname: str = StringField(required=True, primary_key=True)
     class_path: str = StringField(required=True)
     label: str = StringField(required=True)
@@ -211,7 +215,7 @@ class Process(Document):
 
 class StageTemplate(Document):
     """
-    Represents a type of Stage, with expected ingredients and associated processes.
+    Model for a Stage, with expected ingredients and associated processes.
 
     Examples: `modeling`, `rigging`, `shading`, `animation`, `lighting`, etc...
     """
@@ -222,7 +226,10 @@ class StageTemplate(Document):
     color: str = StringField(default="#ffffff")
     icon_name: str = StringField(default="fa5s.question")
 
+    # list of available software for this Stage, used to create a new empty Version
+    # TODO: rename to something easier to understand
     software: list[Software] = SortedListField(ReferenceField(document_type=Software), default=[])
+
     presets: list[str] = ListField(StringField(), default=[])  # TODO: an api to register presets would be easier to edit without using the ui
 
     processes: list[Process] = SortedListField(ReferenceField(document_type=Process, default=[]))

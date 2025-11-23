@@ -10,6 +10,10 @@ from Api.turbine.utils import JobContext
 
 
 class TurbineEngine(TurbineStep):
+    """
+    Series of step that from a process. Examples: Build, Export, Review, etc ...
+    """
+
     name: str = "process_name"
     label: str = "process_label"
     tooltip: str = "process_tooltip"
