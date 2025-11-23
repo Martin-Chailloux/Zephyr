@@ -1,8 +1,12 @@
 # Reference
 
+A deeper explanation of Breeze's internal systems.
 
-## [Assets structure](assets_structure.md)
+### [Assets structure](assets_structure.md)
+The document structure used to register files in the database.
 
-## [Recipes](recipes.md)
+### [Recipes](recipes.md)
+Ingredients system used to build scenes out of exported Components.
 
-## [Turbine](turbine.md)
+### [Turbine](turbine.md)
+Build, Update, Export and Review scenes.

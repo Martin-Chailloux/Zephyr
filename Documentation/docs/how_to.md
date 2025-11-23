@@ -9,9 +9,11 @@ Navigate in the browser to select an Asset, a Stage and a Version.
 
 Double-click on the version to open it.
 
-<br/><br/>
-<br/><br/>
-<br/><br/>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ___
 
@@ -37,14 +39,19 @@ ___
 
 Click the `User` or `Status` icon to open an Edit Popup. Left-click to confirm, or right-click to cancel.
 
-<br/><br/>
-<br/><br/>
-<br/><br/>
-<br/><br/>
-<br/><br/>
-<br/><br/>
-<br/><br/>
-
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ___
 

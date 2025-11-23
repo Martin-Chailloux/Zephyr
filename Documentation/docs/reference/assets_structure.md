@@ -1,6 +1,6 @@
 # Assets Structure (Reference)
 
-This is the base structure of documents used to register files in the database.
+Breeze uses a MongoEngine database to register and to store files.
 
 An Asset contains multiple Stages that represents each step of its creation.
 Each Stage generates multiple Components, they become the ingredients of other Stages.
