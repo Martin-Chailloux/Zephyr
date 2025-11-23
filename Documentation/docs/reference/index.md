@@ -2,11 +2,10 @@
 
 A deeper explanation of Breeze's internal systems.
 
-### [Assets structure](assets_structure.md)
-The document structure used to register files in the database.
+___
 
-### [Recipes](recipes.md)
-Ingredients system used to build scenes out of exported Components.
+[Assets structure](assets_structure.md) - The document structure used to register files in the database.
 
-### [Turbine](turbine.md)
-Build, Update, Export and Review scenes.
+[Recipes](recipes.md) - Ingredients system used to build scenes out of exported Components.
+
+[Turbine](turbine.md) - Build, Update, Export and Review scenes.

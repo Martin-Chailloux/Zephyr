@@ -837,15 +837,19 @@
 
 <h1 id="recipes-reference">Recipes (Reference)<a class="headerlink" href="#recipes-reference" title="Permanent link">¶</a></h1>
 <p>To use external components in our working files, we use an ingredient-recipes system.</p>
-<p class="annotate">We cast expected ingredients in a <a href="../assets_structure/#stage">Stage</a>,
-based on the recipe (1) from its <a href="../assets_structure/#stagetemplate">StageTemplate</a>.
+<p>We cast expected ingredients in a <a href="../assets_structure/#stage">Stage</a>,
+based on the recipe from its <a href="../assets_structure/#stagetemplate">StageTemplate</a>.
 These ingredients are the output <a href="../assets_structure/#component">Components</a> of another Stage.</p>
-<ol>
-<li>We can also cast ingredients that are not part of the recipe, if needed.</li>
-</ol>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
-<p>In a <code>rigging</code> stage, we cast a geometry <code>geo</code> from the <code>modeling</code> and a material <code>shd</code> from the <code>shading</code>.</p>
+<ul>
+<li>In a <code>rigging</code> stage, we cast a geometry <code>geo</code> from the <code>modeling</code> and a material <code>shd</code> from the <code>shading</code>.</li>
+<li>In an <code>animaition</code> stage, we cast multiple character rigs, multiple props, a camera rig, a decor, etc.</li>
+</ul>
+</div>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>It is possible to cast ingredients that are not part of the recipe, if needed.</p>
 </div>
 <h2 id="classes">Classes<a class="headerlink" href="#classes" title="Permanent link">¶</a></h2>
 <h3 id="recipe"><code>Recipe</code><a class="headerlink" href="#recipe" title="Permanent link">¶</a></h3>

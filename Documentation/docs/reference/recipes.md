@@ -3,14 +3,15 @@
 To use external components in our working files, we use an ingredient-recipes system.
 
 We cast expected ingredients in a [Stage](assets_structure.md#stage),
-based on the recipe (1) from its [StageTemplate](assets_structure.md#stagetemplate).
+based on the recipe from its [StageTemplate](assets_structure.md#stagetemplate).
 These ingredients are the output [Components](assets_structure.md#component) of another Stage.
-{ .annotate }
 
-1. We can also cast ingredients that are not part of the recipe, if needed.
+!!! example
+    - In a `rigging` stage, we cast a geometry `geo` from the `modeling` and a material `shd` from the `shading`.
+    - In an `animaition` stage, we cast multiple character rigs, multiple props, a camera rig, a decor, etc.
 
-!!! Example
-    In a `rigging` stage, we cast a geometry `geo` from the `modeling` and a material `shd` from the `shading`.
+!!! info
+    It is possible to cast ingredients that are not part of the recipe, if needed.
 
 
 ## Classes
