@@ -1,8 +1,10 @@
 from typing import Optional
 
+import qtawesome
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem, QLabel
 
 from Api.document_models.project_documents import Stage, Component, Version
+from Utils.sub_widgets import IconLabel
 
 
 class SelectedStageSubPanel(QWidget):
@@ -44,28 +46,31 @@ class StageExportsTable(QTableWidget):
         if not versions:
             return
 
-        work_component = versions[0].component.stage.work_component
+        # columns (components)
         components: list[Component] = [v.component for v in versions]
-        components: list[Component] = [c for c in components if c != work_component]
         components = list(set(components))
         self.setColumnCount(len(components))
-        self.setHorizontalHeaderLabels([c.label for c in components])
-        columns = {component.label: i for i, component in enumerate(components)}
+        self.setHorizontalHeaderLabels([f"{c.label} {c.extension}" for c in components])
+        columns = {component: i for i, component in enumerate(components)}
 
-        numbers: list[int] = [v.number for v in versions]
+        # rows (version numbers)
+        work_versions =  components[0].stage.work_component.versions  # any item from components will work
+        numbers: list[int] = [v.number for v in work_versions]
         numbers = list(set(numbers))
         numbers.reverse()
         self.setRowCount(len(numbers))
         self.setVerticalHeaderLabels([f"{n:03d}" for n in numbers])
-        rows = {f"{number:03d}": i for i, number in enumerate(numbers)}
+        rows = {number: i for i, number in enumerate(numbers)}
 
         for version in versions:
-            row = rows.get(f"{version.number:03d}", None)
-            column = columns.get(version.component.label, None)
+            row = rows.get(version.number, None)
+            column = columns.get(version.component, None)
 
             if row is not None and column is not None:
-                text = f".{version.software.extension}"
+                text = version.creation_user.pseudo
+                icon = qtawesome.icon('fa.check')
                 item = QTableWidgetItem(text)
+                item.setIcon(icon)
                 self.setItem(row, column, item)
 
     def set_stage(self, stage: Stage=None):
@@ -76,7 +81,8 @@ class StageExportsTable(QTableWidget):
 
         versions = []
         for component in stage.components:
-            versions.extend(component.versions)
+            if component != stage.work_component:
+                versions.extend(component.versions)
 
         self.populate(versions=versions)
 
