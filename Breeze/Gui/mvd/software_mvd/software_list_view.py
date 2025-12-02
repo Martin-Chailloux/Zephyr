@@ -1,6 +1,7 @@
 from PySide6.QtCore import Signal
 
 from Api.document_models.project_documents import Stage
+from Api.document_models.studio_documents import Software
 from Gui.mvd.abstract_mvd import AbstractListView
 from Gui.mvd.software_mvd.software_list_item_delegate import SoftwareListItemDelegate
 from Gui.mvd.software_mvd.software_list_model import SoftwareListModel, SoftwareItemRoles
@@ -18,10 +19,7 @@ class SoftwareListView(AbstractListView):
         self._item_delegate = SoftwareListItemDelegate()
         self.setItemDelegate(self._item_delegate)
 
-    def mousePressEvent(self, event):
-        super().mousePressEvent(event)
-        hovered_item = self.get_hovered_item()
-        if hovered_item is None:
-            return
-        software = hovered_item.data(SoftwareItemRoles.software)
-        self.software_selected.emit(software.label)
+    def get_software(self) -> Software:
+        index = self.get_selected_index()
+        software: Software = index.data(SoftwareItemRoles.software)
+        return software

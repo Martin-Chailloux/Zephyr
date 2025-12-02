@@ -8,8 +8,6 @@ from PySide6.QtWidgets import QWidget, QApplication, QVBoxLayout
 mongoengine.connect(host="mongodb://localhost:27017", db="Studio", alias="default")
 
 from Api.breeze_app import BreezeApp
-from Api.document_models.project_documents import Component
-from Gui.popups.component_browser import ComponentBrowser
 from Gui.popups.text_input_popup import TextInputPopup
 
 mongoengine.connect(host="mongodb://localhost:27017", db="JourDeVent", alias="current_project")
@@ -27,11 +25,9 @@ class Widget(QWidget):
         layout = QVBoxLayout()
         self.setLayout(layout)
 
-        subwidget = ComponentBrowser()
+        subwidget = QWidget()
         layout.addWidget(subwidget)
 
-        components = Component.objects()
-        subwidget.component_list.set_components(components=components)
 
     def _connect_signals(self):
         pass

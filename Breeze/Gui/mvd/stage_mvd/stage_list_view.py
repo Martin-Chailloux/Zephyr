@@ -8,7 +8,7 @@ from Gui.mvd.stage_mvd.stage_list_item_delegate import StageListItemDelegate, St
 from Gui.mvd.stage_mvd.stage_list_model import StageListModel, StageItemRoles, StageListMinimalModel
 from Gui.mvd.stage_mvd.stage_list_model import StageItemMetrics
 from Gui.popups.status_select_popup import StatusSelectPopup
-from Gui.popups.user_select_popup import UserSelectPopup
+from Gui.popups.user_browser import UserBrowser
 
 
 @dataclass
@@ -156,9 +156,11 @@ class StageListEditableView(_StageListBaseView):
     def mousePressEvent(self, event):
         hover_data = self._get_hover_data()
         if hover_data.on_user:
-            user_select_popup = UserSelectPopup(stage=self._get_hovered_stage())
-            result = user_select_popup.show_menu(position=[0.5, 0.25])
+            stage = self._get_hovered_stage()
+            user_browser = UserBrowser(default_user=stage.user)
+            result = user_browser.show_menu(position=[0.5, 0.25])
             if result:
+                stage.update(user=user_browser.users_list.get_user())
                 self.stage_data_modified.emit()
                 self.refresh()
         elif hover_data.on_status:

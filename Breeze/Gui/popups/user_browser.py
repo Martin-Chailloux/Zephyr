@@ -1,19 +1,18 @@
 from PySide6.QtWidgets import QVBoxLayout
 
 from Api.breeze_app import BreezeApp
-from Api.document_models.project_documents import Stage
 from Api.document_models.studio_documents import User
 from Gui.mvd.user_mvd.user_list_view import UserListView
 from Gui.popups.abstract_popup_widget import AbstractPopupWidget
 
 
-class UserSelectPopup(AbstractPopupWidget):
+class UserBrowser(AbstractPopupWidget):
     project = BreezeApp.project
     users = project.users
 
-    def __init__(self, stage: Stage):
+    def __init__(self, default_user: User = None):
         super().__init__(w=168, h=248)
-        self.stage = stage
+        self.default_user = default_user
         self._init_ui()
         self._connect_signals()
 
@@ -23,15 +22,11 @@ class UserSelectPopup(AbstractPopupWidget):
 
         users_list = UserListView()
         layout.addWidget(users_list)
-        users_list.set_selected_user(self.stage.user)
+        if self.default_user is not None:
+            users_list.set_selected_user(self.default_user)
 
         self.users_list = users_list
 
     def _connect_signals(self):
-        self.users_list.user_selected.connect(self.on_user_selected)
         self.users_list.right_clicked.connect(self.reject)
-
-    def on_user_selected(self, pseudo: str):
-        user = User.objects.get(pseudo=pseudo)
-        self.stage.update(user=user)
-        self.accept()
+        self.users_list.selectionModel().selectionChanged.connect(self.accept)

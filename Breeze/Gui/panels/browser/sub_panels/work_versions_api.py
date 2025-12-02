@@ -7,15 +7,12 @@ def create_empty_version(stage: Stage) -> bool:
     confirm = software_browser.show_menu(position=[0.5, 0.25])
     if not confirm:
         return False
-    elif software_browser.software is None:
-        return False
+    software = software_browser.software_list.get_software()
 
     comment_box = CommentEditMenu(title="Comment: ", default_comment="New file")
     confirm = comment_box.show_menu(position=[0.5, 0.3])
     if not confirm:
         return False
-
-    software = software_browser.software
 
     # create version
     if stage.work_component is None:

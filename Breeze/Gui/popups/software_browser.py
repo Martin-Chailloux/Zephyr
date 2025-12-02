@@ -6,7 +6,6 @@ from PySide6.QtGui import QShortcut, QKeySequence
 from PySide6.QtWidgets import QVBoxLayout, QPushButton, QHBoxLayout
 
 from Api.document_models.project_documents import Stage
-from Api.document_models.studio_documents import Software
 from Gui.popups.abstract_popup_widget import AbstractPopupWidget
 from Gui.mvd.software_mvd.software_list_view import SoftwareListView
 from Utils.sub_widgets import TextBox, IconButton
@@ -16,8 +15,6 @@ class SoftwareBrowser(AbstractPopupWidget):
     def __init__(self, stage: Stage):
         super().__init__(w=168, h=248)
         self.stage = stage
-        self.software: Optional[Software] = None  # is set when closed
-        self.comment: Optional[str] = None  # is set when closed
         self._init_ui()
         self._connect_signals()
 
@@ -31,13 +28,8 @@ class SoftwareBrowser(AbstractPopupWidget):
         self.software_list = software_list
 
     def _connect_signals(self):
-        self.software_list.software_selected.connect(self.on_software_selected)
+        self.software_list.selectionModel().selectionChanged.connect(self.accept)
         self.software_list.right_clicked.connect(self.reject)
-
-    def on_software_selected(self, label: str):
-        software = Software.objects.get(label=label)
-        self.software = software
-        self.accept()
 
 
 class CommentEditMenu(AbstractPopupWidget):

@@ -138,10 +138,14 @@ class AbstractListView(QListView):
         self.selectionModel().setCurrentIndex(index, selection_flag)
 
     def mousePressEvent(self, event):
-        if isinstance(event, QMouseEvent):
-            if event.button() == QtCore.Qt.MouseButton.RightButton:
+        if not isinstance(event, QMouseEvent):
+            raise NotImplementedError("DEV: Not a mouse event")
+
+        match event.button():
+            case QtCore.Qt.MouseButton.RightButton:
                 self.right_clicked.emit()
-        super().mousePressEvent(event)
+            case _:
+                super().mousePressEvent(event)
 
     def mouseDoubleClickEvent(self, event):
         super().mouseDoubleClickEvent(event)

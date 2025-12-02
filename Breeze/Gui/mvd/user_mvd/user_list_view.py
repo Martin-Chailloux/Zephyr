@@ -7,9 +7,6 @@ from Gui.mvd.user_mvd.user_list_model import UserListModel, UserItemRoles
 
 
 class UserListView(AbstractListView):
-    user_selected = Signal(str)
-    right_clicked = Signal()
-
     def __init__(self):
         super().__init__()
         self._model = UserListModel()
@@ -25,10 +22,7 @@ class UserListView(AbstractListView):
                 self.selectionModel().setCurrentIndex(index, QItemSelectionModel.SelectionFlag.Select)
                 return
 
-    def mousePressEvent(self, event):
-        super().mousePressEvent(event)
-        hovered_item = self.get_hovered_item()
-        if hovered_item is None:
-            return
-        user = hovered_item.data(UserItemRoles.user)
-        self.user_selected.emit(user.pseudo)
+    def get_user(self) -> User:
+        index = self.get_selected_index()
+        user: User = index.data(UserItemRoles.user)
+        return user

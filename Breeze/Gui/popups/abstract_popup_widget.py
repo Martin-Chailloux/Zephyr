@@ -36,7 +36,11 @@ class AbstractPopupWidget(QDialog):
         return self.exec()
 
     def mousePressEvent(self, event):
-        super().mousePressEvent(event)
-        if isinstance(event, QMouseEvent):
-            if event.button() == QtCore.Qt.MouseButton.RightButton:
+        if not isinstance(event, QMouseEvent):
+            raise NotImplementedError("DEV: Not a mouse event")
+
+        match event.button():
+            case QtCore.Qt.MouseButton.RightButton:
                 self.reject()
+            case _:
+                super().mousePressEvent(event)
