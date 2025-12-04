@@ -1,24 +1,14 @@
-from dataclasses import dataclass
-
-from PySide6.QtCore import Signal, QModelIndex, QItemSelectionModel
+from PySide6 import QtCore
+from PySide6.QtCore import Signal, QItemSelectionModel, QItemSelection, QModelIndex
 
 from Api.document_models.project_documents import Asset, Stage
 from Gui.mvd.abstract_mvd import AbstractListView
-from Gui.mvd.stage_mvd.stage_list_item_delegate import StageListItemDelegate, StageListMinimalItemDelegate
+from Gui.mvd.stage_mvd.stage_list_item_delegate import StageListItemDelegate, StageListItemDelegateMinimal
 from Gui.mvd.stage_mvd.stage_list_model import StageListModel, StageItemRoles, StageListMinimalModel
 from Gui.mvd.stage_mvd.stage_list_model import StageItemMetrics
-from Gui.popups.status_select_popup import StatusSelectPopup
-from Gui.popups.user_browser import UserBrowser
 
 
-@dataclass
-class StageListHoverData:
-    index: QModelIndex = None
-    on_user: bool = False
-    on_status: bool = False
-
-
-class _StageListBaseView(AbstractListView):
+class _StageListViewBase(AbstractListView):
     stage_selected = Signal()
 
     def __init__(self):
@@ -26,7 +16,6 @@ class _StageListBaseView(AbstractListView):
         self._set_model()
         self._set_delegate()
 
-        self.last_hover_data = StageListHoverData()
         self._connect_signals()
 
     def _set_model(self):
@@ -86,102 +75,51 @@ class _StageListBaseView(AbstractListView):
                 self.select_row(row)
 
     def _connect_signals(self):
+        super()._connect_signals()
         self.selectionModel().selectionChanged.connect(self._on_selection_changed)
 
     def _on_selection_changed(self):
         self.stage_selected.emit()
 
-    def _get_hovered_stage(self) -> Stage | None:
-        hovered_item = self.get_hovered_item()
-        if hovered_item is None:
-            return None
 
-        stage = hovered_item.data(StageItemRoles.stage)
-        return stage
+class StageListViewEditable(_StageListViewBase):
+    def __init__(self):
+        super().__init__()
 
-
-class StageListEditableView(_StageListBaseView):
     stage_data_modified = Signal()
 
-    def refresh(self):
-        super().refresh()
-        self.set_items_hover_infos()
-        self.viewport().update()
-
-    def _get_hover_data(self) -> StageListHoverData:
-        x, y, w, h = self._get_viewport_rect()
-        mouse_pos = self._get_mouse_pos()
-        status_x = w - StageItemMetrics.status_w
-        user_x = status_x - StageItemMetrics.height
+    def _set_hover_data(self, edit: bool=False):
+        self._model.clear_hover_data()
 
         index = self._get_hovered_index()
-        on_user = index.row() != -1 and user_x < mouse_pos.x() < status_x
-        on_status = index.row() != -1 and status_x < mouse_pos.x()
-        hover_data = StageListHoverData(index=index,
-                                        on_user=on_user,
-                                        on_status=on_status)
-        return hover_data
+        item = self._model.itemFromIndex(index)
 
-    def set_items_hover_infos(self):
-        hovered_item = self.get_hovered_item()
-        if hovered_item is None:
+        if index is None or item is None:
             return
 
-        # Set hovered components for the delegate
-        hovered_item.setData(self.last_hover_data.on_user, StageItemRoles.user_is_hovered)
-        hovered_item.setData(self.last_hover_data.on_status, StageItemRoles.status_is_hovered)
+        mouse_position = self._get_mouse_pos()
+        x, y, w, h = self._get_viewport_rect()
+        status_x = w - StageItemMetrics.status_width
+        user_x = status_x - StageItemMetrics.height
 
-        # Set tooltip
-        # TODO: pollutes the gui, use a help bar at the bottom of the app instead
-        #  it receives text signals
-        if hovered_item.data(StageItemRoles.user_is_hovered):
-            tooltip = "Edit user"
-        elif hovered_item.data(StageItemRoles.status_is_hovered):
-            tooltip = "Edit status"
-        else:
-            tooltip = ""
-        hovered_item.setToolTip(tooltip)
-
-    def mouseMoveEvent(self, event):
-        current_hover_data = self._get_hover_data()
-
-        if current_hover_data != self.last_hover_data:
-            self._model.remove_items_hover()
-            self.last_hover_data = current_hover_data
-            self.set_items_hover_infos()
-            self.viewport().update()
-
-        super().mouseMoveEvent(event)
+        can_edit_user = user_x < mouse_position.x() < status_x
+        can_edit_status = status_x < mouse_position.x()
+        item.setData(can_edit_user, StageItemRoles.can_edit_user)
+        item.setData(can_edit_status, StageItemRoles.can_edit_status)
 
     def mousePressEvent(self, event):
-        hover_data = self._get_hover_data()
-        if hover_data.on_user:
-            stage = self._get_hovered_stage()
-            user_browser = UserBrowser(default_user=stage.user)
-            result = user_browser.show_menu(position=[0.5, 0.25])
-            if result:
-                stage.update(user=user_browser.users_list.get_user())
-                self.stage_data_modified.emit()
-                self.refresh()
-        elif hover_data.on_status:
-            status_select_popup = StatusSelectPopup(stage=self._get_hovered_stage())
-            result = status_select_popup.show_menu(position=[0.5, 0.5])
-            if result:
-                self.stage_data_modified.emit()
-                self.refresh()
+        index = self._get_hovered_index()
+        if index.data(StageItemRoles.can_edit_user) or index.data(StageItemRoles.can_edit_status):
+            self.edit(index)
         else:
             super().mousePressEvent(event)
 
-    def leaveEvent(self, event):
-        self._model.remove_items_hover()
-        super().leaveEvent(event)
 
-
-class StageListMinimalView(_StageListBaseView):
+class StageListViewMinimal(_StageListViewBase):
     def _set_model(self):
         self._model = StageListMinimalModel()
         self.setModel(self._model)
 
     def _set_delegate(self):
-        self._item_delegate = StageListMinimalItemDelegate()
+        self._item_delegate = StageListItemDelegateMinimal()
         self.setItemDelegate(self._item_delegate)

@@ -29,7 +29,7 @@ class ComponentTreeView(AbstractTreeView):
         self._item_delegate.set_stage(stage=stage)
         self.expandAll()
 
-    def _set_hover_data(self):
+    def _set_hover_data(self, edit: bool=False):
         index = self._get_hovered_index()
         item = self._model.itemFromIndex(index)
 
@@ -38,35 +38,22 @@ class ComponentTreeView(AbstractTreeView):
 
         is_title: bool = index.data(ComponentTreeItemRoles.is_title)
         version: Version = index.data(ComponentTreeItemRoles.version)
+
         if is_title or version is None:
             item.setData(False, ComponentTreeItemRoles.can_edit_version_number)
             return
 
         mouse_position = self._get_mouse_pos()
         x, y, w, h = self._get_viewport_rect()
-        is_over_version_number = mouse_position.x() > w - ComponentTreeItemMetrics.version_width - ComponentTreeItemMetrics.edit_width
 
-        item.setData(is_over_version_number, ComponentTreeItemRoles.can_edit_version_number)
-
-    def leaveEvent(self, event):
-        super().leaveEvent(event)
-        self._set_hover_data()
-
-    def mouseMoveEvent(self, event):
-        super().mouseMoveEvent(event)
-        self._set_hover_data()
-
-    def mousePressEvent(self, event):
-        super().mousePressEvent(event)
-
-        self._set_hover_data()
+        can_edit_version_number = mouse_position.x() > w - ComponentTreeItemMetrics.version_width - ComponentTreeItemMetrics.edit_width
+        item.setData(can_edit_version_number, ComponentTreeItemRoles.can_edit_version_number)
 
         # edit after a single click
-        index = self._get_hovered_index()
         version = index.data(ComponentTreeItemRoles.version)
-        can_edit_version_number = index.data(ComponentTreeItemRoles.can_edit_version_number)
-        if version is None or can_edit_version_number:
-            self.edit(index)
+        if edit:
+            if version is None or can_edit_version_number:
+                self.edit(index)
 
     def _connect_signals(self):
         self._model.refreshed.connect(self.expandAll)

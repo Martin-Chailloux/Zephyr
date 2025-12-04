@@ -2,7 +2,7 @@ import datetime
 from typing import Optional
 
 from PySide6 import QtCore
-from PySide6.QtCore import QPoint, QModelIndex, QRect, QRectF, QPointF, QItemSelectionModel, Signal
+from PySide6.QtCore import QPoint, QModelIndex, QRect, QRectF, QPointF, QItemSelectionModel, Signal, QTimer
 from PySide6.QtGui import (QCursor, QStandardItem, QStandardItemModel, QPainter, QColor,
                            QBrush, QPen, QImage, QPainterPath, QMouseEvent, QFontMetrics)
 from PySide6.QtWidgets import QListView, QStyledItemDelegate, QStyleOptionViewItem, QStyle, QWidget, QAbstractItemView, \
@@ -15,6 +15,8 @@ alignment = QtCore.Qt.AlignmentFlag
 
 
 class AbstractItemModel(QStandardItemModel):
+    refresh_view = Signal()
+
     def __init__(self):
         super().__init__()
 
@@ -75,11 +77,27 @@ class AbstractTreeView(QTreeView):
         else:
             self.selectionModel().setCurrentIndex(index, QItemSelectionModel.SelectionFlag.Deselect)
 
+    def _set_hover_data(self, edit: bool=False):
+        pass
+
+    def leaveEvent(self, event):
+        super().leaveEvent(event)
+        self._set_hover_data()
+
+    def mouseMoveEvent(self, event):
+        super().mouseMoveEvent(event)
+        self._set_hover_data()
+
     def mousePressEvent(self, event):
-        if isinstance(event, QMouseEvent):
-            if event.button() == QtCore.Qt.MouseButton.RightButton:
+        if not isinstance(event, QMouseEvent):
+            raise NotImplementedError("DEV: Not a mouse event")
+
+        match event.button():
+            case QtCore.Qt.MouseButton.RightButton:
                 self.right_clicked.emit()
-        super().mousePressEvent(event)
+            case _:
+                super().mousePressEvent(event)
+                self._set_hover_data(edit=True)
 
 
 class AbstractListView(QListView):
@@ -92,7 +110,7 @@ class AbstractListView(QListView):
         self._model: Optional[AbstractItemModel] = None
 
     def _connect_signals(self):
-        pass
+        self._model.refresh_view.connect(self.refresh)
 
     def _get_viewport_rect(self) -> (int, int, int, int):
         rect = self.viewport().rect()
@@ -137,6 +155,17 @@ class AbstractListView(QListView):
             selection_flag = QItemSelectionModel.SelectionFlag.Deselect
         self.selectionModel().setCurrentIndex(index, selection_flag)
 
+    def _set_hover_data(self, edit: bool=False):
+        pass
+
+    def leaveEvent(self, event):
+        super().leaveEvent(event)
+        self._set_hover_data()
+
+    def mouseMoveEvent(self, event):
+        super().mouseMoveEvent(event)
+        self._set_hover_data()
+
     def mousePressEvent(self, event):
         if not isinstance(event, QMouseEvent):
             raise NotImplementedError("DEV: Not a mouse event")
@@ -146,10 +175,12 @@ class AbstractListView(QListView):
                 self.right_clicked.emit()
             case _:
                 super().mousePressEvent(event)
+                self._set_hover_data(edit=True)
 
     def mouseDoubleClickEvent(self, event):
         super().mouseDoubleClickEvent(event)
         self.double_clicked.emit()
+        self._set_hover_data()
 
     def refresh(self):
         selected_indexes = self.selectionModel().selectedIndexes()
@@ -170,6 +201,7 @@ class AbstractItemDelegate(QStyledItemDelegate):
 
     def __init__(self):
         super().__init__()
+        self.is_editing: bool = False  # used to track if an edit popup should be moved
 
     def _set_common_data(self, option: QStyleOptionViewItem, index: QModelIndex):
         self.widget: QWidget = option.widget
@@ -187,6 +219,16 @@ class AbstractItemDelegate(QStyledItemDelegate):
     def _set_data(self, option: QStyleOptionViewItem, index: QModelIndex):
         self._set_common_data(option, index)
         self._set_custom_data(option, index)
+
+    @staticmethod
+    def _setup_editor(editor: QWidget, parent: QWidget, option: QStyleOptionViewItem):
+        """ moves the editor and give it the tool look"""
+        # return
+        editor.setWindowFlags(QtCore.Qt.WindowType.Tool)
+        QTimer.singleShot(0, lambda: editor.move(parent.mapToGlobal(option.rect.topLeft())))
+        QTimer.singleShot(0, lambda: editor.setMinimumSize(0, 0))
+        QTimer.singleShot(0, lambda: editor.setMaximumSize(1920, 1080))
+        QTimer.singleShot(0, lambda: editor.resize(280, 280))
 
     def get_item_rect(self) -> (int, int, int, int):
         item_rect = self.item_rect

@@ -1,13 +1,15 @@
 from PySide6 import QtCore
-from PySide6.QtCore import QModelIndex, QRect
-from PySide6.QtGui import QPainter, QBrush, QPainterPath
-from PySide6.QtWidgets import QStyleOptionViewItem
+from PySide6.QtCore import QModelIndex, QRect, QPoint
+from PySide6.QtGui import QPainter, QBrush, QPainterPath, QCursor
+from PySide6.QtWidgets import QStyleOptionViewItem, QWidget
 
 from Api.document_models.studio_documents import StageTemplate
 from Api.document_models.project_documents import Stage, Asset
-from Gui.mvd.stage_mvd.stage_list_model import StageItemRoles
+from Gui.mvd.stage_mvd.stage_list_model import StageItemRoles, StageListModel
 from Gui.mvd.stage_mvd.stage_list_model import StageItemMetrics
 from Gui.mvd.stage_template_mvd.stage_template_list_item_delegate import StageTemplateListItemDelegate
+from Gui.popups.status_select_popup import StatusSelectPopup
+from Gui.popups.user_browser import UserBrowser
 
 alignment = QtCore.Qt.AlignmentFlag
 
@@ -20,8 +22,8 @@ class StageListItemDelegate(StageTemplateListItemDelegate):
         self.stage: Stage = index.data(StageItemRoles.stage)
         self.asset: Asset = self.stage.asset
         self.stage_template: StageTemplate = self.stage.stage_template  # /!\ keep this name the same as in the upper class
-        self.user_is_hovered = index.data(StageItemRoles.user_is_hovered)
-        self.status_is_hovered = index.data(StageItemRoles.status_is_hovered)
+        self.can_edit_user = index.data(StageItemRoles.can_edit_user)
+        self.can_edit_status = index.data(StageItemRoles.can_edit_status)
 
     def paint(self, painter: QPainter, option: QStyleOptionViewItem , index: QModelIndex):
         self._set_data(option, index)
@@ -40,8 +42,8 @@ class StageListItemDelegate(StageTemplateListItemDelegate):
         self.paint_icon_circle(
             painter,
             icon_path=self.stage.user.icon_path,
-            margin=2 if self.user_is_hovered else 3,
-            offset= [w - StageItemMetrics.status_w - h, 0, 0, 0]
+            margin=2 if self.can_edit_user else 3,
+            offset= [w - StageItemMetrics.status_width - h, 0, 0, 0]
             )
         self.paint_status(painter)
 
@@ -49,17 +51,17 @@ class StageListItemDelegate(StageTemplateListItemDelegate):
 
     def paint_status(self, painter: QPainter):
         # metrics
-        margin = 3 if self.status_is_hovered else 4
+        margin = 3 if self.can_edit_status else 4
         x, y, w, h = self.get_item_rect()
-        x = w - StageItemMetrics.status_w + margin
-        rect = QRect(x, y + margin, StageItemMetrics.status_w - 2 * margin, h - 2 * margin)
+        x = w - StageItemMetrics.status_width + margin
+        rect = QRect(x, y + margin, StageItemMetrics.status_width - 2 * margin, h - 2 * margin)
 
         # gui
         text = self.stage.status.label
         pill_color = self.stage.status.color
         text_color = "black"
         font = painter.font()
-        if self.status_is_hovered:
+        if self.can_edit_status:
             font.setPointSizeF(font.pointSizeF() + 0.5)
 
         painter.save()
@@ -77,8 +79,59 @@ class StageListItemDelegate(StageTemplateListItemDelegate):
 
         painter.restore()
 
+    def create_user_editor(self, parent: QWidget, option: QStyleOptionViewItem, index: QModelIndex):
+        stage: Stage = index.data(StageItemRoles.stage)
+        user_browser = UserBrowser(default_user=stage.user)
+        return user_browser
 
-class StageListItemAlwaysOnDelegate(StageListItemDelegate):
+    def create_status_editor(self, parent: QWidget, option: QStyleOptionViewItem, index: QModelIndex):
+        stage: Stage = index.data(StageItemRoles.stage)
+        status_editor = StatusSelectPopup(stage=stage)
+        return status_editor
+
+    def createEditor(self, parent: QWidget, option: QStyleOptionViewItem, index: QModelIndex):
+        if index.data(StageItemRoles.can_edit_user):
+            editor = self.create_user_editor(parent=parent, option=option, index=index)
+        elif index.data(StageItemRoles.can_edit_status):
+            editor = self.create_status_editor(parent=parent, option=option, index=index)
+        else:
+            editor = None
+        editor.setWindowFlags(QtCore.Qt.WindowType.Popup)
+        return editor
+
+    def updateEditorGeometry(self, editor, option, index):
+        if self.is_editing:
+            return
+
+        editor.move(QCursor.pos())
+        self.is_editing = True
+
+    def set_user_data(self, editor: UserBrowser, model: StageListModel, index: QModelIndex):
+        user = editor.users_list.get_user()
+        stage = index.data(StageItemRoles.stage)
+        if user is None:
+            return
+        stage.update(user=user)
+
+    def set_status_data(self, editor: StatusSelectPopup, model: StageListModel, index: QModelIndex):
+        pass
+
+    def setModelData(self, editor: UserBrowser | StatusSelectPopup, model: StageListModel, index: QModelIndex):
+        if isinstance(editor, UserBrowser):
+            self.set_user_data(editor=editor, model=model, index=index)
+        elif isinstance(editor, StatusSelectPopup):
+            self.set_status_data(editor=editor, model=model, index=index)
+        else:
+            super().setModelData(editor, model, index)
+
+        self.is_editing = False
+        model.refresh_view.emit()
+
+
+class StageListItemDelegateHighlighted(StageListItemDelegate):
+    """
+    Display a single item that is always highlighted
+    """
     def _set_custom_data(self, option: QStyleOptionViewItem, index: QModelIndex):
         super()._set_custom_data(option, index)
         self.opacity = 1
@@ -92,7 +145,8 @@ class StageListItemAlwaysOnDelegate(StageListItemDelegate):
         return
 
 
-class StageListMinimalItemDelegate(StageListItemDelegate):
+class StageListItemDelegateMinimal(StageListItemDelegate):
+    """ Don't show user and status infos"""
     def paint(self, painter: QPainter, option: QStyleOptionViewItem , index: QModelIndex):
         self._set_data(option, index)
 

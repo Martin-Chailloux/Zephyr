@@ -47,12 +47,12 @@ class StageTemplateListItemDelegate(AbstractItemDelegate):
 
         painter.setOpacity(self.opacity)
         painter.setPen(QColor(0, 0, 0, 0))
-        rect = QRectF(x, y, StageItemMetrics.logo_w, h)
+        rect = QRectF(x, y, StageItemMetrics.logo_width, h)
         painter.setBrush(QBrush(background_color))
         painter.drawRect(rect)
 
         painter.setBrush(QBrush(icon_color))
-        rect = QRect(x + margin, y + margin, StageItemMetrics.logo_w - 2 * margin, h - 2 * margin)
+        rect = QRect(x + margin, y + margin, StageItemMetrics.logo_width - 2 * margin, h - 2 * margin)
         icon: QIcon = qtawesome.icon(self.stage_template.icon_name, opacity=self.opacity)
         icon.paint(painter, rect, QtCore.Qt.AlignmentFlag.AlignRight)
 
@@ -66,6 +66,6 @@ class StageTemplateListItemDelegate(AbstractItemDelegate):
         painter.save()
         painter.setOpacity(self.opacity)
         painter.setPen(QPen(color))
-        rect = QRect(x + padding + StageItemMetrics.logo_w, y, w, h)
+        rect = QRect(x + padding + StageItemMetrics.logo_width, y, w, h)
         painter.drawText(rect, self.stage_template.label, alignment.AlignVCenter | alignment.AlignLeft)
         painter.restore()

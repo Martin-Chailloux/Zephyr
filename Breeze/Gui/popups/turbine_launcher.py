@@ -9,7 +9,7 @@ from Api.breeze_app import BreezeApp
 from Api.document_models.project_documents import Version, Component
 from Api.document_models.studio_documents import Process
 from Api.turbine.inputs_gui import TurbineGui
-from Gui.mvd.stage_mvd.stage_list_view import StageListMinimalView
+from Gui.mvd.stage_mvd.stage_list_view import StageListViewMinimal
 from Gui.popups.abstract_popup_widget import AbstractPopupWidget
 from Gui.mvd.process_mvd.process_list_view import ProcessListView
 from Api.turbine.engine import TurbineEngine
@@ -46,7 +46,7 @@ class TurbineLauncher(AbstractPopupWidget):
         layout.addLayout(h_layout)
 
         h = 148
-        stage_list = StageListMinimalView()
+        stage_list = StageListViewMinimal()
         h_layout.addWidget(stage_list)
         stage_list.setFixedWidth(160)
         stage_list.setFixedHeight(h)

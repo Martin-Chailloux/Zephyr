@@ -31,9 +31,8 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
 
     def _set_custom_data(self, option: QStyleOptionViewItem, index: QModelIndex):
         self.is_title: bool = index.data(ComponentTreeItemRoles.is_title)
-        # below is unusable because it is not consistent with edit popups, get from index.data() when needed:
-        # self.ingredient_slot: IngredientSlot = index.data(ComponentTreeItemRoles.ingredient_slot)
         self.can_edit_version_number: bool = index.data(ComponentTreeItemRoles.can_edit_version_number)
+        # self.ingredient_slot  # avoid: not consistent with popups
 
         if self.is_title:
             self.label: str = index.data(ComponentTreeItemRoles.label)
@@ -112,14 +111,6 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
     # ------------------------
     # Create editor
     # ------------------------
-    def _setup_editor(self, editor: QWidget, parent: QWidget, option: QStyleOptionViewItem):
-        """ moves the editor and give it the tool look"""
-        editor.setWindowFlags(QtCore.Qt.WindowType.Tool)
-        QTimer.singleShot(0, lambda: editor.move(parent.mapToGlobal(option.rect.topLeft())))
-        QTimer.singleShot(0, lambda: editor.setMinimumSize(0, 0))
-        QTimer.singleShot(0, lambda: editor.setMaximumSize(500, 500))
-        QTimer.singleShot(0, lambda: editor.resize(280, 280))
-
     def create_component_editor(self, parent: QWidget, option: QStyleOptionViewItem, index: QModelIndex):
         # filter allowed components
         ingredient_slot: IngredientSlot = index.data(ComponentTreeItemRoles.ingredient_slot)
@@ -127,7 +118,7 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
 
         # create editor
         components_browser = ComponentBrowser(components=components, stage=self.stage)
-        self._setup_editor(editor=components_browser, parent=parent, option=option)
+        # self._setup_editor(editor=components_browser, parent=parent, option=option)
         return components_browser
 
     def create_version_number_editor(self, parent: QWidget, option: QStyleOptionViewItem, index: QModelIndex):
@@ -140,7 +131,7 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
 
         # create editor
         version_browser = VersionBrowser(versions=versions)
-        self._setup_editor(editor=version_browser, parent=parent, option=option)
+#         self._setup_editor(editor=version_browser, parent=parent, option=option)
         return version_browser
 
     def createEditor(self, parent: QWidget, option: QStyleOptionViewItem, index: QModelIndex):
@@ -192,6 +183,7 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
                                           old_version=current_version,
                                           new_version=new_version)
 
+
     def setModelData(self, editor: VersionBrowser | ComponentBrowser, model: ComponentTreeModel, index: QModelIndex):
         is_title = index.data(ComponentTreeItemRoles.is_title)
         if is_title:
@@ -210,3 +202,7 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
 
         # refresh
         model.refresh()
+
+    def updateEditorGeometry(self, editor, option, index):
+        position = option.widget.mapToGlobal(option.rect.center())
+        editor.move(position)

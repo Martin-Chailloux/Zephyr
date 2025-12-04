@@ -8,7 +8,7 @@ from PySide6.QtWidgets import (QWidget, QVBoxLayout, QPushButton, QSizePolicy)
 
 from Api.document_models.project_documents import Asset
 from Gui.popups.set_stage_templates_popup import SetStageTemplatesPopup
-from Gui.mvd.stage_mvd.stage_list_view import StageListEditableView
+from Gui.mvd.stage_mvd.stage_list_view import StageListViewEditable
 
 
 class StageListWidget(QWidget):
@@ -25,7 +25,7 @@ class StageListWidget(QWidget):
         layout.setContentsMargins(0, 7, 0, 0)
         layout.setSpacing(5)
 
-        stage_list = StageListEditableView()
+        stage_list = StageListViewEditable()
         layout.addWidget(stage_list)
 
         # 'Edit' button

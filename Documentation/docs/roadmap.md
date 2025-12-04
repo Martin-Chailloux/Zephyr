@@ -2,9 +2,10 @@
 
 
 ### Priority
+- match component delegates with stage
+- confo status editor
 
 - remove Software field from versions, find it using the component's extension with: Component.get_software() -> Optional[Software]
-- FIX: rmb in Users List does not cancel it
 
 - Turbine:
     - modeling build: version num + dont overwrite to build over an existing version

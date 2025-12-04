@@ -11,16 +11,16 @@ from Gui.mvd.abstract_mvd import AbstractItemModel
 @dataclass
 class StageItemRoles:
     stage = QtCore.Qt.ItemDataRole.UserRole
-    user_is_hovered = QtCore.Qt.ItemDataRole.UserRole + 1
-    status_is_hovered = QtCore.Qt.ItemDataRole.UserRole + 2
+    can_edit_user = QtCore.Qt.ItemDataRole.UserRole + 1
+    can_edit_status = QtCore.Qt.ItemDataRole.UserRole + 2
 
 
 @dataclass
 class StageItemMetrics:
     height: int = 42
     height_minimal: int = 36
-    logo_w: int = 48
-    status_w: int = 52
+    logo_width: int = 48
+    status_width: int = 52
 
 
 class StageListModel(AbstractItemModel):
@@ -41,8 +41,12 @@ class StageListModel(AbstractItemModel):
 
     def refresh(self):
         self.blockSignals(True)
-        longnames = [stage.longname for stage in self.stages]
-        stages = Stage.objects(longname__in=longnames)
+
+        stages = []
+        for stage in self.stages:
+            stage.reload()
+            stages.append(stage)
+
         self.populate(stages)
         self.blockSignals(False)
 
@@ -51,18 +55,19 @@ class StageListModel(AbstractItemModel):
 
         item = QStandardItem()
         item.setSizeHint(QSize(0, self.item_h))
-        item.setEditable(False)
+        item.setEditable(True)
 
         item.setData(stage, StageItemRoles.stage)
-        item.setData(False, StageItemRoles.user_is_hovered)
-        item.setData(False, StageItemRoles.status_is_hovered)
+        item.setData(False, StageItemRoles.can_edit_user)
+        item.setData(False, StageItemRoles.can_edit_status)
 
         self.setItem(row, item)
 
-    def remove_items_hover(self):
+    def clear_hover_data(self):
         for item in self.items:
-            item.setData(False, StageItemRoles.user_is_hovered)
-            item.setData(False, StageItemRoles.status_is_hovered)
+            item.setData(False, StageItemRoles.can_edit_user)
+            item.setData(False, StageItemRoles.can_edit_status)
+
 
 class StageListMinimalModel(StageListModel):
     item_h = StageItemMetrics.height_minimal
