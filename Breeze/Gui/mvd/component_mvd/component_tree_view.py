@@ -55,5 +55,7 @@ class ComponentTreeView(AbstractTreeView):
             if version is None or can_edit_version_number:
                 self.edit(index)
 
-    def _connect_signals(self):
-        self._model.refreshed.connect(self.expandAll)
+    def refresh(self):
+        # TODO: restore selection
+        self._model.refresh()
+        self.expandAll()

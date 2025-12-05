@@ -2,16 +2,15 @@ from typing import Optional
 
 import qtawesome
 from PySide6 import QtCore
-from PySide6.QtCore import QModelIndex, QRect, QTimer
-from PySide6.QtGui import QPainter, QStandardItemModel
-from PySide6.QtWidgets import QStyleOptionViewItem, QComboBox, QStyle, QWidget
+from PySide6.QtCore import QModelIndex, QRect
+from PySide6.QtGui import QPainter, QCursor
+from PySide6.QtWidgets import QStyleOptionViewItem,  QWidget
 
-from Api.document_models.project_documents import Component, Version, Stage
+from Api.document_models.project_documents import Version, Stage
 from Api.recipes.ingredient_slot import IngredientSlot
 from Gui.mvd.abstract_mvd import AbstractItemDelegate
-from Gui.mvd.component_mvd.component_tree_model import ComponentTreeItemRoles, ComponentTreeModel, \
-    ComponentTreeItemMetrics
-from Gui.mvd.version_mvd.version_list_view import VersionListView
+from Gui.mvd.component_mvd.component_tree_model import (ComponentTreeItemRoles, ComponentTreeModel,
+                                                        ComponentTreeItemMetrics)
 from Gui.popups.component_browser import ComponentBrowser
 from Gui.popups.version_browser import VersionBrowser
 
@@ -109,7 +108,7 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
         painter.restore()
 
     # ------------------------
-    # Create editor
+    # Editor
     # ------------------------
     def create_component_editor(self, parent: QWidget, option: QStyleOptionViewItem, index: QModelIndex):
         # filter allowed components
@@ -118,7 +117,6 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
 
         # create editor
         components_browser = ComponentBrowser(components=components, stage=self.stage)
-        # self._setup_editor(editor=components_browser, parent=parent, option=option)
         return components_browser
 
     def create_version_number_editor(self, parent: QWidget, option: QStyleOptionViewItem, index: QModelIndex):
@@ -131,7 +129,6 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
 
         # create editor
         version_browser = VersionBrowser(versions=versions)
-#         self._setup_editor(editor=version_browser, parent=parent, option=option)
         return version_browser
 
     def createEditor(self, parent: QWidget, option: QStyleOptionViewItem, index: QModelIndex):
@@ -145,11 +142,17 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
             editor = self.create_version_number_editor(parent=parent, option=option, index=index)
         else:
             editor = self.create_component_editor(parent=parent, option=option, index=index)
+        editor.setWindowFlags(QtCore.Qt.WindowType.Popup)
+        self.is_editing = False
         return editor
 
-    # ------------------------
-    # Set editor's data
-    # ------------------------
+    def updateEditorGeometry(self, editor, option, index):
+        if self.is_editing:
+            return
+
+        editor.move(QCursor.pos())
+        self.is_editing = True
+
     def set_version_number_data(self, editor: VersionBrowser, model: ComponentTreeModel, index: QModelIndex):
         selected_version = editor.versions_list.get_selected_version()
         if selected_version is None:
@@ -201,8 +204,4 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
             self.set_component_data(editor=editor, model=model, index=index)
 
         # refresh
-        model.refresh()
-
-    def updateEditorGeometry(self, editor, option, index):
-        position = option.widget.mapToGlobal(option.rect.center())
-        editor.move(position)
+        model.refresh_view.emit()

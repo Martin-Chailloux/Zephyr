@@ -38,7 +38,7 @@ class AbstractTreeView(QTreeView):
         self._model: Optional[AbstractItemModel] = None
 
     def _connect_signals(self):
-        pass
+        self._model.refresh_view.connect(self.refresh)
 
     def refresh(self):
         self._model.refresh()

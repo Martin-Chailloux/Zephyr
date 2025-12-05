@@ -2,9 +2,6 @@
 
 
 ### Priority
-- match component delegates with stage
-- confo status editor
-
 - remove Software field from versions, find it using the component's extension with: Component.get_software() -> Optional[Software]
 
 - Turbine:
@@ -65,8 +62,6 @@
     - external toolbar
     - searchbar
     - groups all icon stuff in a single file
-
-- mvd: confo and simplify from new knowledge, update stages' mouse events using component tree's code
 
 - SoftwareClasses: sub-classes for in/out, file management, etc.
 

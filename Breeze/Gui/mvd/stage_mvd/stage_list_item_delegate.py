@@ -79,6 +79,9 @@ class StageListItemDelegate(StageTemplateListItemDelegate):
 
         painter.restore()
 
+    # ------------------------
+    # Editor
+    # ------------------------
     def create_user_editor(self, parent: QWidget, option: QStyleOptionViewItem, index: QModelIndex):
         stage: Stage = index.data(StageItemRoles.stage)
         user_browser = UserBrowser(default_user=stage.user)
@@ -86,7 +89,7 @@ class StageListItemDelegate(StageTemplateListItemDelegate):
 
     def create_status_editor(self, parent: QWidget, option: QStyleOptionViewItem, index: QModelIndex):
         stage: Stage = index.data(StageItemRoles.stage)
-        status_editor = StatusSelectPopup(stage=stage)
+        status_editor = StatusSelectPopup()
         return status_editor
 
     def createEditor(self, parent: QWidget, option: QStyleOptionViewItem, index: QModelIndex):
@@ -96,7 +99,11 @@ class StageListItemDelegate(StageTemplateListItemDelegate):
             editor = self.create_status_editor(parent=parent, option=option, index=index)
         else:
             editor = None
-        editor.setWindowFlags(QtCore.Qt.WindowType.Popup)
+
+        if editor is not None:
+            editor.setWindowFlags(QtCore.Qt.WindowType.Popup)
+
+        self.is_editing = False
         return editor
 
     def updateEditorGeometry(self, editor, option, index):
@@ -114,7 +121,11 @@ class StageListItemDelegate(StageTemplateListItemDelegate):
         stage.update(user=user)
 
     def set_status_data(self, editor: StatusSelectPopup, model: StageListModel, index: QModelIndex):
-        pass
+        stage = index.data(StageItemRoles.stage)
+        status = editor.selected_status
+        if status is None:
+            return
+        stage.update(status=status)
 
     def setModelData(self, editor: UserBrowser | StatusSelectPopup, model: StageListModel, index: QModelIndex):
         if isinstance(editor, UserBrowser):
@@ -124,7 +135,6 @@ class StageListItemDelegate(StageTemplateListItemDelegate):
         else:
             super().setModelData(editor, model, index)
 
-        self.is_editing = False
         model.refresh_view.emit()
 
 

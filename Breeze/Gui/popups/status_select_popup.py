@@ -1,4 +1,5 @@
 from textwrap import dedent
+from typing import Optional
 
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QColor
@@ -20,9 +21,9 @@ class StatusSelectPopup(AbstractPopupWidget):
     button_h = 28
     max_columns = 2
 
-    def __init__(self, stage: Stage):
-        self.stage = stage
+    def __init__(self):
         self.status_per_label: dict[str, Status] = {}
+        self.selected_status: Optional[Status] = None  # used to fetch the result
 
         max_rows = int(len(self.statuses) / self.max_columns) + 1
         w = (self.button_w * self.max_columns) + (2 * self.margin)
@@ -52,8 +53,7 @@ class StatusSelectPopup(AbstractPopupWidget):
         # TODO: subclass button to send more infos than label
         button: QPushButton = self.sender()
         status = self.status_per_label[button.text()]
-
-        self.stage.update(status=status)
+        self.selected_status = status
         self.accept()
 
 

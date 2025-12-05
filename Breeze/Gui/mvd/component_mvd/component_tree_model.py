@@ -37,8 +37,9 @@ class ComponentTreeModel(AbstractItemModel):
         self.ingredients = []
 
     def refresh(self):
-        self.populate(stage=self.stage)
-        self.refreshed.emit()  # to call expandAll() when called from the delegate
+        stage = self.stage
+        stage.reload()
+        self.populate(stage=stage)
 
     def populate(self, stage: Stage = None):
         self.stage = stage
