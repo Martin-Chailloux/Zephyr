@@ -24,12 +24,12 @@ class GetTemplateSceneStep(TurbineStep):
             raise ValueError(f"Asset not found with: {self._category = }, {self._name = }, {self._variant = }")
         asset = asset[0]
         stage = asset.get_stage(name=self._stage_template)
-        self.logger.debug(f"{stage.work_component = }")
+        self.logger.debug(f"{stage.get_work_component() = }")
 
         if self._version_number is not None:
-            version = stage.work_component.get_version(number=self._version_number)
+            version = stage.get_work_component().get_version(number=self._version_number)
         else:
-            version = stage.work_component.get_last_version()
+            version = stage.get_work_component().get_last_version()
 
         self.version = version
         self.logger.debug(f"{self.version = }")

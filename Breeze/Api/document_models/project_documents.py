@@ -74,7 +74,6 @@ class Stage(Document):
     stage_template: StageTemplate = ReferenceField(document_type=StageTemplate)
 
     components: list['Component'] = ListField(ReferenceField(document_type='Component'), default=[])
-    work_component: 'Component' = ReferenceField(document_type='Component')
 
     status: Status = ReferenceField(document_type=Status, default=Status.objects.get(label='WAIT'))
     # TODO: User unknown, with a question mark icon
@@ -122,8 +121,29 @@ class Stage(Document):
 
     def create_work_component(self, extension: str) -> 'Component':
         work_component = self.create_component(name=data.Components.work, label=data.Components.work.title(), extension=extension)
-        self.update(work_component=work_component)
         return work_component
+
+    def get_work_components(self) -> list['Component']:
+        work_components = [c for c in self.components if c.name == 'work']
+        return work_components
+
+    def get_work_component(self, extension: str=None) -> Optional['Component']:
+        work_components = self.get_work_components()
+        match len(work_components):
+            case 0:
+                return None
+            case 1:
+                return work_components[0]
+            case _:
+                if extension is None:  # get last used work component
+                    work_components = sorted(work_components, key=lambda c: c.get_last_version().timestamp)
+                    return work_components[0]
+                else:  # get component with matching extension
+                    for component in work_components:
+                        if component.extension == extension:
+                            return component
+                    else:
+                        return None
 
     def add_ingredient(self, name: str, version: 'Version'):
         if name not in self.ingredients.keys():
@@ -185,8 +205,9 @@ class Component(Document):
 
     name: str = StringField(required=True)
     label: str = StringField(required=True)
+    extension: str = StringField()
+
     stage: Stage = ReferenceField(document_type=Stage, required=True)
-    extension: str = StringField()  # in work components, get extension from version.software.extension instead
 
     versions: list['Version'] = SortedListField(ReferenceField(document_type='Version'), default=[])
     recommended_version: 'Version' = ReferenceField(document_type='Version', default=None)
@@ -265,6 +286,10 @@ class Component(Document):
             raise ValueError(f"Found more than 1 version with number {number}: {versions}")
         else:
             return versions[0]
+
+    def get_software(self) -> Optional[Software]:
+        software = Software.from_extension(extension=self.extension)
+        return software
 
 
 class Version(Document):

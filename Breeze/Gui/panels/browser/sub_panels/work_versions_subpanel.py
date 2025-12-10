@@ -54,7 +54,7 @@ class WorkVersionsWidget(QWidget):
         if stage is None:
             return
 
-        self.versions_list.set_component(component=stage.work_component)
+        self.versions_list.set_component(component=stage.get_work_component())
         self.versions_list.select_row(row=0, is_selected=True)
 
     def _connect_signals(self):
@@ -78,13 +78,13 @@ class WorkVersionsWidget(QWidget):
 
     def refresh(self, select_last_version: bool=False, reselect_row: bool=False):
         # TODO: args are confusing to use
-        if self.stage.work_component is not None:
+        if self.stage.get_work_component() is not None:
             selected_index = self.versions_list.get_selected_index()
             if selected_index is None:
                 current_row = 0
             else:
                 current_row = selected_index.row()
-            self.versions_list.set_component(component=self.stage.work_component, clear_cache=True)
+            self.versions_list.set_component(component=self.stage.get_work_component(), clear_cache=True)
             if select_last_version:
                 self.versions_list.select_row(row=0, is_selected=True)
             elif reselect_row:
@@ -135,7 +135,7 @@ class WorkVersionsWidget(QWidget):
     def launch_turbine_browser(self):
         if self.stage is None:
             return
-        process_select_menu = TurbineLauncher(component=self.stage.work_component, version=self.versions_list.get_selected_version())
+        process_select_menu = TurbineLauncher(component=self.stage.get_work_component(), version=self.versions_list.get_selected_version())
         # process_select_menu.process_finished.connect(self.ask_refresh_exports.emit)
         result = process_select_menu.show_menu(position=[0.5, 1])
         if result:

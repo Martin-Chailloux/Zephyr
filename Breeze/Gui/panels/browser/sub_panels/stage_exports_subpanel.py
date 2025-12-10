@@ -54,7 +54,7 @@ class StageExportsTable(QTableWidget):
         columns = {component: i for i, component in enumerate(components)}
 
         # rows (version numbers)
-        work_versions =  components[0].stage.work_component.versions  # any item from components will work
+        work_versions =  components[0].stage.get_work_component().versions  # any item from components will work
         numbers: list[int] = [v.number for v in work_versions]
         numbers = list(set(numbers))
         numbers.reverse()
@@ -81,7 +81,7 @@ class StageExportsTable(QTableWidget):
 
         versions = []
         for component in stage.components:
-            if component != stage.work_component:
+            if component != stage.get_work_component():
                 versions.extend(component.versions)
 
         self.populate(versions=versions)

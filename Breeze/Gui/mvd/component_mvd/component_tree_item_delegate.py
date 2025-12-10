@@ -122,7 +122,7 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
     def create_version_number_editor(self, parent: QWidget, option: QStyleOptionViewItem, index: QModelIndex):
         # get work versions with same number as available component's versions
         version: Version = index.data(ComponentTreeItemRoles.version)
-        work_component = version.component.stage.work_component
+        work_component = version.component.stage.get_work_component()
         available_versions = version.component.versions
         available_versions_numbers = [v.number for v in available_versions]
         versions = [v for v in work_component.versions if v.number in available_versions_numbers]

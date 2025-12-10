@@ -15,10 +15,10 @@ def create_empty_version(stage: Stage) -> bool:
         return False
 
     # create version
-    if stage.work_component is None:
+    if stage.get_work_component() is None:
         stage.create_work_component(extension=software.extension)
         stage.reload()
-    version = stage.work_component.create_last_version(software=software)
+    version = stage.get_work_component().create_last_version(software=software)
     version.update(comment=comment_box.comment)
 
     # create file

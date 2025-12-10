@@ -2,9 +2,9 @@
 
 
 ### Priority
-- remove Software field from versions, find it using the component's extension with: Component.get_software() -> Optional[Software]
 
 - Turbine:
+    - build from an empty stage, it creates a work component from scratch
     - modeling build: version num + dont overwrite to build over an existing version
     - export modeling: use version num input
 

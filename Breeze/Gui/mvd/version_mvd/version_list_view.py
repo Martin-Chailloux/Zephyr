@@ -1,3 +1,5 @@
+from typing import Optional
+
 import qtawesome
 from PySide6.QtCore import Signal, Qt, QPoint, QItemSelectionModel
 from PySide6.QtWidgets import QMenu
@@ -24,7 +26,7 @@ class VersionListView(AbstractListView):
         self.setItemDelegate(self._item_delegate)
 
     # setters
-    def set_component(self, component: Component, clear_cache: bool=False):
+    def set_component(self, component: Optional[Component], clear_cache: bool=False):
         if clear_cache:
             component.reload()
         if component is None:

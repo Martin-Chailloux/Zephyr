@@ -104,7 +104,7 @@ class TurbineLauncher(AbstractPopupWidget):
 
     def on_stage_selected(self):
         stage = self.stage_list.stage
-        self.job_context.set_component(component=stage.work_component)
+        self.job_context.set_component(component=stage.get_work_component())
         self.process_list.selectionModel().blockSignals(True)
         self.process_list.set_stage_template(stage_template=self.stage_list.stage.stage_template)
         self.process_list.selectionModel().blockSignals(False)
