@@ -1,4 +1,4 @@
-from typing import Self, Any
+from typing import Self, Any, Optional
 
 import mongoengine
 from mongoengine import *
@@ -137,6 +137,15 @@ class Software(Document):
         software.save()
         print(f"Created: {software}")
         return software
+
+    @classmethod
+    def from_extension(cls, extension: str) -> Optional[Self]:
+        for soft in Software.objects():
+            if soft.extension == extension:
+                return soft
+        else:
+            return None
+
 
 
 class Project(Document):
