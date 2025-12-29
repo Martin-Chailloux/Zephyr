@@ -147,7 +147,6 @@ class Software(Document):
             return None
 
 
-
 class Project(Document):
     name: str = StringField(required=True, primary_key=True)
     root_path: str = StringField(required=True)

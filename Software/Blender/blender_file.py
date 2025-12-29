@@ -8,8 +8,7 @@ import subprocess
 import threading
 import bpy
 
-from abstract_io import AbstractSoftwareFile
-
+from software_base import AbstractSoftwareFile
 
 class BlenderFile(AbstractSoftwareFile):
     label: str = "Blender"

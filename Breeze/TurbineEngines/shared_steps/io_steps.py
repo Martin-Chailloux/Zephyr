@@ -2,7 +2,7 @@ from typing import Optional, Type, TypeVar
 
 from Api.document_models.project_documents import Version
 from Api.turbine.step import TurbineStep
-from abstract_io import AbstractSoftwareFile
+from software_base import AbstractSoftwareFile
 
 
 File = TypeVar("File")

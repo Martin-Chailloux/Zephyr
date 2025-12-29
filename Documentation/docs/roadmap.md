@@ -17,11 +17,15 @@
 
 - ComponentBrowser: remove work components (wait for more exports, for debug purposes)
 
----
 
 ### Missing features
+
 - Recipes:
     - toolbar buttons: refresh, autofill, copy, paste, ingredient groups
+
+- Work versions:
+    - list versions from all work components
+    - work components from a same stage should never have the same version numbers
 
 - Turbine:
     - Jobs list filters
@@ -54,6 +58,7 @@
 ---
 
 ### Cleans & Refactors
+
 - popups:
     - transform every popup into browsers with a toolbar style
 
@@ -63,11 +68,12 @@
     - searchbar
     - groups all icon stuff in a single file
 
-- SoftwareClasses: sub-classes for in/out, file management, etc.
+- SoftwareClasses: subclasses for in/out, file management, etc.
 
 ---
 
 ### Qol & Upgrades to existing and working features
+
 - work versions panel: disable when no stages are selected (or a version cannot be created)
 
 - process_launcher:
