@@ -3,7 +3,7 @@ import socket
 import threading
 
 from Api.document_models.studio_documents import StageTemplate
-from Blender.blender_file import BlenderFile
+from blender_file import BlenderFile
 
 ports = [
     BlenderFile.port

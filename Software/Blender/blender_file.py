@@ -10,6 +10,7 @@ import bpy
 
 from software_base import AbstractSoftwareFile
 
+
 class BlenderFile(AbstractSoftwareFile):
     label: str = "Blender"
     exe_path: str = "C:/Program Files/Blender Foundation/Blender 4.3/blender.exe"

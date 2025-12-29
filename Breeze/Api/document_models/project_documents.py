@@ -9,8 +9,9 @@ from mongoengine import *
 from Api import data, utils
 from Api.breeze_app import BreezeApp
 from Api.document_models.studio_documents import Status, User, Software, Process, StageTemplate
+
 from software_base import AbstractSoftwareFile
-from Blender.blender_file import BlenderFile
+from blender_file import BlenderFile
 
 
 class Asset(Document):

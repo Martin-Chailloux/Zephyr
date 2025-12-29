@@ -1,8 +1,8 @@
 import sys
+
 # externalize logs
 sys.stdout.reconfigure(line_buffering=True)
 sys.stderr.reconfigure(line_buffering=True)
-# sys.path.append('C:/Users/marti/OneDrive/Documents/__work/_dev/Zephyr/Breeze')
 sys.path.append('C:/Users/marti/OneDrive/Documents/__work/_dev/Zephyr/Software/Abstract')
 sys.path.append('C:/Users/marti/OneDrive/Documents/__work/_dev/Zephyr/Software/Blender')
 
