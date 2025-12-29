@@ -85,13 +85,12 @@ def create_default_users():
 
 
 def remove_field():
-    # StageTemplate.objects.update(unset__tooltip=True)
-    Version.objects.update(unset__software=True)
+    StageTemplate.objects.update(unset__software=True)
 
 def reload_stage_templates_software():
     stage_templates: list[StageTemplate] = StageTemplate.objects
     for stage_template in stage_templates:
-        software = stage_template.software
+        software = stage_template.available_software
         software = sorted(software, key=lambda k: k.label)
         stage_template.update(software=software)
 

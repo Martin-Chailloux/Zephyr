@@ -37,5 +37,5 @@ class SoftwareListModel(AbstractItemModel):
 
     def populate(self):
         self.clear()
-        for software in self.stage.stage_template.software:
+        for software in self.stage.stage_template.available_software:
             self.add_item(software)

@@ -234,9 +234,8 @@ class StageTemplate(Document):
     color: str = StringField(default="#ffffff")
     icon_name: str = StringField(default="fa5s.question")
 
-    # list of available software for this Stage, used to create a new empty Version
-    # TODO: rename to something easier to understand
-    software: list[Software] = SortedListField(ReferenceField(document_type=Software), default=[])
+    # used when creating a new empty Version
+    available_software: list[Software] = SortedListField(ReferenceField(document_type=Software), default=[])
 
     presets: list[str] = ListField(StringField(), default=[])  # TODO: an api to register presets would be easier to edit without using the ui
 
