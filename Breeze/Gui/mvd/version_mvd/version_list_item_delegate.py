@@ -51,7 +51,7 @@ class VersionListItemDelegate(AbstractItemDelegate):
         )
 
     def paint_software(self, painter: QPainter):
-        software = self.version.component.get_software()
+        software = self.version.software
 
         x, y, w, h = self.get_item_rect()
         margin: int = 4

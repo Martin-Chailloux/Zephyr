@@ -241,6 +241,11 @@ class Component(Document):
 
         return component
 
+    @property
+    def software(self) -> Optional[Software]:
+        software = Software.from_extension(extension=self.extension)
+        return software
+
     def to_folders(self) -> list[str]:
         """ returns a folder's hierarchy based on its fields """
         folders = self.longname.split("_")  # [character, baby, -, modeling, work, blend]
@@ -287,10 +292,6 @@ class Component(Document):
         else:
             return versions[0]
 
-    def get_software(self) -> Optional[Software]:
-        software = Software.from_extension(extension=self.extension)
-        return software
-
 
 class Version(Document):
     """
@@ -300,9 +301,6 @@ class Version(Document):
 
     component: Component = ReferenceField(document_type=Component, required=True)
     number: int = IntField(required=True)  # -1 is head
-
-    # TODO: remove and replace with Component.get_software() -> Optional[Software], that uses Component.extension
-    software: Software = ReferenceField(document_type=Software, required=True)  # strange to have in exports
 
     # deduced from upper documents
     filepath: str = StringField(required=True)
@@ -363,6 +361,11 @@ class Version(Document):
         print(f"Created: {version}")
         return version
 
+    @property
+    def software(self) -> Optional[Software]:
+        software = self.component.software
+        return software
+
     def set_comment(self, text: str):
         old_comment = self.comment
         self.update(comment=text)
@@ -385,12 +388,11 @@ class Version(Document):
         utils.copy_to_clipboard(text=self.filepath)
 
     def to_file(self) -> AbstractSoftwareFile:
-        software = self.component.get_software()
-        match software.extension:
+        match self.software.extension:
             case data.Extensions.blend:
                 return BlenderFile(filepath=self.filepath)
             case _:
-                raise NotImplementedError(f"File instance for: {software}")
+                raise NotImplementedError(f"File instance for: {self.software}")
 
     def open_interactive(self)-> AbstractSoftwareFile:
         file = self.to_file()
