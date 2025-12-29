@@ -51,9 +51,11 @@ class VersionListItemDelegate(AbstractItemDelegate):
         )
 
     def paint_software(self, painter: QPainter):
+        software = self.version.component.get_software()
+
         x, y, w, h = self.get_item_rect()
         margin: int = 4
-        text = f".{self.version.software.extension}"
+        text = f".{software.extension}"
         x_offset = w - h
 
         painter.save()
@@ -62,7 +64,7 @@ class VersionListItemDelegate(AbstractItemDelegate):
         # paint icon
         self.paint_icon_circle(
             painter,
-            icon_path= self.version.software.icon_path,
+            icon_path= software.icon_path,
             margin = margin,
             offset = [x_offset, - margin - 1, 0, 0],
         )

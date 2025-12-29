@@ -9,8 +9,8 @@ from mongoengine import *
 from Api import data, utils
 from Api.breeze_app import BreezeApp
 from Api.document_models.studio_documents import Status, User, Software, Process, StageTemplate
-from abstract_io import AbstractSoftwareFile
-from blender_file import BlenderFile
+from software_base import AbstractSoftwareFile
+from Blender.blender_file import BlenderFile
 
 
 class Asset(Document):
@@ -385,11 +385,12 @@ class Version(Document):
         utils.copy_to_clipboard(text=self.filepath)
 
     def to_file(self) -> AbstractSoftwareFile:
-        # TODO: replace with File.from_version(version: Version)
-        if self.software.label == 'Blender':
-            return BlenderFile(filepath=self.filepath)
-        else:
-            raise NotImplementedError(f"File instance for: {self.software}")
+        software = self.component.get_software()
+        match software.extension:
+            case data.Extensions.blend:
+                return BlenderFile(filepath=self.filepath)
+            case _:
+                raise NotImplementedError(f"File instance for: {software}")
 
     def open_interactive(self)-> AbstractSoftwareFile:
         file = self.to_file()

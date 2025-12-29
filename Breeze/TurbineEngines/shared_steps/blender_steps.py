@@ -1,8 +1,8 @@
 import bpy
 
-import bl_utils
 from Api.document_models.project_documents import Version
 from Api.turbine.step import TurbineStep
+from Blender import bl_utils
 
 
 class CreateCollectionStep(TurbineStep):
