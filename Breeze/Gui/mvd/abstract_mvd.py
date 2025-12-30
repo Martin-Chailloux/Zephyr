@@ -357,7 +357,7 @@ class AbstractItemDelegate(QStyledItemDelegate):
 
         # component
         painter.setPen(QPen(BreezeApp.palette.white_text))
-        text = f" {component.label} - "
+        text = f" {component.name} - "
         rect = QRect(x, y, w, h)
         painter.drawText(rect, text, alignment.AlignLeft | alignment.AlignVCenter)
 

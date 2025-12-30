@@ -85,7 +85,7 @@ def create_default_users():
 
 
 def remove_field():
-    StageTemplate.objects.update(unset__software=True)
+    Component.objects.update(unset__label=True)
 
 def reload_stage_templates_software():
     stage_templates: list[StageTemplate] = StageTemplate.objects

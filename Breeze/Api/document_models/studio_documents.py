@@ -241,6 +241,7 @@ class StageTemplate(Document):
 
     processes: list[Process] = SortedListField(ReferenceField(document_type=Process, default=[]))
     recipe: dict[str, Any] = DictField()  # dict[name, infos], contains IngredientSlots
+    outputs: list[str] = SortedListField(StringField(), default=[])  # list of exported component names
 
     meta = {
         'collection': 'Stage templates',

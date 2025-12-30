@@ -21,21 +21,21 @@ class BlenderModelingBuildEngine(TurbineEngine):
         ))
 
         self.create_version_group = self.add_group(label="Create version")
-        self.create_version_step = self.create_version_group.add_step(ReserveVersionStep(component=self.context.component))
+        self.reserve_version_step = self.create_version_group.add_step(ReserveVersionStep(component=self.context.component))
         self.open_step = self.create_version_group.add_step(step=OpenStep())
         self.save_as_step = self.create_version_group.add_step(SaveAsStep())
 
         self.save_step = self.add_step(SaveStep())
 
     def _inner_run(self):
-        self.get_template_step.run()
-
-        self.create_version_step.run()
+        # TODO: build engine to write this create version part once
+        self.reserve_version_step.run()
         # set the source version for this job
-        source_version = self.create_version_step.version
+        source_version = self.reserve_version_step.version
         self.job.update(source_version=source_version)
         self.context.set_version(version=source_version)
 
+        self.get_template_step.run()
         self.open_step.run(version=self.get_template_step.version)
         self.save_as_step.run(file=self.open_step.file, target_version=source_version)
         self.create_version_group.set_success()

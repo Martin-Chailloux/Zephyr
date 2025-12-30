@@ -2,7 +2,7 @@ import bpy
 
 from Api.document_models.project_documents import Version
 from Api.turbine.step import TurbineStep
-from Blender import bl_utils
+import bl_utils
 
 
 class CreateCollectionStep(TurbineStep):
@@ -46,7 +46,6 @@ class CleanExportedSceneStep(TurbineStep):
     def __init__(self):
         super().__init__()
         self.export_collection = None
-
 
     def run(self, export_collection: bpy.types.Collection, target_version: Version):
         super().run(export_collection=export_collection, target_version=target_version)

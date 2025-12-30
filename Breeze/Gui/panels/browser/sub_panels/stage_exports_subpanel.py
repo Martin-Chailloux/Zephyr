@@ -50,7 +50,7 @@ class StageExportsTable(QTableWidget):
         components: list[Component] = [v.component for v in versions]
         components = list(set(components))
         self.setColumnCount(len(components))
-        self.setHorizontalHeaderLabels([f"{c.label} {c.extension}" for c in components])
+        self.setHorizontalHeaderLabels([f"{c.name} {c.extension}" for c in components])
         columns = {component: i for i, component in enumerate(components)}
 
         # rows (version numbers)

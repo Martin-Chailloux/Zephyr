@@ -205,7 +205,7 @@ class Component(Document):
     longname: str = StringField(required=True, primary_key=True)  # category_name_variant_stage_component
 
     name: str = StringField(required=True)
-    label: str = StringField(required=True)
+    label: str = StringField()
     extension: str = StringField()
 
     stage: Stage = ReferenceField(document_type=Stage, required=True)
@@ -227,9 +227,9 @@ class Component(Document):
         return self.__repr__()
 
     @classmethod
-    def create(cls, name: str, label: str, stage: Stage, extension: str, **kwargs):
+    def create(cls, name: str, stage: Stage, extension: str, **kwargs):
         longname = "_".join(s for s in [stage.longname, name, extension])
-        kwargs = dict(longname=longname, name=name, label=label, stage=stage, extension=extension, **kwargs)
+        kwargs = dict(longname=longname, name=name, stage=stage, extension=extension, **kwargs)
         kwargs = {k: v for k, v in kwargs.items() if v is not None}
 
         existing_component = Component.objects(longname=longname)
