@@ -269,9 +269,16 @@ class StageTemplate(Document):
         self.save()
 
     def set_recipe(self, recipe: dict[str, Any]):
+        previous_recipe = self.recipe
         self.recipe = recipe
         self.save()
-        print(f"{self}'s recipe was set to: {recipe}")
+        print(f"{self}'s recipe was set from {previous_recipe} to {recipe}")
+
+    def set_outputs(self, outputs: list[str]):
+        previous_outputs = self.outputs
+        self.outputs = outputs
+        self.save()
+        print(f"{self}'s outputs was set from {previous_outputs} to {outputs}")
 
     def set_ingredient_slot(self, slot_name: str, slot_infos: dict[str, Any], crash_if_exists: bool=True):
         slot_exists = slot_name in self.recipe.keys()
