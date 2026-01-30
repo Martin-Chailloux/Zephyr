@@ -1,5 +1,5 @@
 from PySide6 import QtCore
-from PySide6.QtWidgets import QMainWindow, QLabel, QDockWidget
+from PySide6.QtWidgets import QMainWindow, QDockWidget
 
 from Gui.panels.turbine.job_selector_panel import SelectProcessPanel
 from Gui.panels.turbine.step_logs_panel import StepLogsPanel

@@ -4,6 +4,14 @@
 ### Priority
 
 - Turbine:
+    - separate inputs from their gui, they should be parallel and independent
+    - gui / inputs / engine / context are 4 different things, gathered into a master class
+      - gui: edit inputs
+      - inputs: dataclass of user inputs
+      - context: context to run the process with (automatic inputs in a sense)
+      - engine: series of required steps
+      - runner: runs a process using the other elements
+
     - build from an empty stage, it creates a work component from scratch
     - modeling build: version num + dont overwrite to build over an existing version
     - export modeling: use version num input

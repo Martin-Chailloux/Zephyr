@@ -1,9 +1,9 @@
-from Api.turbine.inputs_gui import TurbineGui
-from Api.turbine.utils import TurbineInputs
+from Api.turbine.gui_base import EngineGuiBase
+from Api.turbine.utils import TurbineInputsBase
 
 
-class BlenderModelingBuildInputs(TurbineInputs):
+class BlenderModelingBuildInputs(TurbineInputsBase):
     pass
 
-class BlenderModelingBuildGui(TurbineGui):
+class BlenderModelingBuildGui(EngineGuiBase):
     pass

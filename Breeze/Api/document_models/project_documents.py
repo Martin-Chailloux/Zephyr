@@ -107,21 +107,21 @@ class Stage(Document):
 
         return stage
 
-    def create_component(self, name: str, label: str, extension: str, crash_if_exists: bool = True) -> 'Component':
-        component = Component.objects(name=name, label=label, extension=extension, stage=self)
+    def create_component(self, name: str, extension: str, crash_if_exists: bool = True) -> 'Component':
+        component = Component.objects(name=name, extension=extension, stage=self)
         if len(component) == 1:
             if crash_if_exists:
                 raise ValueError(f"{component} is already a component of {self}")
             else:
                 return component[0]
 
-        component = Component.create(name=name, label=label, stage=self, extension=extension)
+        component = Component.create(name=name, stage=self, extension=extension)
         self.components.append(component)
         self.save()
         return component
 
     def create_work_component(self, extension: str) -> 'Component':
-        work_component = self.create_component(name=data.Components.work, label=data.Components.work.title(), extension=extension)
+        work_component = self.create_component(name=data.Components.work, extension=extension)
         return work_component
 
     def get_work_components(self) -> list['Component']:
@@ -205,7 +205,6 @@ class Component(Document):
     longname: str = StringField(required=True, primary_key=True)  # category_name_variant_stage_component
 
     name: str = StringField(required=True)
-    label: str = StringField()
     extension: str = StringField()
 
     stage: Stage = ReferenceField(document_type=Stage, required=True)
@@ -260,7 +259,7 @@ class Component(Document):
         self.versions.append(version)
         self.save()
 
-    def create_last_version(self, software: Software) -> 'Version':
+    def create_last_version(self) -> 'Version':
         versions: list[Version] = self.versions
         if not versions:
             number = 1
@@ -269,11 +268,11 @@ class Component(Document):
             number: int = versions[0].number
             number += 1
 
-        version = Version.create(component=self, number=number, software=software)
+        version = Version.create(component=self, number=number)
         return version
 
-    def create_version(self, number: int, software: Software) -> 'Version':
-        version = Version.create(component=self, number=number, software=software)
+    def create_version(self, number: int) -> 'Version':
+        version = Version.create(component=self, number=number)
         return version
 
     def get_last_version(self) -> Optional['Version']:
@@ -331,7 +330,7 @@ class Version(Document):
         return self.__repr__()
 
     @classmethod
-    def create(cls, component: Component, number: int, software: Software, **kwargs):
+    def create(cls, component: Component, number: int, **kwargs):
         longname = f"{component.longname}_{number:03d}"
         existing_version = Version.objects(longname=longname)
         if existing_version:
@@ -349,7 +348,7 @@ class Version(Document):
         Path(filepath).parent.mkdir(parents=True, exist_ok=True)
 
         # create document
-        kwargs = dict(longname=longname, component=component, number=number, software=software,
+        kwargs = dict(longname=longname, component=component, number=number,
                       creation_user=creation_user, last_user=last_user, filepath=str(filepath),
                       **kwargs)
         kwargs = {k: v for k, v in kwargs.items() if v is not None}
@@ -374,7 +373,7 @@ class Version(Document):
 
     def increment(self, comment: str = "") -> Self:
         print(f"Incrementing {self} ... ")
-        new_version = self.component.create_last_version(software=self.software)
+        new_version = self.component.create_last_version()
         new_version.update(comment=comment)
         return new_version
 
@@ -432,7 +431,7 @@ class Job(Document):
     source_process: Process = ReferenceField(document_type=Process, required=True)
     source_version: Version = ReferenceField(document_type=Version, required=True)
     steps: dict[str, any] = DictField(required=True)
-    inputs: dict[str, Any] = DictField()  # dict[name: widget_infos]
+    inputs: dict[str, Any] = DictField()  # dict[name: data]
 
     meta = {
         'collection': 'Jobs',

@@ -1,17 +1,17 @@
 from dataclasses import dataclass
 
-from Api.turbine.utils import JobContext, TurbineInputs
-from Api.turbine.inputs_gui import TurbineGui
+from Api.turbine.utils import JobContext, TurbineInputsBase
+from Api.turbine.gui_base import EngineGuiBase
 
 
-@dataclass
-class BlenderModelingExportInputs(TurbineInputs):
-    use_last_version: bool = False
-    version_number: int = None
-    dont_overwrite: bool = False
+# @dataclass
+# class BlenderModelingExportInputs(TurbineInputsBase):
+#     use_last_version: bool = False
+#     version_number: int = None
+#     dont_overwrite: bool = False
 
 
-class BlenderModelingExportGui(TurbineGui):
+class BlenderModelingExportGui(EngineGuiBase):
     def _init_ui(self):
         # TODO: group common methods in class TurbineInputsApi
         #  - get_versions_numbers() -> str
@@ -45,8 +45,8 @@ class BlenderModelingExportGui(TurbineGui):
         self.version_number.setEnabled(not is_checked)
 
     @property
-    def inputs(self) -> BlenderModelingExportInputs:
-        result = BlenderModelingExportInputs(
+    def inputs(self) -> TurbineInputsBase:
+        result = TurbineInputsBase(
             use_last_version=self.last_version.checkbox.isChecked(),
             version_number=int(self.version_number.combobox.currentText()),
             dont_overwrite=self.allow_overwrite.checkbox.isChecked(),

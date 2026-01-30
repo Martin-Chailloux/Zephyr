@@ -11,7 +11,7 @@ from Utils.pills import PillModel, AbstractPills
 
 
 @dataclass
-class StepPills(AbstractPills):
+class StepStatuses(AbstractPills):
     idle =       PillModel(name="idle", icon_name="mdi.dots-horizontal", color="grey")
     not_needed = PillModel(name="not_needed", icon_name="fa.minus", color="purple")
     running =    PillModel(name="running", icon_name="fa.play", color="deepskyblue")
@@ -19,40 +19,47 @@ class StepPills(AbstractPills):
     error =      PillModel(name="error", icon_name="fa.close", color="red")
     success =    PillModel(name="success", icon_name="fa.check", color="green")
 
-    pills = [idle, not_needed, running, warning, error, success]
+    statuses = [idle, not_needed, running, warning, error, success]
 
 
-class StepPill(QObject):
+class StepStatus(QObject):
     def __init__(self):
         super().__init__()
-        self.pill: PillModel = StepPills.idle
+        self.status: PillModel = StepStatuses.idle
         self.set_idle()
 
     @classmethod
-    def from_name(cls, name: str) -> 'StepPill':
-        step_pill = cls()
-        step_pill.pill = StepPills.from_name(name=name)
-        return step_pill
+    def from_name(cls, name: str) -> 'StepStatus':
+        status_class = cls()
+        status_class.status = StepStatuses.from_name(name=name)
+        return status_class
 
     def set_idle(self):
-        self.pill = StepPills.idle
+        self.status = StepStatuses.idle
 
     def set_running(self):
-        self.pill = StepPills.running
+        self.status = StepStatuses.running
 
     def set_warning(self):
-        self.pill = StepPills.warning
+        self.status = StepStatuses.warning
 
     def set_error(self):
-        self.pill = StepPills.error
+        self.status = StepStatuses.error
 
     def set_success(self):
-        self.pill = StepPills.success
+        self.status = StepStatuses.success
+
+
+@dataclass
+class TurbineInputsBase:
+    use_last_version: bool = True
+    version_number: int = None
+    dont_overwrite: bool = False
 
 
 @dataclass
 class JobContext:
-    # NOTE: component and version are split, because a build process may use a component with 0 versions in it
+    # NOTE: component and version are split, because a build process does not build from an existing version
     user: User
     component: Component
     version: Optional[Version]
@@ -65,10 +72,18 @@ class JobContext:
         self.version = version
         self.component = version.component
 
-    def update_creation_time(self):
+    def set_creation_time(self):
         self.creation_time = datetime.now()
 
-@dataclass
-class TurbineInputs:
-    use_last_version: bool = True
-    version_number: int = None
+    def update_from_inputs(self, inputs: TurbineInputsBase):
+        if inputs is None:
+            return
+
+        if inputs.use_last_version:
+            version = self.component.get_last_version()
+        elif inputs.version_number is not None:
+            version = self.component.get_version(number=inputs.version_number)
+        else:
+            version = None
+
+        self.set_version(version=version)

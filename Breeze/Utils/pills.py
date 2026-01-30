@@ -22,11 +22,11 @@ class PillModel:
 
 
 class AbstractPills:
-    pills: list[PillModel] = []
+    statuses: list[PillModel] = []
 
     @classmethod
     def from_name(cls, name: str) -> Optional[PillModel]:
-        for pill in cls.pills:
+        for pill in cls.statuses:
             if name == pill.name:
                 return pill
         else:

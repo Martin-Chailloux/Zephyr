@@ -21,6 +21,7 @@ class CreateCollectionStep(TurbineStep):
         bpy.context.scene.collection.children.link(collection)
 
 
+
 class GetExportCollectionStep(TurbineStep):
     label: str = "Get export collection"
     tooltip: str = ""
@@ -39,33 +40,3 @@ class GetExportCollectionStep(TurbineStep):
         self.export_collection = export_collection
 
 
-class CleanExportedSceneStep(TurbineStep):
-    label: str = "Clean"
-    tooltip: str = "Isolates the collection 'Export' and rename with {component asset stage}. Example: geo character_baby_-_modeling"
-
-    def __init__(self):
-        super().__init__()
-        self.export_collection = None
-
-    def run(self, export_collection: bpy.types.Collection, target_version: Version):
-        super().run(export_collection=export_collection, target_version=target_version)
-
-    def _inner_run(self, export_collection: bpy.types.Collection, target_version: Version):
-        self.logger.debug(f"{export_collection = }")
-
-        root_collection: bpy.types.Collection = bpy.context.scene.collection
-
-        self.logger.info("Parenting the export collection to the root collection ... ")
-        parent = bl_utils.get_collection_parent(export_collection)
-        if parent is not None:
-            parent.children.unlink(export_collection)
-            root_collection.children.link(export_collection)
-
-        self.logger.info("Deleting other collections ... ")
-        for collection in root_collection.children.values():
-            if collection != export_collection:
-                root_collection.children.unlink(collection)
-
-        name = f"{target_version.component.name} {target_version.component.stage.longname}"
-        self.logger.info(f"Renaming the export collection to: '{name}'")
-        export_collection.name = name

@@ -43,7 +43,6 @@ class StageListWidget(QWidget):
         self.stage_list = stage_list
 
     def set_asset(self, asset: Asset = None):
-        print(f"{asset = }")
         self.asset = asset
         self.stage_list.set_asset(asset)
 

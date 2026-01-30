@@ -58,27 +58,31 @@ class SaveAsStep(TurbineStep):
         self.set_sub_label(target_version.__repr__())
 
 
-class ReserveExportedVersionStep(TurbineStep):
+class CreateVersionStep(TurbineStep):
     label: str = "Reserve Version"
     tooltip: str = ""
 
     def __init__(self, source_version: Version, dont_overwrite: bool,
-                 name: str, label: str, extension: str):
+                 component_name: str, extension: str):
         super().__init__()
+        # inputs
         self._source_version = source_version
         self._dont_overwrite = dont_overwrite
-        self._name = name
-        self._label = label
-        self._extension = extension
         self.logger.debug(f"{dont_overwrite = }")
 
+        # component
+        self._name = component_name
+        self._extension = extension
+
     def _inner_run(self):
-        component = self._source_version.component.stage.create_component(name=self._name, label=self._label, extension=self._extension, crash_if_exists=False)
+        # get or create component
+        component = self._source_version.component.stage.create_component(name=self._name, extension=self._extension, crash_if_exists=False)
         self.logger.debug(f"{component = }")
 
+        # get or create export version
         version = component.get_version(number=self._source_version.number)
         if version is None:
-            version = component.create_version(number=self._source_version.number, software=self._source_version.software)
+            version = component.create_version(number=self._source_version.number)
         elif self._dont_overwrite:
             raise ValueError(f"{version} already exists. Uncheck `don't overwrite` to export over it.")
         else:

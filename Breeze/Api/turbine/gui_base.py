@@ -1,13 +1,13 @@
-from typing import Any
+from typing import Any, TypeVar
 
 from PySide6 import QtCore
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton
+from PySide6.QtWidgets import QWidget, QVBoxLayout
 
-from Api.turbine.utils import JobContext, TurbineInputs
+from Api.turbine.utils import JobContext, TurbineInputsBase
 from Api.turbine.inputs_widgets import TurbineWidgets, TurbineWidgetBase
 
 
-class TurbineGui(QWidget):
+class EngineGuiBase(QWidget):
     def __init__(self, context: JobContext):
         """
         Creates the inputs layout
@@ -51,11 +51,11 @@ class TurbineGui(QWidget):
         return combobox
 
     @property
-    def inputs(self) -> TurbineInputs:
+    def inputs(self) -> TurbineInputsBase:
         """
         Returns a list of inputs with values matching those selected in the ui.
         """
-        result = TurbineInputs()
+        result = TurbineInputsBase()
         return result
 
     def to_database(self) -> dict[str, Any]:
