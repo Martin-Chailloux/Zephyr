@@ -7,6 +7,41 @@ import bl_utils
 from TurbineEngines.shared_steps.io_steps import OpenStep, CreateVersionStep, SaveAsStep
 
 
+class GetCollectionsToExportStep(TurbineStep):
+    label: str = "Scan"
+    tooltip: str = "Get collections to export"
+
+    def __init__(self):
+        super().__init__()
+        self.collections: list[bpy.types.Collection] = []
+
+    def _inner_run(self):
+        component_names = self.engine.context.version.component.stage.stage_template.outputs
+        collection_names = []  # debug only
+        for name in component_names:
+            # get collection
+            collection_name = f'Export {name}'
+            collection_names.append(collection_name)
+            collection = bpy.data.collections.get(collection_name, None)
+
+            msg = None
+            if collection is None:
+                msg = f"Could not find the collection {collection_name}. Component '{name}' will not be exported"
+                self.logger.warning(msg)
+            elif bl_utils.get_collection_parent(collection=collection).name != 'Exports':
+                msg = f"{collection_name} is not a child of the collection 'Exports'. Component '{name}' will not be exported"
+            elif bl_utils.is_collection_excluded(collection=collection):
+                msg = f"{collection_name} is excluded. Component '{name}' will not be exported"
+
+            if msg is not None:
+                self.logger.warning(msg)
+            else:
+                self.collections.append(collection)
+
+        if not self.collections:
+            raise ValueError(f"Did not find any collection to export. Expected: {collection_names}")
+
+
 class ExportCollectionsStep(TurbineStep):
     label: str = "Export"
     tooltip: str = "Export collections as .blend files"
@@ -50,41 +85,6 @@ class ExportCollectionStep(TurbineStep):
         self.open_step.run(version=self.engine.context.version)
         self.clean_step.run(export_collection_name=collection_name, target_version=self.reserve_version_step.version)
         self.save_step.run(file=self.open_step.file, target_version=self.reserve_version_step.version)
-
-
-class GetCollectionsToExportStep(TurbineStep):
-    label: str = "Scan"
-    tooltip: str = "Get collections to export"
-
-    def __init__(self):
-        super().__init__()
-        self.collections: list[bpy.types.Collection] = []
-
-    def _inner_run(self):
-        component_names = self.engine.context.version.component.stage.stage_template.outputs
-        collection_names = []  # debug only
-        for name in component_names:
-            # get collection
-            collection_name = f'Export {name}'
-            collection_names.append(collection_name)
-            collection = bpy.data.collections.get(collection_name, None)
-
-            msg = None
-            if collection is None:
-                msg = f"Could not find the collection {collection_name}. Component '{name}' will not be exported"
-                self.logger.warning(msg)
-            elif bl_utils.get_collection_parent(collection=collection).name != 'Exports':
-                msg = f"{collection_name} is not a child of the collection 'Exports'. Component '{name}' will not be exported"
-            elif bl_utils.is_collection_excluded(collection=collection):
-                msg = f"{collection_name} is excluded. Component '{name}' will not be exported"
-
-            if msg is not None:
-                self.logger.warning(msg)
-            else:
-                self.collections.append(collection)
-
-        if not self.collections:
-            raise ValueError(f"Did not find any collection to export. Expected: {collection_names}")
 
 
 class CleanExportedSceneStep(TurbineStep):
