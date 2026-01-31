@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+from Api.turbine.inputs_widgets import TurbineWidgets
 from Api.turbine.utils import JobContext, TurbineInputsBase
 from Api.turbine.gui_base import EngineGuiBase
 
@@ -30,9 +31,9 @@ class BlenderModelingExportGui(EngineGuiBase):
         else:
             selected_version_number: str = f"{self.context.version.number:03d}"
 
-        self.allow_overwrite = self.add_checkbox(name='allow_overwrite', label="Don't overwrite", is_checked=True)
-        self.last_version = self.add_checkbox(name='last_version', label='Last version', is_checked=True)
-        self.version_number = self.add_combobox(name='version_num', label='Version num', items=version_number_items, current_text=selected_version_number)
+        self.allow_overwrite = self.add(TurbineWidgets.Checkbox(name='allow_overwrite', label="Don't overwrite", is_checked=True))
+        self.last_version = self.add(TurbineWidgets.Checkbox(name='last_version', label='Last version', is_checked=True))
+        self.version_number = self.add(TurbineWidgets.Combobox(name='version_num', label='Version num', items=version_number_items, current_text=selected_version_number))
         self.version_number.combobox.setFixedWidth(64)
 
     def _connect_signals(self):
