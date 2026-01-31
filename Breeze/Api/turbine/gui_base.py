@@ -19,7 +19,6 @@ class EngineGuiBase(QWidget):
         """
         super().__init__()
         self.context = context
-        self.api = EngineGuiApi(context=context)
         self.widgets: list[TurbineWidgetBase] = []
 
         layout = QVBoxLayout()
