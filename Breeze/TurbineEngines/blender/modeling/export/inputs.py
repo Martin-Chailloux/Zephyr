@@ -1,39 +1,13 @@
-from dataclasses import dataclass
-
-from Api.turbine.inputs_widgets import TurbineWidgets
-from Api.turbine.utils import JobContext, TurbineInputsBase
-from Api.turbine.gui_base import EngineGuiBase
-
-
-# @dataclass
-# class BlenderModelingExportInputs(TurbineInputsBase):
-#     use_last_version: bool = False
-#     version_number: int = None
-#     dont_overwrite: bool = False
+from Api.turbine.engine_inputs_widgets import Specifics
+from Api.turbine.utils import TurbineInputsBase
+from Api.turbine.engine_inputs_gui import EngineGuiBase
 
 
 class BlenderModelingExportGui(EngineGuiBase):
     def _init_ui(self):
-        # TODO: group common methods in class TurbineInputsApi
-        #  - get_versions_numbers() -> str
-        #  - get_selected_version_number() -> str
-        #  - etc.
-
-        # get available versions
-        versions = self.context.component.versions
-        versions_numbers = [version.number for version in versions]
-        versions_numbers.sort(reverse=True)
-        version_number_items = [f"{i:03d}" for i in versions_numbers]
-
-        # get default inputs
-        if self.context.version is None:
-            selected_version_number: str = ''
-        else:
-            selected_version_number: str = f"{self.context.version.number:03d}"
-
-        self.allow_overwrite = self.add(TurbineWidgets.Checkbox(name='allow_overwrite', label="Don't overwrite", is_checked=True))
-        self.last_version = self.add(TurbineWidgets.Checkbox(name='last_version', label='Last version', is_checked=True))
-        self.version_number = self.add(TurbineWidgets.Combobox(name='version_num', label='Version num', items=version_number_items, current_text=selected_version_number))
+        self.allow_overwrite = self.add(Specifics.DontOverwrite())
+        self.last_version = self.add(Specifics.LastVersion())
+        self.version_number = self.add(Specifics.VersionNumber(context=self.context))
         self.version_number.combobox.setFixedWidth(64)
 
     def _connect_signals(self):

@@ -292,6 +292,11 @@ class Component(Document):
         else:
             return versions[0]
 
+    def get_version_numbers(self) -> list[int]:
+        numbers = [version.number for version in self.versions]
+        numbers.sort(reverse=True)
+        return numbers
+
 
 class Version(Document):
     """

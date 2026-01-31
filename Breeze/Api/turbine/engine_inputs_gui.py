@@ -4,9 +4,7 @@ from PySide6 import QtCore
 from PySide6.QtWidgets import QWidget, QVBoxLayout
 
 from Api.turbine.utils import JobContext, TurbineInputsBase
-from Api.turbine.inputs_widgets import TurbineWidgets, TurbineWidgetBase
-
-
+from Api.turbine.engine_inputs_widgets import Generics, TurbineWidgetBase
 
 
 TWidget = TypeVar("TWidget", bound=TurbineWidgetBase)
@@ -55,5 +53,5 @@ class EngineGuiBase(QWidget):
         return result
 
     def to_database(self) -> dict[str, Any]:
-        infos = {widget.name: widget.export_infos() for widget in self.widgets}
+        infos = {widget.name: widget.to_dict() for widget in self.widgets}
         return infos

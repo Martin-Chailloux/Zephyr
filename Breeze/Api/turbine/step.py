@@ -10,7 +10,7 @@ from PySide6.QtWidgets import QTreeWidgetItem
 
 from Api.document_models.project_documents import Job
 from Api.document_models.studio_documents import Process
-from Api.turbine.gui_base import EngineGuiBase
+from Api.turbine.engine_inputs_gui import EngineGuiBase
 from Api.turbine.utils import StepStatus, JobContext, TurbineInputsBase
 from Api.turbine.logger import StepLogger
 

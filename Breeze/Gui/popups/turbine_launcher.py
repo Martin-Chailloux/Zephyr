@@ -14,7 +14,7 @@ from Gui.popups.abstract_popup_widget import AbstractPopupWidget
 from Gui.mvd.process_mvd.process_list_view import ProcessListView
 from Gui.sub_widgets.asset_widgets.asset_browser_widget import AssetBrowserWidget
 
-from Api.turbine.gui_base import EngineGuiBase
+from Api.turbine.engine_inputs_gui import EngineGuiBase
 from Api.turbine.step import TurbineEngine
 from Api.turbine.utils import JobContext
 

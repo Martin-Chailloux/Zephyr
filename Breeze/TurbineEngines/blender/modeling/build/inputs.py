@@ -1,4 +1,4 @@
-from Api.turbine.gui_base import EngineGuiBase
+from Api.turbine.engine_inputs_gui import EngineGuiBase
 from Api.turbine.utils import TurbineInputsBase
 
 
