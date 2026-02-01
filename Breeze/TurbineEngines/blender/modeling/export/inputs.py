@@ -6,7 +6,7 @@ from Api.turbine.engine_inputs_gui import EngineGuiBase
 class BlenderModelingExportGui(EngineGuiBase):
     def _init_ui(self):
         self.allow_overwrite = self.add(Specifics.DontOverwrite())
-        self.last_version = self.add(Specifics.LastVersion())
+        self.last_version = self.add(Specifics.LastVersion(context=self.context))
         self.version_number = self.add(Specifics.VersionNumber(context=self.context))
         self.version_number.combobox.setFixedWidth(64)
 

@@ -189,11 +189,7 @@ class TurbineEngine(TurbineStep, Generic[TGui]):
         self.engine = self  # memory leak ? caution, easy to fix anyway
         # self.gui: TGui = self.Gui(context=context)
         self.gui: TGui[EngineGuiBase] = self.Gui(context=context)
-        self.refresh_context()
         self.job: Optional[Job] = None
-
-    def refresh_context(self):
-        self.context.update_from_inputs(inputs=self.gui.inputs)
 
     def _before_run(self):
         """ hook, currently used in build engines """

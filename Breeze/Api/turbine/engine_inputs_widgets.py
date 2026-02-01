@@ -87,9 +87,16 @@ class DontOverwriteCheckbox(Checkbox):
     def __init__(self):
         super().__init__(name='dont_overwrite', label='Dont overwrite', is_checked=True)
 
+
 class LastVersionCheckbox(Checkbox):
-    def __init__(self):
-        super().__init__(name='last_version', label='Last version', is_checked=True)
+    def __init__(self, context: JobContext):
+        if context.version is None:
+            is_checked = True
+        elif context.version.number == context.component.get_last_version().number:
+            is_checked = True
+        else:
+            is_checked = False
+        super().__init__(name='last_version', label='Last version', is_checked=is_checked)
 
 
 class VersionNumberCombobox(Combobox):
