@@ -48,6 +48,8 @@ class ReserveBuiltVersionStep(TurbineStep):
         else:
             built_version = self.engine.context.component.get_version(number=self._number, crash_if_not_found=True)
             self.logger.warning(f"Building over an existing version... {built_version}")
+            if self.engine.gui.get_inputs().dont_overwrite:
+                raise FileExistsError(f"{built_version} already exists. Uncheck 'don't overwrite' to overwrite it.'")
 
         built_version.set_comment(text='Build')
         self.version = built_version

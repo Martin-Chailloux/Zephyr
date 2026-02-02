@@ -64,23 +64,19 @@ class ReserveExportVersionStep(TurbineStep):
 
     def __init__(self, source_version: Version, component_name: str, extension: str):
         super().__init__()
-        # inputs
         self._source_version = source_version
-
-        # component
         self._name = component_name
         self._extension = extension
 
     def _inner_run(self):
-        # get or create component
         component = self._source_version.component.stage.create_or_get_component(name=self._name, extension=self._extension, crash_if_exists=False)
         self.logger.debug(f"{component = }")
 
-        # get or create version
         version = component.get_version(number=self._source_version.number)
         if version is None:
             version = component.create_version(number=self._source_version.number)
         else:
             self.logger.debug(f"Overriding an existing version ...")
-
+            if self.engine.gui.get_inputs().dont_overwrite:
+                raise FileExistsError(f"{version} already exists. Uncheck 'don't overwrite' to overwrite it.")
         self.version = version

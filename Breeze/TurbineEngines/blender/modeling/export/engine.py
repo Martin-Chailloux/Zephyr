@@ -14,6 +14,7 @@ class BlenderModelingExportEngine(TurbineEngine):
     def _add_steps(self):
         self.open_step = self.add_step(OpenStep())
         self.scan_step = self.add_step(GetCollectionsToExportStep())
+        # TODO: reserve all the versions that will be exported, to raise dont_overwrite errors earlier
         self.export_step = self.add_step(ExportCollectionsStep())
 
     def _inner_run(self, **kwargs):
