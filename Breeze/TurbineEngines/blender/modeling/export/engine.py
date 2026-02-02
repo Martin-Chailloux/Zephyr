@@ -1,18 +1,15 @@
 from Api.turbine.step import TurbineEngine
 from TurbineEngines.blender.modeling.export.inputs import BlenderModelingExportGui
 from TurbineEngines.blender.shared_steps.export_collections import ExportCollectionsStep, GetCollectionsToExportStep
-
 from TurbineEngines.shared_steps.io_steps import OpenStep
 
-
-class BlenderModelingExportEngine(TurbineEngine[BlenderModelingExportGui]):
+class BlenderModelingExportEngine(TurbineEngine):
     name = "blender_modeling_export"
     label = "Export"
     tooltip = "from a stage 'Modeling', exports the collection 'Export'"
-    Gui = BlenderModelingExportGui
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    def _set_gui(self):
+        self.gui = BlenderModelingExportGui(context=self.context)
 
     def _add_steps(self):
         self.open_step = self.add_step(OpenStep())

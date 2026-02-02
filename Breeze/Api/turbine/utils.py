@@ -6,6 +6,7 @@ from PySide6.QtCore import QObject
 
 from Api.document_models.project_documents import Component, Version
 from Api.document_models.studio_documents import User
+from Api.turbine.engine_inputs import EngineInputsBase
 
 from Utils.pills import PillModel, AbstractPills
 
@@ -51,13 +52,6 @@ class StepStatus(QObject):
 
 
 @dataclass
-class TurbineInputsBase:
-    use_last_version: bool = True
-    version_number: int = None
-    dont_overwrite: bool = False
-
-
-@dataclass
 class JobContext:
     # NOTE: component and version are split, because a build process does not build from an existing version
     user: User
@@ -75,7 +69,7 @@ class JobContext:
     def set_creation_time(self):
         self.creation_time = datetime.now()
 
-    def update_from_inputs(self, inputs: TurbineInputsBase):
+    def update_from_inputs(self, inputs: EngineInputsBase):
         if inputs is None:
             return
 

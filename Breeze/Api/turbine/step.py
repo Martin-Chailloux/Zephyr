@@ -10,15 +10,15 @@ from PySide6.QtWidgets import QTreeWidgetItem
 
 from Api.document_models.project_documents import Job
 from Api.document_models.studio_documents import Process
-from Api.turbine.engine_inputs_gui import EngineGuiBase
-from Api.turbine.utils import StepStatus, JobContext, TurbineInputsBase
+from Api.turbine.engine_gui import EngineGuiBase
+from Api.turbine.engine_inputs import EngineInputsBase
+from Api.turbine.utils import StepStatus, JobContext
 from Api.turbine.logger import StepLogger
 
 from Utils.pills import PillModel
 
 
 TStep = TypeVar("TStep", bound='TurbineStep')
-
 
 class TurbineStep(QObject):
     """
@@ -72,11 +72,16 @@ class TurbineStep(QObject):
     def on_sub_step_updated(self):
         self.updated.emit()
 
+    def _before_run(self):
+        """ hook, currently used in build engines """
+        pass
+
     def run(self, **kwargs):
         # TODO: duration
 
         self.Pill.set_running()
         try:
+            self._before_run()
             self._inner_run(**kwargs)
             self.set_success()
 
@@ -159,17 +164,13 @@ class StepTranslator:
         return item
 
 
-TGui = TypeVar("TGui", bound=EngineGuiBase)
-
-class TurbineEngine(TurbineStep, Generic[TGui]):
+class TurbineEngine(TurbineStep):
     """
     Series of step that from a process. Examples: Build, Export, Review, etc ...
     """
-
     name: str = "process_name"
     label: str = "process_label"
     tooltip: str = "process_tooltip"
-    Gui: Type[TGui]
 
     @classmethod
     def from_database(cls, process: Process, context: JobContext) -> Self:
@@ -186,17 +187,16 @@ class TurbineEngine(TurbineStep, Generic[TGui]):
     def __init__(self, context: JobContext):
         super().__init__(sub_label=None)
         self.context = context
-        self.engine = self  # memory leak ? caution, easy to fix anyway
-        # self.gui: TGui = self.Gui(context=context)
-        self.gui: TGui[EngineGuiBase] = self.Gui(context=context)
+        self.engine: TurbineEngine[EngineGuiBase] = self  # memory leak ? caution, easy to fix anyway
+        self._set_gui()
         self.job: Optional[Job] = None
 
-    def _before_run(self):
+    def _set_gui(self):
+        self.gui: EngineGuiBase = EngineGuiBase(context=self.context)
+
+    def _before_add_steps(self):
         """ hook, currently used in build engines """
         pass
-
-    def set_gui(self, gui: EngineGuiBase):
-        self.gui = gui
 
     def _add_steps(self):
         """ Add steps here rather than during init so that inputs can be updated in-between """
@@ -204,11 +204,11 @@ class TurbineEngine(TurbineStep, Generic[TGui]):
 
     def run(self):
         self.job = self.create_job()
-        self._before_run()
+        self._before_add_steps()
         self._add_steps()
         self.Pill.set_idle()
 
-        self.logger.debug(f"{self.gui.inputs = }")
+        self.logger.debug(f"{self.gui.get_inputs() = }")
         self.Pill.set_running()
 
         try:
@@ -269,15 +269,3 @@ class TurbineEngine(TurbineStep, Generic[TGui]):
     def update_job(self):
         """ Updates the current job """
         self.job.update(steps=self.to_dict())
-
-
-class BuildEngineBase(TurbineEngine, Generic[TGui]):
-    # TODO: when a build fails, show it clearly in the ui
-    #  changing the display of file-less versions might do the trick
-    #  (and any invalid version)
-    def _before_run(self):
-        built_version = self.context.component.create_last_version()
-        built_version.set_comment(text='Build')
-        self.job.update(source_version=built_version)
-        self.context.set_version(version=built_version)
-        self.logger.info(f"Creating built version... {built_version}")

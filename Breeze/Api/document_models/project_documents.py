@@ -107,7 +107,7 @@ class Stage(Document):
 
         return stage
 
-    def create_component(self, name: str, extension: str, crash_if_exists: bool = True) -> 'Component':
+    def create_or_get_component(self, name: str, extension: str, crash_if_exists: bool = True) -> 'Component':
         component = Component.objects(name=name, extension=extension, stage=self)
         if len(component) == 1:
             if crash_if_exists:
@@ -121,7 +121,7 @@ class Stage(Document):
         return component
 
     def create_work_component(self, extension: str) -> 'Component':
-        work_component = self.create_component(name=data.Components.work, extension=extension)
+        work_component = self.create_or_get_component(name=data.Components.work, extension=extension)
         return work_component
 
     def get_work_components(self) -> list['Component']:
@@ -283,14 +283,18 @@ class Component(Document):
             versions = sorted(versions, key=lambda v: v.number, reverse=True)
             return versions[0]
 
-    def get_version(self, number: int) -> Optional['Version']:
+    def get_version(self, number: int, crash_if_not_found: bool=False) -> Optional['Version']:
         versions = [v for v in self.versions if v.number == number]
-        if not versions:
-            return None
-        elif len(versions) > 1:  # this should not be possible
-            raise ValueError(f"Found more than 1 version with number {number}: {versions}")
-        else:
-            return versions[0]
+        match len(versions):
+            case 0:
+                if crash_if_not_found:
+                    raise ValueError(f"Did not find version number {number} in {self}")
+                return None
+            case 1:
+                return versions[0]
+            case _:  # this should not be possible
+                raise ValueError(f"Found more than 1 version with number {number}: {versions}")
+
 
     def get_version_numbers(self) -> list[int]:
         numbers = [version.number for version in self.versions]

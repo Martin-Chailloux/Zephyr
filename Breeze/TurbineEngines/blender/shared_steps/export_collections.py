@@ -4,7 +4,7 @@ from Api import data
 from Api.document_models.project_documents import Version
 from Api.turbine.step import TurbineStep
 import bl_utils
-from TurbineEngines.shared_steps.io_steps import OpenStep, CreateVersionStep, SaveAsStep
+from TurbineEngines.shared_steps.io_steps import OpenStep, ReserveExportVersionStep, SaveAsStep
 
 
 class GetCollectionsToExportStep(TurbineStep):
@@ -40,6 +40,8 @@ class GetCollectionsToExportStep(TurbineStep):
 
         if not self.collections:
             raise ValueError(f"Did not find any collection to export. Expected: {collection_names}")
+        else:
+            self.logger.info(f"Found {len(self.collections)} collection(s) to export: {[c.name for c in self.collections]}")
 
 
 class ExportCollectionsStep(TurbineStep):
@@ -50,8 +52,13 @@ class ExportCollectionsStep(TurbineStep):
         super().run(collections=collections)
 
     def _inner_run(self, collections: list[bpy.types.Collection]):
+        steps = []
         for collection in collections:
             step = self.add_step(ExportCollectionStep())
+            step.set_sub_label(sub_label=collection.name)
+            steps.append(step)
+
+        for step, collection in zip(steps, collections):
             step.run(collection_name=collection.name)
 
 
@@ -66,11 +73,9 @@ class ExportCollectionStep(TurbineStep):
         collection = bl_utils.get_collection(name=collection_name)
         self.logger.debug(f"{collection = }")
         component_name = collection.name.replace("Export ", "")
-        self.set_sub_label(sub_label=component_name)
 
-        self.reserve_version_step = self.add_step(CreateVersionStep(
+        self.reserve_version_step = self.add_step(ReserveExportVersionStep(
             source_version=self.engine.context.version,
-            dont_overwrite=self.engine.gui.inputs.dont_overwrite,
             component_name=component_name,
             extension=data.Extensions.blend,
         ))

@@ -137,7 +137,7 @@ class WorkVersionsWidget(QWidget):
             return
         process_select_menu = TurbineLauncher(component=self.stage.get_work_component(), version=self.versions_list.get_selected_version())
         # process_select_menu.process_finished.connect(self.ask_refresh_exports.emit)
-        result = process_select_menu.show_menu(position=[0.5, 1])
+        result = process_select_menu.show_menu(position=[0.5, 0.5])
         if result:
             self.refresh(reselect_row=True)
 

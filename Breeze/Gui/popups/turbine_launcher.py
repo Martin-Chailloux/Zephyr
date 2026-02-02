@@ -14,7 +14,7 @@ from Gui.popups.abstract_popup_widget import AbstractPopupWidget
 from Gui.mvd.process_mvd.process_list_view import ProcessListView
 from Gui.sub_widgets.asset_widgets.asset_browser_widget import AssetBrowserWidget
 
-from Api.turbine.engine_inputs_gui import EngineGuiBase
+from Api.turbine.engine_gui import EngineGuiBase
 from Api.turbine.step import TurbineEngine
 from Api.turbine.utils import JobContext
 
@@ -151,7 +151,10 @@ class TurbineLauncher(AbstractPopupWidget):
             self.set_engine(engine=engine)
 
     def on_launch_button_clicked(self):
-        inputs = self.get_gui().inputs
+        # TODO:
+        #  - test with a long process
+        #  - launch in a separate thread and debug
+        inputs = self.get_gui().get_inputs()
         engine = self.engine
         engine.context.update_from_inputs(inputs=inputs)
         engine.context.set_creation_time()

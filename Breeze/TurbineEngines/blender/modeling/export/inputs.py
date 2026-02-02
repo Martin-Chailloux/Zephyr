@@ -1,6 +1,6 @@
-from Api.turbine.engine_inputs_widgets import Specifics
-from Api.turbine.utils import TurbineInputsBase
-from Api.turbine.engine_inputs_gui import EngineGuiBase
+from Api.turbine.gui_widgets import Specifics
+from Api.turbine.engine_gui import EngineGuiBase
+from Api.turbine.engine_inputs import EngineInputsBase
 
 
 class BlenderModelingExportGui(EngineGuiBase):
@@ -19,9 +19,8 @@ class BlenderModelingExportGui(EngineGuiBase):
     def on_last_version_clicked(self, is_checked: bool):
         self.version_number.setEnabled(not is_checked)
 
-    @property
-    def inputs(self) -> TurbineInputsBase:
-        result = TurbineInputsBase(
+    def get_inputs(self) -> EngineInputsBase:
+        result = EngineInputsBase(
             use_last_version=self.last_version.checkbox.isChecked(),
             version_number=int(self.version_number.combobox.currentText()),
             dont_overwrite=self.allow_overwrite.checkbox.isChecked(),
