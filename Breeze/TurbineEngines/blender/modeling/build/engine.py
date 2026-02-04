@@ -1,11 +1,10 @@
 from Api import data
-from Api.turbine.step import TurbineStep
-from TurbineEngines.shared_engines.build_engine import BuildEngineBase
+from TurbineEngines.shared_engines.build import EngineBuildBase
 from TurbineEngines.shared_steps.collect_steps import GetTemplateSceneStep
 from TurbineEngines.shared_steps.io_steps import OpenStep, SaveAsStep
 
 
-class BlenderModelingBuildEngine(BuildEngineBase):
+class BlenderModelingBuildEngine(EngineBuildBase):
     name = "blender_modeling_build"
     label = "Build"
     tooltip = "Builds a scene for modeling"

@@ -1,10 +1,8 @@
-from typing import Optional
-
-from Api.document_models.project_documents import Version, Component, Asset
-from Api.turbine.step import TurbineStep
+from Api.document_models.project_documents import Version, Asset
+from Api.turbine.step import Step
 
 
-class GetTemplateSceneStep(TurbineStep):
+class GetTemplateSceneStep(Step):
     label = "Get template scene"
 
     def __init__(self, category: str, name: str, variant: str, stage_template: str, version_number: int=None):

@@ -1,14 +1,14 @@
 from typing import TypeVar
 
 from Api.document_models.project_documents import Version
-from Api.turbine.step import TurbineStep
+from Api.turbine.step import Step
 from software_base import AbstractSoftwareFile
 
 
 File = TypeVar("File")
 
 
-class OpenStep(TurbineStep):
+class OpenStep(Step):
     label = "Open"
     tooltip = "Open a file from a version"
 
@@ -28,7 +28,7 @@ class OpenStep(TurbineStep):
         self.file = file
 
 
-class SaveStep(TurbineStep):
+class SaveStep(Step):
     label = "Save"
     tooltip = "Saves the file"
 
@@ -40,7 +40,7 @@ class SaveStep(TurbineStep):
         file.save()
 
 
-class SaveAsStep(TurbineStep):
+class SaveAsStep(Step):
     label = "Save As"
     tooltip = "Saves a file in an other version"
 
@@ -58,7 +58,30 @@ class SaveAsStep(TurbineStep):
         self.set_sub_label(target_version.__repr__())
 
 
-class ReserveExportVersionStep(TurbineStep):
+class ReserveBuiltVersionStep(Step):
+    label: str = "Reserve version"
+    tooltip: str = ""
+
+    def __init__(self, number: int = -1):
+        super().__init__()
+        self._number = number
+        self.version: Version
+
+    def _inner_run(self):
+        if self._number == -1:
+            built_version = self.engine.context.component.create_last_version()
+            self.logger.info(f"Created a new version... {built_version}")
+        else:
+            built_version = self.engine.context.component.get_version(number=self._number, crash_if_not_found=True)
+            self.logger.warning(f"Building over an existing version... {built_version}")
+            if self.engine.gui.get_inputs().dont_overwrite:
+                raise FileExistsError(f"{built_version} already exists. Uncheck 'don't overwrite' to overwrite it.'")
+
+        built_version.set_comment(text='Build')
+        self.version = built_version
+
+
+class ReserveExportVersionStep(Step):
     label: str = "Reserve export Version"
     tooltip: str = ""
 

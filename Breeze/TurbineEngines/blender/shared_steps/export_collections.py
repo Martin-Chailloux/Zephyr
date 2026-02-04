@@ -2,12 +2,12 @@ import bpy
 
 from Api import data
 from Api.document_models.project_documents import Version
-from Api.turbine.step import TurbineStep
+from Api.turbine.step import Step
 import bl_utils
 from TurbineEngines.shared_steps.io_steps import OpenStep, ReserveExportVersionStep, SaveAsStep
 
 
-class GetCollectionsToExportStep(TurbineStep):
+class GetCollectionsToExportStep(Step):
     label: str = "Scan"
     tooltip: str = "Get collections to export"
 
@@ -44,7 +44,7 @@ class GetCollectionsToExportStep(TurbineStep):
             self.logger.info(f"Found {len(self.collections)} collection(s) to export: {[c.name for c in self.collections]}")
 
 
-class ExportCollectionsStep(TurbineStep):
+class ExportCollectionsStep(Step):
     label: str = "Export"
     tooltip: str = "Export collections as .blend files"
 
@@ -62,7 +62,7 @@ class ExportCollectionsStep(TurbineStep):
             step.run(collection_name=collection.name)
 
 
-class ExportCollectionStep(TurbineStep):
+class ExportCollectionStep(Step):
     label: str = "Export"
     tooltip: str = "Export a single collection as a .blend file"
 
@@ -92,7 +92,7 @@ class ExportCollectionStep(TurbineStep):
         self.save_step.run(file=self.open_step.file, target_version=self.reserve_version_step.version)
 
 
-class CleanExportedSceneStep(TurbineStep):
+class CleanExportedSceneStep(Step):
     label: str = "Clean"
     tooltip: str = "Isolates the collection 'Export' and rename with {component asset stage}. Example: geo character_baby_-_modeling"
 

@@ -6,9 +6,15 @@ from PySide6.QtCore import QObject
 
 from Api.document_models.project_documents import Component, Version
 from Api.document_models.studio_documents import User
-from Api.turbine.engine_inputs import EngineInputsBase
 
 from Utils.pills import PillModel, AbstractPills
+
+
+@dataclass
+class InputsBase:
+    use_last_version: bool = True
+    version_number: int = None
+    dont_overwrite: bool = False
 
 
 @dataclass
@@ -69,7 +75,7 @@ class JobContext:
     def set_creation_time(self):
         self.creation_time = datetime.now()
 
-    def update_from_inputs(self, inputs: EngineInputsBase):
+    def update_from_inputs(self, inputs: InputsBase):
         if inputs is None:
             return
 

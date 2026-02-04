@@ -1,11 +1,9 @@
 import bpy
 
-from Api.document_models.project_documents import Version
-from Api.turbine.step import TurbineStep
-import bl_utils
+from Api.turbine.step import Step
 
 
-class CreateCollectionStep(TurbineStep):
+class CreateCollectionStep(Step):
     label = "Create collection"
     tooltip = "Creates a new empty collection"
 
@@ -22,7 +20,7 @@ class CreateCollectionStep(TurbineStep):
 
 
 
-class GetExportCollectionStep(TurbineStep):
+class GetExportCollectionStep(Step):
     label: str = "Get export collection"
     tooltip: str = ""
 

@@ -1,7 +1,7 @@
 import importlib
 import os
 import traceback
-from typing import TypeVar, Optional, Generic, Type, Self
+from typing import TypeVar, Optional, Type, Self
 
 import qtawesome
 from PySide6 import QtCore
@@ -10,8 +10,7 @@ from PySide6.QtWidgets import QTreeWidgetItem
 
 from Api.document_models.project_documents import Job
 from Api.document_models.studio_documents import Process
-from Api.turbine.engine_gui import EngineGuiBase
-from Api.turbine.engine_inputs import EngineInputsBase
+from Api.turbine.gui import GuiBase
 from Api.turbine.utils import StepStatus, JobContext
 from Api.turbine.logger import StepLogger
 
@@ -20,7 +19,7 @@ from Utils.pills import PillModel
 
 TStep = TypeVar("TStep", bound='TurbineStep')
 
-class TurbineStep(QObject):
+class Step(QObject):
     """
     Multiple steps are assembled inside a TurbineEngine and ran after each other.
     """
@@ -37,8 +36,8 @@ class TurbineStep(QObject):
         self.Pill: StepStatus = StepStatus()
         self.logger: StepLogger = StepLogger(name=f"{self.label}__{self.sub_label}__{os.urandom(4)}")
 
-        self.steps: list[TurbineStep] = []
-        self.engine: Optional[TurbineEngine] = None
+        self.steps: list[Step] = []
+        self.engine: Optional[EngineBase] = None
 
         self.logger.info(f"Starting step '{self.label}' ... ")
         self.log_output = ""  # used with Self.from_dict() to recover log
@@ -56,7 +55,7 @@ class TurbineStep(QObject):
     def pill(self) -> PillModel:
         return self.Pill.status
 
-    def set_engine(self, engine: 'TurbineEngine'):
+    def set_engine(self, engine: 'EngineBase'):
         self.engine = engine
 
     def add_step(self, step: TStep) -> TStep:
@@ -108,14 +107,14 @@ class TurbineStep(QObject):
         return StepTranslator.to_dict(step=self)
 
     @classmethod
-    def from_dict(cls, infos: dict[str, any]) -> 'TurbineStep':
+    def from_dict(cls, infos: dict[str, any]) -> 'Step':
         return StepTranslator.from_dict(infos=infos)
 
     def to_tree_item(self) -> QTreeWidgetItem:
         return StepTranslator.to_tree_item(step=self)
 
 
-class StepGroup(TurbineStep):
+class StepGroup(Step):
     def __init__(self, label: str, sub_label: str = None):
         self.label = label
         super().__init__(sub_label = sub_label)
@@ -123,7 +122,7 @@ class StepGroup(TurbineStep):
 
 class StepTranslator:
     @staticmethod
-    def to_dict(step: TurbineStep) -> dict[str, any]:
+    def to_dict(step: Step) -> dict[str, any]:
         infos = {
             'label': step.label,
             'sub_label': step.sub_label,
@@ -135,8 +134,8 @@ class StepTranslator:
         return infos
 
     @staticmethod
-    def from_dict(infos: dict[str, any]) -> TurbineStep:
-        step = TurbineStep(sub_label=infos['sub_label'])
+    def from_dict(infos: dict[str, any]) -> Step:
+        step = Step(sub_label=infos['sub_label'])
         step.comes_from_dict = True
         step.label = infos['label']
         step.tooltip = infos['tooltip']
@@ -144,13 +143,13 @@ class StepTranslator:
         step.log_output = infos['log']
 
         for child_step in infos['child_steps']:
-            child_step = TurbineStep.from_dict(infos=child_step)
+            child_step = Step.from_dict(infos=child_step)
             step.steps.append(child_step)
 
         return step
 
     @staticmethod
-    def to_tree_item(step: TurbineStep) -> QTreeWidgetItem:
+    def to_tree_item(step: Step) -> QTreeWidgetItem:
         item = QTreeWidgetItem()
 
         text = step.label
@@ -164,7 +163,7 @@ class StepTranslator:
         return item
 
 
-class TurbineEngine(TurbineStep):
+class EngineBase(Step):
     """
     Series of step that from a process. Examples: Build, Export, Review, etc ...
     """
@@ -187,12 +186,12 @@ class TurbineEngine(TurbineStep):
     def __init__(self, context: JobContext):
         super().__init__(sub_label=None)
         self.context = context
-        self.engine: TurbineEngine[EngineGuiBase] = self  # memory leak ? caution, easy to fix anyway
+        self.engine: EngineBase[GuiBase] = self  # memory leak ? caution, easy to fix anyway
         self._set_gui()
         self.job: Optional[Job] = None
 
     def _set_gui(self):
-        self.gui: EngineGuiBase = EngineGuiBase(context=self.context)
+        self.gui: GuiBase = GuiBase(context=self.context)
 
     def _before_add_steps(self):
         """ hook, currently used in build engines """

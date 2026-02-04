@@ -14,8 +14,8 @@ from Gui.popups.abstract_popup_widget import AbstractPopupWidget
 from Gui.mvd.process_mvd.process_list_view import ProcessListView
 from Gui.sub_widgets.asset_widgets.asset_browser_widget import AssetBrowserWidget
 
-from Api.turbine.engine_gui import EngineGuiBase
-from Api.turbine.step import TurbineEngine
+from Api.turbine.gui import GuiBase
+from Api.turbine.step import EngineBase
 from Api.turbine.utils import JobContext
 
 
@@ -30,7 +30,7 @@ class TurbineLauncher(AbstractPopupWidget):
             component=component,
             version=version,
         )
-        self.engine: Optional[TurbineEngine] = None
+        self.engine: Optional[EngineBase] = None
         self._init_ui()
         self._connect_signals()
         self._init_state()
@@ -100,14 +100,14 @@ class TurbineLauncher(AbstractPopupWidget):
         self.on_asset_selected()  # only needed if current asset is the first from the list
         self.stage_list.select_stage(stage=self.source_context.component.stage)
 
-    def set_engine(self, engine: TurbineEngine):
+    def set_engine(self, engine: EngineBase):
         self.engine = engine
 
-    def get_gui(self) -> EngineGuiBase:
-        gui: EngineGuiBase = self.gui_widget.widget(0)
+    def get_gui(self) -> GuiBase:
+        gui: GuiBase = self.gui_widget.widget(0)
         return gui
 
-    def set_gui(self, gui: EngineGuiBase = None):
+    def set_gui(self, gui: GuiBase = None):
         self.gui_widget.removeWidget(self.get_gui())
         if gui is None:
             return
@@ -146,7 +146,7 @@ class TurbineLauncher(AbstractPopupWidget):
         if process is None:
             self.set_gui(None)
         else:
-            engine = TurbineEngine.from_database(process=process, context=self.get_current_context())
+            engine = EngineBase.from_database(process=process, context=self.get_current_context())
             self.set_gui(gui=engine.gui)
             self.set_engine(engine=engine)
 
