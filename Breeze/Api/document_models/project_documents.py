@@ -146,11 +146,14 @@ class Stage(Document):
                     else:
                         return None
 
+    def set_ingredients(self, ingredients: dict[str, list['Version']]):
+        self.ingredients = ingredients
+        self._sort_ingredients()
+
     def add_ingredient(self, name: str, version: 'Version'):
         if name not in self.ingredients.keys():
             self.ingredients[name] = []
         self.ingredients[name].append(version)
-        self.save()
         self._sort_ingredients()
         print(f"{version} was added to the '{name}' ingredients of {self}")
 

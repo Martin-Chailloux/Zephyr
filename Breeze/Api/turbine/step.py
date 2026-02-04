@@ -1,7 +1,8 @@
 import importlib
 import os
 import traceback
-from typing import TypeVar, Optional, Type, Self
+from abc import abstractmethod
+from typing import TypeVar, Optional, Type, Self, ParamSpec
 
 import qtawesome
 from PySide6 import QtCore
@@ -31,7 +32,7 @@ class Step(QObject):
 
     def __init__(self, sub_label: str = None):
         super().__init__()
-        self.comes_from_dict: bool = False  # used with logs
+        self._comes_from_dict: bool = False  # used with logs
         self.sub_label: str = sub_label
         self.Pill: StepStatus = StepStatus()
         self.logger: StepLogger = StepLogger(name=f"{self.label}__{self.sub_label}__{os.urandom(4)}")
@@ -46,7 +47,7 @@ class Step(QObject):
         self.sub_label = sub_label
 
     def get_log(self) -> str:
-        if self.comes_from_dict:
+        if self._comes_from_dict:
             return self.log_output
         else:
             return self.logger.stream.getvalue()
@@ -72,7 +73,7 @@ class Step(QObject):
         self.updated.emit()
 
     def _before_run(self):
-        """ hook, currently used in build engines """
+        """ hook (currently used in build engines) """
         pass
 
     def run(self, **kwargs):
@@ -87,8 +88,9 @@ class Step(QObject):
         except Exception as e:
             self.set_failed()
 
+    @abstractmethod
     def _inner_run(self, **kwargs):
-        # override with actions
+        # run steps here in subclasses
         pass
 
     def set_success(self):
@@ -136,7 +138,7 @@ class StepTranslator:
     @staticmethod
     def from_dict(infos: dict[str, any]) -> Step:
         step = Step(sub_label=infos['sub_label'])
-        step.comes_from_dict = True
+        step._comes_from_dict = True
         step.label = infos['label']
         step.tooltip = infos['tooltip']
         step.Pill = StepStatus.from_name(name=infos['pill']) # TODO: rename 'pill' with 'status'

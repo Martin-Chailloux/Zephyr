@@ -9,32 +9,32 @@ from Api.recipes.recipe import Recipe
 @dataclass
 class RecipesDefault:
     modeling = Recipe(ingredient_slots=[
-        IngredientSlot(name='Extra', multiple=True, filters=[]),
+        IngredientSlot(name='extra', multiple=True, filters=[]),
     ])
 
     rigging = Recipe(ingredient_slots=[
-        IngredientSlot(name='Geos', multiple=True, filters=[ComponentFilters.Component(items=[data.Components.geo])]),
-        IngredientSlot(name='Extra', multiple=True, filters=[]),
+        IngredientSlot(name='geo', multiple=True, filters=[ComponentFilters.Component(items=[data.Components.geo])]),
+        IngredientSlot(name='extra', multiple=True, filters=[]),
     ])
 
     texturing = Recipe(ingredient_slots=[
-        IngredientSlot(name='Geo', multiple=False, filters=[ComponentFilters.Component(items=[data.Components.geo])]),
+        IngredientSlot(name='geo', multiple=False, filters=[ComponentFilters.Component(items=[data.Components.geo])]),
     ])
 
     shading = Recipe(ingredient_slots=[
-        IngredientSlot(name='Geo', multiple=False, filters=[ComponentFilters.Component(items=[data.Components.geo])]),
+        IngredientSlot(name='geo', multiple=False, filters=[ComponentFilters.Component(items=[data.Components.geo])]),
     ])
 
     animation = Recipe(ingredient_slots=[
-        IngredientSlot(name='CamRig', multiple=False, filters=[ComponentFilters.Component(items=[data.Components.cam_rig])]),
-        IngredientSlot(name='Decor', multiple=False, filters=[ComponentFilters.Category(items=[data.Categories.decor])]),
-        IngredientSlot(name='Rigs', multiple=True, filters=[ComponentFilters.Component(items=[data.Components.rig])]),
-        IngredientSlot(name='Extra', multiple=True, filters=[]),
+        IngredientSlot(name='camrig', multiple=False, filters=[ComponentFilters.Component(items=[data.Components.cam_rig])]),
+        IngredientSlot(name='decor', multiple=False, filters=[ComponentFilters.Category(items=[data.Categories.decor])]),
+        IngredientSlot(name='rig', multiple=True, filters=[ComponentFilters.Component(items=[data.Components.rig])]),
+        IngredientSlot(name='extra', multiple=True, filters=[]),
     ])
 
     lighting = Recipe(ingredient_slots=[
-        IngredientSlot(name='Cam', multiple=False, filters=[ComponentFilters.Component(items=[data.Components.cam])]),
-        IngredientSlot(name='Animated', multiple=True, filters=[ComponentFilters.Component(items=[data.Components.anim])]),
-        IngredientSlot(name='Static', multiple=True, filters=[ComponentFilters.Component(items=[data.Components.shd])]),
-        IngredientSlot(name='Extra', multiple=True, filters=[]),
+        IngredientSlot(name='cam', multiple=False, filters=[ComponentFilters.Component(items=[data.Components.cam])]),
+        IngredientSlot(name='animated', multiple=True, filters=[ComponentFilters.Component(items=[data.Components.anim])]),
+        IngredientSlot(name='static', multiple=True, filters=[ComponentFilters.Component(items=[data.Components.shd])]),
+        IngredientSlot(name='extra', multiple=True, filters=[]),
     ])

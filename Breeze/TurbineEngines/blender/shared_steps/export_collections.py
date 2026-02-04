@@ -70,7 +70,7 @@ class ExportCollectionStep(Step):
         super().run(collection_name=collection_name)
 
     def _inner_run(self, collection_name: str):
-        collection = bl_utils.get_collection(name=collection_name)
+        collection = bpy.data.collections.get(collection_name)
         self.logger.debug(f"{collection = }")
         component_name = collection.name.replace("Export ", "")
 
@@ -104,7 +104,7 @@ class CleanExportedSceneStep(Step):
         super().run(export_collection_name=export_collection_name, target_version=target_version)
 
     def _inner_run(self, export_collection_name: str, target_version: Version):
-        export_collection = bl_utils.get_collection(name=export_collection_name)
+        export_collection = bpy.data.collections.get(export_collection_name)
         self.logger.debug(f"{export_collection = }")
 
         root_collection: bpy.types.Collection = bpy.context.scene.collection

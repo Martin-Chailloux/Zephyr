@@ -53,4 +53,4 @@ def set_outputs():
 
 
 if __name__ == '__main__':
-    set_outputs()
+    set_recipes()

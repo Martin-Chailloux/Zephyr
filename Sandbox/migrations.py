@@ -16,10 +16,11 @@ from TurbineEngines.blender.modeling.build.engine import BlenderModelingBuildEng
 
 from Api.document_models.studio_documents import StageTemplate
 from Api.document_models.project_documents import Stage, Asset, Version, Job, Component
-from TurbineEngines.blender.modeling.export.engine import BlenderModelingExportEngine
 from Api.recipes.recipe import Recipe
 from Api.recipes.ingredient_slot import IngredientSlot
 from Api.recipes.component_filters import ComponentFilters
+from TurbineEngines.blender.modeling.export.engine import BlenderModelingExportEngine
+from TurbineEngines.blender.rigging.build.engine import BlenderRiggingBuildEngine
 
 
 
@@ -167,6 +168,7 @@ def register_engines():
 
 def set_default_processes():
     modeling: StageTemplate = StageTemplate.objects.get(name=data.StageTemplates.modeling)
+    rigging: StageTemplate = StageTemplate.objects.get(name=data.StageTemplates.rigging)
 
     modeling.processes = [
         BlenderModelingBuildEngine.get_related_process(),
@@ -174,7 +176,23 @@ def set_default_processes():
     ]
     modeling.save()
 
+    BlenderRiggingBuildEngine.register()
+    rigging.processes = [
+        BlenderRiggingBuildEngine.get_related_process(),
+    ]
+    rigging.save()
+
+def clean_unused_ingredients():
+    stages: list[Stage] = Stage.objects()
+    for stage in stages:
+        ingredients = {k: v for k, v in stage.ingredients.items() if k in stage.stage_template.recipe.keys()}
+        print(f"{ingredients = }")
+        stage.set_ingredients(ingredients=ingredients)
+
+
 if __name__ == '__main__':
-    remove_field()
+    # remove_field()
     # register_engines()
-    # set_default_processes()
+    set_default_processes()
+    # clean_unused_ingredients()
+

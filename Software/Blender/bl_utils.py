@@ -4,13 +4,6 @@ import bpy
 
 # TODO: put in /bl_utils/collections if it scales up a lot
 
-def get_collection(name: str) -> bpy.types.Collection:
-    collection = bpy.data.collections.get(name, None)
-    if collection is None:
-        raise ValueError(f"Did not find a collection with name: {name}")
-    return collection
-
-
 def get_collection_parent(collection: bpy.types.Collection) -> Optional[bpy.types.Collection]:
     for parent in bpy.data.collections:
         for name, child in parent.children.items():
