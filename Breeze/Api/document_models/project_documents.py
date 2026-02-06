@@ -561,3 +561,6 @@ Stage.register_delete_rule(Version, 'destinations', mongoengine.PULL)
 User.register_delete_rule(Job, 'user', mongoengine.DENY)
 Process.register_delete_rule(Job, 'source_process', mongoengine.CASCADE)
 Version.register_delete_rule(Job, 'source_version', mongoengine.CASCADE)
+
+# SubUser
+User.register_delete_rule(Job, 'source_user', mongoengine.DENY)
