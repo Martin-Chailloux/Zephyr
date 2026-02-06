@@ -187,8 +187,8 @@ class EngineBase(Step):
 
     def __init__(self, context: JobContext):
         super().__init__(sub_label=None)
-        self.context = context
-        self.engine: EngineBase[GuiBase] = self  # memory leak ? caution, easy to fix anyway
+        self.context: JobContext = context
+        self.engine: EngineBase = self  # memory leak ? caution, easy to fix anyway
         self._set_gui()
         self.job: Optional[Job] = None
 
@@ -199,8 +199,9 @@ class EngineBase(Step):
         """ hook, currently used in build engines """
         pass
 
+    @abstractmethod
     def _add_steps(self):
-        """ Add steps here rather than during init so that inputs can be updated in-between """
+        """ Add steps here """
         pass
 
     def run(self):
@@ -261,7 +262,7 @@ class EngineBase(Step):
 
         job = Job.create(source_process=source_process,
                          steps=self.to_dict(),
-                         inputs=self.gui.to_database(),
+                         inputs=self.gui.export_inputs(),
                          user=self.context.user,
                          version=self.context.version,
                          creation_time=self.context.creation_time)

@@ -1,4 +1,4 @@
-from typing import Optional, Type
+from typing import Optional, Type, Any
 
 import qtawesome
 from PySide6 import QtCore
@@ -6,7 +6,7 @@ from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QVBoxLayout, QPushButton, QHBoxLayout, QStackedWidget, QLabel
 
 from Api.breeze_app import BreezeApp
-from Api.document_models.project_documents import Version, Component
+from Api.document_models.project_documents import Version, Component, Stage
 from Api.document_models.studio_documents import Process
 
 from Gui.mvd.stage_mvd.stage_list_view import StageListViewMinimal
@@ -22,18 +22,33 @@ from Api.turbine.utils import JobContext
 class TurbineLauncher(AbstractPopupWidget):
     process_finished = Signal()
 
-    def __init__(self, component: Component, version: Optional[Version]):
+    def __init__(self, component: Component, version: Optional[Version], process: Process = None, inputs: dict[str, Any] = None):
         super().__init__(w=280, show_borders=True)
         self.setWindowTitle("Select a process to launch with turbine")
+
+        self.process_cache = _ProcessCache()
+        self.inputs_cache = _InputsCache()
+        if process is not None and inputs is not None:
+            self.inputs_cache.set_item(stage=component.stage, process=process, inputs=inputs)
+
+        self.previous_stage: Optional[Stage] = None  # inputs_cache hack
+        self.previous_process: Optional[Process] = None  # inputs_cache hack
+
         self.source_context = JobContext(
             user=BreezeApp.user,
             component=component,
             version=version,
         )
+
         self.engine: Optional[EngineBase] = None
+
         self._init_ui()
         self._connect_signals()
         self._init_state()
+
+        if process is not None:
+            self.process_list.select_process(process=process)
+
 
     def _init_ui(self):
         layout = QVBoxLayout()
@@ -99,6 +114,7 @@ class TurbineLauncher(AbstractPopupWidget):
         self.asset_browser.set_asset(longname=self.source_context.component.stage.asset.longname)
         self.on_asset_selected()  # only needed if current asset is the first from the list
         self.stage_list.select_stage(stage=self.source_context.component.stage)
+        self.on_process_selected()
 
     def set_engine(self, engine: EngineBase):
         self.engine = engine
@@ -121,12 +137,42 @@ class TurbineLauncher(AbstractPopupWidget):
         self.process_list.selectionModel().blockSignals(True)
         self.process_list.set_stage_template(stage_template=self.stage_list.stage.stage_template)
         self.process_list.selectionModel().blockSignals(False)
-        self.process_list.select_row(0)  # TODO: remember rows with a cache
+
+        # cache
+        row = self.process_cache.get_row(stage=self.stage_list.stage)
+        self.process_list.select_row(row)  # TODO: remember rows with a cache
+
+    def on_process_selected(self):
+        """ displays the ui matching the selected process """
+
+        stage = self.stage_list.stage
+        process: Process = self.process_list.get_selected_process()
+
+        # process cache
+        row: int = self.process_list.get_selected_index().row()
+        self.process_cache.set_item(stage=stage, row=row)
+
+        # inputs cache
+        gui = self.get_gui()
+        if gui is not None:
+            self.inputs_cache.set_item(stage=self.previous_stage, process=self.previous_process, inputs=gui.export_inputs())
+
+        if process is None:
+            self.set_gui(None)
+        else:
+            engine = EngineBase.from_database(process=process, context=self.get_current_context())
+            inputs = self.inputs_cache.get_inputs(stage=stage, process=process)
+            engine.gui.import_inputs(inputs=inputs)
+            self.set_gui(gui=engine.gui)
+            self.set_engine(engine=engine)
+
+        self.previous_stage = stage
+        self.previous_process = process
 
     def get_current_context(self) -> JobContext:
         stage = self.stage_list.stage
         component = stage.get_work_component()
-        # TODO: cache to remember selected versions for each component, initiated with the source context
+        # TODO: strange because the version comes from the inputs in the end, maybe the context could only be the component
         if component == self.source_context.component:
             version = self.source_context.version
         else:
@@ -139,16 +185,6 @@ class TurbineLauncher(AbstractPopupWidget):
         )
 
         return context
-
-    def on_process_selected(self):
-        """ displays the ui matching the selected process """
-        process: Process = self.process_list.get_selected_process()
-        if process is None:
-            self.set_gui(None)
-        else:
-            engine = EngineBase.from_database(process=process, context=self.get_current_context())
-            self.set_gui(gui=engine.gui)
-            self.set_engine(engine=engine)
 
     def on_launch_button_clicked(self):
         # TODO:
@@ -163,3 +199,42 @@ class TurbineLauncher(AbstractPopupWidget):
 
         self.process_finished.emit()
         self.accept()
+
+
+class _ProcessCache:
+    def __init__(self):
+        self.items: dict[str, int] = {}
+
+    def clear(self):
+        self.items = {}
+
+    def set_item(self, stage: Stage, row: int):
+        self.items[stage.longname] = row
+
+    def get_row(self, stage: Stage) -> int:
+        row = self.items.get(stage.longname, 0)
+        return row
+
+
+class _InputsCache:
+    def __init__(self):
+        self.items: dict[str, dict] = {}
+
+    def clear(self):
+        self.items = {}
+
+    @staticmethod
+    def _get_key(stage: Stage, process: Process) -> str:
+        key = f"{stage.longname}_{process.longname}"
+        return key
+
+    def set_item(self, stage: Stage, process: Process, inputs: dict):
+        if stage is None or process is None:
+            return
+        key = self._get_key(stage=stage, process=process)
+        self.items[key] = inputs
+
+    def get_inputs(self, stage: Stage, process: Process) -> dict:
+        key = self._get_key(stage=stage, process=process)
+        inputs = self.items.get(key, {})
+        return inputs

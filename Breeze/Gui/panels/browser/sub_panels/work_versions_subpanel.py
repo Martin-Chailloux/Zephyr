@@ -1,4 +1,3 @@
-import qtawesome
 from PySide6 import QtCore
 from PySide6.QtCore import Signal, QPoint
 from PySide6.QtGui import QAction
@@ -107,7 +106,7 @@ class WorkVersionsWidget(QWidget):
     def show_context_menu(self, position: QPoint):
         version = self.versions_list.get_hovered_version()
         menu = VersionsBrowserContextMenu(version=version)
-        menu.show(position=self.mapToGlobal(position))
+        menu.show(position=self.versions_list.mapToGlobal(position))
 
     def increment_selected_version(self):
         if self.stage is None:
@@ -135,9 +134,9 @@ class WorkVersionsWidget(QWidget):
     def launch_turbine_browser(self):
         if self.stage is None:
             return
-        process_select_menu = TurbineLauncher(component=self.stage.get_work_component(), version=self.versions_list.get_selected_version())
-        # process_select_menu.process_finished.connect(self.ask_refresh_exports.emit)
-        result = process_select_menu.show_menu(position=[0.5, 0.5])
+        turbine_launcher = TurbineLauncher(component=self.stage.get_work_component(), version=self.versions_list.get_selected_version())
+        # turbine_launcher.process_finished.connect(self.ask_refresh_exports.emit)
+        result = turbine_launcher.show_menu(position=[0.5, 0.5])
         if result:
             self.refresh(reselect_row=True)
 
@@ -163,11 +162,12 @@ class VersionsBrowserContextMenu(ContextMenu):
         self.open_folder_action = self.add_action(label="Open folder", icon_name='fa5s.folder-open')
 
     def resolve(self, action: QAction):
-        if action is self.copy_id_action:
-            self.version.copy_longname()
-        if action is self.copy_filepath_action:
-            self.version.copy_filepath()
-        elif action is self.open_folder_action:
-            self.version.open_folder()
-        else:
-            return
+        match action:
+            case self.copy_id_action:
+                self.version.copy_longname()
+            case self.copy_filepath_action:
+                self.version.copy_filepath()
+            case self.open_folder_action:
+                self.version.open_folder()
+            case _:
+                return

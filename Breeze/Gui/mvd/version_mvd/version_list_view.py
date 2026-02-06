@@ -1,8 +1,6 @@
 from typing import Optional
 
-import qtawesome
-from PySide6.QtCore import Signal, Qt, QPoint, QItemSelectionModel
-from PySide6.QtWidgets import QMenu
+from PySide6.QtCore import Signal
 
 from Api.document_models.project_documents import Component, Version
 from Gui.mvd.abstract_mvd import AbstractListView

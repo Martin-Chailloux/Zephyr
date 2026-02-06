@@ -170,6 +170,8 @@ def set_default_processes():
     modeling: StageTemplate = StageTemplate.objects.get(name=data.StageTemplates.modeling)
     rigging: StageTemplate = StageTemplate.objects.get(name=data.StageTemplates.rigging)
 
+    BlenderModelingBuildEngine.register()
+    BlenderModelingExportEngine.register()
     modeling.processes = [
         BlenderModelingBuildEngine.get_related_process(),
         BlenderModelingExportEngine.get_related_process(),

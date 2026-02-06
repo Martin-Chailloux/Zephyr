@@ -1,7 +1,7 @@
 from PySide6 import QtCore
 from PySide6.QtWidgets import QMainWindow, QDockWidget
 
-from Gui.panels.turbine.job_selector_panel import SelectProcessPanel
+from Gui.panels.turbine.job_selector_panel import SelectJobPanel
 from Gui.panels.turbine.step_logs_panel import StepLogsPanel
 from Gui.panels.turbine.steps_viewer_panel import StepsViewer
 
@@ -12,12 +12,13 @@ class TurbineGui(QMainWindow):
         super().__init__()
         self._init_ui()
         self._connect_signals()
+        self._init_state()
 
     def _init_ui(self):
-        select_process_panel = SelectProcessPanel()
+        select_job_panel = SelectJobPanel()
         dock = QDockWidget()
         dock.setWindowTitle("Jobs")
-        dock.setWidget(select_process_panel)
+        dock.setWidget(select_job_panel)
         self.addDockWidget(QtCore.Qt.DockWidgetArea.LeftDockWidgetArea, dock)
         dock.setAllowedAreas(QtCore.Qt.DockWidgetArea.LeftDockWidgetArea)
 
@@ -33,16 +34,19 @@ class TurbineGui(QMainWindow):
 
         self.setCorner(QtCore.Qt.Corner.BottomLeftCorner, QtCore.Qt.DockWidgetArea.LeftDockWidgetArea)
 
-        self.select_process_panel = select_process_panel
+        self.select_job_panel = select_job_panel
         self.steps_viewer_panel = steps_viewer_panel
         self.logs_panel = logs_panel
 
     def _connect_signals(self):
-        self.select_process_panel.jobs_list.job_selected.connect(self.on_job_selected)
+        self.select_job_panel.jobs_list.job_selected.connect(self.on_job_selected)
         self.steps_viewer_panel.step_selected.connect(self.on_step_selected)
 
+    def _init_state(self):
+        self.select_job_panel.refresh()
+
     def on_job_selected(self):
-        job = self.select_process_panel.jobs_list.get_selected_job()
+        job = self.select_job_panel.jobs_list.get_selected_job()
         self.steps_viewer_panel.populate(job=job)
 
     def on_step_selected(self):

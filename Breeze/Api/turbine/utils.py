@@ -87,3 +87,7 @@ class JobContext:
             version = None
 
         self.set_version(version=version)
+
+    def get_ingredients(self) -> dict[str, list[Version]]:
+        ingredients = self.component.stage.ingredients
+        return ingredients

@@ -1,4 +1,5 @@
 from PySide6.QtCore import Signal
+from mkdocs.config.config_options import Optional
 
 from Api.document_models.studio_documents import Process, StageTemplate
 from Gui.mvd.abstract_mvd import AbstractListView
@@ -27,3 +28,12 @@ class ProcessListView(AbstractListView):
 
         return process
 
+    def select_process(self, process: Process):
+        if process is None:
+            self.selectionModel().clearSelection()
+            return
+
+        for row in range(self._model.rowCount()):
+            index = self._model.index(row, 0)
+            if process == index.data(ProcessItemRoles.process):
+                self.select_row(row)

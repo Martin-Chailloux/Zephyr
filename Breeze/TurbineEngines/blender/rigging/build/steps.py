@@ -1,7 +1,6 @@
 import bpy
 
 from Api.turbine.step import Step
-from software_base import AbstractSoftwareFile
 
 
 class ImportGeoStep(Step):
@@ -9,7 +8,7 @@ class ImportGeoStep(Step):
     tooltip = "Imports geo ingredients in the scene"
 
     def _inner_run(self):
-        ingredients = self.engine.context.component.stage.ingredients
+        ingredients = self.engine.context.get_ingredients()
         geos = ingredients['geo']
         self.logger.debug(f"{geos = }")
 

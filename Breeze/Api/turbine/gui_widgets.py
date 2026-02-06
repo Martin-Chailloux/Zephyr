@@ -8,6 +8,7 @@ from Api.turbine.utils import JobContext
 
 class TurbineWidgetBase(QWidget):
     """ A base layout with a label, to be extended with a control widget """
+
     def __init__(self, name: str, label: str):
         super().__init__()
         self.name = name
@@ -31,10 +32,10 @@ class TurbineWidgetBase(QWidget):
     def set_enabled(self, is_enabled: bool):
         self.label_widget.setEnabled(is_enabled)
 
-    def to_dict(self) -> dict[str, any]:
+    def export_config(self) -> dict[str, any]:
         pass
 
-    def from_dict(self, **kwargs):
+    def import_config(self, **kwargs):
         # TODO when implementing process relaunch from turbine gui (in sub-classes)
         pass
 
@@ -51,10 +52,10 @@ class Checkbox(TurbineWidgetBase):
         super().set_enabled(is_enabled)
         self.checkbox.setEnabled(is_enabled)
 
-    def to_dict(self) -> dict[str, any]:
-        return {'label': self.label, 'value': self.checkbox.isChecked()}
+    def export_config(self) -> dict[str, any]:
+        return {'is_checked': self.checkbox.isChecked()}
 
-    def from_dict(self, is_checked: bool):
+    def import_config(self, is_checked: bool):
         self.checkbox.setChecked(is_checked)
 
 
@@ -73,13 +74,11 @@ class Combobox(TurbineWidgetBase):
         super().set_enabled(is_enabled)
         self.combobox.setEnabled(is_enabled)
 
-    def to_dict(self) -> dict[str, any]:
+    def export_config(self) -> dict[str, any]:
         items = [self.combobox.itemText(i) for i in range(self.combobox.count())]
-        return {'label': self.label, 'items': items, 'current_text': self.combobox.currentText()}
+        return {'current_text': self.combobox.currentText()}
 
-    def from_dict(self, items: list[str], current_text: str):
-        self.combobox.clear()
-        self.combobox.addItems(items)
+    def import_config(self, current_text: str):
         self.combobox.setCurrentText(current_text)
 
 

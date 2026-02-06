@@ -68,6 +68,13 @@ class GuiBase(QWidget):
         result = InputsBase()
         return result
 
-    def to_database(self) -> dict[str, Any]:
-        infos = {widget.name: widget.to_dict() for widget in self.widgets}
+    def export_inputs(self) -> dict[str, Any]:
+        infos = {widget.name: widget.export_config() for widget in self.widgets}
         return infos
+
+    def import_inputs(self, inputs: dict[str, Any]):
+        for widget in self.widgets:
+            infos: dict[str, any] = inputs.get(widget.name, None)
+            if infos is not None:
+                widget.import_config(**infos)
+        self._init_state()

@@ -27,6 +27,12 @@ class BreezeTabs(QTabWidget):
         temp_window = QMainWindow()
         temp_tab = self.addTab(temp_window, "Admin")
 
+        self.currentChanged.connect(self.on_tab_changed)
+
+    def on_tab_changed(self):
+        match self.currentIndex():
+            case 1:  # turbine
+                self.turbine_window.select_job_panel.refresh()
 
 class BreezeMainWindow(QMainWindow):
     def __init__(self):
