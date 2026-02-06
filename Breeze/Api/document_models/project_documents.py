@@ -563,4 +563,6 @@ Process.register_delete_rule(Job, 'source_process', mongoengine.CASCADE)
 Version.register_delete_rule(Job, 'source_version', mongoengine.CASCADE)
 
 # SubUser
-User.register_delete_rule(Job, 'source_user', mongoengine.DENY)
+User.register_delete_rule(SubUser, 'source_user', mongoengine.DENY)
+Asset.register_delete_rule(SubUser, 'recent_assets', mongoengine.PULL)
+Asset.register_delete_rule(SubUser, 'bookmarks', mongoengine.PULL)

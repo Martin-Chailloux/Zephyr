@@ -16,9 +16,9 @@ class AssetBrowserWidget(QWidget):
     add_item_label = "New"
     asset_selected = Signal()
 
-    def __init__(self, show_favorite: bool=True):
+    def __init__(self, show_bookmark: bool=True):
         super().__init__()
-        self.show_favorite = show_favorite
+        self.show_bookmark = show_bookmark
         self.cache = _SelectionCache()
 
         self._init_ui()
@@ -57,9 +57,9 @@ class AssetBrowserWidget(QWidget):
         for cb in [category_cb, name_cb, variant_cb]:
             cb.setFixedHeight(self.h)
 
-        set_bookmark_button = BookmarkIconButton()
-        if self.show_favorite:
-            grid_layout.addWidget(set_bookmark_button, 1, 4)
+        bookmark_button = BookmarkIconButton()
+        if self.show_bookmark:
+            grid_layout.addWidget(bookmark_button, 1, 4)
 
         # ------------------------
         # public vars
@@ -67,6 +67,7 @@ class AssetBrowserWidget(QWidget):
         self.category_cb = category_cb
         self.name_cb = name_cb
         self.variant_cb = variant_cb
+        self.bookmark_button = bookmark_button
 
     @property
     def category(self) -> str:
@@ -111,6 +112,7 @@ class AssetBrowserWidget(QWidget):
         self.category_cb.item_created.connect(self._on_category_created)
         self.name_cb.item_created.connect(self._on_name_created)
         self.variant_cb.item_created.connect(self._on_variant_created)
+        self.bookmark_button.clicked.connect(self.on_bookmark_clicked)
 
     def _on_category_selected(self):
         self.name_cb.blockSignals(True)  # Delay on_name_selected()
@@ -163,6 +165,9 @@ class AssetBrowserWidget(QWidget):
         Asset.create(category=self.category, name=self.name, variant=variant)
         self._on_name_selected()
         self.variant_cb.setCurrentText(variant)
+
+    def on_bookmark_clicked(self):
+        pass
 
 
 class _AssetFieldCombobox(QComboBox):

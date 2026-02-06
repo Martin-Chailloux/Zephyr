@@ -56,7 +56,7 @@ class AssetBrowserPanel(QWidget):
         self.stage_list_widget.set_asset(asset=asset)
 
         user = SubUser.from_pseudo(pseudo=BreezeApp.user.pseudo)
-        user.add_recent(asset=asset)
+        user.add_recent_asset(asset=asset)
 
         self.asset_selected.emit()  # promote
 

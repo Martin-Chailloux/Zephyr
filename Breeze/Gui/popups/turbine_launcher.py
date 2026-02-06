@@ -56,7 +56,7 @@ class TurbineLauncher(AbstractPopupWidget):
         layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop)
 
         # asset browser
-        asset_browser = AssetBrowserWidget(show_favorite=False)
+        asset_browser = AssetBrowserWidget(show_bookmark=False)
         layout.addWidget(asset_browser)
 
         # stage list
