@@ -15,7 +15,7 @@ mongoengine.connect(host="mongodb://localhost:27017", db=BreezeApp.project.name,
 from TurbineEngines.blender.modeling.build.engine import BlenderModelingBuildEngine
 
 from Api.document_models.studio_documents import StageTemplate
-from Api.document_models.project_documents import Stage, Asset, Version, Job, Component
+from Api.document_models.project_documents import Stage, Asset, Version, Job, Component, SubUser
 from Api.recipes.recipe import Recipe
 from Api.recipes.ingredient_slot import IngredientSlot
 from Api.recipes.component_filters import ComponentFilters
@@ -191,10 +191,18 @@ def clean_unused_ingredients():
         print(f"{ingredients = }")
         stage.set_ingredients(ingredients=ingredients)
 
+def create_sub_users():
+    users: list[User] = User.objects()
+    for user in users:
+        SubUser.create_for_user(pseudo=user.pseudo)
 
 if __name__ == '__main__':
+    # create_sub_users()
+    # User.create(pseudo="Any", fullname="Any Any")
     # remove_field()
     # register_engines()
-    set_default_processes()
+    # set_default_processes()
     # clean_unused_ingredients()
+
+    pass
 

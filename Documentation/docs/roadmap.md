@@ -69,6 +69,8 @@
 
 ### Qol & Upgrades to existing and working features
 
+- StageList: bug sometimes when editing a user that has just been edited and refresh has not happened yet
+
 - work versions panel: disable when no stages are selected (or a version cannot be created)
 
 - process_launcher:

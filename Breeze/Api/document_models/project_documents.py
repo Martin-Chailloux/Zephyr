@@ -79,7 +79,7 @@ class Stage(Document):
     status: Status = ReferenceField(document_type=Status, default=Status.objects.get(label='WAIT'))
     # TODO: User unknown, with a question mark icon
     #  it should appear first in lists, add User.order to have some special users at -1
-    user: User = ReferenceField(document_type=User, default=User.objects.get(pseudo="Martin"))
+    user: 'SubUser' = ReferenceField(document_type='SubUser')
 
     ingredients: dict[str, list['Version']] = DictField()  # {name: list[Versions]}
 
@@ -425,9 +425,9 @@ class Version(Document):
         keys = [
             f"{self.number:03d}",
             self.creation_user.pseudo,
-            self.creation_user.fullname,
+            self.creation_user.full_name,
             self.last_user.pseudo,
-            self.last_user.fullname,
+            self.last_user.full_name,
             self.component.extension or '-',
             str(self.timestamp),
         ]
@@ -471,6 +471,42 @@ class Job(Document):
         print(f"Created: {process}")
 
         return process
+
+
+class SubUser(Document):
+    source_user: User = ReferenceField(document_type=User, required=True, unique=True)
+    recent: list[Asset] = SortedListField(ReferenceField(document_type=Asset, default=[]))
+    bookmarks: list[Asset] = SortedListField(ReferenceField(document_type=Asset, default=[]))
+
+    # TODO: Palette
+
+    meta = {
+        'collection': 'SubUsers',
+        'db_alias': 'current_project',
+    }
+
+    def __repr__(self):
+        return f"<SubUser>: {self.source_user.pseudo}"
+
+    def __str__(self):
+        return self.__repr__()
+
+    @classmethod
+    def create_for_user(cls, pseudo: str):
+        source_user = User.from_pseudo(pseudo=pseudo)
+        if source_user is None:
+            raise ValueError(f"User not found with pseudo: {pseudo}")
+        sub_user = cls(source_user=source_user)
+        sub_user.save()
+        print(f"Created: {sub_user}")
+
+    @classmethod
+    def from_pseudo(cls, pseudo: str) -> Optional[Self]:
+        for sub_user in SubUser.objects():
+            if sub_user.source_user.pseudo == pseudo:
+                return sub_user
+        else:
+            return None
 
 
 # ------------------------

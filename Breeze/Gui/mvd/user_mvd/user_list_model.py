@@ -5,6 +5,7 @@ from PySide6.QtCore import QSize
 from PySide6.QtGui import QStandardItem
 
 from Api.breeze_app import BreezeApp
+from Api.document_models.project_documents import SubUser
 from Api.document_models.studio_documents import User
 from Gui.mvd.abstract_mvd import AbstractItemModel
 
@@ -36,6 +37,5 @@ class UserListModel(AbstractItemModel):
 
     def populate(self):
         self.clear()
-        project = BreezeApp.project
-        for user in project.users:
+        for user in SubUser.objects():
             self.add_item(user)

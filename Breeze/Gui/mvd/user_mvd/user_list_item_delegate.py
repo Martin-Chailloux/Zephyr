@@ -4,7 +4,7 @@ from PySide6.QtGui import QPainter, QColor, QPen
 from PySide6.QtWidgets import QStyleOptionViewItem
 
 from Api.breeze_app import BreezeApp
-from Api.document_models.studio_documents import User
+from Api.document_models.project_documents import SubUser
 from Gui.mvd.abstract_mvd import AbstractItemDelegate
 from Gui.mvd.user_mvd.user_list_model import UserItemRoles
 
@@ -17,7 +17,7 @@ class UserListItemDelegate(AbstractItemDelegate):
         super().__init__()
 
     def _set_custom_data(self, option: QStyleOptionViewItem, index: QModelIndex):
-        self.user: User = index.data(UserItemRoles.user)
+        self.user: SubUser = index.data(UserItemRoles.user)
 
     def paint(self, painter: QPainter, option: QStyleOptionViewItem , index: QModelIndex):
         self._set_data(option, index)
@@ -28,7 +28,7 @@ class UserListItemDelegate(AbstractItemDelegate):
         self.paint_selected_background(painter)
         self.paint_hover(painter)
         # self.paint_selected_underline(painter)
-        self.paint_icon_circle(painter, icon_path=self.user.icon_path)
+        self.paint_icon_circle(painter, icon_path=self.user.source_user.icon_path)
         self.paint_text(painter)
 
         painter.restore()
@@ -47,7 +47,7 @@ class UserListItemDelegate(AbstractItemDelegate):
         font.setBold(True)
         painter.setFont(font)
         rect = QRect(x + padding + h, y + h*1/8 - 1, w, h)
-        painter.drawText(rect, self.user.pseudo, alignment.AlignTop | alignment.AlignLeft)
+        painter.drawText(rect, self.user.source_user.pseudo, alignment.AlignTop | alignment.AlignLeft)
 
         font_size = painter.font().pointSizeF()
         font.setBold(False)
@@ -57,5 +57,5 @@ class UserListItemDelegate(AbstractItemDelegate):
         painter.setOpacity(self.opacity)
 
         rect = QRect(x + padding + h, y + h/2, w, h/2)
-        painter.drawText(rect, self.user.fullname, alignment.AlignTop | alignment.AlignLeft)
+        painter.drawText(rect, self.user.source_user.full_name, alignment.AlignTop | alignment.AlignLeft)
         painter.restore()

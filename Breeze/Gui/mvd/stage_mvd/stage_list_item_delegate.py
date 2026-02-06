@@ -41,7 +41,7 @@ class StageListItemDelegate(StageTemplateListItemDelegate):
         self.paint_selected_underline(painter)
         self.paint_icon_circle(
             painter,
-            icon_path=self.stage.user.icon_path,
+            icon_path=self.stage.user.source_user.icon_path,
             margin=2 if self.can_edit_user else 3,
             offset= [w - StageItemMetrics.status_width - h, 0, 0, 0]
             )

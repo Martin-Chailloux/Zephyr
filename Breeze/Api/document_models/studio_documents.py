@@ -81,13 +81,16 @@ class Status(Document):
 
 class User(Document):
     # NOTE: users should never be deleted, omit them instead
-    pseudo: str = StringField(required=True, primary_key=True)
-    fullname: str = StringField(required=True)
-    password: str = StringField(default="zephyr")
-    icon_path: str = StringField(required=True)
 
+    pseudo: str = StringField(required=True, primary_key=True)
+    first_name: str = StringField(required=True)
+    last_name: str = StringField(required=True)
+    full_name: str = StringField(required=True)
+
+    order: int = IntField(default=0)
+
+    # TODO: move to SubUser
     palette: Palette = ReferenceField(document_type=Palette, default=Palette.objects.get(name="dev"))
-    mail: str = StringField()  # Not used yet
 
     meta = {
         'collection': 'Users',
@@ -101,14 +104,29 @@ class User(Document):
         return self.__repr__()
 
     @classmethod
-    def create(cls, pseudo: str, fullname: str, icon_path: str, password: str = None, mail: str = None,
-                    **kwargs) -> Self:
-        kwargs = dict(pseudo=pseudo, fullname=fullname, icon_path=icon_path, password=password, mail=mail, **kwargs)
+    def create(cls, pseudo: str, first_name: str, last_name:str, **kwargs) -> Self:
+        full_name = f"{first_name} + {last_name}"
+        kwargs = dict(pseudo=pseudo, first_name=first_name, last_name=last_name, full_name=full_name, **kwargs)
         kwargs = {k: v for k, v in kwargs.items() if v is not None}
         user = cls(**kwargs)
         user.save()
         print(f"Created: {user}")
         return user
+
+    @classmethod
+    def from_pseudo(cls, pseudo: str) -> Optional[Self]:
+        for user in User.objects():
+            if user.pseudo == pseudo:
+                return user
+        else:
+            return None
+
+    @property
+    def icon_path(self) -> str:
+        # TODO: root_path somewhere else
+        # TODO: tool to import a profile picture and keep the size to 64x64 (too heavy creates lags)
+        path = f"C:/Users/marti/OneDrive/Documents/__work/_dev/Zephyr/Resources/Icons/Users/{self.pseudo}"
+        return path
 
 
 class Software(Document):
