@@ -3,7 +3,7 @@ from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QWidget, QComboBox, QLabel, QGridLayout
 
 from Api.breeze_app import BreezeApp
-from Api.document_models.project_documents import Asset
+from Api.document_models.project_documents import Asset, SubUser
 from Gui.popups.text_input_popup import TextInputPopup
 from Gui.sub_widgets.asset_widgets.bookmark_widgets import BookmarkIconButton
 
@@ -23,7 +23,7 @@ class AssetBrowserWidget(QWidget):
 
         self._init_ui()
         self._connect_signals()
-        self._on_category_selected()
+        self._init_state()
 
     def _init_ui(self):
         self.setMaximumWidth(512)
@@ -114,6 +114,15 @@ class AssetBrowserWidget(QWidget):
         self.variant_cb.item_created.connect(self._on_variant_created)
         self.bookmark_button.clicked.connect(self.on_bookmark_clicked)
 
+    def set_bookmark_button_checked_state(self):
+        user = SubUser.from_pseudo(pseudo=BreezeApp.user.pseudo)
+        is_bookmarked = self.asset in user.bookmarks
+        self.bookmark_button.setChecked(is_bookmarked)
+
+    def _init_state(self):
+        self._on_category_selected()
+        self.set_bookmark_button_checked_state()
+
     def _on_category_selected(self):
         self.name_cb.blockSignals(True)  # Delay on_name_selected()
 
@@ -146,6 +155,7 @@ class AssetBrowserWidget(QWidget):
 
     def _on_variant_selected(self):
         self.cache.set_key(self.category, self.name, self.variant)
+        self.set_bookmark_button_checked_state()
         self.asset_selected.emit()
 
     def _on_category_created(self, category: str):
@@ -167,7 +177,8 @@ class AssetBrowserWidget(QWidget):
         self.variant_cb.setCurrentText(variant)
 
     def on_bookmark_clicked(self):
-        pass
+        user = SubUser.from_pseudo(pseudo=BreezeApp.user.pseudo)
+        user.set_bookmark(asset=self.asset, add=self.bookmark_button.isChecked())
 
 
 class _AssetFieldCombobox(QComboBox):

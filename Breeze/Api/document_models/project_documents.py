@@ -512,7 +512,7 @@ class SubUser(Document):
         if asset is None:
             return
 
-        max_length = 10
+        max_length = 20
 
         self.recent_assets.insert(0, asset)
 
@@ -523,6 +523,20 @@ class SubUser(Document):
         self.recent_assets = no_duplicates
 
         self.recent_assets = [self.recent_assets[i] for i in range(len(self.recent_assets)) if i < max_length]
+
+        self.save()
+
+    def set_bookmark(self, asset: Asset, add: bool=True):
+        """
+        :param asset: the Asset to bookmark
+        :param add: if True: bookmarks the Asset, else: removes it from the bookmarks
+        """
+        if asset is None:
+            return
+
+        self.bookmarks = [x for x in self.bookmarks if x != asset]
+        if add:
+            self.bookmarks.insert(0, asset)
 
         self.save()
 

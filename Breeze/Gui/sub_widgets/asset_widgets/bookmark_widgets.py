@@ -10,14 +10,13 @@ class BookmarkIconButton(IconButton):
         self.unchecked_icon = qtawesome.icon("fa.star-o", color=self.color)
 
         self.setCheckable(True)
-        self.clicked.connect(self.on_click)
+        self.setChecked(False)
+        self.clicked.connect(self.set_state)
 
-        self.set_state(is_checked=False)  # TODO: from db
-
-    def on_click(self, is_checked: bool):
+    def setChecked(self, is_checked: bool):
+        super().setChecked(is_checked)
         icon = self.icon if is_checked else self.unchecked_icon
         self.setIcon(icon)
 
     def set_state(self, is_checked: bool):
         self.setChecked(is_checked)
-        self.on_click(is_checked=is_checked)
