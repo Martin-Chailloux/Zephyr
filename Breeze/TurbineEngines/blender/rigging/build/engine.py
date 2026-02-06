@@ -6,7 +6,7 @@ from TurbineEngines.shared_steps.io_steps import OpenStep, SaveAsStep
 
 
 class BlenderRiggingBuildEngine(EngineBuildBase):
-    name = "blender_modeling_build"
+    name = "blender_rigging_build"
     label = "Build"
     tooltip = "Builds a scene for rigging"
 
