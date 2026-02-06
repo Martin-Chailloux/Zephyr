@@ -1,7 +1,8 @@
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QWidget, QVBoxLayout
 
-from Api.document_models.project_documents import Stage
+from Api.breeze_app import BreezeApp
+from Api.document_models.project_documents import Stage, SubUser
 from Gui.sub_widgets.asset_widgets.asset_browser_widget import AssetBrowserWidget
 from Gui.sub_widgets.stage_widgets.stage_list_widget import StageListWidget
 
@@ -53,6 +54,9 @@ class AssetBrowserPanel(QWidget):
     def _on_asset_selected(self):
         asset = self.asset_selector_widget.asset
         self.stage_list_widget.set_asset(asset=asset)
+
+        user = SubUser.from_pseudo(pseudo=BreezeApp.user.pseudo)
+        user.add_recent(asset=asset)
 
         self.asset_selected.emit()  # promote
 

@@ -9,7 +9,7 @@ from Gui.sub_widgets.asset_widgets.bookmark_widgets import BookmarkIconButton
 
 
 # TODO: bug: if an asset without existing name or variant, the previous stage list is kept
-# TODO: strange to use project here, categories should be deduced from a query
+# TODO : strange to use project here, categories should be deduced from a query
 
 class AssetBrowserWidget(QWidget):
     h = 32

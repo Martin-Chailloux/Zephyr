@@ -475,8 +475,8 @@ class Job(Document):
 
 class SubUser(Document):
     source_user: User = ReferenceField(document_type=User, required=True, unique=True)
-    recent: list[Asset] = SortedListField(ReferenceField(document_type=Asset, default=[]))
-    bookmarks: list[Asset] = SortedListField(ReferenceField(document_type=Asset, default=[]))
+    recent: list[Asset] = ListField(ReferenceField(document_type=Asset, default=[]))
+    bookmarks: list[Asset] = ListField(ReferenceField(document_type=Asset, default=[]))
 
     # TODO: Palette
 
@@ -508,11 +508,28 @@ class SubUser(Document):
         else:
             return None
 
+    def add_recent(self, asset: Asset):
+        if asset is None:
+            return
+
+        max_length = 10
+
+        self.recent.insert(0, asset)
+
+        no_duplicates = []
+        for x in self.recent:
+            if x not in no_duplicates:
+                no_duplicates.append(x)
+        self.recent = no_duplicates
+
+        self.recent = [self.recent[i] for i in range(len(self.recent)) if i < max_length]
+
+        self.save()
+
 
 # ------------------------
 # Delete rules
 # ------------------------
-
 # Asset
 Stage.register_delete_rule(Asset, 'stages', mongoengine.PULL)
 
