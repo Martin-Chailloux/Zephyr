@@ -1,12 +1,17 @@
-from PySide6.QtCore import QSize
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QComboBox, QTextEdit, QHBoxLayout, \
-    QSizePolicy
+from PySide6 import QtCore
+from PySide6.QtCore import QSize, QPoint
+from PySide6.QtGui import QAction
+from PySide6.QtWidgets import (QWidget, QVBoxLayout, QLabel, QComboBox,
+                               QTextEdit, QHBoxLayout, QSizePolicy)
 
+from Api.document_models.project_documents import Job
+from Gui.popups.turbine_launcher import TurbineLauncher
+from Gui.sub_widgets.context_menu import ContextMenu
 from Utils.sub_widgets import IconButton
 from Gui.mvd.job_mvd.job_list_view import JobListView
 
 
-class SelectProcessPanel(QWidget):
+class SelectJobPanel(QWidget):
     def __init__(self):
         super().__init__()
         self._init_ui()
@@ -43,12 +48,40 @@ class SelectProcessPanel(QWidget):
         layout.addWidget(jobs_list)
         jobs_list.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
         jobs_list.get_jobs()
+        jobs_list.setContextMenuPolicy(QtCore.Qt.ContextMenuPolicy.CustomContextMenu)
 
         self.refresh_button = refresh_button
         self.jobs_list = jobs_list
 
     def _connect_signals(self):
         self.refresh_button.clicked.connect(self.refresh)
+        self.jobs_list.customContextMenuRequested.connect(self.show_context_menu)
 
     def refresh(self):
         self.jobs_list.get_jobs()
+
+    def show_context_menu(self, position: QPoint):
+        job = self.jobs_list.get_hovered_job()
+        menu = JobsSelectorContextMenu(job=job)
+        menu.show(position=self.jobs_list.mapToGlobal(position))
+
+
+class JobsSelectorContextMenu(ContextMenu):
+    def __init__(self, job: Job):
+        super().__init__()
+        self.job = job
+
+        self.relaunch_action = self.add_action(label="Relaunch", icon_name='fa5s.address-card')
+
+    def resolve(self, action: QAction):
+        match action:
+            case self.relaunch_action:
+                self.relaunch_job()
+            case _:
+                return
+
+    def relaunch_job(self):
+        source_version = self.job.source_version
+        turbine_launcher = TurbineLauncher(component=source_version.component, version=source_version,
+                                           process=self.job.source_process, inputs=self.job.inputs)
+        result = turbine_launcher.show_menu(position=[0.5, 0.5])

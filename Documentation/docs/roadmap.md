@@ -5,11 +5,8 @@
 
 - Turbine:
     - build from an empty stage, it creates a work component from scratch
-    - modeling build: version num + dont overwrite to build over an existing version
-    - export modeling: use version num input
 
     - Create processes to be able to do: modeling -> rigging -> shot
-    - rigging: build from geo and extra ingredients
 
 - better ExportsTable:
     - mvd
@@ -17,6 +14,8 @@
 
 - ComponentBrowser: remove work components (wait for more exports, for debug purposes)
 
+- Turbine:
+    - Jobs list filters
 
 ### Missing features
 
@@ -26,10 +25,6 @@
 - Work versions:
     - list versions from all work components
     - work components from a same stage should never have the same version numbers
-
-- Turbine:
-    - Jobs list filters
-    - relaunch a process from the jobs list
 
 - Users:
     - per project information
@@ -77,13 +72,10 @@
 - work versions panel: disable when no stages are selected (or a version cannot be created)
 
 - process_launcher:
-    - cache, remember selected processes and inputs for each context: stage: process ; process: inputs
     - preset the input's height and use scroll area to have a fixed size window
 
 - Turbine:
-    - refresh jobs on tab shown
     - show processes and steps duration
-    - relaunch from the jobs list
 
 - copy/paste users and statuses with ctrl+C/ctrl+V
 

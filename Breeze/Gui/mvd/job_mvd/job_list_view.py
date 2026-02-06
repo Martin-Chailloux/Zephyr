@@ -39,5 +39,12 @@ class JobListView(AbstractListView):
             job: Job = items[0].data(JobItemRoles.job)
             return job
 
+    def get_hovered_job(self) -> Job | None:
+        index = self._get_hovered_index()
+        if index is None:
+            return None
+        job = index.data(JobItemRoles.job)
+        return job
+
     def on_selection_changed(self):
         self.job_selected.emit()
