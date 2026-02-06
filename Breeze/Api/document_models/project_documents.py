@@ -475,7 +475,7 @@ class Job(Document):
 
 class SubUser(Document):
     source_user: User = ReferenceField(document_type=User, required=True, unique=True)
-    recent: list[Asset] = ListField(ReferenceField(document_type=Asset, default=[]))
+    recent_assets: list[Asset] = ListField(ReferenceField(document_type=Asset, default=[]))
     bookmarks: list[Asset] = ListField(ReferenceField(document_type=Asset, default=[]))
 
     # TODO: Palette
@@ -508,21 +508,21 @@ class SubUser(Document):
         else:
             return None
 
-    def add_recent(self, asset: Asset):
+    def add_recent_asset(self, asset: Asset):
         if asset is None:
             return
 
         max_length = 10
 
-        self.recent.insert(0, asset)
+        self.recent_assets.insert(0, asset)
 
         no_duplicates = []
-        for x in self.recent:
+        for x in self.recent_assets:
             if x not in no_duplicates:
                 no_duplicates.append(x)
-        self.recent = no_duplicates
+        self.recent_assets = no_duplicates
 
-        self.recent = [self.recent[i] for i in range(len(self.recent)) if i < max_length]
+        self.recent_assets = [self.recent_assets[i] for i in range(len(self.recent_assets)) if i < max_length]
 
         self.save()
 

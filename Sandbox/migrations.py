@@ -204,5 +204,5 @@ if __name__ == '__main__':
     # set_default_processes()
     # clean_unused_ingredients()
 
-    pass
+    SubUser.objects.update(unset__recent=True )
 
