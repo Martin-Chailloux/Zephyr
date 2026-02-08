@@ -6,7 +6,6 @@ from PySide6.QtGui import QColor
 from PySide6.QtWidgets import QGridLayout, QPushButton
 
 from Api.breeze_app import BreezeApp
-from Api.document_models.project_documents import Stage
 from Api.document_models.studio_documents import Status
 from Gui.popups.abstract_popup_widget import AbstractPopupWidget
 

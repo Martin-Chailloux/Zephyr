@@ -3,7 +3,7 @@ import qtawesome
 from PySide6 import QtCore
 from PySide6.QtWidgets import QMainWindow, QDockWidget
 
-from Gui.panels.browser.asset_browser_panel import AssetBrowserPanel
+from Gui.panels.browser.stage_selector_panel import StageSelectorPanel
 from Gui.panels.browser.selected_stage_panel import SelectedStagePanel
 
 
@@ -17,7 +17,7 @@ class BrowserGui(QMainWindow):
 
     def _init_ui(self):
         # asset browse
-        asset_browser_panel = AssetBrowserPanel()
+        asset_browser_panel = StageSelectorPanel()
         dock = QDockWidget("Select Stage")
         dock.setWidget(asset_browser_panel)
         self.addDockWidget(QtCore.Qt.DockWidgetArea.LeftDockWidgetArea, dock)
@@ -42,7 +42,7 @@ class BrowserGui(QMainWindow):
     def _on_asset_selected(self):
         """ selects the same stage as the stage from selected_stage_panel """
         selected_stage = self.selected_stage_panel.stage
-        stages = self.asset_browser_panel.asset_stages
+        stages = self.asset_browser_panel.stages
         if selected_stage in stages:
             self.asset_browser_panel.select_stage(stage=selected_stage)
 

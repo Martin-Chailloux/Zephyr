@@ -15,6 +15,7 @@ class AssetBrowserWidget(QWidget):
     h = 32
     add_item_label = "New"
     asset_selected = Signal()
+    asset_bookmarked = Signal()
 
     def __init__(self, show_bookmark: bool=True):
         super().__init__()
@@ -123,6 +124,20 @@ class AssetBrowserWidget(QWidget):
         self._on_category_selected()
         self.set_bookmark_button_checked_state()
 
+    def refresh(self):
+        self.set_bookmark_button_checked_state()
+
+    def select_asset(self, asset: Asset):
+        if asset is None:
+            return
+        self.blockSignals(True)
+        self.category_cb.setCurrentText(asset.category)
+        self.name_cb.setCurrentText(asset.name)
+        self.variant_cb.setCurrentText(asset.variant)
+        self.blockSignals(False)
+        self._on_variant_selected()
+
+
     def _on_category_selected(self):
         self.name_cb.blockSignals(True)  # Delay on_name_selected()
 
@@ -179,6 +194,7 @@ class AssetBrowserWidget(QWidget):
     def on_bookmark_clicked(self):
         user = SubUser.from_pseudo(pseudo=BreezeApp.user.pseudo)
         user.set_bookmark(asset=self.asset, add=self.bookmark_button.isChecked())
+        self.asset_bookmarked.emit()
 
 
 class _AssetFieldCombobox(QComboBox):
