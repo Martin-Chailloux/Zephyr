@@ -2,6 +2,8 @@
 
 
 ### Priority
+- switch User and Projects
+    - ui to create them
 
 - Turbine:
     - build from an empty stage, it creates a work component from scratch
@@ -26,17 +28,7 @@
     - list versions from all work components
     - work components from a same stage should never have the same version numbers
 
-- Users:
-    - per project information
-        - roles (sup / lead / graphist / pipe)
-        - favorite_assets
-        - recent_assets
-   --> probably a Contributor/Member/PrUser/SubUser document in project_documents, with source_user and the needed extra fields
-      it is a user with extra project-related fields
-      can be found with BreezeApp.sub_user
-
-- switch User and Projects
-    - ui to create them
+- Roles (sup / lead / graphist / pipe), for SubUsers
 
 - Admin tab: Guis to create and manage db items
     - Users (for the current project): add users to project / assign roles
@@ -91,8 +83,5 @@
 - add error messages to steps in step viewer's tree
 
 - Stage Templates: status and users history
-
-- Asset browser:
-    - favorites / recent
 
 - Ingredient Slots: components history
