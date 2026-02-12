@@ -55,7 +55,7 @@ class AssetListItemDelegate(AbstractItemDelegate):
         x, y, w, h = self.get_item_rect()
         margin = 5 if self.can_bookmark else 7
 
-        sub_user = SubUser.from_pseudo(pseudo=BreezeApp.user.pseudo)
+        sub_user = SubUser.current()
         is_bookmarked = self.asset in sub_user.bookmarks
         icon_name = "fa.star" if is_bookmarked else "fa.star-o"
 

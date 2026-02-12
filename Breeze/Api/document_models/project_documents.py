@@ -508,6 +508,14 @@ class SubUser(Document):
         else:
             return None
 
+    @classmethod
+    def current(cls) -> Optional[Self]:
+        for sub_user in SubUser.objects():
+            if sub_user.source_user.pseudo == BreezeApp.user.pseudo:
+                return sub_user
+        else:
+            return None
+
     def add_recent_asset(self, asset: Asset):
         if asset is None:
             return

@@ -90,7 +90,7 @@ class AssetListView(AbstractListView):
     def mousePressEvent(self, event):
         index = self._get_hovered_index()
         if index.data(AssetItemRoles.can_bookmark):
-            sub_user = SubUser.from_pseudo(pseudo=BreezeApp.user.pseudo)
+            sub_user = SubUser.current()
             asset = index.data(AssetItemRoles.asset)
             is_bookmarked = asset in sub_user.bookmarks
             sub_user.set_bookmark(asset=asset, add=not is_bookmarked)

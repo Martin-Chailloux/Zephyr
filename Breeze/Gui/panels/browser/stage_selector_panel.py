@@ -71,7 +71,7 @@ class StageSelectorPanel(QWidget):
         asset = self.asset_selector_widget.asset
         self.stage_list_widget.set_asset(asset=asset)
 
-        user = SubUser.from_pseudo(pseudo=BreezeApp.user.pseudo)
+        user = SubUser.current()
         user.add_recent_asset(asset=asset)
 
         self.quick_search_widget.refresh()
@@ -146,7 +146,7 @@ class BookmarksAndRecentAssetsWidget(QWidget):
 
     @staticmethod
     def get_sub_user() -> SubUser:
-        sub_user = SubUser.from_pseudo(pseudo=BreezeApp.user.pseudo)
+        sub_user = SubUser.current()
         return sub_user
 
     def show_recent(self):

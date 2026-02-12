@@ -116,7 +116,7 @@ class AssetBrowserWidget(QWidget):
         self.bookmark_button.clicked.connect(self.on_bookmark_clicked)
 
     def set_bookmark_button_checked_state(self):
-        user = SubUser.from_pseudo(pseudo=BreezeApp.user.pseudo)
+        user = SubUser.current()
         is_bookmarked = self.asset in user.bookmarks
         self.bookmark_button.setChecked(is_bookmarked)
 
@@ -192,7 +192,7 @@ class AssetBrowserWidget(QWidget):
         self.variant_cb.setCurrentText(variant)
 
     def on_bookmark_clicked(self):
-        user = SubUser.from_pseudo(pseudo=BreezeApp.user.pseudo)
+        user = SubUser.current()
         user.set_bookmark(asset=self.asset, add=self.bookmark_button.isChecked())
         self.asset_bookmarked.emit()
 

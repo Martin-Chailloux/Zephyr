@@ -34,6 +34,7 @@ class BreezeTabs(QTabWidget):
             case 1:  # turbine
                 self.turbine_window.select_job_panel.refresh()
 
+
 class BreezeMainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -43,7 +44,8 @@ class BreezeMainWindow(QMainWindow):
 
     def _init_ui(self):
         # top menu bar
-        self.setMenuBar(BreezeTopMenuBar())
+        # self.setMenuBar(BreezeTopMenuBar())
+        self.setMenuWidget(BreezeTopMenuBar())
 
         # stage central widget
         breeze_tabs_widget = BreezeTabs()
