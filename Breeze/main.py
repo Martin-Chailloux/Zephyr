@@ -20,10 +20,10 @@ if __name__ == '__main__':
 
     app = QApplication(sys.argv)
     BreezeApp.set_project("JourDeVent")
+    # BreezeApp.set_project("dev_a")
     BreezeApp.set_user("Martin")
     app.setStyleSheet(qdarkstyle.load_stylesheet())
 
-    mongoengine.connect(host="mongodb://localhost:27017", db=BreezeApp.project.name, alias="current_project")
     chrono.tick("... Connected in:")
 
     from Api import breeze_dialog
@@ -34,7 +34,7 @@ if __name__ == '__main__':
     chrono.tick(f"... Finished launching 'Breeze' in:")
     print("-----------------")
 
-    app.exec()
+    # app.exec()
 
     runtime = chrono.tick()
     runtime = str(timedelta(seconds=runtime))
@@ -43,3 +43,5 @@ if __name__ == '__main__':
     seconds = float(runtime.split(":")[2])
     msg = f"Run time: {hours}h, {minutes}m, {seconds:2.2f}s"
     print(msg)
+
+    sys.exit(app.exec())

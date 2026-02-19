@@ -166,7 +166,7 @@ class Software(Document):
 
 
 class Project(Document):
-    name: str = StringField(required=True, primary_key=True)
+    name: str = StringField(primary_key=True)
     root_path: str = StringField(required=True)
     categories: list[str] = SortedListField(StringField(), default=["Character", "Decor", "Element", "Prop", "Shot"])
     users: list[User] = SortedListField(ReferenceField(document_type=User), default=[])
@@ -183,14 +183,18 @@ class Project(Document):
         return self.__repr__()
 
     @classmethod
-    def create(cls, name: str, db_name: str, root_path: str,
-               categories: list[str], users: list[User],
+    def create(cls, name: str, root_path: str, categories: list[str] = None, users: list[User] = None,
                **kwargs):
         kwargs = dict(name=name, root_path=root_path, categories=categories, users=users, **kwargs)
         kwargs = {k: v for k, v in kwargs.items() if v is not None}
         project = cls(**kwargs)
         project.save()
         print(f"Created: {project}")
+        return project
+
+    @classmethod
+    def create_from_project(cls, source: 'Project', name: str, root_path: str) -> 'Project':
+        project = cls.create(name=name, root_path=root_path, categories=source.categories, users=source.users)
         return project
 
     def add_category(self, category: str):

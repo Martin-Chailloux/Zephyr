@@ -41,7 +41,6 @@ class AssetBrowserWidget(QWidget):
 
         category_cb = _AssetFieldCombobox(name="category")
         grid_layout.addWidget(category_cb, 1, 0)
-        category_cb.set_items(BreezeApp.project.categories)
 
         label = QLabel("Name")
         grid_layout.addWidget(label, 0, 1)
@@ -69,6 +68,26 @@ class AssetBrowserWidget(QWidget):
         self.name_cb = name_cb
         self.variant_cb = variant_cb
         self.bookmark_button = bookmark_button
+
+    def _connect_signals(self):
+        self.category_cb.currentTextChanged.connect(self._on_category_selected)
+        self.name_cb.currentTextChanged.connect(self._on_name_selected)
+        self.variant_cb.currentTextChanged.connect(self._on_variant_selected)
+
+        self.category_cb.item_created.connect(self._on_category_created)
+        self.name_cb.item_created.connect(self._on_name_created)
+        self.variant_cb.item_created.connect(self._on_variant_created)
+        self.bookmark_button.clicked.connect(self.on_bookmark_clicked)
+
+    def _init_state(self):
+        categories = BreezeApp.project.categories
+        print(f"{categories = }")
+        self.category_cb.set_items(categories)
+        self._on_category_selected()
+        self.set_bookmark_button_checked_state()
+
+    def refresh(self):
+        self._init_state()
 
     @property
     def category(self) -> str:
@@ -105,27 +124,14 @@ class AssetBrowserWidget(QWidget):
         self.name_cb.setCurrentText(name)
         self.variant_cb.setCurrentText(variant)
 
-    def _connect_signals(self):
-        self.category_cb.currentTextChanged.connect(self._on_category_selected)
-        self.name_cb.currentTextChanged.connect(self._on_name_selected)
-        self.variant_cb.currentTextChanged.connect(self._on_variant_selected)
-
-        self.category_cb.item_created.connect(self._on_category_created)
-        self.name_cb.item_created.connect(self._on_name_created)
-        self.variant_cb.item_created.connect(self._on_variant_created)
-        self.bookmark_button.clicked.connect(self.on_bookmark_clicked)
-
     def set_bookmark_button_checked_state(self):
+        if self.asset is None:
+            return
         user = SubUser.current()
+        if user is None:
+            return
         is_bookmarked = self.asset in user.bookmarks
         self.bookmark_button.setChecked(is_bookmarked)
-
-    def _init_state(self):
-        self._on_category_selected()
-        self.set_bookmark_button_checked_state()
-
-    def refresh(self):
-        self.set_bookmark_button_checked_state()
 
     def select_asset(self, asset: Asset):
         if asset is None:

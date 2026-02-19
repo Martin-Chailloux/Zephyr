@@ -2,6 +2,8 @@
 
 
 ### Priority
+- auto-assign sub-users for new projects
+
 - switch User and Projects
     - ui to create them
 

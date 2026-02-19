@@ -12,7 +12,6 @@ from Gui.mvd.stage_mvd.stage_list_view import StageListViewEditable
 
 
 class StageListWidget(QWidget):
-
     def __init__(self):
         super().__init__()
         self.asset: Optional[Asset] = None

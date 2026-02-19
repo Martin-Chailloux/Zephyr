@@ -2,7 +2,7 @@ from typing import Callable
 
 import qtawesome
 from PySide6 import QtCore
-from PySide6.QtCore import QSize
+from PySide6.QtCore import QSize, Signal
 from PySide6.QtGui import QAction, QKeySequence, QActionEvent, QPaintEvent, QPainter, QBrush, QColor, QPixmap, QImage, \
     QIcon
 from PySide6.QtWidgets import QMenuBar, QMenu, QWidget, QHBoxLayout, QLabel, QVBoxLayout, QSizePolicy, QPushButton, \
@@ -18,6 +18,8 @@ keys = QtCore.Qt.Key
 
 
 class BreezeTopMenuBar(QWidget):
+    project_changed = Signal()
+
     def __init__(self):
         super().__init__()
         self._init_ui()
@@ -34,27 +36,17 @@ class BreezeTopMenuBar(QWidget):
         grid.setSpacing(0)
         grid.setContentsMargins(0, 0, 0, 0)
 
+        # ------------------------
+        # left side
+        # ------------------------
         l_layout = QHBoxLayout()
         grid.addLayout(l_layout, 0, 0, QtCore.Qt.AlignmentFlag.AlignLeft)
-
-        r_layout = QHBoxLayout()
-        grid.addLayout(r_layout, 0, 0, QtCore.Qt.AlignmentFlag.AlignRight)
 
         menu_bar = QMenuBar()
         l_layout.addWidget(menu_bar)
 
-        user_edit = QPushButton()
-        r_layout.addWidget(user_edit)
-        h = 28
-        user_edit.setFixedSize(QSize(h, h))
-        user_edit.setIconSize(QSize(h, h))
-
         palette_menu = self.add_menu(menu_bar, label="Palette", icon_name="fa5s.palette")
-
-        # self.edit_user_action = self.add_action(menu_bar, label="User")
-
         project_menu = self.add_menu(menu_bar, label="Project", icon_name="ri.landscape-fill")
-        # user_menu = self.add_menu(menu_bar,     label="User",     icon_name="fa5s.user-circle")
         help_menu = self.add_menu(menu_bar, label="Help", icon_name="fa.question")
 
         self.add_action(palette_menu, label="Breeze")
@@ -64,11 +56,27 @@ class BreezeTopMenuBar(QWidget):
         self.add_action(project_menu, label="Change")
         self.add_action(project_menu, label="Edit", shortcut=keys.Key_U)
 
+        # ------------------------
+        # right side
+        # ------------------------
+        r_layout = QHBoxLayout()
+        grid.addLayout(r_layout, 0, 0, QtCore.Qt.AlignmentFlag.AlignRight)
+
+        project_edit = QPushButton(' Project ')
+        r_layout.addWidget(project_edit)
+
+        user_edit = QPushButton()
+        r_layout.addWidget(user_edit)
+        h = 28
+        user_edit.setFixedSize(QSize(h, h))
+        user_edit.setIconSize(QSize(h, h))
+
+        self.project_edit = project_edit
         self.user_edit = user_edit
 
     def _connect_signals(self):
-#         self.edit_user_action.triggered.connect(self.on_user_edited)
         self.user_edit.clicked.connect(self.on_user_edited)
+        self.project_edit.clicked.connect(self.on_project_edited)
 
     def _init_state(self):
         self.set_user(user=BreezeApp.user)
@@ -80,6 +88,10 @@ class BreezeTopMenuBar(QWidget):
         self.user_edit.setIcon(icon)
 
         print(f"SET USER: {user}")
+
+    def on_project_edited(self):
+        BreezeApp.set_project(name='empty')
+        self.project_changed.emit()  # unintuitive for the menubar to know about this, but it works for now
 
     def on_user_edited(self):
         editor = UserEditor()

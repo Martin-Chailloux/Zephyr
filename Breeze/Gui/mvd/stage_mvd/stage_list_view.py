@@ -36,11 +36,12 @@ class _StageListViewBase(AbstractListView):
 
     def set_asset(self, asset: Asset=None):
         if asset is None:
-            return
+            stages = []
         else:
-            self.selectionModel().blockSignals(True)
-            self._model.populate(stages=asset.stages)
-            self.selectionModel().blockSignals(False)
+            stages = asset.stages
+        self.selectionModel().blockSignals(True)
+        self._model.populate(stages=stages)
+        self.selectionModel().blockSignals(False)
 
     def set_stage(self, stage: Stage=None):
         if stage is None:

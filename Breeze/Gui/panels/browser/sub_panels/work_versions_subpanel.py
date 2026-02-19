@@ -77,6 +77,9 @@ class WorkVersionsWidget(QWidget):
 
     def refresh(self, select_last_version: bool=False, reselect_row: bool=False):
         # TODO: args are confusing to use
+        if self.stage is None:
+            return
+
         if self.stage.get_work_component() is not None:
             selected_index = self.versions_list.get_selected_index()
             if selected_index is None:

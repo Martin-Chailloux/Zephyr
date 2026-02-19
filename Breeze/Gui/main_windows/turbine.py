@@ -45,6 +45,9 @@ class TurbineGui(QMainWindow):
     def _init_state(self):
         self.select_job_panel.refresh()
 
+    def refresh(self):
+        self._init_state()
+
     def on_job_selected(self):
         job = self.select_job_panel.jobs_list.get_selected_job()
         self.steps_viewer_panel.populate(job=job)

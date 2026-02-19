@@ -16,7 +16,7 @@ class Listener:
         threading.Thread(target=self.listen, args=(BlenderFile.port,), daemon=True).start()
 
     def listen(self, data: int):
-        print(f"LISTENING FOR SOFTWARES REQUEST ...")
+        print(f"LISTENING FOR SOFTWARES ...")
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             for port in ports:
                 s.bind(("localhost", port))

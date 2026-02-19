@@ -10,7 +10,6 @@ from Api.document_models.studio_documents import User, Palette, Project, Process
 from Api.breeze_app import BreezeApp
 BreezeApp.set_project("JourDeVent")
 BreezeApp.set_user("Martin")
-mongoengine.connect(host="mongodb://localhost:27017", db=BreezeApp.project.name, alias="current_project")
 
 from TurbineEngines.blender.modeling.build.engine import BlenderModelingBuildEngine
 
@@ -21,7 +20,6 @@ from Api.recipes.ingredient_slot import IngredientSlot
 from Api.recipes.component_filters import ComponentFilters
 from TurbineEngines.blender.modeling.export.engine import BlenderModelingExportEngine
 from TurbineEngines.blender.rigging.build.engine import BlenderRiggingBuildEngine
-
 
 
 def update_stages_longname():
@@ -84,7 +82,6 @@ def create_default_users():
     for user in users:
         User.create(pseudo=user[0], fullname=user[1], icon_path=user[2])
 
-
 def remove_field():
     Component.objects.update(unset__label=True)
 
@@ -100,7 +97,6 @@ def random_list_query():
     print(f"{stages = }")
     stages = [s for s in stages if s.stage_template.label == "Animation"]
     print(stages)
-
 
 def create_work_collections():
     for stage in Stage.objects:
@@ -197,12 +193,12 @@ def create_sub_users():
         SubUser.create_for_user(pseudo=user.pseudo)
 
 if __name__ == '__main__':
-    # create_sub_users()
-    # User.create(pseudo="Any", fullname="Any Any")
-    # remove_field()
-    # register_engines()
-    # set_default_processes()
-    # clean_unused_ingredients()
+    create_sub_users()
 
-    SubUser.objects.update(unset__recent=True )
+
+    # p = Path.home().joinpath("OneDrive", "Documents", "__work", "_dev", "zephyr_projects")
+    # name = 'empty'
+    # root_path = str(p.joinpath(name))
+    # # p = Project.create(name=name, root_path=root_path)
+    # p = Project.create_from_project(source=BreezeApp.project, name=name, root_path=root_path)
 
