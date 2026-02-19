@@ -56,7 +56,6 @@ class StageSelectorPanel(QWidget):
 
     def refresh(self):
         self.asset_selector_widget.refresh()
-        print(f"{self.asset_selector_widget.asset = }")
         self.stage_list_widget.set_asset(self.asset_selector_widget.asset)
         self.quick_search_widget.refresh()
 
@@ -151,8 +150,6 @@ class BookmarksAndRecentAssetsWidget(QWidget):
         return sub_user
 
     def show_recent(self):
-        if self.asset_list.asset is None:
-            return
         self.switch_button.setText('Recent')
         self.asset_list.set_assets(assets=self.get_sub_user().recent_assets)
 
