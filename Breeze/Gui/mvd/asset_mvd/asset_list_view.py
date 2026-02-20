@@ -93,7 +93,7 @@ class AssetListView(AbstractListView):
             sub_user = SubUser.current()
             asset = index.data(AssetItemRoles.asset)
             is_bookmarked = asset in sub_user.bookmarks
-            sub_user.set_bookmark(asset=asset, add=not is_bookmarked)
+            sub_user.bookmark_asset(asset=asset, add=not is_bookmarked)
             self.update(index)
             self.asset_data_modified.emit()
         else:

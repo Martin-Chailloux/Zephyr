@@ -199,7 +199,7 @@ class AssetBrowserWidget(QWidget):
 
     def on_bookmark_clicked(self):
         user = SubUser.current()
-        user.set_bookmark(asset=self.asset, add=self.bookmark_button.isChecked())
+        user.bookmark_asset(asset=self.asset, add=self.bookmark_button.isChecked())
         self.asset_bookmarked.emit()
 
 

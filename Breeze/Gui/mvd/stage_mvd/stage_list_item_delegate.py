@@ -3,8 +3,8 @@ from PySide6.QtCore import QModelIndex, QRect, QPoint
 from PySide6.QtGui import QPainter, QBrush, QPainterPath, QCursor
 from PySide6.QtWidgets import QStyleOptionViewItem, QWidget
 
-from Api.document_models.studio_documents import StageTemplate
-from Api.document_models.project_documents import Stage, Asset
+from Api.document_models.studio_documents import StageTemplate, User
+from Api.document_models.project_documents import Stage, Asset, SubUser
 from Gui.mvd.stage_mvd.stage_list_model import StageItemRoles, StageListModel
 from Gui.mvd.stage_mvd.stage_list_model import StageItemMetrics
 from Gui.mvd.stage_template_mvd.stage_template_list_item_delegate import StageTemplateListItemDelegate
@@ -39,15 +39,24 @@ class StageListItemDelegate(StageTemplateListItemDelegate):
         self.paint_text(painter)
 
         self.paint_selected_underline(painter)
-        self.paint_icon_circle(
-            painter,
-            icon_path=self.stage.user.source_user.icon_path,
-            margin=2 if self.can_edit_user else 3,
-            offset= [w - StageItemMetrics.status_width - h, 0, 0, 0]
-            )
+        self.paint_user(painter)
         self.paint_status(painter)
 
         painter.restore()
+
+    def paint_user(self, painter: QPainter):
+        x, y, w, h = self.get_item_rect()
+
+        if self.stage.user is None:
+            any_user = User.from_pseudo(pseudo='Any')
+            self.stage.set_user(any_user)
+
+        self.paint_icon_circle(
+            painter,
+            icon_path=self.stage.user.icon_path,
+            margin=2 if self.can_edit_user else 3,
+            offset= [w - StageItemMetrics.status_width - h, 0, 0, 0]
+            )
 
     def paint_status(self, painter: QPainter):
         # metrics
@@ -118,14 +127,14 @@ class StageListItemDelegate(StageTemplateListItemDelegate):
         stage = index.data(StageItemRoles.stage)
         if user is None:
             return
-        stage.update(user=user)
+        stage.set_user(user=user)
 
     def set_status_data(self, editor: StatusSelectPopup, model: StageListModel, index: QModelIndex):
         stage = index.data(StageItemRoles.stage)
         status = editor.selected_status
         if status is None:
             return
-        stage.update(status=status)
+        stage.set_status(status=status)
 
     def setModelData(self, editor: UserBrowser | StatusSelectPopup, model: StageListModel, index: QModelIndex):
         if isinstance(editor, UserBrowser):

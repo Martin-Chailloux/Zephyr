@@ -1,17 +1,15 @@
-from typing import Callable
-
 import qtawesome
 from PySide6 import QtCore
 from PySide6.QtCore import QSize, Signal
-from PySide6.QtGui import QAction, QKeySequence, QActionEvent, QPaintEvent, QPainter, QBrush, QColor, QPixmap, QImage, \
+from PySide6.QtGui import QAction, QKeySequence, QPaintEvent, QPixmap, QImage, \
     QIcon
-from PySide6.QtWidgets import QMenuBar, QMenu, QWidget, QHBoxLayout, QLabel, QVBoxLayout, QSizePolicy, QPushButton, \
-    QStackedWidget, QGridLayout
+from PySide6.QtWidgets import QMenuBar, QMenu, QWidget, QHBoxLayout, QPushButton, \
+    QGridLayout
 
 from Api.breeze_app import BreezeApp
 from Api.document_models.studio_documents import User
+from Gui.popups.project_manager.prmg_main import ProjectManager
 from Gui.popups.user_editor import UserEditor
-from Utils.user_widgets import UserPicture
 
 modifiers = QtCore.Qt.Modifier
 keys = QtCore.Qt.Key
@@ -76,7 +74,7 @@ class BreezeTopMenuBar(QWidget):
 
     def _connect_signals(self):
         self.user_edit.clicked.connect(self.on_user_edited)
-        self.project_edit.clicked.connect(self.on_project_edited)
+        self.project_edit.clicked.connect(self.on_edit_project_clicked)
 
     def _init_state(self):
         self.set_user(user=BreezeApp.user)
@@ -89,14 +87,17 @@ class BreezeTopMenuBar(QWidget):
 
         print(f"SET USER: {user}")
 
-    def on_project_edited(self):
-        BreezeApp.set_project(name='empty')
-        self.project_changed.emit()  # unintuitive for the menubar to know about this, but it works for now
+    def on_edit_project_clicked(self):
+        project_manager = ProjectManager()
+        project_manager.exec()
+
+        # BreezeApp.set_project(name='empty')
+        # self.project_changed.emit()  # unintuitive for the menubar to know about this, but it works for now
 
     def on_user_edited(self):
         editor = UserEditor()
         editor.exec()
-        self._init_state()  # hack to update the gui
+        self.set_user(user=BreezeApp.user)
 
     def add_menu(self, parent: QMenuBar | QMenu, label: str, icon_name: str) -> QMenu:
         # TODO: tooltips are not working

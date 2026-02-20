@@ -144,15 +144,14 @@ class BookmarksAndRecentAssetsWidget(QWidget):
             case _:
                 raise ValueError(f"Unexpected display mode: {previous_mode}")
 
-    @staticmethod
-    def get_sub_user() -> SubUser:
-        sub_user = SubUser.current()
-        return sub_user
-
     def show_recent(self):
         self.switch_button.setText('Recent')
-        self.asset_list.set_assets(assets=self.get_sub_user().recent_assets)
+        sub_user = SubUser.current()
+        assets = [] if sub_user is None else SubUser.current().recent_assets
+        self.asset_list.set_assets(assets=assets)
 
     def show_bookmarks(self):
         self.switch_button.setText('Bookmarks')
-        self.asset_list.set_assets(assets=self.get_sub_user().bookmarks)
+        sub_user = SubUser.current()
+        assets = [] if sub_user is None else SubUser.current().bookmarks
+        self.asset_list.set_assets(assets=assets)

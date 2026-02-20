@@ -20,10 +20,6 @@ class UserItemMetrics:
 
 
 class UserListModel(AbstractItemModel):
-    def __init__(self):
-        super().__init__()
-        self.populate()
-
     def add_item(self, user: User):
         row = self.rowCount()
 
@@ -35,7 +31,10 @@ class UserListModel(AbstractItemModel):
 
         self.setItem(row, item)
 
-    def populate(self):
+    def populate(self, users: list[User]):
         self.clear()
-        for user in SubUser.objects():
+
+        users = sorted(users, key=lambda x: x.pseudo)
+
+        for user in users:
             self.add_item(user)

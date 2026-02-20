@@ -79,7 +79,7 @@ class Stage(Document):
     status: Status = ReferenceField(document_type=Status, default=Status.objects.get(label='WAIT'))
     # TODO: User unknown, with a question mark icon
     #  it should appear first in lists, add User.order to have some special users at -1
-    user: 'SubUser' = ReferenceField(document_type='SubUser')
+    user: User = ReferenceField(document_type='User')
 
     ingredients: dict[str, list['Version']] = DictField()  # {name: list[Versions]}
 
@@ -106,6 +106,14 @@ class Stage(Document):
         asset.add_stage(stage=stage)
 
         return stage
+
+    def set_user(self, user: User):
+        self.user = user
+        self.save()
+
+    def set_status(self, status: Status):
+        self.status = status
+        self.save()
 
     def create_or_get_component(self, name: str, extension: str, crash_if_exists: bool = True) -> 'Component':
         component = Component.objects(name=name, extension=extension, stage=self)
@@ -474,7 +482,7 @@ class Job(Document):
 
 
 class SubUser(Document):
-    source_user: User = ReferenceField(document_type=User, required=True, unique=True)
+    source_user: User = ReferenceField(document_type=User, primary_key=True)
     recent_assets: list[Asset] = ListField(ReferenceField(document_type=Asset, default=[]))
     bookmarks: list[Asset] = ListField(ReferenceField(document_type=Asset, default=[]))
 
@@ -492,21 +500,26 @@ class SubUser(Document):
         return self.__repr__()
 
     @classmethod
-    def create_for_user(cls, pseudo: str):
+    def create_for_user(cls, pseudo: str) -> Self:
         source_user = User.from_pseudo(pseudo=pseudo)
         if source_user is None:
             raise ValueError(f"User not found with pseudo: {pseudo}")
         sub_user = cls(source_user=source_user)
         sub_user.save()
         print(f"Created: {sub_user}")
+        return sub_user
 
     @classmethod
-    def from_pseudo(cls, pseudo: str) -> Optional[Self]:
+    def from_pseudo(cls, pseudo: str, create_if_missing: bool=False) -> Optional[Self]:
         for sub_user in SubUser.objects():
             if sub_user.source_user.pseudo == pseudo:
                 return sub_user
         else:
-            return None
+            if create_if_missing:
+                sub_user = SubUser.create_for_user(pseudo=pseudo)
+                return sub_user
+            else:
+                return None
 
     @classmethod
     def current(cls) -> Optional[Self]:
@@ -534,7 +547,7 @@ class SubUser(Document):
 
         self.save()
 
-    def set_bookmark(self, asset: Asset, add: bool=True):
+    def bookmark_asset(self, asset: Asset, add: bool=True):
         """
         :param asset: the Asset to bookmark
         :param add: if True: bookmarks the Asset, else: removes it from the bookmarks

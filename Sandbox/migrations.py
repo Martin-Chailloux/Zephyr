@@ -193,7 +193,10 @@ def create_sub_users():
         SubUser.create_for_user(pseudo=user.pseudo)
 
 if __name__ == '__main__':
-    create_sub_users()
+    SubUser.objects().delete()
+    Stage.objects.update(unset__user=True)
+
+    # create_sub_users()
 
 
     # p = Path.home().joinpath("OneDrive", "Documents", "__work", "_dev", "zephyr_projects")
