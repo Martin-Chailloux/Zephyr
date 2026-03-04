@@ -14,12 +14,17 @@ from Gui.mvd.abstract_mvd import AbstractItemModel
 class UserItemRoles:
     user = QtCore.Qt.ItemDataRole.UserRole
 
+
 @dataclass
 class UserItemMetrics:
     height: int = 32
 
 
 class UserListModel(AbstractItemModel):
+    def __init__(self):
+        super().__init__()
+        self.users: list[User] = []
+
     def add_item(self, user: User):
         row = self.rowCount()
 
@@ -32,6 +37,7 @@ class UserListModel(AbstractItemModel):
         self.setItem(row, item)
 
     def populate(self, users: list[User]):
+        self.users = users
         self.clear()
 
         users = sorted(users, key=lambda x: x.pseudo)

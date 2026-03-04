@@ -485,6 +485,7 @@ class SubUser(Document):
     source_user: User = ReferenceField(document_type=User, primary_key=True)
     recent_assets: list[Asset] = ListField(ReferenceField(document_type=Asset, default=[]))
     bookmarks: list[Asset] = ListField(ReferenceField(document_type=Asset, default=[]))
+    is_omit: bool = BooleanField(default=False)
 
     # TODO: Palette
 
@@ -523,11 +524,16 @@ class SubUser(Document):
 
     @classmethod
     def current(cls) -> Optional[Self]:
+        user = BreezeApp.user
         for sub_user in SubUser.objects():
-            if sub_user.source_user.pseudo == BreezeApp.user.pseudo:
+            if sub_user.source_user.pseudo == user.pseudo:
                 return sub_user
         else:
-            return None
+            SubUser.create_for_user(pseudo=user.pseudo)
+
+    def set_omit(self, is_omit: bool):
+        self.is_omit = is_omit
+        self.save()
 
     def add_recent_asset(self, asset: Asset):
         if asset is None:
