@@ -51,10 +51,10 @@ class WorkVersionsWidget(QWidget):
     def set_stage(self, stage: Stage):
         self.stage = stage
         if stage is None:
-            return
-
-        self.versions_list.set_component(component=stage.get_work_component())
-        self.versions_list.select_row(row=0, is_selected=True)
+            self.versions_list.set_component(component=None)
+        else:
+            self.versions_list.set_component(component=stage.get_work_component())
+            self.versions_list.select_row(row=0, is_selected=True)
 
     def _connect_signals(self):
         self.toolbar.refresh_button.clicked.connect(self.refresh)

@@ -7,7 +7,7 @@ from Api.document_models.project_documents import Stage, Component, Version
 from Utils.sub_widgets import IconLabel
 
 
-class SelectedStageSubPanel(QWidget):
+class StageExportsSubpanel(QWidget):
     def __init__(self):
         super().__init__()
         self._init_ui()
@@ -76,13 +76,12 @@ class StageExportsTable(QTableWidget):
     def set_stage(self, stage: Stage=None):
         self.stage = stage
 
-        if stage is None:
-            return
-
         versions = []
-        for component in stage.components:
-            if component != stage.get_work_component():
-                versions.extend(component.versions)
+
+        if stage is not None:
+            for component in stage.components:
+                if component != stage.get_work_component():
+                    versions.extend(component.versions)
 
         self.populate(versions=versions)
 

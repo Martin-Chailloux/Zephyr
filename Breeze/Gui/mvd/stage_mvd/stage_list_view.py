@@ -43,9 +43,9 @@ class _StageListViewBase(AbstractListView):
         self._model.populate(stages=stages)
         self.selectionModel().blockSignals(False)
 
-    def set_stage(self, stage: Stage=None):
+    def set_single_stage(self, stage: Stage=None):
         if stage is None:
-            return
+            self._model.populate(stages=[])
         else:
             self.selectionModel().blockSignals(True)
             self._model.populate(stages=[stage])

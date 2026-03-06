@@ -40,10 +40,12 @@ class StageBannerWidget(QWidget):
         self.stage = stage
 
         # asset
-        if stage is not None:
+        if stage is None:
+            text = ""
+        else:
             text = f"{stage.asset.category} ⮞ {stage.asset.name} ⮞ {stage.asset.variant}"
-            self._asset_label.setText(text)
+        self._asset_label.setText(text)
 
         # stage
-        self.stage_list.set_stage(stage)
+        self.stage_list.set_single_stage(stage)
 

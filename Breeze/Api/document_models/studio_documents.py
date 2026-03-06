@@ -197,6 +197,13 @@ class Project(Document):
         project = cls.create(name=name, root_path=root_path, categories=source.categories, users=source.users)
         return project
 
+    @property
+    def thumbnail_path(self) -> str:
+        # TODO: root_path somewhere else
+        # TODO: tool to import a profile picture and keep the size to 64x64 (too heavy creates lags)
+        path = f"C:/Users/marti/OneDrive/Documents/__work/_dev/Zephyr/Resources/Icons/projects/{self.name}"
+        return path
+
     def add_category(self, category: str):
         self.categories.append(category)
         self.save()

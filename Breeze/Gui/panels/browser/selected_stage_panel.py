@@ -8,7 +8,7 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QSplitter, QHBoxLayout, QPus
 from Api.breeze_app import BreezeApp
 from Api.document_models.project_documents import Stage
 from Gui.panels.browser.sub_panels.ingredients_subpanel import IngredientsSubPanel
-from Gui.panels.browser.sub_panels.stage_exports_subpanel import SelectedStageSubPanel
+from Gui.panels.browser.sub_panels.stage_exports_subpanel import StageExportsSubpanel
 from Gui.panels.browser.sub_panels.work_versions_subpanel import WorkVersionsWidget
 from Gui.sub_widgets.stage_widgets.stage_banner_widget import StageBannerWidget
 from Utils.sub_widgets import IconButton
@@ -77,7 +77,7 @@ class SelectedStagePanel(QWidget):
         # ingredients_widget = IngredientsTreeWidget()
         ingredients_widget = IngredientsSubPanel(stage=None)
         work_versions_widget = WorkVersionsWidget(stage=None)
-        stage_exports_widget = SelectedStageSubPanel()
+        stage_exports_widget = StageExportsSubpanel()
 
         v_splitter = QSplitter()
         layout.addWidget(v_splitter, 1)
@@ -122,12 +122,13 @@ class SelectedStagePanel(QWidget):
         self.stage_data_modified.emit()
 
     def refresh_banner(self):
-        self.stage_banner_widget.stage_list.refresh()
+        # self.stage_banner_widget.stage_list.refresh()
+        self.stage_banner_widget.set_stage(stage=self.stage)
 
     def refresh(self):
-        self.refresh_banner()
         self.work_versions_widget.refresh()
         self.stage_exports_widget.refresh()
+        self.refresh_banner()
 
     def _on_splitter_button_clicked(self, is_checked: bool):
         """ shows or hides the matching widget """

@@ -41,6 +41,7 @@ class BrowserGui(QMainWindow):
 
     def refresh(self):
         self.stage_selector_panel.refresh()
+        self.selected_stage_panel.set_stage(stage=self.stage_selector_panel.selected_stage)
         self.selected_stage_panel.refresh()
 
     def _on_asset_selected(self):
