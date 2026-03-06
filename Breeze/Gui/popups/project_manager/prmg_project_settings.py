@@ -70,4 +70,6 @@ class ProjectSettingsWidget(QWidget):
         project = BreezeApp.project
         self.name.setText(project.name)
         self.thumbnail.set_path(path=project.thumbnail_path)
+
+        self.general_tab.refresh()
         self.users_tab.refresh()

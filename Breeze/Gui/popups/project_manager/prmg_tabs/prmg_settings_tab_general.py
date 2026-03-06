@@ -1,6 +1,9 @@
 import qtawesome
+from PySide6 import QtCore
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QFormLayout, QLineEdit, QHBoxLayout, QPushButton, QLabel, QComboBox, \
     QDateEdit, QProgressBar
+
+from Api.breeze_app import BreezeApp
 
 
 class ProjectSettingsGeneralTab(QWidget):
@@ -26,9 +29,7 @@ class ProjectSettingsGeneralTab(QWidget):
         end_widget = QDateEdit()
         for date_widget in [start_widget, end_widget]:
             date_widget.setDisplayFormat('dd/MM/yyyy')
-        progression_widget = QProgressBar()
-        progression_widget.setMaximum(100)
-        progression_widget.setValue(72)
+        progression_widget = _InteractiveProgressBarWidget()
         status_widget = QLabel('Wip')
 
         form.addRow("root path", root_path_widget)
@@ -55,11 +56,19 @@ class ProjectSettingsGeneralTab(QWidget):
         for button in [reset_button, confirm_button]:
             button.setFixedHeight(28)
 
+        self.progression = progression_widget
+
     def _connect_signals(self):
-        pass
+        self.progression.valueChanged.connect(self.update_progression)
 
     def _init_state(self):
-        pass
+        self.refresh()
+
+    def refresh(self):
+        self.progression.setValue(BreezeApp.project.progression)
+
+    def update_progression(self):
+        BreezeApp.project.set_progression(progression=self.progression.value())
 
 
 class _RootPathWidget(QWidget):
@@ -134,3 +143,24 @@ class _DateWidget(QWidget):
 
     def _init_state(self):
         pass
+
+
+class _InteractiveProgressBarWidget(QProgressBar):
+    def __init__(self):
+        super().__init__()
+        self.setMaximum(100)
+
+    def set_value(self, event):
+        x = event.pos().x()
+        w = self.width()
+        percent = x/w * 100
+        self.setValue(int(percent))
+
+    def mouseMoveEvent(self, event):
+        if QtCore.Qt.MouseButton.LeftButton in event.buttons():
+            self.set_value(event=event)
+        super().mouseMoveEvent(event)
+
+    def mousePressEvent(self, event):
+        self.set_value(event=event)
+        super().mousePressEvent(event)

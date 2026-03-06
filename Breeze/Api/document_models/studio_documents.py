@@ -170,6 +170,7 @@ class Project(Document):
     root_path: str = StringField(required=True)
     categories: list[str] = SortedListField(StringField(), default=["Character", "Decor", "Element", "Prop", "Shot"])
     users: list[User] = SortedListField(ReferenceField(document_type=User), default=[])
+    progression: int = IntField(default=0)
 
     meta = {
         'collection': 'Projects',
@@ -216,6 +217,9 @@ class Project(Document):
         self.users.extend(users)
         self.save()
 
+    def set_progression(self, progression: int):
+        self.progression = progression
+        self.save()
 
 class Process(Document):
     """
