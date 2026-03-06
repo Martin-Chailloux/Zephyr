@@ -1,6 +1,6 @@
 import qtawesome
 from PySide6.QtCore import QSize
-from PySide6.QtGui import QIcon
+from PySide6.QtGui import QIcon, QPaintEvent, QPainter, QImage
 from PySide6.QtWidgets import QPushButton, QLabel, QWidget, QVBoxLayout, QTextEdit
 
 from Api.breeze_app import BreezeApp
@@ -77,3 +77,22 @@ class PushButtonAutoWidth(QPushButton):
         self.setFixedHeight(height)
         width = self.sizeHint().width() + 12
         self.setFixedWidth(width) if fixed_width else self.setMinimumWidth(width)
+
+
+class Thumbnail(QLabel):
+    def __init__(self, path: str = ""):
+        super().__init__()
+        self.path: str = path
+
+    def set_path(self, path: str):
+        self.path = path
+
+    def paintEvent(self, event: QPaintEvent):
+        super().paintEvent(event)
+        painter = QPainter(self)
+        rect = event.rect()
+
+        image = QImage(self.path)
+        if image.isNull():
+            return
+        painter.drawImage(rect, image)

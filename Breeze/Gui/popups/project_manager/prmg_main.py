@@ -1,6 +1,7 @@
 import qtawesome
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QSplitter
 
+from Api.breeze_app import BreezeApp
 from Gui.popups.project_manager.prmg_project_settings import ProjectSettingsWidget
 from Gui.popups.project_manager.prmg_project_selector import ProjectSelectorWidget
 
@@ -31,9 +32,13 @@ class ProjectManager(QDialog):
         self.project_settings = project_settings
 
     def _connect_signals(self):
-        pass
+        self.projects_selector.projects_list.selectionModel().selectionChanged.connect(self.on_project_selected)
 
     def _init_state(self):
         pass
 
-
+    def on_project_selected(self):
+        project = self.projects_selector.projects_list.get_project()
+        BreezeApp.set_project(name=project.name)
+        self.project_settings.refresh()
+        self.project_settings.update()  # updates the thumbnail immediately

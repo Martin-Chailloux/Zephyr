@@ -88,11 +88,12 @@ class BreezeTopMenuBar(QWidget):
         print(f"SET USER: {user}")
 
     def on_edit_project_clicked(self):
+        project = BreezeApp.project
         project_manager = ProjectManager()
         project_manager.exec()
 
-        # BreezeApp.set_project(name='empty')
-        # self.project_changed.emit()  # unintuitive for the menubar to know about this, but it works for now
+        if BreezeApp.project != project:
+            self.project_changed.emit()  # unintuitive for the menubar to know about this, but it works for now
 
     def on_user_edited(self):
         editor = UserEditor()

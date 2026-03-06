@@ -42,20 +42,9 @@ class ProjectListItemDelegate(AbstractItemDelegate):
 
         painter.setPen(QPen(color))
 
-        # long name
         text = f"{self.project.name} "
         rect = QRect(x, y, w, h)
         painter.drawText(rect, text, alignment.AlignLeft | alignment.AlignVCenter)
-
-        # # short name
-        # font_metrics = QFontMetrics(painter.font())
-        # x += font_metrics.horizontalAdvance(text)
-        # rect = QRect(x, y, w, h)
-        #
-        # font.setBold(False)
-        # painter.setFont(font)
-        # text = f"({self.project.name[:3]})"
-        # painter.drawText(rect, text, alignment.AlignLeft | alignment.AlignVCenter)
 
         painter.restore()
 

@@ -1,4 +1,5 @@
 import time
+from typing import Optional
 
 import qtawesome
 from PySide6.QtCore import QSize
@@ -6,12 +7,14 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QHBoxLayout, QL
 
 from Api.breeze_app import BreezeApp
 from Api.document_models.project_documents import SubUser
+from Api.document_models.studio_documents import Project
 from Gui.mvd.user_mvd.user_list_view import UserListView
 
 
 class ProjectSettingsUsersTab(QWidget):
     def __init__(self):
         super().__init__()
+        self.project: Optional[Project] = None
         self._init_ui()
         self._connect_signals()
         self._init_state()
@@ -136,3 +139,6 @@ class ProjectSettingsUsersTab(QWidget):
                 sub_user.set_omit(is_omit=False)
 
         self.refresh()
+
+    def set_project(self, project: Optional[Project]):
+        self.project = project

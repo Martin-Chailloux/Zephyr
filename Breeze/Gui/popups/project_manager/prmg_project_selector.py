@@ -1,5 +1,7 @@
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLineEdit, QListWidget, QListWidgetItem
 
+from Gui.mvd.project_mvd.project_list_view import ProjectListView
+
 
 class ProjectSelectorWidget(QWidget):
     def __init__(self):
@@ -16,7 +18,8 @@ class ProjectSelectorWidget(QWidget):
         search_bar.setPlaceholderText("search")
         layout.addWidget(search_bar)
 
-        projects_list = QListWidget()
+        projects_list = ProjectListView()
+        projects_list.set_projects()
         layout.addWidget(projects_list)
 
         self.projects_list = projects_list
@@ -25,5 +28,4 @@ class ProjectSelectorWidget(QWidget):
         pass
 
     def _init_state(self):
-        self.projects_list.addItem(QListWidgetItem("Project A"))
-        self.projects_list.addItem(QListWidgetItem("Project B"))
+        pass
