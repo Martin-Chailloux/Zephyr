@@ -1,3 +1,4 @@
+from datetime import date
 from typing import Self, Any, Optional
 
 import mongoengine
@@ -171,6 +172,9 @@ class Project(Document):
     categories: list[str] = SortedListField(StringField(), default=["Character", "Decor", "Element", "Prop", "Shot"])
     users: list[User] = SortedListField(ReferenceField(document_type=User), default=[])
     progression: int = IntField(default=0)
+    start_date: date = DateField()
+    end_date: date = DateField()
+    res: list[int] = ListField(IntField(), default=[1920, 1080])
 
     meta = {
         'collection': 'Projects',
@@ -220,6 +224,19 @@ class Project(Document):
     def set_progression(self, progression: int):
         self.progression = progression
         self.save()
+
+    def set_resolution(self, res_x: int, res_y: int):
+        self.res = [res_x, res_y]
+        self.save()
+
+    def set_start_date(self, start_date: date):
+        self.start_date = start_date
+        self.save()
+
+    def set_end_date(self, end_date: date):
+        self.end_date = end_date
+        self.save()
+
 
 class Process(Document):
     """
