@@ -3,12 +3,12 @@ from PySide6.QtCore import Signal, QPoint
 from PySide6.QtGui import QAction
 from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel, QWidget, QMenu
 
-from Api.document_models.project_documents import Stage, Version
-from Gui.popups.turbine_launcher import TurbineLauncher
-from Gui.sub_widgets.context_menu import ContextMenu
-from Gui.sub_widgets.toolbar import ToolBar
-from Gui.panels.browser.sub_panels import work_versions_api
-from Gui.mvd.version_mvd.version_list_view import VersionListView
+from Breeze.Api.document_models.project_documents import Stage, Version
+from Breeze.Gui.popups.turbine_launcher import TurbineLauncher
+from Breeze.Gui.sub_widgets.context_menu import ContextMenu
+from Breeze.Gui.sub_widgets.toolbar import ToolBar
+from Breeze.Gui.panels.browser.sub_panels import work_versions_api
+from Breeze.Gui.mvd.version_mvd.version_list_view import VersionListView
 
 
 class WorkVersionsWidget(QWidget):

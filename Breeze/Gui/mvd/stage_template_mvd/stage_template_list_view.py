@@ -1,12 +1,11 @@
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QListView
 
-from Api.document_models.project_documents import Asset
-from Api.document_models.studio_documents import StageTemplate
-from Gui.mvd.abstract_mvd import AbstractListView
-from Gui.mvd.stage_template_mvd.stage_template_list_item_delegate import StageTemplateListItemDelegate
-from Gui.mvd.stage_template_mvd.stage_template_list_model import StageTemplateListModel, \
-    StageTemplateItemRoles
+from Breeze.Api.document_models.project_documents import Asset
+from Breeze.Api.document_models.studio_documents import StageTemplate
+from Breeze.Gui.mvd.abstract_mvd import AbstractListView
+from Breeze.Gui.mvd.stage_template_mvd.stage_template_list_item_delegate import StageTemplateListItemDelegate
+from Breeze.Gui.mvd.stage_template_mvd.stage_template_list_model import StageTemplateListModel, StageTemplateItemRoles
 
 
 class StageTemplateListView(AbstractListView):

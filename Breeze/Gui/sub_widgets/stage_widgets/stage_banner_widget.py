@@ -4,10 +4,10 @@ from PySide6 import QtCore
 from PySide6.QtCore import QSize
 from PySide6.QtWidgets import QLabel, QWidget, QVBoxLayout, QSizePolicy
 
-from Api.document_models.project_documents import Stage
-from Gui.mvd.stage_mvd.stage_list_item_delegate import StageListItemDelegateHighlighted
-from Gui.mvd.stage_mvd.stage_list_model import StageItemMetrics
-from Gui.mvd.stage_mvd.stage_list_view import StageListViewEditable
+from Breeze.Api.document_models.project_documents import Stage
+from Breeze.Gui.mvd.stage_mvd.stage_list_item_delegate import StageListItemDelegateHighlighted
+from Breeze.Gui.mvd.stage_mvd.stage_list_model import StageItemMetrics
+from Breeze.Gui.mvd.stage_mvd.stage_list_view import StageListViewEditable
 
 
 class StageBannerWidget(QWidget):

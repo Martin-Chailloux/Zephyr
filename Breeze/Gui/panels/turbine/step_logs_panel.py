@@ -1,7 +1,6 @@
-from PySide6.QtGui import QColor
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QTextEdit
+from PySide6.QtWidgets import QTextEdit
 
-from Api.breeze_app import BreezeApp
+from Breeze.Api.breeze_app import BreezeApp
 
 
 class StepLogsPanel(QTextEdit):

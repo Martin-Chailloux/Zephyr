@@ -1,10 +1,10 @@
 import sys
 from datetime import timedelta
 
-from Utils.chronometer import Chronometer
+from Breeze.Utils.chronometer import Chronometer
 import mongoengine
 
-import qdarkstyle
+# import qdarkstyle
 
 from PySide6.QtWidgets import QApplication
 
@@ -16,19 +16,19 @@ if __name__ == '__main__':
     print("Connecting ...")
     mongoengine.connect(host="mongodb://localhost:27017", db="Studio", alias="default")
 
-    from Api.breeze_app import BreezeApp
+    from Breeze.Api.breeze_app import BreezeApp
 
     app = QApplication(sys.argv)
     BreezeApp.set_project("JourDeVent")
     # BreezeApp.set_project("dev_a")
     BreezeApp.set_user("Martin")
-    app.setStyleSheet(qdarkstyle.load_stylesheet())
+#     app.setStyleSheet(qdarkstyle.load_stylesheet())
 
     chrono.tick("... Connected in:")
 
-    from Api import breeze_dialog
+    from Breeze.Api import breeze_dialog
     breeze_dialog.Listener()
-    from Gui.main_windows.tabs import BreezeMainWindow
+    from Breeze.Gui.main_windows.tabs import BreezeMainWindow
     window = BreezeMainWindow()
     window.show()
     chrono.tick(f"... Finished launching 'Breeze' in:")

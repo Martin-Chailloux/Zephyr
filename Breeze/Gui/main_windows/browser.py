@@ -3,8 +3,8 @@ import qtawesome
 from PySide6 import QtCore
 from PySide6.QtWidgets import QMainWindow, QDockWidget
 
-from Gui.panels.browser.stage_selector_panel import StageSelectorPanel
-from Gui.panels.browser.selected_stage_panel import SelectedStagePanel
+from Breeze.Gui.panels.browser.stage_selector_panel import StageSelectorPanel
+from Breeze.Gui.panels.browser.selected_stage_panel import SelectedStagePanel
 
 
 class BrowserGui(QMainWindow):

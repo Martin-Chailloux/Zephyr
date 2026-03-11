@@ -1,11 +1,9 @@
 from PySide6.QtWidgets import QVBoxLayout
-from qtawesome.iconic_font import user32
 
-from Api.breeze_app import BreezeApp
-from Api.document_models.project_documents import SubUser
-from Api.document_models.studio_documents import User
-from Gui.mvd.user_mvd.user_list_view import UserListView
-from Gui.popups.abstract_popup_widget import AbstractPopupWidget
+from Breeze.Api.breeze_app import BreezeApp
+from Breeze.Api.document_models.studio_documents import User
+from Breeze.Gui.mvd.user_mvd.user_list_view import UserListView
+from Breeze.Gui.popups.abstract_popup_widget import AbstractPopupWidget
 
 
 class UserBrowser(AbstractPopupWidget):

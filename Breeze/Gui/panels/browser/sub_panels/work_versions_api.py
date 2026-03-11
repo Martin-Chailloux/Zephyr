@@ -1,5 +1,5 @@
-from Api.document_models.project_documents import Version, Stage
-from Gui.popups.software_browser import CommentEditMenu, SoftwareBrowser
+from Breeze.Api.document_models.project_documents import Version, Stage
+from Breeze.Gui.popups.software_browser import CommentEditMenu, SoftwareBrowser
 
 
 def create_empty_version(stage: Stage) -> bool:

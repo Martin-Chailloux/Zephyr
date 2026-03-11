@@ -1,14 +1,12 @@
-from typing import Optional
-
 import qtawesome
 from PySide6 import QtCore
 from PySide6.QtGui import QShortcut, QKeySequence
 from PySide6.QtWidgets import QVBoxLayout, QPushButton, QHBoxLayout
 
-from Api.document_models.project_documents import Stage
-from Gui.popups.abstract_popup_widget import AbstractPopupWidget
-from Gui.mvd.software_mvd.software_list_view import SoftwareListView
-from Utils.sub_widgets import TextBox, IconButton
+from Breeze.Api.document_models.project_documents import Stage
+from Breeze.Gui.popups.abstract_popup_widget import AbstractPopupWidget
+from Breeze.Gui.mvd.software_mvd.software_list_view import SoftwareListView
+from Breeze.Utils.sub_widgets import TextBox, IconButton
 
 
 class SoftwareBrowser(AbstractPopupWidget):

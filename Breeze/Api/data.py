@@ -1,5 +1,3 @@
-
-
 class _DataNamesBase:
     @classmethod
     def all(cls) -> list[str]:

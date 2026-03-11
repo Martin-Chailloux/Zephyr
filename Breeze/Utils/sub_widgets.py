@@ -3,7 +3,7 @@ from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon, QPaintEvent, QPainter, QImage
 from PySide6.QtWidgets import QPushButton, QLabel, QWidget, QVBoxLayout, QTextEdit
 
-from Api.breeze_app import BreezeApp
+from Breeze.Api.breeze_app import BreezeApp
 
 
 class IconButton(QPushButton):

@@ -5,11 +5,10 @@ from PySide6 import QtCore
 from PySide6.QtCore import QPoint, QModelIndex, QRect, QRectF, QPointF, QItemSelectionModel, Signal, QTimer
 from PySide6.QtGui import (QCursor, QStandardItem, QStandardItemModel, QPainter, QColor,
                            QBrush, QPen, QImage, QPainterPath, QMouseEvent, QFontMetrics)
-from PySide6.QtWidgets import QListView, QStyledItemDelegate, QStyleOptionViewItem, QStyle, QWidget, QAbstractItemView, \
-    QTreeView
+from PySide6.QtWidgets import QListView, QStyledItemDelegate, QStyleOptionViewItem, QStyle, QWidget, QTreeView
 
-from Api.breeze_app import BreezeApp
-from Api.document_models.project_documents import Component
+from Breeze.Api.breeze_app import BreezeApp
+from Breeze.Api.document_models.project_documents import Component
 
 alignment = QtCore.Qt.AlignmentFlag
 

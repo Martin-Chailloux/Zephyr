@@ -2,8 +2,8 @@ from PySide6 import QtCore
 from PySide6.QtCore import Signal, Qt
 from PySide6.QtWidgets import QVBoxLayout, QPushButton, QHBoxLayout, QLineEdit, QCheckBox
 
-from Gui.popups.abstract_popup_widget import AbstractPopupWidget
-from Utils.pills import GenericPillIcon
+from Breeze.Gui.popups.abstract_popup_widget import AbstractPopupWidget
+from Breeze.Utils.pills import GenericPillIcon
 
 
 class _TextInput:

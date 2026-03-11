@@ -6,7 +6,7 @@ sys.stderr.reconfigure(line_buffering=True)
 sys.path.append('C:/Users/marti/OneDrive/Documents/__work/_dev/Zephyr/Software/Abstract')
 sys.path.append('C:/Users/marti/OneDrive/Documents/__work/_dev/Zephyr/Software/Blender')
 
-from startup import zephyr_menu
+from Software.Blender.startup import zephyr_menu
 
 
 def run():

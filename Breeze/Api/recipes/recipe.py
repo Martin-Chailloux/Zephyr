@@ -1,6 +1,6 @@
 from typing import Any
 
-from Api.recipes.ingredient_slot import IngredientSlot
+from Breeze.Api.recipes.ingredient_slot import IngredientSlot
 
 
 class Recipe:

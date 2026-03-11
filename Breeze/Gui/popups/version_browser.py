@@ -1,9 +1,8 @@
-from PySide6.QtWidgets import QVBoxLayout, QTextEdit, QCheckBox
+from PySide6.QtWidgets import QVBoxLayout, QTextEdit
 
-from Api.document_models.project_documents import Component, Version
-from Gui.mvd.component_mvd.component_list_view import ComponentListView
-from Gui.mvd.version_mvd.version_list_view import VersionListView
-from Gui.popups.abstract_popup_widget import AbstractPopupWidget
+from Breeze.Api.document_models.project_documents import Version
+from Breeze.Gui.mvd.version_mvd.version_list_view import VersionListView
+from Breeze.Gui.popups.abstract_popup_widget import AbstractPopupWidget
 
 
 class VersionBrowser(AbstractPopupWidget):

@@ -5,9 +5,9 @@ from PySide6.QtCore import Signal
 from PySide6.QtWidgets import (QDialog, QVBoxLayout, QLabel, QLineEdit, QFormLayout,
                                QPushButton, QHBoxLayout, QGroupBox)
 
-from Api.breeze_app import BreezeApp
-from Api.document_models.studio_documents import User
-from Utils.user_widgets import UserPicture
+from Breeze.Api.breeze_app import BreezeApp
+from Breeze.Api.document_models.studio_documents import User
+from Breeze.Utils.user_widgets import UserPicture
 
 
 class UserEditor(QDialog):

@@ -3,8 +3,8 @@ from typing import Any, TypeVar
 from PySide6 import QtCore
 from PySide6.QtWidgets import QWidget, QVBoxLayout
 
-from Api.turbine.utils import JobContext, InputsBase
-from Api.turbine.gui_widgets import TurbineWidgetBase
+from Breeze.Api.turbine.utils import JobContext, InputsBase
+from Breeze.Api.turbine.gui_widgets import TurbineWidgetBase
 
 TWidget = TypeVar("TWidget", bound=TurbineWidgetBase)
 

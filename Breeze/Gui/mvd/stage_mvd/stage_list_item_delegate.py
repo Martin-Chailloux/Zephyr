@@ -3,13 +3,13 @@ from PySide6.QtCore import QModelIndex, QRect, QPoint
 from PySide6.QtGui import QPainter, QBrush, QPainterPath, QCursor
 from PySide6.QtWidgets import QStyleOptionViewItem, QWidget
 
-from Api.document_models.studio_documents import StageTemplate, User
-from Api.document_models.project_documents import Stage, Asset, SubUser
-from Gui.mvd.stage_mvd.stage_list_model import StageItemRoles, StageListModel
-from Gui.mvd.stage_mvd.stage_list_model import StageItemMetrics
-from Gui.mvd.stage_template_mvd.stage_template_list_item_delegate import StageTemplateListItemDelegate
-from Gui.popups.status_select_popup import StatusSelectPopup
-from Gui.popups.user_browser import UserBrowser
+from Breeze.Api.document_models.studio_documents import StageTemplate, User
+from Breeze.Api.document_models.project_documents import Stage, Asset, SubUser
+from Breeze.Gui.mvd.stage_mvd.stage_list_model import StageItemRoles, StageListModel
+from Breeze.Gui.mvd.stage_mvd.stage_list_model import StageItemMetrics
+from Breeze.Gui.mvd.stage_template_mvd.stage_template_list_item_delegate import StageTemplateListItemDelegate
+from Breeze.Gui.popups.status_select_popup import StatusSelectPopup
+from Breeze.Gui.popups.user_browser import UserBrowser
 
 alignment = QtCore.Qt.AlignmentFlag
 

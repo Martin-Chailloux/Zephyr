@@ -2,24 +2,24 @@ from pathlib import Path
 
 import mongoengine
 
-from Api import data
+from Breeze.Api import data
 
 mongoengine.connect(host="mongodb://localhost:27017", db="Studio", alias="default")
 
-from Api.document_models.studio_documents import User, Palette, Project, Process
-from Api.breeze_app import BreezeApp
+from Breeze.Api.document_models.studio_documents import User, Palette, Project, Process
+from Breeze.Api.breeze_app import BreezeApp
 BreezeApp.set_project("JourDeVent")
 BreezeApp.set_user("Martin")
 
-from TurbineEngines.blender.modeling.build.engine import BlenderModelingBuildEngine
+from Breeze.TurbineEngines.blender.modeling.build.engine import BlenderModelingBuildEngine
 
-from Api.document_models.studio_documents import StageTemplate
-from Api.document_models.project_documents import Stage, Asset, Version, Job, Component, SubUser
-from Api.recipes.recipe import Recipe
-from Api.recipes.ingredient_slot import IngredientSlot
-from Api.recipes.component_filters import ComponentFilters
-from TurbineEngines.blender.modeling.export.engine import BlenderModelingExportEngine
-from TurbineEngines.blender.rigging.build.engine import BlenderRiggingBuildEngine
+from Breeze.Api.document_models.studio_documents import StageTemplate
+from Breeze.Api.document_models.project_documents import Stage, Asset, Version, Job, Component, SubUser
+from Breeze.Api.recipes.recipe import Recipe
+from Breeze.Api.recipes.ingredient_slot import IngredientSlot
+from Breeze.Api.recipes.component_filters import ComponentFilters
+from Breeze.TurbineEngines.blender.modeling.export.engine import BlenderModelingExportEngine
+from Breeze.TurbineEngines.blender.rigging.build.engine import BlenderRiggingBuildEngine
 
 
 def update_stages_longname():

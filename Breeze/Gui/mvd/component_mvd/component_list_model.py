@@ -4,8 +4,8 @@ from PySide6 import QtCore
 from PySide6.QtCore import QSize, QSortFilterProxyModel, QModelIndex
 from PySide6.QtGui import QStandardItem
 
-from Api.document_models.project_documents import Component
-from Gui.mvd.abstract_mvd import AbstractItemModel
+from Breeze.Api.document_models.project_documents import Component
+from Breeze.Gui.mvd.abstract_mvd import AbstractItemModel
 
 
 @dataclass

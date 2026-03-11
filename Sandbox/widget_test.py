@@ -7,8 +7,8 @@ from PySide6.QtWidgets import QWidget, QApplication, QVBoxLayout
 
 mongoengine.connect(host="mongodb://localhost:27017", db="Studio", alias="default")
 
-from Api.breeze_app import BreezeApp
-from Gui.popups.text_input_popup import TextInputPopup
+from Breeze.Api.breeze_app import BreezeApp
+from Breeze.Gui.popups.text_input_popup import TextInputPopup
 
 mongoengine.connect(host="mongodb://localhost:27017", db="JourDeVent", alias="current_project")
 

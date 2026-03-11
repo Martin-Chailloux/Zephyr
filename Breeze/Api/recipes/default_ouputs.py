@@ -1,9 +1,9 @@
 from dataclasses import dataclass
 
-from Api import data
-from Api.recipes.component_filters import ComponentFilters
-from Api.recipes.ingredient_slot import IngredientSlot
-from Api.recipes.recipe import Recipe
+from Breeze.Api import data
+from Breeze.Api.recipes.component_filters import ComponentFilters
+from Breeze.Api.recipes.ingredient_slot import IngredientSlot
+from Breeze.Api.recipes.recipe import Recipe
 
 
 @dataclass

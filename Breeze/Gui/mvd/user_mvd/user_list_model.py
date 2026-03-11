@@ -4,10 +4,8 @@ from PySide6 import QtCore
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QStandardItem
 
-from Api.breeze_app import BreezeApp
-from Api.document_models.project_documents import SubUser
-from Api.document_models.studio_documents import User
-from Gui.mvd.abstract_mvd import AbstractItemModel
+from Breeze.Api.document_models.studio_documents import User
+from Breeze.Gui.mvd.abstract_mvd import AbstractItemModel
 
 
 @dataclass

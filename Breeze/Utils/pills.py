@@ -4,7 +4,7 @@ from typing import Optional
 import qtawesome
 from PySide6.QtGui import QIcon
 
-from Utils.sub_widgets import IconLabel
+from Breeze.Utils.sub_widgets import IconLabel
 
 
 @dataclass

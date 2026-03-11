@@ -2,11 +2,11 @@ import qtawesome
 from PySide6 import QtCore
 from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QPushButton
 
-from Api.document_models.project_documents import Asset, Stage
-from Gui.mvd.stage_template_mvd.stage_template_list_view import StageTemplateListView
-from Gui.popups.abstract_popup_widget import AbstractPopupWidget
-from Gui.popups.text_input_popup import TextInputPopup
-from Gui.sub_widgets.stage_templates_widgets.stage_template_presets_bar import StageTemplatesPresetsBar
+from Breeze.Api.document_models.project_documents import Asset, Stage
+from Breeze.Gui.mvd.stage_template_mvd.stage_template_list_view import StageTemplateListView
+from Breeze.Gui.popups.abstract_popup_widget import AbstractPopupWidget
+from Breeze.Gui.popups.text_input_popup import TextInputPopup
+from Breeze.Gui.sub_widgets.stage_templates_widgets.stage_template_presets_bar import StageTemplatesPresetsBar
 
 
 class SetStageTemplatesPopup(AbstractPopupWidget):

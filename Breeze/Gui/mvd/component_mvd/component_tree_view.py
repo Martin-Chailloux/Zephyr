@@ -1,10 +1,10 @@
 from PySide6.QtWidgets import QAbstractItemView
 
-from Api.document_models.project_documents import Stage, Version
-from Gui.mvd.abstract_mvd import AbstractTreeView
-from Gui.mvd.component_mvd.component_tree_item_delegate import ComponentTreeItemDelegate
-from Gui.mvd.component_mvd.component_tree_model import (ComponentTreeModel, ComponentTreeItemRoles,
-                                                        ComponentTreeItemMetrics)
+from Breeze.Api.document_models.project_documents import Stage, Version
+from Breeze.Gui.mvd.abstract_mvd import AbstractTreeView
+from Breeze.Gui.mvd.component_mvd.component_tree_item_delegate import ComponentTreeItemDelegate
+from Breeze.Gui.mvd.component_mvd.component_tree_model import (ComponentTreeModel, ComponentTreeItemRoles,
+                                                               ComponentTreeItemMetrics)
 
 
 class ComponentTreeView(AbstractTreeView):

@@ -1,7 +1,7 @@
 from PySide6 import QtCore
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QFrame, QPushButton
 
-from Utils.sub_widgets import IconButton
+from Breeze.Utils.sub_widgets import IconButton
 
 
 class ToolBar(QWidget):

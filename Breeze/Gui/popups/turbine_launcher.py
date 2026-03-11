@@ -5,18 +5,17 @@ from PySide6 import QtCore
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QVBoxLayout, QPushButton, QHBoxLayout, QStackedWidget, QLabel
 
-from Api.breeze_app import BreezeApp
-from Api.document_models.project_documents import Version, Component, Stage
-from Api.document_models.studio_documents import Process
+from Breeze.Api.breeze_app import BreezeApp
+from Breeze.Api.document_models.project_documents import Version, Component, Stage
+from Breeze.Api.document_models.studio_documents import Process
+from Breeze.Api.turbine.gui import GuiBase
+from Breeze.Api.turbine.step import EngineBase
+from Breeze.Api.turbine.utils import JobContext
 
-from Gui.mvd.stage_mvd.stage_list_view import StageListViewMinimal
-from Gui.popups.abstract_popup_widget import AbstractPopupWidget
-from Gui.mvd.process_mvd.process_list_view import ProcessListView
-from Gui.sub_widgets.asset_widgets.asset_browser_widget import AssetBrowserWidget
-
-from Api.turbine.gui import GuiBase
-from Api.turbine.step import EngineBase
-from Api.turbine.utils import JobContext
+from Breeze.Gui.mvd.stage_mvd.stage_list_view import StageListViewMinimal
+from Breeze.Gui.popups.abstract_popup_widget import AbstractPopupWidget
+from Breeze.Gui.mvd.process_mvd.process_list_view import ProcessListView
+from Breeze.Gui.sub_widgets.asset_widgets.asset_browser_widget import AssetBrowserWidget
 
 
 class TurbineLauncher(AbstractPopupWidget):

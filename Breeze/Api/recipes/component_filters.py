@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Any, Type
 
-from Api.document_models.project_documents import Component
+from Breeze.Api.document_models.project_documents import Component
 
 
 class ComponentFilterBase:

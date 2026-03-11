@@ -4,10 +4,10 @@ from PySide6.QtCore import QModelIndex, QRect
 from PySide6.QtGui import QPainter, QPen, QBrush, QIcon
 from PySide6.QtWidgets import QStyleOptionViewItem
 
-from Api.breeze_app import BreezeApp
-from Api.document_models.project_documents import Asset, SubUser
-from Gui.mvd.abstract_mvd import AbstractItemDelegate
-from Gui.mvd.asset_mvd.asset_list_model import AssetItemRoles, AssetItemMetrics
+from Breeze.Api.breeze_app import BreezeApp
+from Breeze.Api.document_models.project_documents import Asset, SubUser
+from Breeze.Gui.mvd.abstract_mvd import AbstractItemDelegate
+from Breeze.Gui.mvd.asset_mvd.asset_list_model import AssetItemRoles, AssetItemMetrics
 
 alignment = QtCore.Qt.AlignmentFlag
 

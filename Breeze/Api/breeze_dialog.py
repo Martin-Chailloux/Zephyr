@@ -2,8 +2,8 @@ import json
 import socket
 import threading
 
-from Api.document_models.studio_documents import StageTemplate
-from blender_file import BlenderFile
+from Breeze.Api.document_models.studio_documents import StageTemplate
+from Software.Blender.blender_file import BlenderFile
 
 ports = [
     BlenderFile.port

@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLineEdit, QListWidget, QListWidgetItem
 
-from Gui.mvd.project_mvd.project_list_view import ProjectListView
+from Breeze.Gui.mvd.project_mvd.project_list_view import ProjectListView
 
 
 class ProjectSelectorWidget(QWidget):

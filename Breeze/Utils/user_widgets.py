@@ -3,7 +3,7 @@ from PySide6.QtCore import QSize, QPointF, Signal, QRect
 from PySide6.QtGui import QPaintEvent, QPainter, QImage, QBrush, QPainterPath, QMouseEvent, QEnterEvent
 from PySide6.QtWidgets import QLabel
 
-from Api.document_models.studio_documents import User
+from Breeze.Api.document_models.studio_documents import User
 
 
 class UserPicture(QLabel):

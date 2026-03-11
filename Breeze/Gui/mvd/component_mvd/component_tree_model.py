@@ -5,10 +5,10 @@ from PySide6 import QtCore
 from PySide6.QtCore import QSize, Signal
 from PySide6.QtGui import QStandardItem
 
-from Api.document_models.project_documents import Stage, Version
-from Api.recipes.recipe import Recipe
-from Api.recipes.ingredient_slot import IngredientSlot
-from Gui.mvd.abstract_mvd import AbstractItemModel
+from Breeze.Api.document_models.project_documents import Stage, Version
+from Breeze.Api.recipes.recipe import Recipe
+from Breeze.Api.recipes.ingredient_slot import IngredientSlot
+from Breeze.Gui.mvd.abstract_mvd import AbstractItemModel
 
 
 @dataclass

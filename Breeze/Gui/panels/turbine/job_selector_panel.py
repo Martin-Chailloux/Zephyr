@@ -4,11 +4,11 @@ from PySide6.QtGui import QAction
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QLabel, QComboBox,
                                QTextEdit, QHBoxLayout, QSizePolicy)
 
-from Api.document_models.project_documents import Job
-from Gui.popups.turbine_launcher import TurbineLauncher
-from Gui.sub_widgets.context_menu import ContextMenu
-from Utils.sub_widgets import IconButton
-from Gui.mvd.job_mvd.job_list_view import JobListView
+from Breeze.Api.document_models.project_documents import Job
+from Breeze.Gui.popups.turbine_launcher import TurbineLauncher
+from Breeze.Gui.sub_widgets.context_menu import ContextMenu
+from Breeze.Utils.sub_widgets import IconButton
+from Breeze.Gui.mvd.job_mvd.job_list_view import JobListView
 
 
 class SelectJobPanel(QWidget):

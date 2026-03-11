@@ -6,12 +6,12 @@ from typing import Self, Optional, Any
 import mongoengine
 from mongoengine import *
 
-from Api import data, utils
-from Api.breeze_app import BreezeApp
-from Api.document_models.studio_documents import Status, User, Software, Process, StageTemplate
+from Breeze.Api import data, utils
+from Breeze.Api.breeze_app import BreezeApp
+from Breeze.Api.document_models.studio_documents import Status, User, Software, Process, StageTemplate
 
-from software_base import AbstractSoftwareFile
-from blender_file import BlenderFile
+from Software.Abstract.software_base import AbstractSoftwareFile
+from Software.Blender.blender_file import BlenderFile
 
 
 class Asset(Document):

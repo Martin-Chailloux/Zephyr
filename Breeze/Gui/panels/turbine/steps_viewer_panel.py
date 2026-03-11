@@ -2,8 +2,8 @@ from PySide6 import QtCore
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QTreeWidget, QTreeWidgetItem
 
-from Api.document_models.project_documents import Job
-from Api.turbine.step import Step
+from Breeze.Api.document_models.project_documents import Job
+from Breeze.Api.turbine.step import Step
 
 
 class StepsViewer(QTreeWidget):

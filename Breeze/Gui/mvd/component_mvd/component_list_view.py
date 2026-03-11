@@ -1,9 +1,7 @@
-from PySide6.QtCore import Signal
-
-from Api.document_models.project_documents import Component
-from Gui.mvd.abstract_mvd import AbstractListView
-from Gui.mvd.component_mvd.component_list_item_delegate import ComponentListItemDelegate
-from Gui.mvd.component_mvd.component_list_model import ComponentItemRoles, ComponentListModel
+from Breeze.Api.document_models.project_documents import Component
+from Breeze.Gui.mvd.abstract_mvd import AbstractListView
+from Breeze.Gui.mvd.component_mvd.component_list_item_delegate import ComponentListItemDelegate
+from Breeze.Gui.mvd.component_mvd.component_list_model import ComponentItemRoles, ComponentListModel
 
 
 class ComponentListView(AbstractListView):

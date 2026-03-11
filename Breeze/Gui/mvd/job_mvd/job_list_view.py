@@ -1,9 +1,9 @@
 from PySide6.QtCore import Signal, QSize
 
-from Api.document_models.project_documents import Job
-from Gui.mvd.abstract_mvd import AbstractListView
-from Gui.mvd.job_mvd.job_list_item_delegate import JobListItemDelegate
-from Gui.mvd.job_mvd.job_list_model import JobItemRoles, JobListModel
+from Breeze.Api.document_models.project_documents import Job
+from Breeze.Gui.mvd.abstract_mvd import AbstractListView
+from Breeze.Gui.mvd.job_mvd.job_list_item_delegate import JobListItemDelegate
+from Breeze.Gui.mvd.job_mvd.job_list_model import JobItemRoles, JobListModel
 
 
 class JobListView(AbstractListView):

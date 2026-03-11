@@ -1,9 +1,9 @@
 from typing import Optional
 
-from Api.document_models.studio_documents import Project
-from Gui.mvd.abstract_mvd import AbstractListView
-from Gui.mvd.project_mvd.project_list_item_delegate import ProjectListItemDelegate
-from Gui.mvd.project_mvd.project_list_model import ProjectListModel, ProjectItemRoles
+from Breeze.Api.document_models.studio_documents import Project
+from Breeze.Gui.mvd.abstract_mvd import AbstractListView
+from Breeze.Gui.mvd.project_mvd.project_list_item_delegate import ProjectListItemDelegate
+from Breeze.Gui.mvd.project_mvd.project_list_model import ProjectListModel, ProjectItemRoles
 
 
 class ProjectListView(AbstractListView):

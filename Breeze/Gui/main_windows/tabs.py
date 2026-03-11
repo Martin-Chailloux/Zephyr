@@ -2,10 +2,10 @@ import qtawesome
 
 from PySide6.QtWidgets import QTabWidget, QMainWindow
 
-from Api.breeze_app import BreezeApp
-from Gui.main_windows.top_menu_bar import BreezeTopMenuBar
-from Gui.main_windows.browser import BrowserGui
-from Gui.main_windows.turbine import TurbineGui
+from Breeze.Api.breeze_app import BreezeApp
+from Breeze.Gui.main_windows.top_menu_bar import BreezeTopMenuBar
+from Breeze.Gui.main_windows.browser import BrowserGui
+from Breeze.Gui.main_windows.turbine import TurbineGui
 
 
 # TODO: empty tabs to switch to when not loaded

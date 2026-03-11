@@ -1,11 +1,10 @@
-from PySide6 import QtCore
-from PySide6.QtCore import Signal, QItemSelectionModel, QItemSelection, QModelIndex
+from PySide6.QtCore import Signal, QItemSelectionModel
 
-from Api.document_models.project_documents import Asset, Stage
-from Gui.mvd.abstract_mvd import AbstractListView
-from Gui.mvd.stage_mvd.stage_list_item_delegate import StageListItemDelegate, StageListItemDelegateMinimal
-from Gui.mvd.stage_mvd.stage_list_model import StageListModel, StageItemRoles, StageListMinimalModel
-from Gui.mvd.stage_mvd.stage_list_model import StageItemMetrics
+from Breeze.Api.document_models.project_documents import Asset, Stage
+from Breeze.Gui.mvd.abstract_mvd import AbstractListView
+from Breeze.Gui.mvd.stage_mvd.stage_list_item_delegate import StageListItemDelegate, StageListItemDelegateMinimal
+from Breeze.Gui.mvd.stage_mvd.stage_list_model import StageListModel, StageItemRoles, StageListMinimalModel
+from Breeze.Gui.mvd.stage_mvd.stage_list_model import StageItemMetrics
 
 
 class _StageListViewBase(AbstractListView):

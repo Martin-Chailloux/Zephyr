@@ -1,7 +1,7 @@
 import bpy
 
-import bl_commands
-import bl_dialog
+from Software.Blender import bl_commands
+from Software.Blender import bl_dialog
 
 
 class BreezeTest(bpy.types.Operator):

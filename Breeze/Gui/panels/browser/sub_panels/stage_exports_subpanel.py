@@ -3,8 +3,7 @@ from typing import Optional
 import qtawesome
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem, QLabel
 
-from Api.document_models.project_documents import Stage, Component, Version
-from Utils.sub_widgets import IconLabel
+from Breeze.Api.document_models.project_documents import Stage, Component, Version
 
 
 class StageExportsSubpanel(QWidget):

@@ -1,11 +1,10 @@
 from PySide6.QtCore import Signal, QItemSelectionModel
 
-from Api.breeze_app import BreezeApp
-from Api.document_models.project_documents import Asset, SubUser
-from Gui.mvd.abstract_mvd import AbstractListView
-from Gui.mvd.asset_mvd.asset_list_item_delegate import AssetListItemDelegate
-from Gui.mvd.asset_mvd.asset_list_model import AssetListModel, AssetItemRoles
-from Gui.mvd.asset_mvd.asset_list_model import AssetItemMetrics
+from Breeze.Api.document_models.project_documents import Asset, SubUser
+from Breeze.Gui.mvd.abstract_mvd import AbstractListView
+from Breeze.Gui.mvd.asset_mvd.asset_list_item_delegate import AssetListItemDelegate
+from Breeze.Gui.mvd.asset_mvd.asset_list_model import AssetListModel, AssetItemRoles
+from Breeze.Gui.mvd.asset_mvd.asset_list_model import AssetItemMetrics
 
 
 class AssetListView(AbstractListView):

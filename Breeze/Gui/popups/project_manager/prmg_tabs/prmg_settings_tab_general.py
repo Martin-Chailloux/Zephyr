@@ -3,10 +3,10 @@ from datetime import date
 import qtawesome
 from PySide6 import QtCore
 from PySide6.QtCore import QDate
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QFormLayout, QLineEdit, QHBoxLayout, QPushButton, QLabel, QComboBox, \
-    QDateEdit, QProgressBar
+from PySide6.QtWidgets import (QWidget, QVBoxLayout, QFormLayout, QLineEdit, QHBoxLayout, QPushButton,
+                               QLabel, QComboBox, QDateEdit, QProgressBar)
 
-from Api.breeze_app import BreezeApp
+from Breeze.Api.breeze_app import BreezeApp
 
 
 class ProjectSettingsGeneralTab(QWidget):

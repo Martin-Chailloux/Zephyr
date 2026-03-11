@@ -4,8 +4,8 @@ from PySide6 import QtCore
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QStandardItem
 
-from Api.document_models.studio_documents import StageTemplate
-from Gui.mvd.abstract_mvd import AbstractItemModel
+from Breeze.Api.document_models.studio_documents import StageTemplate
+from Breeze.Gui.mvd.abstract_mvd import AbstractItemModel
 
 
 @dataclass

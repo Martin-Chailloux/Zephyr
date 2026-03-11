@@ -2,15 +2,15 @@ import mongoengine
 
 
 mongoengine.connect(host="mongodb://localhost:27017", db="Studio", alias="default")
-from Api.breeze_app import BreezeApp
+from Breeze.Api.breeze_app import BreezeApp
 BreezeApp.set_project("JourDeVent")
 BreezeApp.set_user("Martin")
 mongoengine.connect(host="mongodb://localhost:27017", db=BreezeApp.project.name, alias="current_project")
 
-from Api import data
-from Api.document_models.studio_documents import StageTemplate
-from Api.recipes.default_recipes import RecipesDefault
-from Api.recipes.default_ouputs import OutputDefaults
+from Breeze.Api import data
+from Breeze.Api.document_models.studio_documents import StageTemplate
+from Breeze.Api.recipes.default_recipes import RecipesDefault
+from Breeze.Api.recipes.default_ouputs import OutputDefaults
 
 
 def set_recipes():

@@ -1,9 +1,9 @@
 import qtawesome
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QSplitter
 
-from Api.breeze_app import BreezeApp
-from Gui.popups.project_manager.prmg_project_settings import ProjectSettingsWidget
-from Gui.popups.project_manager.prmg_project_selector import ProjectSelectorWidget
+from Breeze.Api.breeze_app import BreezeApp
+from Breeze.Gui.popups.project_manager.prmg_project_settings import ProjectSettingsWidget
+from Breeze.Gui.popups.project_manager.prmg_project_selector import ProjectSelectorWidget
 
 
 class ProjectManager(QDialog):

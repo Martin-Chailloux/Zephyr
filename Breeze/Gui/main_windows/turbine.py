@@ -1,9 +1,9 @@
 from PySide6 import QtCore
 from PySide6.QtWidgets import QMainWindow, QDockWidget
 
-from Gui.panels.turbine.job_selector_panel import SelectJobPanel
-from Gui.panels.turbine.step_logs_panel import StepLogsPanel
-from Gui.panels.turbine.steps_viewer_panel import StepsViewer
+from Breeze.Gui.panels.turbine.job_selector_panel import SelectJobPanel
+from Breeze.Gui.panels.turbine.step_logs_panel import StepLogsPanel
+from Breeze.Gui.panels.turbine.steps_viewer_panel import StepsViewer
 
 
 class TurbineGui(QMainWindow):

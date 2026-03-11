@@ -4,10 +4,10 @@ from typing import Optional
 
 from PySide6.QtCore import QObject
 
-from Api.document_models.project_documents import Component, Version
-from Api.document_models.studio_documents import User
+from Breeze.Api.document_models.project_documents import Component, Version
+from Breeze.Api.document_models.studio_documents import User
 
-from Utils.pills import PillModel, AbstractPills
+from Breeze.Utils.pills import PillModel, AbstractPills
 
 
 @dataclass

@@ -6,9 +6,9 @@ from PySide6 import QtCore
 from PySide6.QtCore import QSize
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QPushButton, QSizePolicy)
 
-from Api.document_models.project_documents import Asset
-from Gui.popups.set_stage_templates_popup import SetStageTemplatesPopup
-from Gui.mvd.stage_mvd.stage_list_view import StageListViewEditable
+from Breeze.Api.document_models.project_documents import Asset
+from Breeze.Gui.popups.set_stage_templates_popup import SetStageTemplatesPopup
+from Breeze.Gui.mvd.stage_mvd.stage_list_view import StageListViewEditable
 
 
 class StageListWidget(QWidget):

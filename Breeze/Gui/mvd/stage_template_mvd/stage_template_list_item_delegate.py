@@ -4,11 +4,11 @@ from PySide6.QtCore import QModelIndex, QRect, QRectF
 from PySide6.QtGui import QPainter, QBrush, QColor, QPen, QIcon
 from PySide6.QtWidgets import QStyleOptionViewItem
 
-from Api.breeze_app import BreezeApp
-from Api.document_models.studio_documents import StageTemplate
-from Gui.mvd.abstract_mvd import AbstractItemDelegate
-from Gui.mvd.stage_mvd.stage_list_model import StageItemMetrics
-from Gui.mvd.stage_template_mvd.stage_template_list_model import StageTemplateItemRoles
+from Breeze.Api.breeze_app import BreezeApp
+from Breeze.Api.document_models.studio_documents import StageTemplate
+from Breeze.Gui.mvd.abstract_mvd import AbstractItemDelegate
+from Breeze.Gui.mvd.stage_mvd.stage_list_model import StageItemMetrics
+from Breeze.Gui.mvd.stage_template_mvd.stage_template_list_model import StageTemplateItemRoles
 
 alignment = QtCore.Qt.AlignmentFlag
 

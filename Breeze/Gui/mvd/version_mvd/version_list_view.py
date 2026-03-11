@@ -2,10 +2,10 @@ from typing import Optional
 
 from PySide6.QtCore import Signal
 
-from Api.document_models.project_documents import Component, Version
-from Gui.mvd.abstract_mvd import AbstractListView
-from Gui.mvd.version_mvd.version_list_item_delegate import VersionListItemDelegate
-from Gui.mvd.version_mvd.version_list_model import VersionListModel, VersionItemRoles
+from Breeze.Api.document_models.project_documents import Component, Version
+from Breeze.Gui.mvd.abstract_mvd import AbstractListView
+from Breeze.Gui.mvd.version_mvd.version_list_item_delegate import VersionListItemDelegate
+from Breeze.Gui.mvd.version_mvd.version_list_model import VersionListModel, VersionItemRoles
 
 
 class VersionListView(AbstractListView):

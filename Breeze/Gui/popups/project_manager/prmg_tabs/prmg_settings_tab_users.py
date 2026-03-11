@@ -1,14 +1,13 @@
-import time
 from typing import Optional
 
 import qtawesome
 from PySide6.QtCore import QSize
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QHBoxLayout, QLabel
 
-from Api.breeze_app import BreezeApp
-from Api.document_models.project_documents import SubUser
-from Api.document_models.studio_documents import Project
-from Gui.mvd.user_mvd.user_list_view import UserListView
+from Breeze.Api.breeze_app import BreezeApp
+from Breeze.Api.document_models.project_documents import SubUser
+from Breeze.Api.document_models.studio_documents import Project
+from Breeze.Gui.mvd.user_mvd.user_list_view import UserListView
 
 
 class ProjectSettingsUsersTab(QWidget):

@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from PySide6 import QtCore
 from PySide6.QtWidgets import QCheckBox, QComboBox, QWidget, QHBoxLayout, QLabel
 
-from Api.turbine.utils import JobContext
+from Breeze.Api.turbine.utils import JobContext
 
 
 class TurbineWidgetBase(QWidget):

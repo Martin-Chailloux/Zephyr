@@ -3,9 +3,9 @@ from PySide6.QtCore import QModelIndex
 from PySide6.QtGui import QPainter
 from PySide6.QtWidgets import QStyleOptionViewItem
 
-from Api.document_models.project_documents import Component
-from Gui.mvd.abstract_mvd import AbstractItemDelegate
-from Gui.mvd.component_mvd.component_list_model import ComponentItemRoles
+from Breeze.Api.document_models.project_documents import Component
+from Breeze.Gui.mvd.abstract_mvd import AbstractItemDelegate
+from Breeze.Gui.mvd.component_mvd.component_list_model import ComponentItemRoles
 
 alignment = QtCore.Qt.AlignmentFlag
 

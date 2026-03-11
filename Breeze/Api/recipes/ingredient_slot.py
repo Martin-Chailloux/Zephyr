@@ -1,7 +1,7 @@
 from typing import Any
 
-from Api.document_models.project_documents import Component, Version
-from Api.recipes.component_filters import ComponentFilterBase, ComponentFilters
+from Breeze.Api.document_models.project_documents import Component
+from Breeze.Api.recipes.component_filters import ComponentFilterBase, ComponentFilters
 
 
 class IngredientSlot:

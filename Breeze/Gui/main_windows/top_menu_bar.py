@@ -1,15 +1,13 @@
 import qtawesome
 from PySide6 import QtCore
 from PySide6.QtCore import QSize, Signal
-from PySide6.QtGui import QAction, QKeySequence, QPaintEvent, QPixmap, QImage, \
-    QIcon
-from PySide6.QtWidgets import QMenuBar, QMenu, QWidget, QHBoxLayout, QPushButton, \
-    QGridLayout
+from PySide6.QtGui import QAction, QKeySequence, QPaintEvent, QPixmap, QImage, QIcon
+from PySide6.QtWidgets import QMenuBar, QMenu, QWidget, QHBoxLayout, QPushButton, QGridLayout
 
-from Api.breeze_app import BreezeApp
-from Api.document_models.studio_documents import User
-from Gui.popups.project_manager.prmg_main import ProjectManager
-from Gui.popups.user_editor import UserEditor
+from Breeze.Api.breeze_app import BreezeApp
+from Breeze.Api.document_models.studio_documents import User
+from Breeze.Gui.popups.project_manager.prmg_main import ProjectManager
+from Breeze.Gui.popups.user_editor import UserEditor
 
 modifiers = QtCore.Qt.Modifier
 keys = QtCore.Qt.Key

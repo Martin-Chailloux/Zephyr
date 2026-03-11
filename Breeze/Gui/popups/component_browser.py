@@ -1,8 +1,8 @@
 from PySide6.QtWidgets import QVBoxLayout, QTextEdit, QCheckBox
 
-from Api.document_models.project_documents import Component, Stage
-from Gui.mvd.component_mvd.component_list_view import ComponentListView
-from Gui.popups.abstract_popup_widget import AbstractPopupWidget
+from Breeze.Api.document_models.project_documents import Component, Stage
+from Breeze.Gui.mvd.component_mvd.component_list_view import ComponentListView
+from Breeze.Gui.popups.abstract_popup_widget import AbstractPopupWidget
 
 
 class ComponentBrowser(AbstractPopupWidget):

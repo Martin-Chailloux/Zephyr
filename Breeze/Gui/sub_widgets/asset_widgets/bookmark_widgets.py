@@ -1,7 +1,7 @@
 import qtawesome
 
-from Api.breeze_app import BreezeApp
-from Utils.sub_widgets import IconButton
+from Breeze.Api.breeze_app import BreezeApp
+from Breeze.Utils.sub_widgets import IconButton
 
 
 class BookmarkIconButton(IconButton):

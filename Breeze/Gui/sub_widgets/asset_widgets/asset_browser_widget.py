@@ -2,10 +2,10 @@ import qtawesome
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QWidget, QComboBox, QLabel, QGridLayout
 
-from Api.breeze_app import BreezeApp
-from Api.document_models.project_documents import Asset, SubUser
-from Gui.popups.text_input_popup import TextInputPopup
-from Gui.sub_widgets.asset_widgets.bookmark_widgets import BookmarkIconButton
+from Breeze.Api.breeze_app import BreezeApp
+from Breeze.Api.document_models.project_documents import Asset, SubUser
+from Breeze.Gui.popups.text_input_popup import TextInputPopup
+from Breeze.Gui.sub_widgets.asset_widgets.bookmark_widgets import BookmarkIconButton
 
 
 # TODO: bug: if an asset without existing name or variant, the previous stage list is kept

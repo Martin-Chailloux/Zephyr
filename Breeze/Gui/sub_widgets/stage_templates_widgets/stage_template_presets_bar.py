@@ -1,7 +1,7 @@
 from PySide6 import QtCore
 from PySide6.QtWidgets import QVBoxLayout, QWidget, QComboBox, QHBoxLayout, QLabel
 
-from Utils.sub_widgets import IconButton
+from Breeze.Utils.sub_widgets import IconButton
 
 
 class StageTemplatesPresetsBar(QWidget):

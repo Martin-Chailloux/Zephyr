@@ -2,11 +2,11 @@ from typing import Optional
 
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QHBoxLayout
 
-from Api.document_models.project_documents import Stage
-from Api.recipes.ingredient_slot import IngredientSlot
-from Gui.mvd.component_mvd.component_tree_model import ComponentTreeItemRoles
-from Gui.mvd.component_mvd.component_tree_view import ComponentTreeView
-from Gui.sub_widgets.toolbar import ToolBar
+from Breeze.Api.document_models.project_documents import Stage
+from Breeze.Api.recipes.ingredient_slot import IngredientSlot
+from Breeze.Gui.mvd.component_mvd.component_tree_model import ComponentTreeItemRoles
+from Breeze.Gui.mvd.component_mvd.component_tree_view import ComponentTreeView
+from Breeze.Gui.sub_widgets.toolbar import ToolBar
 
 
 class IngredientsSubPanel(QWidget):

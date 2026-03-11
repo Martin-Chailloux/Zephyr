@@ -5,13 +5,13 @@ from PySide6 import QtCore
 from PySide6.QtCore import Signal, QSize
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QSplitter, QHBoxLayout, QPushButton
 
-from Api.breeze_app import BreezeApp
-from Api.document_models.project_documents import Stage
-from Gui.panels.browser.sub_panels.ingredients_subpanel import IngredientsSubPanel
-from Gui.panels.browser.sub_panels.stage_exports_subpanel import StageExportsSubpanel
-from Gui.panels.browser.sub_panels.work_versions_subpanel import WorkVersionsWidget
-from Gui.sub_widgets.stage_widgets.stage_banner_widget import StageBannerWidget
-from Utils.sub_widgets import IconButton
+from Breeze.Api.breeze_app import BreezeApp
+from Breeze.Api.document_models.project_documents import Stage
+from Breeze.Gui.panels.browser.sub_panels.ingredients_subpanel import IngredientsSubPanel
+from Breeze.Gui.panels.browser.sub_panels.stage_exports_subpanel import StageExportsSubpanel
+from Breeze.Gui.panels.browser.sub_panels.work_versions_subpanel import WorkVersionsWidget
+from Breeze.Gui.sub_widgets.stage_widgets.stage_banner_widget import StageBannerWidget
+from Breeze.Utils.sub_widgets import IconButton
 
 
 class SelectedStagePanel(QWidget):

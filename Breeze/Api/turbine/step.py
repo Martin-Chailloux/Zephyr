@@ -9,13 +9,13 @@ from PySide6 import QtCore
 from PySide6.QtCore import Signal, QObject
 from PySide6.QtWidgets import QTreeWidgetItem
 
-from Api.document_models.project_documents import Job
-from Api.document_models.studio_documents import Process
-from Api.turbine.gui import GuiBase
-from Api.turbine.utils import StepStatus, JobContext
-from Api.turbine.logger import StepLogger
+from Breeze.Api.document_models.project_documents import Job
+from Breeze.Api.document_models.studio_documents import Process
+from Breeze.Api.turbine.gui import GuiBase
+from Breeze.Api.turbine.utils import StepStatus, JobContext
+from Breeze.Api.turbine.logger import StepLogger
 
-from Utils.pills import PillModel
+from Breeze.Utils.pills import PillModel
 
 
 TStep = TypeVar("TStep", bound='TurbineStep')

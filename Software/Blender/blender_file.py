@@ -8,7 +8,7 @@ import subprocess
 import threading
 import bpy
 
-from software_base import AbstractSoftwareFile
+from Software.Abstract.software_base import AbstractSoftwareFile
 
 
 class BlenderFile(AbstractSoftwareFile):

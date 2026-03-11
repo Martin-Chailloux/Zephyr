@@ -19,3 +19,7 @@ class NewWidget(QWidget):
 
     def _init_state(self):
         pass
+
+
+def create_exe():
+    line = 'pyinstaller --exclude-module _bootlocale --name "Breeze" --distpath "C:\Users\marti\OneDrive\Documents\__work\_dev\zephyr_build" main.py'

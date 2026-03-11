@@ -2,10 +2,10 @@ import qtawesome
 from PySide6.QtCore import QSize
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QTabWidget, QPushButton, QHBoxLayout
 
-from Api.breeze_app import BreezeApp
-from Gui.popups.project_manager.prmg_tabs.prmg_settings_tab_general import ProjectSettingsGeneralTab
-from Gui.popups.project_manager.prmg_tabs.prmg_settings_tab_users import ProjectSettingsUsersTab
-from Utils.sub_widgets import Thumbnail
+from Breeze.Api.breeze_app import BreezeApp
+from Breeze.Gui.popups.project_manager.prmg_tabs.prmg_settings_tab_general import ProjectSettingsGeneralTab
+from Breeze.Gui.popups.project_manager.prmg_tabs.prmg_settings_tab_users import ProjectSettingsUsersTab
+from Breeze.Utils.sub_widgets import Thumbnail
 
 
 class ProjectSettingsWidget(QWidget):

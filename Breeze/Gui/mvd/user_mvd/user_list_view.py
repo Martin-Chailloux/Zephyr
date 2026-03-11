@@ -1,12 +1,12 @@
 from typing import Optional
 
-from PySide6.QtCore import Signal, QItemSelectionModel
+from PySide6.QtCore import QItemSelectionModel
 
-from Api.document_models.project_documents import SubUser
-from Api.document_models.studio_documents import User
-from Gui.mvd.abstract_mvd import AbstractListView
-from Gui.mvd.user_mvd.user_list_item_delegate import UserListItemDelegate
-from Gui.mvd.user_mvd.user_list_model import UserListModel, UserItemRoles
+from Breeze.Api.document_models.project_documents import SubUser
+from Breeze.Api.document_models.studio_documents import User
+from Breeze.Gui.mvd.abstract_mvd import AbstractListView
+from Breeze.Gui.mvd.user_mvd.user_list_item_delegate import UserListItemDelegate
+from Breeze.Gui.mvd.user_mvd.user_list_model import UserListModel, UserItemRoles
 
 
 class UserListView(AbstractListView):

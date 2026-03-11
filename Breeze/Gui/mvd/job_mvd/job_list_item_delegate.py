@@ -4,11 +4,11 @@ from PySide6.QtCore import QModelIndex, QRect, QPoint
 from PySide6.QtGui import QPainter, QColor, QPen, QFontMetrics, QIcon
 from PySide6.QtWidgets import QStyleOptionViewItem
 
-from Api.breeze_app import BreezeApp
-from Api.document_models.project_documents import Job
-from Api.turbine.step import Step
-from Gui.mvd.abstract_mvd import AbstractItemDelegate
-from Gui.mvd.job_mvd.job_list_model import JobItemRoles, JobItemMetrics
+from Breeze.Api.breeze_app import BreezeApp
+from Breeze.Api.document_models.project_documents import Job
+from Breeze.Api.turbine.step import Step
+from Breeze.Gui.mvd.abstract_mvd import AbstractItemDelegate
+from Breeze.Gui.mvd.job_mvd.job_list_model import JobItemRoles, JobItemMetrics
 
 
 alignment = QtCore.Qt.AlignmentFlag

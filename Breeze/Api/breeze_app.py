@@ -2,18 +2,11 @@
 A singleton that keeps track of the current Project, User and Palette.
 It is meant to be freely modified.
 """
-import gc
-import subprocess
-import sys
-from datetime import timedelta
 
 import mongoengine
-import qdarkstyle
 from PySide6.QtCore import Signal
-from PySide6.QtWidgets import QApplication
 
-from Api.document_models.studio_documents import Project, User, Palette
-from Utils.chronometer import Chronometer
+from Breeze.Api.document_models.studio_documents import Project, User, Palette
 
 
 class BreezeApp:

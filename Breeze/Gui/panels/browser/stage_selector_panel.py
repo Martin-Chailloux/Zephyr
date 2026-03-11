@@ -2,10 +2,10 @@ from PySide6 import QtCore
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QSplitter, QPushButton
 
-from Api.document_models.project_documents import Stage, SubUser
-from Gui.mvd.asset_mvd.asset_list_view import AssetListView
-from Gui.sub_widgets.asset_widgets.asset_browser_widget import AssetBrowserWidget
-from Gui.sub_widgets.stage_widgets.stage_list_widget import StageListWidget
+from Breeze.Api.document_models.project_documents import Stage, SubUser
+from Breeze.Gui.mvd.asset_mvd.asset_list_view import AssetListView
+from Breeze.Gui.sub_widgets.asset_widgets.asset_browser_widget import AssetBrowserWidget
+from Breeze.Gui.sub_widgets.stage_widgets.stage_list_widget import StageListWidget
 
 
 class StageSelectorPanel(QWidget):

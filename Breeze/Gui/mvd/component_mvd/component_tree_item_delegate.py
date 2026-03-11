@@ -6,13 +6,13 @@ from PySide6.QtCore import QModelIndex, QRect
 from PySide6.QtGui import QPainter, QCursor
 from PySide6.QtWidgets import QStyleOptionViewItem,  QWidget
 
-from Api.document_models.project_documents import Version, Stage
-from Api.recipes.ingredient_slot import IngredientSlot
-from Gui.mvd.abstract_mvd import AbstractItemDelegate
-from Gui.mvd.component_mvd.component_tree_model import (ComponentTreeItemRoles, ComponentTreeModel,
-                                                        ComponentTreeItemMetrics)
-from Gui.popups.component_browser import ComponentBrowser
-from Gui.popups.version_browser import VersionBrowser
+from Breeze.Api.document_models.project_documents import Version, Stage
+from Breeze.Api.recipes.ingredient_slot import IngredientSlot
+from Breeze.Gui.mvd.abstract_mvd import AbstractItemDelegate
+from Breeze.Gui.mvd.component_mvd.component_tree_model import (ComponentTreeItemRoles, ComponentTreeModel,
+                                                               ComponentTreeItemMetrics)
+from Breeze.Gui.popups.component_browser import ComponentBrowser
+from Breeze.Gui.popups.version_browser import VersionBrowser
 
 alignment = QtCore.Qt.AlignmentFlag
 
