@@ -2,7 +2,7 @@ from typing import TypeVar
 
 from Breeze.Api.document_models.project_documents import Version
 from Breeze.Api.turbine.step import Step
-from software_base import AbstractSoftwareFile
+from Software.Abstract.software_base import AbstractSoftwareFile
 
 
 File = TypeVar("File")
