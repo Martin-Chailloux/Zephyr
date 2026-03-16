@@ -15,7 +15,7 @@ class UserEditor(QDialog):
 
     def __init__(self):
         super().__init__()
-        self.setWindowIcon(qtawesome.icon("fa.user"))
+        self.setWindowIcon(qtawesome.icon("fa6s.user"))
         self.setWindowTitle("User editor")
         self._init_ui()
         self._connect_signals()

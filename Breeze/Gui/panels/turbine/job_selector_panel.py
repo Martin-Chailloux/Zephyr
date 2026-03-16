@@ -23,7 +23,7 @@ class SelectJobPanel(QWidget):
         # layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(3)
 
-        refresh_button = IconButton(icon_name='fa.refresh')
+        refresh_button = IconButton(icon_name='ei.refresh')
         layout.addWidget(refresh_button)
 
         sub_layout = QHBoxLayout()

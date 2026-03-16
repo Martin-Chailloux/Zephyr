@@ -31,7 +31,7 @@ class StageListWidget(QWidget):
         edit_button = QPushButton(" Edit stages")
         layout.addWidget(edit_button)
         edit_button.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
-        edit_button.setIcon(qtawesome.icon("mdi.format-list-checkbox"))
+        edit_button.setIcon(qtawesome.icon("mdi6.format-list-checkbox"))
         edit_button.setIconSize(QSize(22, 22))
         edit_button.clicked.connect(self.on_edit_stages_clicked)
 

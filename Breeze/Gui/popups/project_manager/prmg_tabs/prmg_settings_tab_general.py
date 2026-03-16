@@ -112,7 +112,7 @@ class _RootPathWidget(QWidget):
 
         file_dialog_button = QPushButton()
         layout.addWidget(file_dialog_button)
-        file_dialog_button.setIcon(qtawesome.icon('fa.folder'))
+        file_dialog_button.setIcon(qtawesome.icon('fa6s.folder'))
         file_dialog_button.setFixedHeight(field.sizeHint().height())
 
     def _connect_signals(self):

@@ -23,7 +23,7 @@ class BreezeTopMenuBar(QWidget):
         self._init_state()
 
     def _init_ui(self):
-        # settings_menu = self.add_menu(self, label="Settings", icon_name="fa.gear")  # Not needed yet
+        # settings_menu = self.add_menu(self, label="Settings", icon_name="fa6s.gear")  # Not needed yet
         """
         A grid layout is used to have custom buttons on top of a default menu_bar, on its right
         """
@@ -43,7 +43,7 @@ class BreezeTopMenuBar(QWidget):
 
         palette_menu = self.add_menu(menu_bar, label="Palette", icon_name="fa5s.palette")
         project_menu = self.add_menu(menu_bar, label="Project", icon_name="ri.landscape-fill")
-        help_menu = self.add_menu(menu_bar, label="Help", icon_name="fa.question")
+        help_menu = self.add_menu(menu_bar, label="Help", icon_name="fa5s.question")
 
         self.add_action(palette_menu, label="Breeze")
         self.add_action(palette_menu, label="Dark")

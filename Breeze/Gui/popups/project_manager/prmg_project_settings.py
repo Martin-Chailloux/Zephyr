@@ -49,7 +49,7 @@ class ProjectSettingsWidget(QWidget):
 
         open_button = QPushButton("Open Project")
         layout.addWidget(open_button)
-        open_button.setIcon(qtawesome.icon('fa.folder-open'))
+        open_button.setIcon(qtawesome.icon('fa6s.folder-open'))
         open_button.setFixedHeight(32)
 
         self.name = name

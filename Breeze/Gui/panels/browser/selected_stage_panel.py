@@ -53,7 +53,7 @@ class SelectedStagePanel(QWidget):
         button_m = QPushButton()
         button_m.setIcon(qtawesome.icon('mdi6.format-list-numbered'))
         button_r = QPushButton()
-        button_r.setIcon(qtawesome.icon('fa.paper-plane'))
+        button_r.setIcon(qtawesome.icon('fa5.paper-plane'))
         for button in [button_l, button_m, button_r]:
             sub_layout.addWidget(button)
             button.setCheckable(True)
@@ -68,7 +68,7 @@ class SelectedStagePanel(QWidget):
         # ------------------------
         # refresh
         # ------------------------
-        refresh_button = IconButton(icon_name='fa.refresh')
+        refresh_button = IconButton(icon_name='ei.refresh')
         h_layout.addWidget(refresh_button)
 
         # ------------------------

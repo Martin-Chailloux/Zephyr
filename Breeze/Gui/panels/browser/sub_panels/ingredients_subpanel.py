@@ -87,11 +87,11 @@ class IngredientsSubPanel(QWidget):
 
 class IngredientsToolBar(ToolBar):
     def _init_ui(self):
-        self.refresh_button = self.add_button(icon_name='fa.refresh', tooltip='Refresh')
+        self.refresh_button = self.add_button(icon_name='ei.refresh', tooltip='Refresh')
         self.autofill_button = self.add_button(icon_name='fa5s.sign-in-alt', tooltip='Autofill')
         self.add_divider()
         self.group_button = self.add_button(icon_name='fa5s.folder-plus', tooltip='Create group')
         self.copy_button = self.add_button(icon_name='fa5s.copy', tooltip='Copy')
-        self.paste_button = self.add_button(icon_name='fa.paste', tooltip='Paste')
+        self.paste_button = self.add_button(icon_name='fa6s.paste', tooltip='Paste')
         self.add_divider()
         self.delete_button = self.add_button(icon_name='fa5s.trash', tooltip='Delete')

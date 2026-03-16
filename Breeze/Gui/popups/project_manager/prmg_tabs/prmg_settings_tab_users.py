@@ -55,13 +55,13 @@ class ProjectSettingsUsersTab(QWidget):
 
         cancel_button = QPushButton()
         h_layout.addWidget(cancel_button)
-        cancel_button.setIcon(qtawesome.icon('fa.close'))
+        cancel_button.setIcon(qtawesome.icon('fa6s.xmark'))
         cancel_button.setFixedSize(QSize(28, 28))
         cancel_button.setToolTip('Cancel')
 
         confirm_button = QPushButton('Accept')
         h_layout.addWidget(confirm_button)
-        confirm_button.setIcon(qtawesome.icon('fa.check'))
+        confirm_button.setIcon(qtawesome.icon('fa6s.check'))
         confirm_button.setFixedHeight(28)
 
         self.available_users = available_users

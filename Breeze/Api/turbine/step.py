@@ -233,6 +233,7 @@ class EngineBase(Step):
     @classmethod
     def get_class_path(cls) -> str:
         path = f"{cls.__module__}.{cls.__qualname__}"
+        print(f"{path = }")
         return str(path)
 
     @classmethod

@@ -90,7 +90,7 @@ class ComponentTreeItemDelegate(AbstractItemDelegate):
         margin = 4 if self.is_hovered or self.is_selected else 5
 
         painter.save()
-        icon = qtawesome.icon('fa.plus-circle')
+        icon = qtawesome.icon('fa5s.plus-circle')
         rect = QRect(x, y+margin, h, h-2*margin)
         icon.paint(painter, rect, alignment.AlignCenter)
         painter.restore()

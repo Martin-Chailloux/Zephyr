@@ -67,7 +67,7 @@ class StageExportsTable(QTableWidget):
 
             if row is not None and column is not None:
                 text = version.creation_user.pseudo
-                icon = qtawesome.icon('fa.check')
+                icon = qtawesome.icon('fa6s.check')
                 item = QTableWidgetItem(text)
                 item.setIcon(icon)
                 self.setItem(row, column, item)

@@ -146,13 +146,13 @@ class WorkVersionsWidget(QWidget):
 
 class VersionsBrowserToolBar(ToolBar):
     def _init_ui(self):
-        self.refresh_button = self.add_button(icon_name='fa.refresh', tooltip='Refresh')
+        self.refresh_button = self.add_button(icon_name='ei.refresh', tooltip='Refresh')
         self.add_divider()
-        self.new_version_button = self.add_button(icon_name='fa.plus', tooltip='New: create an empty file')
-        self.increment_button = self.add_button(icon_name='fa.arrow-up', tooltip='Increment: create an incremented copy of the selected version')
+        self.new_version_button = self.add_button(icon_name='fa5s.plus', tooltip='New: create an empty file')
+        self.increment_button = self.add_button(icon_name='fa5s.arrow-up', tooltip='Increment: create an incremented copy of the selected version')
         self.edit_comment_button = self.add_button(icon_name='fa5s.comment-dots', tooltip='Comment: edit the comment of the selected versions')
         self.add_divider()
-        self.turbine_button = self.add_button(icon_name='fa.gears', tooltip='Turbine: choose a process to launch')
+        self.turbine_button = self.add_button(icon_name='fa6s.gears', tooltip='Turbine: choose a process to launch')
 
 
 class VersionsBrowserContextMenu(ContextMenu):

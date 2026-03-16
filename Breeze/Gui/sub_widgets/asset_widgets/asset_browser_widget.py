@@ -230,7 +230,7 @@ class _AssetFieldCombobox(QComboBox):
 
         self.addItems(items)
         self.addItem(self.add_item_label)
-        self.setItemIcon(self.count()-1, qtawesome.icon("fa.plus-circle"))
+        self.setItemIcon(self.count()-1, qtawesome.icon("fa5s.plus-circle"))
 
     def wheelEvent(self, event):
         # Loop at extremities & skip "new"

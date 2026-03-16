@@ -57,10 +57,10 @@ class CommentEditMenu(AbstractPopupWidget):
         layout.addLayout(sub_layout)
         confirm_button = QPushButton("Confirm")
         sub_layout.addWidget(confirm_button)
-        confirm_button.setIcon(qtawesome.icon("fa.check"))
+        confirm_button.setIcon(qtawesome.icon("fa6s.check"))
         confirm_button.setFixedHeight(24)
 
-        cancel_button = IconButton(icon_name="fa.close", wh=24)
+        cancel_button = IconButton(icon_name="fa6s.xmark", wh=24)
         sub_layout.addWidget(cancel_button)
 
         self.textbox = textbox

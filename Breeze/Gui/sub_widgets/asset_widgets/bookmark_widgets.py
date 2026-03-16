@@ -6,8 +6,8 @@ from Breeze.Utils.sub_widgets import IconButton
 
 class BookmarkIconButton(IconButton):
     def __init__(self):
-        super().__init__(icon_name="fa.star", wh=24, icon_size=18, color=BreezeApp.palette.white_text)
-        self.unchecked_icon = qtawesome.icon("fa.star-o", color=self.color)
+        super().__init__(icon_name="fa6s.star", wh=24, icon_size=18, color=BreezeApp.palette.white_text)
+        self.unchecked_icon = qtawesome.icon("fa6.star", color=self.color)
 
         self.setCheckable(True)
         self.setChecked(False)

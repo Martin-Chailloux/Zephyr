@@ -57,7 +57,7 @@ class AssetListItemDelegate(AbstractItemDelegate):
 
         sub_user = SubUser.current()
         is_bookmarked = self.asset in sub_user.bookmarks
-        icon_name = "fa.star" if is_bookmarked else "fa.star-o"
+        icon_name = "fa6s.star" if is_bookmarked else "fa6.star"
 
         icon_color = BreezeApp.palette.white_text
 

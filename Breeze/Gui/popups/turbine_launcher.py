@@ -89,7 +89,7 @@ class TurbineLauncher(AbstractPopupWidget):
         # launch button
         launch_button = QPushButton("Launch")
         layout.addWidget(launch_button)
-        launch_button.setIcon(qtawesome.icon('fa.rocket'))
+        launch_button.setIcon(qtawesome.icon('fa6s.rocket'))
         launch_button.setFixedHeight(32)
 
         self.asset_browser = asset_browser

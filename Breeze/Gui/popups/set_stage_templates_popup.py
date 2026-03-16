@@ -40,10 +40,10 @@ class SetStageTemplatesPopup(AbstractPopupWidget):
         layout.addLayout(h_layout)
 
         cancel_button = QPushButton("Cancel")
-        cancel_button.setIcon(qtawesome.icon("fa.close"))
+        cancel_button.setIcon(qtawesome.icon("fa6s.xmark"))
 
         confirm_button = QPushButton("Confirm")
-        confirm_button.setIcon(qtawesome.icon("fa.check"))
+        confirm_button.setIcon(qtawesome.icon("fa6s.check"))
 
         for button in [cancel_button, confirm_button]:
             h_layout.addWidget(button)

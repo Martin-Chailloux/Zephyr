@@ -34,9 +34,9 @@ class AbstractPills:
 
 
 class GenericPills(AbstractPills):
-    minus = PillModel(name="minus", icon_name="fa.minus", color="lightgrey")
-    true = PillModel(name="true", icon_name="fa.check", color="green")
-    false = PillModel(name="false", icon_name="fa.close", color="tomato")
+    minus = PillModel(name="minus", icon_name="fa5s.minus", color="lightgrey")
+    true = PillModel(name="true", icon_name="fa6s.check", color="green")
+    false = PillModel(name="false", icon_name="fa6s.xmark", color="tomato")
 
     pills = [minus, true, false]
 

@@ -4,7 +4,7 @@ from PySide6.QtGui import QPainter, QBrush, QPainterPath, QCursor
 from PySide6.QtWidgets import QStyleOptionViewItem, QWidget
 
 from Breeze.Api.document_models.studio_documents import StageTemplate, User
-from Breeze.Api.document_models.project_documents import Stage, Asset, SubUser
+from Breeze.Api.document_models.project_documents import Stage, Asset
 from Breeze.Gui.mvd.stage_mvd.stage_list_model import StageItemRoles, StageListModel
 from Breeze.Gui.mvd.stage_mvd.stage_list_model import StageItemMetrics
 from Breeze.Gui.mvd.stage_template_mvd.stage_template_list_item_delegate import StageTemplateListItemDelegate
@@ -30,7 +30,6 @@ class StageListItemDelegate(StageTemplateListItemDelegate):
 
         painter.save()
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-        x, y, w, h = self.get_item_rect()
 
         self.paint_selected_background(painter)
         self.paint_hover(painter)
