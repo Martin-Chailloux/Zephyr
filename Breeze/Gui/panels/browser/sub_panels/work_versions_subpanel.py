@@ -1,7 +1,7 @@
 from PySide6 import QtCore
 from PySide6.QtCore import Signal, QPoint
 from PySide6.QtGui import QAction
-from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel, QWidget, QMenu
+from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel, QWidget
 
 from Breeze.Api.document_models.project_documents import Stage, Version
 from Breeze.Gui.popups.turbine_launcher import TurbineLauncher

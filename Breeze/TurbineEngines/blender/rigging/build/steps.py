@@ -1,4 +1,4 @@
-import bpy
+# import bpy
 
 from Breeze.Api.turbine.step import Step
 
@@ -8,6 +8,7 @@ class ImportGeoStep(Step):
     tooltip = "Imports geo ingredients in the scene"
 
     def _inner_run(self):
+        return
         ingredients = self.engine.context.get_ingredients()
         geos = ingredients['geo']
         self.logger.debug(f"{geos = }")

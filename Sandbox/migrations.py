@@ -161,6 +161,7 @@ def clear_processes():
 def register_engines():
     BlenderModelingBuildEngine.register()
     BlenderModelingExportEngine.register()
+    BlenderRiggingBuildEngine.register()
 
 def set_default_processes():
     modeling: StageTemplate = StageTemplate.objects.get(name=data.StageTemplates.modeling)
@@ -193,15 +194,5 @@ def create_sub_users():
         SubUser.create_for_user(pseudo=user.pseudo)
 
 if __name__ == '__main__':
-    SubUser.objects().delete()
-    Stage.objects.update(unset__user=True)
-
-    # create_sub_users()
-
-
-    # p = Path.home().joinpath("OneDrive", "Documents", "__work", "_dev", "zephyr_projects")
-    # name = 'empty'
-    # root_path = str(p.joinpath(name))
-    # # p = Project.create(name=name, root_path=root_path)
-    # p = Project.create_from_project(source=BreezeApp.project, name=name, root_path=root_path)
+    register_engines()
 

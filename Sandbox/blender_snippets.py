@@ -2,6 +2,7 @@ import bpy
 import math
 import mathutils
 
+
 def rotate_vertices_around_origin():
     # rotmat = mathutils.Matrix.Rotation(30, 4, 'X')
     for obj in bpy.context.selected_objects:
@@ -54,3 +55,6 @@ def gym_example():
     bone = bpy.context.active_pose_bone
     print(f"{bone = }")
     gym(bone=bone, spacing=6, start_frame=1)
+
+def add_mesh():
+    bpy.ops.mesh.primitive_monkey_add()

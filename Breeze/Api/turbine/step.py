@@ -2,7 +2,7 @@ import importlib
 import os
 import traceback
 from abc import abstractmethod
-from typing import TypeVar, Optional, Type, Self, ParamSpec
+from typing import TypeVar, Optional, Type, Self
 
 import qtawesome
 from PySide6 import QtCore
@@ -177,13 +177,14 @@ class EngineBase(Step):
     def from_database(cls, process: Process, context: JobContext) -> Self:
         """ Returns the instance of TurbineEngine that matches the given process """
         module_path, class_name = process.class_path.rsplit('.', 1)
+        # TODO: pyinstaller should include everything from /Breeze/TurbineEngines
         try:
             module = importlib.import_module(module_path)
+            Engine: Type[Self] = getattr(module, class_name)
+            engine = Engine(context=context)
+            return engine
         except:
             raise ValueError(f"module not found from path {module_path}")
-        Engine: Type[Self] = getattr(module, class_name)
-        engine = Engine(context=context)
-        return engine
 
     def __init__(self, context: JobContext):
         super().__init__(sub_label=None)
@@ -233,7 +234,6 @@ class EngineBase(Step):
     @classmethod
     def get_class_path(cls) -> str:
         path = f"{cls.__module__}.{cls.__qualname__}"
-        print(f"{path = }")
         return str(path)
 
     @classmethod

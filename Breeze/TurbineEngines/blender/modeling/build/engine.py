@@ -2,6 +2,7 @@ from Breeze.Api import data
 from Breeze.TurbineEngines.shared_engines.build import EngineBuildBase
 from Breeze.TurbineEngines.shared_steps.collect_steps import GetTemplateSceneStep
 from Breeze.TurbineEngines.shared_steps.io_steps import OpenStep, SaveAsStep
+from Software.Blender.blender_session import BlenderSession
 
 
 class BlenderModelingBuildEngine(EngineBuildBase):
@@ -21,5 +22,8 @@ class BlenderModelingBuildEngine(EngineBuildBase):
 
     def _inner_run(self):
         self.get_template_step.run()
-        self.open_step.run(version=self.get_template_step.version)
-        self.save_as_step.run(file=self.open_step.file, target_version=self.context.version)
+        with BlenderSession(filepath=self.get_template_step.version.filepath) as bl:
+            self.open_step.run(session=bl, version=self.get_template_step.version)
+            self.save_as_step.run(session=bl, target_version=self.context.version)
+
+

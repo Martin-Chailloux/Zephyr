@@ -1,6 +1,6 @@
 from PySide6 import QtCore
 from PySide6.QtCore import QModelIndex, QRect
-from PySide6.QtGui import QPainter, QColor, QPen, QFontMetrics, QImage
+from PySide6.QtGui import QPainter, QColor, QPen, QImage
 from PySide6.QtWidgets import QStyleOptionViewItem
 
 from Breeze.Api.breeze_app import BreezeApp

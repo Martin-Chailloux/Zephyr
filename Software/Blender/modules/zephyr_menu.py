@@ -1,8 +1,5 @@
 import bpy
 
-from Software.Blender import bl_commands
-from Software.Blender import bl_dialog
-
 
 class BreezeTest(bpy.types.Operator):
     """ Demo operator, use to test stuff in the menu"""
@@ -25,7 +22,7 @@ class BreezeSaveInc(bpy.types.Operator):
 
     def execute(self, context):
         print(f"Save inc ...")
-        bl_commands.save_inc(source_filepath="test/filepath")
+        # bl_commands.save_inc(source_filepath="test/filepath")
         # TODO: receive answer
         return {'FINISHED'}
 
@@ -81,5 +78,6 @@ def remove():
 
 
 if __name__ == '__main__':
+    print(f"CREATE MENU")
     create()
 

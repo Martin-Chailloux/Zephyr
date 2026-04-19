@@ -1,5 +1,5 @@
 from PySide6 import QtCore
-from PySide6.QtCore import QModelIndex, QRect, QPoint
+from PySide6.QtCore import QModelIndex, QRect
 from PySide6.QtGui import QPainter, QBrush, QPainterPath, QCursor
 from PySide6.QtWidgets import QStyleOptionViewItem, QWidget
 

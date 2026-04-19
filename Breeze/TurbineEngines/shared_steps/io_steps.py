@@ -3,7 +3,7 @@ from typing import TypeVar
 from Breeze.Api.document_models.project_documents import Version
 from Breeze.Api.turbine.step import Step
 from Software.Abstract.software_base import AbstractSoftwareFile
-
+from Software.Blender.blender_session import BlenderSession
 
 File = TypeVar("File")
 
@@ -12,20 +12,21 @@ class OpenStep(Step):
     label = "Open"
     tooltip = "Open a file from a version"
 
-    def __init__(self):
-        super().__init__()
-        self.file: File = None
+    # def __init__(self):
+    #     super().__init__()
+    #     self.file: File = None
 
-    def run(self, version: Version):
-        super().run(version=version)
+    def run(self, session: BlenderSession, version: Version):
+        super().run(session=session, version=version)
 
-    def _inner_run(self, version: Version):
+    def _inner_run(self, session: BlenderSession, version: Version):
         self.set_sub_label(version.longname)
         self.logger.info(msg=f"Opening a file from version: {version} ...")
         self.logger.debug(msg=f"{version.filepath = }")
-        file = version.to_file()
-        file.open()
-        self.file = file
+        session.open()
+        # file = version.to_file()
+        # file.open()
+        # self.file = file
 
 
 class SaveStep(Step):
@@ -44,17 +45,17 @@ class SaveAsStep(Step):
     label = "Save As"
     tooltip = "Saves a file in an other version"
 
-    def __init__(self):
-        super().__init__()
-        self.file: [AbstractSoftwareFile] = None
+    # def __init__(self):
+    #     super().__init__()
+    #     self.file: [AbstractSoftwareFile] = None
 
-    def run(self, file: AbstractSoftwareFile, target_version: Version):
-        super().run(file=file, target_version=target_version)
+    def run(self, session: BlenderSession, target_version: Version):
+        super().run(session=session, target_version=target_version)
 
-    def _inner_run(self, file: AbstractSoftwareFile, target_version: Version):
-        self.logger.info(msg=f"Saving file: '{file.filepath}' in version: {target_version} ... ")
-        file.save_as(filepath=target_version.filepath)
-        self.file = file
+    def _inner_run(self, session: BlenderSession, target_version: Version):
+        self.logger.info(msg=f"Saving file: '{session.filepath}' in version: {target_version} ... ")
+        session.save_as(filepath=target_version.filepath)
+        # self.file = file
         self.set_sub_label(target_version.__repr__())
 
 

@@ -1,4 +1,4 @@
-from typing import Optional, Type, Any
+from typing import Optional, Any
 
 import qtawesome
 from PySide6 import QtCore
@@ -17,6 +17,11 @@ from Breeze.Gui.popups.abstract_popup_widget import AbstractPopupWidget
 from Breeze.Gui.mvd.process_mvd.process_list_view import ProcessListView
 from Breeze.Gui.sub_widgets.asset_widgets.asset_browser_widget import AssetBrowserWidget
 
+# TODO: not the cleanest
+#  (needed for pyinstaller to compile these engines)
+from Breeze.TurbineEngines.blender.modeling.build import engine
+from Breeze.TurbineEngines.blender.modeling.export import engine
+from Breeze.TurbineEngines.blender.rigging.build import engine
 
 class TurbineLauncher(AbstractPopupWidget):
     process_finished = Signal()
